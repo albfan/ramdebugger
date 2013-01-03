@@ -1,70 +1,90 @@
-<HTML><HEAD><TITLE>Tk Library Procedures - Tk_AllocBitmapFromObj manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_AllocBitmapFromObj manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> GetBitmap</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="GetBitmap.htm#M2" NAME="L221">NAME</A>
-<DL><DD>Tk_AllocBitmapFromObj, Tk_GetBitmap, Tk_GetBitmapFromObj, Tk_DefineBitmap, Tk_NameOfBitmap, Tk_SizeOfBitmap, Tk_FreeBitmapFromObj, Tk_FreeBitmap - maintain database of single-plane pixmaps</DL>
-<DD><A HREF="GetBitmap.htm#M3" NAME="L222">SYNOPSIS</A>
+<DD><A HREF="GetBitmap.htm#M2" NAME="L227">NAME</A>
+<DL><DD>Tk_AllocBitmapFromObj, Tk_GetBitmap, Tk_GetBitmapFromObj, Tk_DefineBitmap, Tk_NameOfBitmap, Tk_SizeOfBitmap, Tk_FreeBitmapFromObj, Tk_FreeBitmap - maintain database of single-plane pixmaps</DD></DL>
+<DD><A HREF="GetBitmap.htm#M3" NAME="L228">SYNOPSIS</A>
 <DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>Pixmap
+<DD><B>Tk_AllocBitmapFromObj(</B><I>interp, tkwin, objPtr</I><B>)</B>
+<DD>Pixmap
+<DD><B>Tk_GetBitmap(</B><I>interp, tkwin, info</I><B>)</B>
+<DD>Pixmap
+<DD><B>Tk_GetBitmapFromObj(</B><I>tkwin, objPtr</I><B>)</B>
+<DD>int
+<DD><B>Tk_DefineBitmap(</B><I>interp, name, source, width, height</I><B>)</B>
+<DD>const char *
+<DD><B>Tk_NameOfBitmap(</B><I>display, bitmap</I><B>)</B>
+<DD><B>Tk_SizeOfBitmap(</B><I>display, bitmap, widthPtr, heightPtr</I><B>)</B>
+<DD><B>Tk_FreeBitmapFromObj(</B><I>tkwin, objPtr</I><B>)</B>
+<DD><B>Tk_FreeBitmap(</B><I>display, bitmap</I><B>)</B>
 </DL>
-<DD><A HREF="GetBitmap.htm#M4" NAME="L223">ARGUMENTS</A>
-<DL>
+<DD><A HREF="GetBitmap.htm#M4" NAME="L229">ARGUMENTS</A>
+<DL class="arguments">
 </DL>
-<DD><A HREF="GetBitmap.htm#M5" NAME="L224">DESCRIPTION</A>
-<DL>
-<DD><A HREF="GetBitmap.htm#M6" NAME="L225"><B>@</B><I>fileName</I></A>
-<DD><A HREF="GetBitmap.htm#M7" NAME="L226"><I>name</I></A>
-<DL>
-<DD><A HREF="GetBitmap.htm#M8" NAME="L227"><B>error</B></A>
-<DD><A HREF="GetBitmap.htm#M9" NAME="L228"><B>gray75</B></A>
-<DD><A HREF="GetBitmap.htm#M10" NAME="L229"><B>gray50</B></A>
-<DD><A HREF="GetBitmap.htm#M11" NAME="L230"><B>gray25</B></A>
-<DD><A HREF="GetBitmap.htm#M12" NAME="L231"><B>gray12</B></A>
-<DD><A HREF="GetBitmap.htm#M13" NAME="L232"><B>hourglass</B></A>
-<DD><A HREF="GetBitmap.htm#M14" NAME="L233"><B>info</B></A>
-<DD><A HREF="GetBitmap.htm#M15" NAME="L234"><B>questhead</B></A>
-<DD><A HREF="GetBitmap.htm#M16" NAME="L235"><B>question</B></A>
-<DD><A HREF="GetBitmap.htm#M17" NAME="L236"><B>warning</B></A>
+<DD><A HREF="GetBitmap.htm#M5" NAME="L230">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="GetBitmap.htm#M6" NAME="L231"><B>@</B><I>fileName</I></A>
+<DD><A HREF="GetBitmap.htm#M7" NAME="L232"><I>name</I></A>
+<DL class="description">
+<DD><A HREF="GetBitmap.htm#M8" NAME="L233"><B>error</B></A>
+<DD><A HREF="GetBitmap.htm#M9" NAME="L234"><B>gray75</B></A>
+<DD><A HREF="GetBitmap.htm#M10" NAME="L235"><B>gray50</B></A>
+<DD><A HREF="GetBitmap.htm#M11" NAME="L236"><B>gray25</B></A>
+<DD><A HREF="GetBitmap.htm#M12" NAME="L237"><B>gray12</B></A>
+<DD><A HREF="GetBitmap.htm#M13" NAME="L238"><B>hourglass</B></A>
+<DD><A HREF="GetBitmap.htm#M14" NAME="L239"><B>info</B></A>
+<DD><A HREF="GetBitmap.htm#M15" NAME="L240"><B>questhead</B></A>
+<DD><A HREF="GetBitmap.htm#M16" NAME="L241"><B>question</B></A>
+<DD><A HREF="GetBitmap.htm#M17" NAME="L242"><B>warning</B></A>
 </DL>
-<DL>
-<DD><A HREF="GetBitmap.htm#M18" NAME="L237"><B>document</B></A>
-<DD><A HREF="GetBitmap.htm#M19" NAME="L238"><B>stationery</B></A>
-<DD><A HREF="GetBitmap.htm#M20" NAME="L239"><B>edition</B></A>
-<DD><A HREF="GetBitmap.htm#M21" NAME="L240"><B>application</B></A>
-<DD><A HREF="GetBitmap.htm#M22" NAME="L241"><B>accessory</B></A>
-<DD><A HREF="GetBitmap.htm#M23" NAME="L242"><B>folder</B></A>
-<DD><A HREF="GetBitmap.htm#M24" NAME="L243"><B>pfolder</B></A>
-<DD><A HREF="GetBitmap.htm#M25" NAME="L244"><B>trash</B></A>
-<DD><A HREF="GetBitmap.htm#M26" NAME="L245"><B>floppy</B></A>
-<DD><A HREF="GetBitmap.htm#M27" NAME="L246"><B>ramdisk</B></A>
-<DD><A HREF="GetBitmap.htm#M28" NAME="L247"><B>cdrom</B></A>
-<DD><A HREF="GetBitmap.htm#M29" NAME="L248"><B>preferences</B></A>
-<DD><A HREF="GetBitmap.htm#M30" NAME="L249"><B>querydoc</B></A>
-<DD><A HREF="GetBitmap.htm#M31" NAME="L250"><B>stop</B></A>
-<DD><A HREF="GetBitmap.htm#M32" NAME="L251"><B>note</B></A>
-<DD><A HREF="GetBitmap.htm#M33" NAME="L252"><B>caution</B></A>
+<DL class="description">
+<DD><A HREF="GetBitmap.htm#M18" NAME="L243"><B>document</B></A>
+<DD><A HREF="GetBitmap.htm#M19" NAME="L244"><B>stationery</B></A>
+<DD><A HREF="GetBitmap.htm#M20" NAME="L245"><B>edition</B></A>
+<DD><A HREF="GetBitmap.htm#M21" NAME="L246"><B>application</B></A>
+<DD><A HREF="GetBitmap.htm#M22" NAME="L247"><B>accessory</B></A>
+<DD><A HREF="GetBitmap.htm#M23" NAME="L248"><B>folder</B></A>
+<DD><A HREF="GetBitmap.htm#M24" NAME="L249"><B>pfolder</B></A>
+<DD><A HREF="GetBitmap.htm#M25" NAME="L250"><B>trash</B></A>
+<DD><A HREF="GetBitmap.htm#M26" NAME="L251"><B>floppy</B></A>
+<DD><A HREF="GetBitmap.htm#M27" NAME="L252"><B>ramdisk</B></A>
+<DD><A HREF="GetBitmap.htm#M28" NAME="L253"><B>cdrom</B></A>
+<DD><A HREF="GetBitmap.htm#M29" NAME="L254"><B>preferences</B></A>
+<DD><A HREF="GetBitmap.htm#M30" NAME="L255"><B>querydoc</B></A>
+<DD><A HREF="GetBitmap.htm#M31" NAME="L256"><B>stop</B></A>
+<DD><A HREF="GetBitmap.htm#M32" NAME="L257"><B>note</B></A>
+<DD><A HREF="GetBitmap.htm#M33" NAME="L258"><B>caution</B></A>
 </DL>
 </DL>
-<DD><A HREF="GetBitmap.htm#M34" NAME="L253">BUGS</A>
-<DD><A HREF="GetBitmap.htm#M35" NAME="L254">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="GetBitmap.htm#M34" NAME="L259">BUGS</A>
+<DD><A HREF="GetBitmap.htm#M35" NAME="L260">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_AllocBitmapFromObj, Tk_GetBitmap, Tk_GetBitmapFromObj, Tk_DefineBitmap, Tk_NameOfBitmap, Tk_SizeOfBitmap, Tk_FreeBitmapFromObj, Tk_FreeBitmap - maintain database of single-plane pixmaps
 <H3><A NAME="M3">SYNOPSIS</A></H3>
 <B>#include &lt;tk.h&gt;</B><BR>
 Pixmap<BR>
-<B>Tk_GetBitmapFromObj(</B><I>interp, tkwin, objPtr</I><B>)</B><BR>
+<B>Tk_AllocBitmapFromObj(</B><I>interp, tkwin, objPtr</I><B>)</B><BR>
 Pixmap<BR>
 <B>Tk_GetBitmap(</B><I>interp, tkwin, info</I><B>)</B><BR>
 Pixmap<BR>
 <B>Tk_GetBitmapFromObj(</B><I>tkwin, objPtr</I><B>)</B><BR>
 int<BR>
 <B>Tk_DefineBitmap(</B><I>interp, name, source, width, height</I><B>)</B><BR>
-CONST char *<BR>
+const char *<BR>
 <B>Tk_NameOfBitmap(</B><I>display, bitmap</I><B>)</B><BR>
 <B>Tk_SizeOfBitmap(</B><I>display, bitmap, widthPtr, heightPtr</I><B>)</B><BR>
 <B>Tk_FreeBitmapFromObj(</B><I>tkwin, objPtr</I><B>)</B><BR>
 <B>Tk_FreeBitmap(</B><I>display, bitmap</I><B>)</B><BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter to use for error reporting; if NULL then no error message
 is left after errors.
@@ -73,12 +93,12 @@ Token for window in which the bitmap will be used.
 <P><DT>Tcl_Obj <B>*objPtr</B> (in/out)<DD>
 String value describes desired bitmap; internal rep will be
 modified to cache pointer to corresponding Pixmap.
-<P><DT>CONST char <B>*info</B> (in)<DD>
+<P><DT>const char <B>*info</B> (in)<DD>
 Same as <I>objPtr</I> except description of bitmap is passed as a string and
-resulting Pixmap isn't cached.
-<P><DT>CONST char <B>*name</B> (in)<DD>
+resulting Pixmap is not cached.
+<P><DT>const char <B>*name</B> (in)<DD>
 Name for new bitmap to be defined.
-<P><DT>CONST char <B>*source</B> (in)<DD>
+<P><DT>const char <B>*source</B> (in)<DD>
 Data for bitmap, in standard bitmap format.
 Must be stored in static memory whose value will never change.
 <P><DT>int <B>width</B> (in)<DD>
@@ -107,7 +127,7 @@ in <I>tkwin</I>.  It re-uses an existing bitmap, if possible, and
 creates a new one otherwise.  <I>ObjPtr</I>'s value must have one
 of the following forms:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M6"><B>@</B><I>fileName</I></A><DD>
 <I>FileName</I> must be the name of a file containing a bitmap
 description in the standard X11 or X10 format.
@@ -116,10 +136,11 @@ description in the standard X11 or X10 format.
 a call to <B>Tk_DefineBitmap</B>.  The following names are pre-defined
 by Tk:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M8"><B>error</B></A><DD>
-The international &quot;don't&quot; symbol:  a circle with a diagonal line
-across it.
+The international
+&#8220;don't&#8221;
+symbol:  a circle with a diagonal line across it.
 <P><DT><A NAME="M9"><B>gray75</B></A><DD>
 75% gray: a checkerboard pattern where three out of four bits are on.
 <P><DT><A NAME="M10"><B>gray50</B></A><DD>
@@ -132,7 +153,8 @@ every fourth pixel in every other row.
 <P><DT><A NAME="M13"><B>hourglass</B></A><DD>
 An hourglass symbol.
 <P><DT><A NAME="M14"><B>info</B></A><DD>
-A large letter ``i''.
+A large letter
+&#8220;i&#8221;.
 <P><DT><A NAME="M15"><B>questhead</B></A><DD>
 The silhouette of a human head, with a question mark in it.
 <P><DT><A NAME="M16"><B>question</B></A><DD>
@@ -145,7 +167,7 @@ A large exclamation point.
 In addition, the following pre-defined names are available only on the
 <B>Macintosh</B> platform:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M18"><B>document</B></A><DD>
 A generic document.
 <P><DT><A NAME="M19"><B>stationery</B></A><DD>
@@ -186,7 +208,7 @@ Under normal conditions, <B>Tk_AllocBitmapFromObj</B>
 returns an identifier for the requested bitmap.  If an error
 occurs in creating the bitmap, such as when <I>objPtr</I> refers
 to a non-existent file, then <B>None</B> is returned and an error
-message is left in <I>interp</I>'s result if <I>interp</I> isn't
+message is left in <I>interp</I>'s result if <I>interp</I> is not
 NULL. <B>Tk_AllocBitmapFromObj</B> caches information about the return
 value in <I>objPtr</I>, which speeds up future calls to procedures
 such as <B>Tk_AllocBitmapFromObj</B> and <B>Tk_GetBitmapFromObj</B>.
@@ -199,7 +221,7 @@ return value, so <B>Tk_GetBitmap</B> is less efficient than
 <P>
 <B>Tk_GetBitmapFromObj</B> returns the token for an existing bitmap, given
 the window and description used to create the bitmap.
-<B>Tk_GetBitmapFromObj</B> doesn't actually create the bitmap; the bitmap
+<B>Tk_GetBitmapFromObj</B> does not actually create the bitmap; the bitmap
 must already have been created with a previous call to
 <B>Tk_AllocBitmapFromObj</B> or <B>Tk_GetBitmap</B>.  The return
 value is cached in <I>objPtr</I>, which speeds up
@@ -218,7 +240,7 @@ describe the bitmap.
 <B>TCL_ERROR</B> is returned and an error message is left in
 <I>interp-&gt;result</I>.
 Note:  <B>Tk_DefineBitmap</B> expects the memory pointed to by
-<I>source</I> to be static:  <B>Tk_DefineBitmap</B> doesn't make
+<I>source</I> to be static:  <B>Tk_DefineBitmap</B> does not make
 a private copy of this memory, but uses the bytes pointed to
 by <I>source</I> later in calls to <B>Tk_AllocBitmapFromObj</B> or
 <B>Tk_GetBitmap</B>.
@@ -298,8 +320,8 @@ a different file.
 
 <H3><A NAME="M35">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#bitmap">bitmap</A>, <A href="../Keywords/P.htm#pixmap">pixmap</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1998 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1998 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

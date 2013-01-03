@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>Automatically Load An Extensions</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: "Verdana" "sans-serif";
+    padding: 8px 1%;
+}
+
+a { color: #45735f }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:240px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.toolbar {
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding:1px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #80a796; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* rounded corners */
+.se  { background: url(../images/se.png) 100% 100% no-repeat #80a796}
+.sw  { background: url(../images/sw.png) 0% 100% no-repeat }
+.ne  { background: url(../images/ne.png) 100% 0% no-repeat }
+.nw  { background: url(../images/nw.png) 0% 0% no-repeat }
+
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="../index.html">
+<img class="logo" src="../images/SQLite.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% style="clear:both"><tr><td>
+  <div class="se"><div class="sw"><div class="ne"><div class="nw">
+  <div class="toolbar">
+    <a href="../about.html">About</a>
+    <a href="../sitemap.html">Sitemap</a>
+    <a href="../docs.html">Documentation</a>
+    <a href="../download.html">Download</a>
+    <a href="../copyright.html">License</a>
+    <a href="../news.html">News</a>
+    <a href="http://www.sqlite.org/cvstrac/index">Developers</a>
+    <a href="../support.html">Support</a>
+  </div></div></div></div></div>
+</td></tr></table>
+  
+<a href="intro.html"><h2>SQLite C Interface</h2></a><h2>Automatically Load An Extensions</h2><blockquote><pre>int sqlite3_auto_extension(void (*xEntryPoint)(void));
+</pre></blockquote><p>
+This API can be invoked at program startup in order to register
+one or more statically linked extensions that will be available
+to all new <a href="../c3ref/sqlite3.html">database connections</a>.</p>
+
+<p>This routine stores a pointer to the extension in an array that is
+obtained from <a href="../c3ref/free.html">sqlite3_malloc()</a>.  If you run a memory leak checker
+on your program and it reports a leak because of this array, invoke
+<a href="../c3ref/reset_auto_extension.html">sqlite3_reset_auto_extension()</a> prior to shutdown to free the memory.</p>
+
+<p> This function registers an extension entry point that is
+automatically invoked whenever a new <a href="../c3ref/sqlite3.html">database connection</a>
+is opened using <a href="../c3ref/open.html">sqlite3_open()</a>, <a href="../c3ref/open.html">sqlite3_open16()</a>,
+or <a href="../c3ref/open.html">sqlite3_open_v2()</a>.</p>
+
+<p> Duplicate extensions are detected so calling this routine
+multiple times with the same extension is harmless.</p>
+
+<p> This routine stores a pointer to the extension in an array
+that is obtained from <a href="../c3ref/free.html">sqlite3_malloc()</a>.</p>
+
+<p> Automatic extensions apply across all threads.
+</p><p>See also lists of
+  <a href="objlist.html">Objects</a>,
+  <a href="constlist.html">Constants</a>, and
+  <a href="funclist.html">Functions</a>.</p><hr><small><i>
+This page last modified 2008/12/09 18:44:04 UTC
+</i></small></div></body></html>

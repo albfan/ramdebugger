@@ -1,24 +1,33 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_DoOneEvent manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_DoOneEvent manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> DoOneEvent</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="DoOneEvent.htm#M2" NAME="L185">NAME</A>
-<DL><DD>Tcl_DoOneEvent - wait for events and invoke event handlers</DL>
-<DD><A HREF="DoOneEvent.htm#M3" NAME="L186">SYNOPSIS</A>
+<DD><A HREF="DoOneEvent.htm#M2" NAME="L181">NAME</A>
+<DL><DD>Tcl_DoOneEvent - wait for events and invoke event handlers</DD></DL>
+<DD><A HREF="DoOneEvent.htm#M3" NAME="L182">SYNOPSIS</A>
 <DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>int
+<DD><B>Tcl_DoOneEvent</B>(<I>flags</I>)
 </DL>
-<DD><A HREF="DoOneEvent.htm#M4" NAME="L187">ARGUMENTS</A>
-<DL>
+<DD><A HREF="DoOneEvent.htm#M4" NAME="L183">ARGUMENTS</A>
+<DL class="arguments">
 </DL>
-<DD><A HREF="DoOneEvent.htm#M5" NAME="L188">DESCRIPTION</A>
-<DL>
-<DD><A HREF="DoOneEvent.htm#M6" NAME="L189"><B>TCL_WINDOW_EVENTS</B> -</A>
-<DD><A HREF="DoOneEvent.htm#M7" NAME="L190"><B>TCL_FILE_EVENTS</B> -</A>
-<DD><A HREF="DoOneEvent.htm#M8" NAME="L191"><B>TCL_TIMER_EVENTS</B> -</A>
-<DD><A HREF="DoOneEvent.htm#M9" NAME="L192"><B>TCL_IDLE_EVENTS</B> -</A>
-<DD><A HREF="DoOneEvent.htm#M10" NAME="L193"><B>TCL_ALL_EVENTS</B> -</A>
-<DD><A HREF="DoOneEvent.htm#M11" NAME="L194"><B>TCL_DONT_WAIT</B> -</A>
+<DD><A HREF="DoOneEvent.htm#M5" NAME="L184">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="DoOneEvent.htm#M6" NAME="L185"><B>TCL_WINDOW_EVENTS</B> -</A>
+<DD><A HREF="DoOneEvent.htm#M7" NAME="L186"><B>TCL_FILE_EVENTS</B> -</A>
+<DD><A HREF="DoOneEvent.htm#M8" NAME="L187"><B>TCL_TIMER_EVENTS</B> -</A>
+<DD><A HREF="DoOneEvent.htm#M9" NAME="L188"><B>TCL_IDLE_EVENTS</B> -</A>
+<DD><A HREF="DoOneEvent.htm#M10" NAME="L189"><B>TCL_ALL_EVENTS</B> -</A>
+<DD><A HREF="DoOneEvent.htm#M11" NAME="L190"><B>TCL_DONT_WAIT</B> -</A>
 </DL>
-<DD><A HREF="DoOneEvent.htm#M12" NAME="L195">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="DoOneEvent.htm#M12" NAME="L191">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_DoOneEvent - wait for events and invoke event handlers
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -26,7 +35,7 @@ Tcl_DoOneEvent - wait for events and invoke event handlers
 int<BR>
 <B>Tcl_DoOneEvent</B>(<I>flags</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>int <B>flags</B> (in)<DD>
 This parameter is normally zero.  It may be an OR-ed combination
 of any of the following flag bits:  
@@ -61,7 +70,7 @@ it restricts the kinds of events that will be processed by
 <B>Tcl_DoOneEvent</B>.
 <I>Flags</I> may be an OR-ed combination of any of the following bits:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M6"><B>TCL_WINDOW_EVENTS</B> -</A><DD>
 Process window system events.
 <P><DT><A NAME="M7"><B>TCL_FILE_EVENTS</B> -</A><DD>
@@ -74,7 +83,7 @@ Process idle callbacks.
 Process all kinds of events:  equivalent to OR-ing together all of the
 above flags or specifying none of them.
 <P><DT><A NAME="M11"><B>TCL_DONT_WAIT</B> -</A><DD>
-Don't sleep:  process only events that are ready at the time of the
+Do not sleep:  process only events that are ready at the time of the
 call.
 <P></DL>
 <P>
@@ -108,8 +117,8 @@ doing anything else.
 
 <H3><A NAME="M12">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#callback">callback</A>, <A href="../Keywords/E.htm#event">event</A>, <A href="../Keywords/H.htm#handler">handler</A>, <A href="../Keywords/I.htm#idle">idle</A>, <A href="../Keywords/T.htm#timer">timer</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1992 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1992 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

@@ -1,0 +1,193 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>Convenience Routines For Running Queries</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: "Verdana" "sans-serif";
+    padding: 8px 1%;
+}
+
+a { color: #45735f }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:240px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.toolbar {
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding:1px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #80a796; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* rounded corners */
+.se  { background: url(../images/se.png) 100% 100% no-repeat #80a796}
+.sw  { background: url(../images/sw.png) 0% 100% no-repeat }
+.ne  { background: url(../images/ne.png) 100% 0% no-repeat }
+.nw  { background: url(../images/nw.png) 0% 0% no-repeat }
+
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="../index.html">
+<img class="logo" src="../images/SQLite.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% style="clear:both"><tr><td>
+  <div class="se"><div class="sw"><div class="ne"><div class="nw">
+  <div class="toolbar">
+    <a href="../about.html">About</a>
+    <a href="../sitemap.html">Sitemap</a>
+    <a href="../docs.html">Documentation</a>
+    <a href="../download.html">Download</a>
+    <a href="../copyright.html">License</a>
+    <a href="../news.html">News</a>
+    <a href="http://www.sqlite.org/cvstrac/index">Developers</a>
+    <a href="../support.html">Support</a>
+  </div></div></div></div></div>
+</td></tr></table>
+  
+<a href="intro.html"><h2>SQLite C Interface</h2></a><h2>Convenience Routines For Running Queries</h2><blockquote><pre>int sqlite3_get_table(
+  sqlite3 *db,          /* An open database */
+  const char *zSql,     /* SQL to be evaluated */
+  char ***pazResult,    /* Results of the query */
+  int *pnRow,           /* Number of result rows written here */
+  int *pnColumn,        /* Number of result columns written here */
+  char **pzErrmsg       /* Error msg written here */
+);
+void sqlite3_free_table(char **result);
+</pre></blockquote><p>
+Definition: A <b>result table</b> is memory data structure created by the
+<a href="../c3ref/free_table.html">sqlite3_get_table()</a> interface.  A result table records the
+complete query results from one or more queries.</p>
+
+<p>The table conceptually has a number of rows and columns.  But
+these numbers are not part of the result table itself.  These
+numbers are obtained separately.  Let N be the number of rows
+and M be the number of columns.</p>
+
+<p>A result table is an array of pointers to zero-terminated UTF-8 strings.
+There are (N+1)*M elements in the array.  The first M pointers point
+to zero-terminated strings that  contain the names of the columns.
+The remaining entries all point to query results.  NULL values result
+in NULL pointers.  All other values are in their UTF-8 zero-terminated
+string representation as returned by <a href="../c3ref/column_blob.html">sqlite3_column_text()</a>.</p>
+
+<p>A result table might consist of one or more memory allocations.
+It is not safe to pass a result table directly to <a href="../c3ref/free.html">sqlite3_free()</a>.
+A result table should be deallocated using <a href="../c3ref/free_table.html">sqlite3_free_table()</a>.</p>
+
+<p>As an example of the result table format, suppose a query result
+is as follows:</p>
+
+<p><blockquote><pre>
+Name        | Age
+-----------------------
+Alice       | 43
+Bob         | 28
+Cindy       | 21
+</pre></blockquote></p>
+
+<p>There are two column (M==2) and three rows (N==3).  Thus the
+result table has 8 entries.  Suppose the result table is stored
+in an array names azResult.  Then azResult holds this content:</p>
+
+<p><blockquote><pre>
+azResult&#91;0] = "Name";
+azResult&#91;1] = "Age";
+azResult&#91;2] = "Alice";
+azResult&#91;3] = "43";
+azResult&#91;4] = "Bob";
+azResult&#91;5] = "28";
+azResult&#91;6] = "Cindy";
+azResult&#91;7] = "21";
+</pre></blockquote></p>
+
+<p>The sqlite3_get_table() function evaluates one or more
+semicolon-separated SQL statements in the zero-terminated UTF-8
+string of its 2nd parameter.  It returns a result table to the
+pointer given in its 3rd parameter.</p>
+
+<p>After the calling function has finished using the result, it should
+pass the pointer to the result table to sqlite3_free_table() in order to
+release the memory that was malloced.  Because of the way the
+<a href="../c3ref/free.html">sqlite3_malloc()</a> happens within sqlite3_get_table(), the calling
+function must not try to call <a href="../c3ref/free.html">sqlite3_free()</a> directly.  Only
+<a href="../c3ref/free_table.html">sqlite3_free_table()</a> is able to release the memory properly and safely.</p>
+
+<p>The sqlite3_get_table() interface is implemented as a wrapper around
+<a href="../c3ref/exec.html">sqlite3_exec()</a>.  The sqlite3_get_table() routine does not have access
+to any internal data structures of SQLite.  It uses only the public
+interface defined here.  As a consequence, errors that occur in the
+wrapper layer outside of the internal <a href="../c3ref/exec.html">sqlite3_exec()</a> call are not
+reflected in subsequent calls to <a href="../c3ref/errcode.html">sqlite3_errcode()</a> or <a href="../c3ref/errcode.html">sqlite3_errmsg()</a>.</p>
+
+<p><h3>Invariants:</h3>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr><td valign="top">H12371</td> 
+<td valign="top">
+If a <a href="../c3ref/free_table.html">sqlite3_get_table()</a> fails a memory allocation, then
+it shall free the result table under construction, abort the
+query in process, skip any subsequent queries, set the
+*pazResult output pointer to NULL and return <a href="../c3ref/c_abort.html">SQLITE_NOMEM</a>.</td></tr>
+<tr><td valign="top">H12373</td> 
+<td valign="top">
+If the pnColumn parameter to <a href="../c3ref/free_table.html">sqlite3_get_table()</a> is not NULL
+then a successful invocation of <a href="../c3ref/free_table.html">sqlite3_get_table()</a> shall
+write the number of columns in the
+result set of the query into *pnColumn.</td></tr>
+<tr><td valign="top">H12374</td> 
+<td valign="top">
+If the pnRow parameter to <a href="../c3ref/free_table.html">sqlite3_get_table()</a> is not NULL
+then a successful invocation of <a href="../c3ref/free_table.html">sqlite3_get_table()</a> shall
+writes the number of rows in the
+result set of the query into *pnRow.</td></tr>
+<tr><td valign="top">H12376</td> 
+<td valign="top">
+A successful invocation of <a href="../c3ref/free_table.html">sqlite3_get_table()</a> that computes
+N rows of result with C columns per row shall make *pazResult
+point to an array of pointers to (N+1)*C strings where the first
+C strings are column names as obtained from
+<a href="../c3ref/column_name.html">sqlite3_column_name()</a> and the rest are column result values
+obtained from <a href="../c3ref/column_blob.html">sqlite3_column_text()</a>.</td></tr>
+<tr><td valign="top">H12379</td> 
+<td valign="top">
+The values in the pazResult array returned by <a href="../c3ref/free_table.html">sqlite3_get_table()</a>
+shall remain valid until cleared by <a href="../c3ref/free_table.html">sqlite3_free_table()</a>.</td></tr>
+<tr><td valign="top">H12382</td> 
+<td valign="top">
+When an error occurs during evaluation of <a href="../c3ref/free_table.html">sqlite3_get_table()</a>
+the function shall set *pazResult to NULL, write an error message
+into memory obtained from <a href="../c3ref/free.html">sqlite3_malloc()</a>, make
+**pzErrmsg point to that error message, and return a
+appropriate <a href="../c3ref/c_abort.html">error code</a>.</td></tr>
+</table>
+</p><p>See also lists of
+  <a href="objlist.html">Objects</a>,
+  <a href="constlist.html">Constants</a>, and
+  <a href="funclist.html">Functions</a>.</p><hr><small><i>
+This page last modified 2008/12/09 18:44:04 UTC
+</i></small></div></body></html>

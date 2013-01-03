@@ -1,50 +1,95 @@
-<html><head><title>Datatypes In SQLite Version 3</title></head>
-<body bgcolor="white" link="#50695f" vlink="#508896">
-<table width="100%" border="0">
-<tr><td valign="top"><img src="sqlite.gif"></td>
-<td width="100%"></td>
-<td valign="bottom">
-<ul>
-<li><a href="http://www.sqlite.org/cvstrac/tktnew">bugs</a></li>
-<li><a href="changes.html">changes</a></li>
-<li><a href="contrib">contrib</a></li>
-<li><a href="download.html#cvs">cvs&nbsp;repository</a></li>
-<li><a href="docs.html">documentation</a></li>
-</ul>
-</td>
-<td width="10"></td>
-<td valign="bottom">
-<ul>
-<li><a href="download.html">download</a></li>
-<li><a href="faq.html">faq</a></li>
-<li><a href="index.html">home</a></li>
-<li><a href="support.html">mailing&nbsp;list</a></li>
-<li><a href="index.html">news</a></li>
-</ul>
-</td>
-<td width="10"></td>
-<td valign="bottom">
-<ul>
-<li><a href="quickstart.html">quick&nbsp;start</a></li>
-<li><a href="support.html">support</a></li>
-<li><a href="lang.html">syntax</a></li>
-<li><a href="http://www.sqlite.org/cvstrac/timeline">timeline</a></li>
-<li><a href="http://www.sqlite.org/cvstrac/wiki">wiki</a></li>
-</ul>
-</td>
-</tr></table>
-<table width="100%">
-<tr><td bgcolor="#80a796"></td></tr>
-</table>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>Datatypes In SQLite Version 3</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: "Verdana" "sans-serif";
+    padding: 8px 1%;
+}
+
+a { color: #45735f }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:240px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.toolbar {
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding:1px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #80a796; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* rounded corners */
+.se  { background: url(images/se.png) 100% 100% no-repeat #80a796}
+.sw  { background: url(images/sw.png) 0% 100% no-repeat }
+.ne  { background: url(images/ne.png) 100% 0% no-repeat }
+.nw  { background: url(images/nw.png) 0% 0% no-repeat }
+
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="index.html">
+<img class="logo" src="images/SQLite.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% style="clear:both"><tr><td>
+  <div class="se"><div class="sw"><div class="ne"><div class="nw">
+  <div class="toolbar">
+    <a href="about.html">About</a>
+    <a href="sitemap.html">Sitemap</a>
+    <a href="docs.html">Documentation</a>
+    <a href="download.html">Download</a>
+    <a href="copyright.html">License</a>
+    <a href="news.html">News</a>
+    <a href="http://www.sqlite.org/cvstrac/index">Developers</a>
+    <a href="support.html">Support</a>
+  </div></div></div></div></div>
+</td></tr></table>
+  
+
+
 
 <h2>Datatypes In SQLite Version 3</h2>
 
-<h3>1. Storage Classes</h3>
+<p>Most SQL database engines (every SQL database engine other than SQLite,
+as far as we know) uses static typing.  With static typing, the datatype
+of a value is determined by its container - the particular column the value
+is stored in.</p>
 
-<P>Version 2 of SQLite stores all column values as ASCII text.
-Version 3 enhances this by providing the ability to store integer and
-real numbers in a more compact format and the capability to store
-BLOB data.</P>
+<p>SQLite uses a more general dynamic type system.  In SQLite, the datatype
+of a value is associated with the value itself, not with the container in
+which it is stored.  The dynamic type system of SQLite is backwards
+compatible with the more common static type systems of other database engines
+in the sense that SQL statement that work on statically typed databases should
+would the same way in SQLite.  However, the dynamic typing in SQLite allowed
+it to do things which are not possible in traditional statically typed
+databases.</p>
+
+<h3>1. Storage Classes</h3>
 
 <P>Each value stored in an SQLite database (or manipulated by the
 database engine) has one of the following storage classes:</P>
@@ -60,9 +105,8 @@ database engine) has one of the following storage classes:</P>
 	it was input.</P>
 </UL>
 
-<P>As in SQLite version 2, any column in a version 3 database except an INTEGER
-PRIMARY KEY may be used to store any type of value. The exception to
-this rule is described below under 'Strict Affinity Mode'.</P>
+<P>Any column in a version 3 database, except an <a href="lang_createtable.html#rowid">INTEGER PRIMARY KEY</a>
+column, may be used to store any type of value.</p>
 
 <P>All values supplied to SQLite, whether as literals embedded in SQL
 statements or values bound to pre-compiled SQL statements
@@ -81,7 +125,9 @@ database engine may convert values between numeric storage classes
 	unquoted number with a decimal point or exponent and NULL if the
 	value is a NULL. Literals with storage class BLOB are specified
         using the X'ABCD' notation.</P>
-	<LI><P>Values supplied using the sqlite3_bind_* APIs are assigned
+
+	<LI><P>Values supplied using the <a href="c3ref/bind_blob.html">sqlite3_bind_*</a>
+        APIs are assigned
 	the storage class that most closely matches the native type bound
 	(i.e. sqlite3_bind_blob() binds a value with storage class BLOB).</P>
 </UL>
@@ -91,6 +137,8 @@ User-defined functions may return values with any storage class. It
 is not generally possible to determine the storage class of the
 result of an expression at compile time.</P>
 
+<a name="affinity"></a>
+
 <h3>2. Column Affinity</h3>
 
 <p>
@@ -98,10 +146,15 @@ In SQLite version 3, the type of a value is associated with the value
 itself, not with the column or variable in which the value is stored.
 (This is sometimes called
 <a href="http://www.cliki.net/manifest%20type%20system">
-manifest typing</a>.)
+manifest typing</a> or <a href="http://en.wikipedia.org/wiki/Duck_typing">
+duck typing</a>.)
 All other SQL databases engines that we are aware of use the more
 restrictive system of static typing where the type is associated with
 the container, not the value.
+To look at it another way, SQLite provides dynamic datatypes such as
+one finds in "script" programming languages such as Awk, Perl, Tcl,
+Python, and Ruby, whereas other SQL database engines provide only
+compile-time fixed, static typing such as found in Pascal, C++, and Java.
 </p>
 
 <p>
@@ -121,6 +174,7 @@ following type affinities:</P>
 	<LI>TEXT</LI>
 	<LI>NUMERIC</LI>
 	<LI>INTEGER</LI>
+        <LI>REAL</li>
 	<LI>NONE</LI>
 </UL>
 
@@ -131,20 +185,30 @@ TEXT affinity it is converted to text form before being stored.</P>
 <P>A column with NUMERIC affinity may contain values using all five
 storage classes. When text data is inserted into a NUMERIC column, an
 attempt is made to convert it to an integer or real number before it
-is stored. If the conversion is successful, then the value is stored
+is stored. If the conversion is successful (meaning that the conversion
+occurs without loss of information), then the value is stored
 using the INTEGER or REAL storage class. If the conversion cannot be
-performed the value is stored using the TEXT storage class. No
+performed without loss of information then 
+the value is stored using the TEXT storage class. No
 attempt is made to convert NULL or blob values.</P>
 
 <P>A column that uses INTEGER affinity behaves in the same way as a
 column with NUMERIC affinity, except that if a real value with no
-floating point component (or text value that converts to such) is
+fractional component and a magnitude that is less than or equal to the
+largest possible integer (or text value that converts to such) is
 inserted it is converted to an integer and stored using the INTEGER
 storage class.</P>
 
+<P>A column with REAL affinity behaves like a column with NUMERIC
+affinity except that it forces integer values into floating point
+representation.  (As an internal optimization, small floating point
+values with no fractional component are stored on
+disk as integers in order to take up less space and are converted
+back into floating point as the value is read out.)</P>
+
 <P>A column with affinity NONE does not prefer one storage class over
-another.  It makes no attempt to coerce data before
-it is inserted.</P>
+another.  No attempt is made to coerce data from one storage class into
+another.  The data is stored on disk exactly as specified.</p>
 
 <h4>2.1 Determination Of Column Affinity</h4>
 
@@ -162,6 +226,10 @@ of the column, according to the following rules:</P>
 	<LI><P>If the datatype for a column
          contains the string &quot;BLOB&quot; or if
         no datatype is specified then the column has affinity NONE.</P>
+
+        <LI><P>If the datatype for a column
+        contains any of the strings &quot;REAL&quot;, &quot;FLOA&quot;,
+        or &quot;DOUB&quot; then the column has REAL affinity</P>
 
 	<LI><P>Otherwise, the affinity is NUMERIC.</P>
 </OL>
@@ -190,6 +258,7 @@ INSERT INTO t1 VALUES(500.0, 500.0, 500.0, 500.0);
 </PRE>
 </blockquote>
 
+<a name="comparisons"></a>
 <h3>3. Comparison Expressions</h3>
 
 <P>Like SQLite version 2, version 3
@@ -219,18 +288,20 @@ two values being compared, according to the following rules:</P>
 classes (INTEGER and REAL) and TEXT before performing a comparison.
 For binary comparisons, this is done in the cases enumerated below.
 The term "expression" used in the bullet points below means any
-SQL scalar expression or literal other than a column value.</P>
+SQL scalar expression or literal other than a column value.  Note that
+if X and Y.Z are a column names, then +X and +Y.Z are considered
+expressions.</P>
 <UL>
 	<LI><P>When a column value is compared to the result of an
 	expression, the affinity of the column is applied to the result of
 	the expression before the comparison takes place.</P>
 
 	<LI><P>When two column values are compared, if one column has
-	INTEGER or NUMERIC affinity and the other does not, the NUMERIC
-	affinity is applied to any values with storage class TEXT extracted
-	from the non-NUMERIC column.</P>
+	INTEGER or REAL or NUMERIC affinity and the other does not, 
+        then NUMERIC affinity is applied to any values with storage
+        class TEXT extracted from the non-NUMERIC column.</P>
 
-	<LI><P>When the results of two expressions are compared, the no
+	<LI><P>When the results of two expressions are compared, no
         conversions occur.  The results are compared as is.  If a string
         is compared to a number, the number will always be less than the
         string.</P>
@@ -248,8 +319,12 @@ similar manner to "a = b"). For example if 'b' is a column value
 and 'a' is an expression, then the affinity of 'b' is applied to 'a'
 before any comparisons take place.</P>
 
-<P>SQLite treats the expression "a IN (x, y, z)" as equivalent to "a = z OR
-a = y OR a = z".
+<P>SQLite treats the expression "a IN (x, y, z)" as equivalent to "a = +x OR
+a = +y OR a = +z".  The values to the right of the IN operator (the "x", "y",
+and "z" values in this example) are considered to be expressions, even if they
+happen to be column values.  If the value of the left of the IN operator is
+a column, then the affinity of that column is used.  If the value is an
+expression then no conversions occur.
 </P>
 
 <h4>3.1 Comparison Example</h4>
@@ -335,28 +410,35 @@ modes, as follows:</P>
 </UL>
 
 <a name="collation"></a>
+
 <h3>7. User-defined Collation Sequences</h3>
 
 <p>
 By default, when SQLite compares two text values, the result of the
 comparison is determined using memcmp(), regardless of the encoding of the
 string. SQLite v3 provides the ability for users to supply arbitrary
-comparison functions, known as user-defined collation sequences, to be used
-instead of memcmp().
+comparison functions, known as user-defined "collation sequences" or
+"collating functions", to be used instead of memcmp().
 </p>  
 <p>
 Aside from the default collation sequence BINARY, implemented using
 memcmp(), SQLite features two extra built-in collation sequences 
-intended for testing purposes, NOCASE and REVERSE:
+intended for testing purposes, the NOCASE and RTRIM collations:
 </p>  
 <UL>
-	<LI><b>BINARY</b> - Compares string data using memcmp(), regardless
-                            of text encoding.</LI>
-	<LI><b>REVERSE</b> - Collate in the reverse order to BINARY. </LI>
-	<LI><b>NOCASE</b> - The same as binary, except the 26 upper case
-			    characters used by the English language are
-			    folded to their lower case equivalents before
-                            the comparison is performed.  </UL>
+<LI><b>BINARY</b> - Compares string data using memcmp(), regardless
+                    of text encoding.</LI>
+<LI><b>NOCASE</b> - The same as binary, except the 26 upper case
+     characters of ASCII are
+     folded to their lower case equivalents before
+     the comparison is performed.  Note that only ASCII characters
+     are case folded.  SQLite does not attempt to due full
+     UTF case folding due to the size of the tables required.</li>
+
+<LI><b>RTRIM</b> - The same as binary, except that trailing space
+     characters are ignored.</li>
+</ul>
+
 
 
 <h4>7.1 Assigning Collation Sequences from SQL</h4>
@@ -375,12 +457,13 @@ which such a comparison takes place.
 </p>  
 
 <p>
-For binary comparison operators (=, <, >, <= and >=) if either operand is a
-column, then the default collation type of the column determines the
-collation sequence to use for the comparison. If both operands are columns,
-then the collation type for the left operand determines the collation
+For binary comparison operators (=, &lt;, &gt;, &lt;= and &gt;=) if either
+operand is a column, then the default collation type of the column determines
+the collation sequence to use for the comparison. If both operands are
+columns, then the collation type for the left operand determines the collation
 sequence used. If neither operand is a column, then the BINARY collation
-sequence is used.
+sequence is used.  For the purposes of this paragraph, a column name
+preceded by one or more unary "+" operators is considered a column name.
 </p>  
 
 <p>
@@ -422,10 +505,10 @@ CREATE TABLE t1(
 SELECT (a = b) FROM t1;
 
 -- Text comparison is performed using the NOCASE collation sequence.
-SELECT (a = d) FROM t1;
+SELECT (d = a) FROM t1;
 
 -- Text comparison is performed using the BINARY collation sequence.
-SELECT (d = a) FROM t1;
+SELECT (a = d) FROM t1;
 
 -- Text comparison is performed using the REVERSE collation sequence.
 SELECT ('abc' = c) FROM t1;
@@ -451,11 +534,6 @@ SELECT * FROM t1 ORDER BY c COLLATE NOCASE;
 
 </PRE>
 </blockquote>
-
-
-
-<table width="100%">
-<tr><td bgcolor="#80a796"></td></tr>
-</table>
-<small><i>This page last modified on 2004/11/19 11:59:24</i></small>
-</body></html>
+<hr><small><i>
+This page last modified 2008/12/15 22:47:50 UTC
+</i></small></div></body></html>

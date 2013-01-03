@@ -1,4 +1,27 @@
-<HTML><HEAD><TITLE>Tk Library Procedures - Tk_GetScrollInfo manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetScrollInfo manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> GetScroll</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="GetScroll.htm#M2" NAME="L365">NAME</A>
+<DL><DD>Tk_GetScrollInfo, Tk_GetScrollInfoObj - parse arguments for scrolling commands</DD></DL>
+<DD><A HREF="GetScroll.htm#M3" NAME="L366">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>int
+<DD><B>Tk_GetScrollInfo(</B><I>interp, argc, argv, dblPtr, intPtr</I><B>)</B>
+<DD>int
+<DD><B>Tk_GetScrollInfoObj(</B><I>interp, objc, objv, dblPtr, intPtr</I><B>)</B>
+</DL>
+<DD><A HREF="GetScroll.htm#M4" NAME="L367">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="GetScroll.htm#M5" NAME="L368">DESCRIPTION</A>
+<DD><A HREF="GetScroll.htm#M6" NAME="L369">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_GetScrollInfo, Tk_GetScrollInfoObj - parse arguments for scrolling commands
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -8,18 +31,18 @@ int<BR>
 int<BR>
 <B>Tk_GetScrollInfoObj(</B><I>interp, objc, objv, dblPtr, intPtr</I><B>)</B><BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter to use for error reporting.
 <P><DT>int <B>argc</B> (in)<DD>
 Number of strings in <I>argv</I> array.
-<P><DT>CONST char <B>*argv[]</B> (in)<DD>
+<P><DT>const char <B>*argv[]</B> (in)<DD>
 Argument strings.  These represent the entire widget command, of
 which the first word is typically the widget name and the second
 word is typically <B>xview</B> or <B>yview</B>.
 <P><DT>int <B>objc</B> (in)<DD>
 Number of Tcl_Obj's in <I>objv</I> array.
-<P><DT>Tcl_Obj *CONST <B>objv[]</B> (in)<DD>
+<P><DT>Tcl_Obj *const <B>objv[]</B> (in)<DD>
 Argument objects.  These represent the entire widget command, of
 which the first word is typically the widget name and the second
 word is typically <B>xview</B> or <B>yview</B>.
@@ -58,8 +81,8 @@ development.
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/P.htm#parse">parse</A>, <A href="../Keywords/S.htm#scrollbar">scrollbar</A>, <A href="../Keywords/S.htm#scrolling command">scrolling command</A>, <A href="../Keywords/X.htm#xview">xview</A>, <A href="../Keywords/Y.htm#yview">yview</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

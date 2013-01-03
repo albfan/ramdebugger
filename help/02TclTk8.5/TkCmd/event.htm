@@ -1,78 +1,83 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - event manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>event manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> event</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="event.htm#M2" NAME="L476">NAME</A>
-<DL><DD>event - Miscellaneous event facilities: define virtual events and generate events</DL>
-<DD><A HREF="event.htm#M3" NAME="L477">SYNOPSIS</A>
+<DD><A HREF="event.htm#M2" NAME="L536">NAME</A>
+<DL><DD>event - Miscellaneous event facilities: define virtual events and generate events</DD></DL>
+<DD><A HREF="event.htm#M3" NAME="L537">SYNOPSIS</A>
 <DL>
-<DD><B>event</B><I> option </I>?<I>arg arg ...</I>?
 </DL>
-<DD><A HREF="event.htm#M4" NAME="L478">DESCRIPTION</A>
-<DL>
-<DD><A HREF="event.htm#M5" NAME="L479"><B>event add &lt;&lt;</B><I>virtual</I><B>&gt;&gt;</B><I> sequence </I>?<I>sequence ...</I>?</A>
-<DD><A HREF="event.htm#M6" NAME="L480"><B>event delete &lt;&lt;</B><I>virtual</I><B>&gt;&gt; </B>?<I>sequence</I> <I>sequence ...</I>?</A>
-<DD><A HREF="event.htm#M7" NAME="L481"><B>event generate </B><I>window event </I>?<I>option value option value ...</I>?</A>
-<DD><A HREF="event.htm#M8" NAME="L482"><B>event info </B>?&lt;&lt;<I>virtual</I><B>&gt;&gt;</B>?</A>
+<DD><A HREF="event.htm#M4" NAME="L538">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="event.htm#M5" NAME="L539"><B>event add &lt;&lt;</B><I>virtual</I><B>&gt;&gt;</B><I> sequence </I>?<I>sequence ...</I>?</A>
+<DD><A HREF="event.htm#M6" NAME="L540"><B>event delete &lt;&lt;</B><I>virtual</I><B>&gt;&gt; </B>?<I>sequence</I> <I>sequence ...</I>?</A>
+<DD><A HREF="event.htm#M7" NAME="L541"><B>event generate </B><I>window event </I>?<I>option value option value ...</I>?</A>
+<DD><A HREF="event.htm#M8" NAME="L542"><B>event info </B>?<B>&lt;&lt;</B><I>virtual</I><B>&gt;&gt;</B>?</A>
 </DL>
-<DD><A HREF="event.htm#M9" NAME="L483">EVENT FIELDS</A>
-<DL>
-<DD><A HREF="event.htm#M10" NAME="L484"><B>-above</B><I> window</I></A>
-<DD><A HREF="event.htm#M11" NAME="L485"><B>-borderwidth</B><I> size</I></A>
-<DD><A HREF="event.htm#M12" NAME="L486"><B>-button</B><I> number</I></A>
-<DD><A HREF="event.htm#M13" NAME="L487"><B>-count</B><I> number</I></A>
-<DD><A HREF="event.htm#M14" NAME="L488"><B>-data</B><I> string</I></A>
-<DD><A HREF="event.htm#M15" NAME="L489"><B>-delta</B><I> number</I></A>
-<DD><A HREF="event.htm#M16" NAME="L490"><B>-detail</B><I> detail</I></A>
-<DD><A HREF="event.htm#M17" NAME="L491"><B>-focus</B><I> boolean</I></A>
-<DD><A HREF="event.htm#M18" NAME="L492"><B>-height</B><I> size</I></A>
-<DD><A HREF="event.htm#M19" NAME="L493"><B>-keycode</B><I> number</I></A>
-<DD><A HREF="event.htm#M20" NAME="L494"><B>-keysym</B><I> name</I></A>
-<DD><A HREF="event.htm#M21" NAME="L495"><B>-mode</B><I> notify</I></A>
-<DD><A HREF="event.htm#M22" NAME="L496"><B>-override</B><I> boolean</I></A>
-<DD><A HREF="event.htm#M23" NAME="L497"><B>-place</B><I> where</I></A>
-<DD><A HREF="event.htm#M24" NAME="L498"><B>-root</B><I> window</I></A>
-<DD><A HREF="event.htm#M25" NAME="L499"><B>-rootx</B><I> coord</I></A>
-<DD><A HREF="event.htm#M26" NAME="L500"><B>-rooty</B><I> coord</I></A>
-<DD><A HREF="event.htm#M27" NAME="L501"><B>-sendevent</B><I> boolean</I></A>
-<DD><A HREF="event.htm#M28" NAME="L502"><B>-serial</B><I> number</I></A>
-<DD><A HREF="event.htm#M29" NAME="L503"><B>-state</B><I> state</I></A>
-<DD><A HREF="event.htm#M30" NAME="L504"><B>-subwindow</B><I> window</I></A>
-<DD><A HREF="event.htm#M31" NAME="L505"><B>-time</B><I> integer</I></A>
-<DD><A HREF="event.htm#M32" NAME="L506"><B>-warp</B><I> boolean</I></A>
-<DD><A HREF="event.htm#M33" NAME="L507"><B>-width</B><I> size</I></A>
-<DD><A HREF="event.htm#M34" NAME="L508"><B>-when</B><I> when</I></A>
-<DL>
-<DD><A HREF="event.htm#M35" NAME="L509"><B>now</B></A>
-<DD><A HREF="event.htm#M36" NAME="L510"><B>tail</B></A>
-<DD><A HREF="event.htm#M37" NAME="L511"><B>head</B></A>
-<DD><A HREF="event.htm#M38" NAME="L512"><B>mark</B></A>
+<DD><A HREF="event.htm#M9" NAME="L543">EVENT FIELDS</A>
+<DL class="event fields">
+<DD><A HREF="event.htm#M10" NAME="L544"><B>-above</B><I> window</I></A>
+<DD><A HREF="event.htm#M11" NAME="L545"><B>-borderwidth</B><I> size</I></A>
+<DD><A HREF="event.htm#M12" NAME="L546"><B>-button</B><I> number</I></A>
+<DD><A HREF="event.htm#M13" NAME="L547"><B>-count</B><I> number</I></A>
+<DD><A HREF="event.htm#M14" NAME="L548"><B>-data</B><I> string</I></A>
+<DD><A HREF="event.htm#M15" NAME="L549"><B>-delta</B><I> number</I></A>
+<DD><A HREF="event.htm#M16" NAME="L550"><B>-detail</B><I> detail</I></A>
+<DD><A HREF="event.htm#M17" NAME="L551"><B>-focus</B><I> boolean</I></A>
+<DD><A HREF="event.htm#M18" NAME="L552"><B>-height</B><I> size</I></A>
+<DD><A HREF="event.htm#M19" NAME="L553"><B>-keycode</B><I> number</I></A>
+<DD><A HREF="event.htm#M20" NAME="L554"><B>-keysym</B><I> name</I></A>
+<DD><A HREF="event.htm#M21" NAME="L555"><B>-mode</B><I> notify</I></A>
+<DD><A HREF="event.htm#M22" NAME="L556"><B>-override</B><I> boolean</I></A>
+<DD><A HREF="event.htm#M23" NAME="L557"><B>-place</B><I> where</I></A>
+<DD><A HREF="event.htm#M24" NAME="L558"><B>-root</B><I> window</I></A>
+<DD><A HREF="event.htm#M25" NAME="L559"><B>-rootx</B><I> coord</I></A>
+<DD><A HREF="event.htm#M26" NAME="L560"><B>-rooty</B><I> coord</I></A>
+<DD><A HREF="event.htm#M27" NAME="L561"><B>-sendevent</B><I> boolean</I></A>
+<DD><A HREF="event.htm#M28" NAME="L562"><B>-serial</B><I> number</I></A>
+<DD><A HREF="event.htm#M29" NAME="L563"><B>-state</B><I> state</I></A>
+<DD><A HREF="event.htm#M30" NAME="L564"><B>-subwindow</B><I> window</I></A>
+<DD><A HREF="event.htm#M31" NAME="L565"><B>-time</B><I> integer</I></A>
+<DD><A HREF="event.htm#M32" NAME="L566"><B>-warp</B><I> boolean</I></A>
+<DD><A HREF="event.htm#M33" NAME="L567"><B>-width</B><I> size</I></A>
+<DD><A HREF="event.htm#M34" NAME="L568"><B>-when</B><I> when</I></A>
+<DL class="event fields">
+<DD><A HREF="event.htm#M35" NAME="L569"><B>now</B></A>
+<DD><A HREF="event.htm#M36" NAME="L570"><B>tail</B></A>
+<DD><A HREF="event.htm#M37" NAME="L571"><B>head</B></A>
+<DD><A HREF="event.htm#M38" NAME="L572"><B>mark</B></A>
 </DL>
-<DD><A HREF="event.htm#M39" NAME="L513"><B>-x</B><I> coord</I></A>
-<DD><A HREF="event.htm#M40" NAME="L514"><B>-y</B><I> coord</I></A>
+<DD><A HREF="event.htm#M39" NAME="L573"><B>-x</B><I> coord</I></A>
+<DD><A HREF="event.htm#M40" NAME="L574"><B>-y</B><I> coord</I></A>
 </DL>
-<DD><A HREF="event.htm#M41" NAME="L515">PREDEFINED VIRTUAL EVENTS</A>
-<DL>
-<DD><A HREF="event.htm#M42" NAME="L516"><B>&lt;&lt;AltUnderlined&gt;&gt;</B></A>
-<DD><A HREF="event.htm#M43" NAME="L517"><B>&lt;&lt;ListboxSelect&gt;&gt;</B></A>
-<DD><A HREF="event.htm#M44" NAME="L518"><B>&lt;&lt;MenuSelect&gt;&gt;</B></A>
-<DD><A HREF="event.htm#M45" NAME="L519"><B>&lt;&lt;Modified&gt;&gt;</B></A>
-<DD><A HREF="event.htm#M46" NAME="L520"><B>&lt;&lt;Selection&gt;&gt;</B></A>
-<DD><A HREF="event.htm#M47" NAME="L521"><B>&lt;&lt;TraverseIn&gt;&gt;</B></A>
-<DD><A HREF="event.htm#M48" NAME="L522"><B>&lt;&lt;TraverseOut&gt;&gt;</B></A>
+<DD><A HREF="event.htm#M41" NAME="L575">PREDEFINED VIRTUAL EVENTS</A>
+<DL class="predefined virtual events">
+<DD><A HREF="event.htm#M42" NAME="L576"><B>&lt;&lt;AltUnderlined&gt;&gt;</B></A>
+<DD><A HREF="event.htm#M43" NAME="L577"><B>&lt;&lt;ListboxSelect&gt;&gt;</B></A>
+<DD><A HREF="event.htm#M44" NAME="L578"><B>&lt;&lt;MenuSelect&gt;&gt;</B></A>
+<DD><A HREF="event.htm#M45" NAME="L579"><B>&lt;&lt;Modified&gt;&gt;</B></A>
+<DD><A HREF="event.htm#M46" NAME="L580"><B>&lt;&lt;Selection&gt;&gt;</B></A>
+<DD><A HREF="event.htm#M47" NAME="L581"><B>&lt;&lt;TraverseIn&gt;&gt;</B></A>
+<DD><A HREF="event.htm#M48" NAME="L582"><B>&lt;&lt;TraverseOut&gt;&gt;</B></A>
 </DL>
-<DL>
-<DD><A HREF="event.htm#M49" NAME="L523"><B>&lt;&lt;Clear&gt;&gt;</B></A>
-<DD><A HREF="event.htm#M50" NAME="L524"><B>&lt;&lt;Copy&gt;&gt;</B></A>
-<DD><A HREF="event.htm#M51" NAME="L525"><B>&lt;&lt;Cut&gt;&gt;</B></A>
-<DD><A HREF="event.htm#M52" NAME="L526"><B>&lt;&lt;Paste&gt;&gt;</B></A>
-<DD><A HREF="event.htm#M53" NAME="L527"><B>&lt;&lt;PasteSelection&gt;&gt;</B></A>
-<DD><A HREF="event.htm#M54" NAME="L528"><B>&lt;&lt;PrevWindow&gt;&gt;</B></A>
-<DD><A HREF="event.htm#M55" NAME="L529"><B>&lt;&lt;Redo&gt;&gt;</B></A>
-<DD><A HREF="event.htm#M56" NAME="L530"><B>&lt;&lt;Undo&gt;&gt;</B></A>
+<DL class="predefined virtual events">
+<DD><A HREF="event.htm#M49" NAME="L583"><B>&lt;&lt;Clear&gt;&gt;</B></A>
+<DD><A HREF="event.htm#M50" NAME="L584"><B>&lt;&lt;Copy&gt;&gt;</B></A>
+<DD><A HREF="event.htm#M51" NAME="L585"><B>&lt;&lt;Cut&gt;&gt;</B></A>
+<DD><A HREF="event.htm#M52" NAME="L586"><B>&lt;&lt;Paste&gt;&gt;</B></A>
+<DD><A HREF="event.htm#M53" NAME="L587"><B>&lt;&lt;PasteSelection&gt;&gt;</B></A>
+<DD><A HREF="event.htm#M54" NAME="L588"><B>&lt;&lt;PrevWindow&gt;&gt;</B></A>
+<DD><A HREF="event.htm#M55" NAME="L589"><B>&lt;&lt;Redo&gt;&gt;</B></A>
+<DD><A HREF="event.htm#M56" NAME="L590"><B>&lt;&lt;Undo&gt;&gt;</B></A>
 </DL>
-<DD><A HREF="event.htm#M57" NAME="L531">VIRTUAL EVENT EXAMPLES</A>
-<DD><A HREF="event.htm#M58" NAME="L532">SEE ALSO</A>
-<DD><A HREF="event.htm#M59" NAME="L533">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="event.htm#M57" NAME="L591">VIRTUAL EVENT EXAMPLES</A>
+<DD><A HREF="event.htm#M58" NAME="L592">SEE ALSO</A>
+<DD><A HREF="event.htm#M59" NAME="L593">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 event - Miscellaneous event facilities: define virtual events and generate events
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -83,7 +88,7 @@ window system events, such as defining virtual events and synthesizing
 events.  The command has several different forms, determined by the
 first argument.  The following forms are currently supported:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>event add &lt;&lt;</B><I>virtual</I><B>&gt;&gt;</B><I> sequence </I>?<I>sequence ...</I>?</A><DD>
 Associates the virtual event <I>virtual</I> with the physical
 event sequence(s) given by the <I>sequence</I> arguments, so that
@@ -120,13 +125,13 @@ argument of the <B><A HREF="../TkCmd/bind.htm">bind</A></B> command except that 
 of a single event pattern, not a sequence.
 <I>Option-value</I> pairs may be used to specify additional
 attributes of the event, such as the x and y mouse position;  see
-EVENT FIELDS below.  If the <B>-when</B> option is not specified, the
+<B>EVENT FIELDS</B> below.  If the <B>-when</B> option is not specified, the
 event is processed immediately:  all of the handlers for the event
 will complete before the <B>event generate</B> command returns.
 If the <B>-when</B> option is specified then it determines when the
 event is processed.  Certain events, such as key events, require
 that the window has focus to receive the event properly.
-<P><DT><A NAME="M8"><B>event info </B>?&lt;&lt;<I>virtual</I><B>&gt;&gt;</B>?</A><DD>
+<P><DT><A NAME="M8"><B>event info </B>?<B>&lt;&lt;</B><I>virtual</I><B>&gt;&gt;</B>?</A><DD>
 Returns information about virtual events.
 If the <B>&lt;&lt;</B><I>virtual</I><B>&gt;&gt;</B> argument is omitted, the return value
 is a list of all the virtual events that are currently defined.
@@ -134,13 +139,17 @@ If <B>&lt;&lt;</B><I>virtual</I><B>&gt;&gt;</B> is specified then the return val
 a list whose elements are the physical event sequences currently
 defined for the given virtual event;  if the virtual event is
 not defined then an empty string is returned.
+<P>
+Note that virtual events that that are not bound to physical event
+sequences are <I>not</I> returned by <B>event info</B>.
 <P></DL>
 <H3><A NAME="M9">EVENT FIELDS</A></H3>
 The following options are supported for the <B>event generate</B>
-command.  These correspond to the ``%'' expansions
-allowed in binding scripts for the <B><A HREF="../TkCmd/bind.htm">bind</A></B> command.
+command.  These correspond to the
+&#8220;%&#8221;
+expansions allowed in binding scripts for the <B><A HREF="../TkCmd/bind.htm">bind</A></B> command.
 <P>
-<DL>
+<DL class="event fields">
 <DT><A NAME="M10"><B>-above</B><I> window</I></A><DD>
 <I>Window</I> specifies the <I>above</I> field for the event,
 either as a window path name or as an integer window id.
@@ -177,10 +186,7 @@ behaviors for mouse wheel motion.  This field corresponds to the
 <P><DT><A NAME="M16"><B>-detail</B><I> detail</I></A><DD>
 <I>Detail</I> specifies the <I>detail</I> field for the event
 and must be one of the following:
-<PRE><B>NotifyAncestor	NotifyNonlinearVirtual
-NotifyDetailNone	NotifyPointer
-NotifyInferior	NotifyPointerRoot
-NotifyNonlinear	NotifyVirtual</B></PRE>
+<dl><dd><table border="0"><tr><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>NotifyAncestor</B><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>NotifyNonlinearVirtual</B><tr><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>NotifyDetailNone</B><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>NotifyPointer</B><tr><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>NotifyInferior</B><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>NotifyPointerRoot</B><tr><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>NotifyNonlinear</B><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>NotifyVirtual</B></table></dl>
 Valid for <B>Enter</B>, <B>Leave</B>, <B>FocusIn</B> and
 <B>FocusOut</B> events.
 Corresponds to the <B>%d</B> substitution for binding scripts.
@@ -288,7 +294,7 @@ Corresponds to the <B>%w</B> substitution for binding scripts.
 <I>When</I> determines when the event will be processed;  it must have one
 of the following values:
 <P>
-<DL>
+<DL class="event fields">
 <DT><A NAME="M35"><B>now</B></A><DD>
 Process the event immediately, before the command returns.
 This also happens if the <B>-when</B> option is omitted.
@@ -335,7 +341,7 @@ next X event serial number.
 Tk defines the following virtual events for the purposes of
 notification:
 <P>
-<DL>
+<DL class="predefined virtual events">
 <DT><A NAME="M42"><B>&lt;&lt;AltUnderlined&gt;&gt;</B></A><DD>
 This is sent to widget to notify it that the letter it has underlined
 (as an accelerator indicator) with the <B>-underline</B> option has
@@ -356,17 +362,21 @@ This is sent to a text widget when the selection in the widget is
 changed.
 <P><DT><A NAME="M47"><B>&lt;&lt;TraverseIn&gt;&gt;</B></A><DD>
 This is sent to a widget when the focus enters the widget because of a
-user-driven &quot;tab to widget&quot; action.
+user-driven
+&#8220;tab to widget&#8221;
+action.
 <P><DT><A NAME="M48"><B>&lt;&lt;TraverseOut&gt;&gt;</B></A><DD>
 This is sent to a widget when the focus leaves the widget because of a
-user-driven &quot;tab to widget&quot; action.
+user-driven
+&#8220;tab to widget&#8221;
+action.
 <P></DL>
 <P>
 Tk defines the following virtual events for the purposes of unifying
 bindings across multiple platforms. Users expect them to behave in the
 following way:
 <P>
-<DL>
+<DL class="predefined virtual events">
 <DT><A NAME="M49"><B>&lt;&lt;Clear&gt;&gt;</B></A><DD>
 Delete the currently selected widget contents.
 <P><DT><A NAME="M50"><B>&lt;&lt;Copy&gt;&gt;</B></A><DD>
@@ -439,8 +449,8 @@ pressing the F6 key will now also invoke the <B>&lt;&lt;Paste&gt;&gt;</B> bindin
 <B><A HREF="../TkCmd/bind.htm">bind</A></B>
 <H3><A NAME="M59">KEYWORDS</A></H3>
 <A href="../Keywords/E.htm#event">event</A>, <A href="../Keywords/B.htm#binding">binding</A>, <A href="../Keywords/D.htm#define">define</A>, <A href="../Keywords/H.htm#handle">handle</A>, <A href="../Keywords/V.htm#virtual event">virtual event</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1998-2000 Ajuba Solutions.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1996 Sun Microsystems, Inc.
+Copyright &copy; 1998-2000 Ajuba Solutions.
+</div>
 </BODY></HTML>

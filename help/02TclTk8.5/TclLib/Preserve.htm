@@ -1,13 +1,36 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_Preserve manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_Preserve manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> Preserve</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="Preserve.htm#M2" NAME="L546">NAME</A>
+<DL><DD>Tcl_Preserve, Tcl_Release, Tcl_EventuallyFree - avoid freeing storage while it is being used</DD></DL>
+<DD><A HREF="Preserve.htm#M3" NAME="L547">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD><B>Tcl_Preserve</B>(<I>clientData</I>)
+<DD><B>Tcl_Release</B>(<I>clientData</I>)
+<DD><B>Tcl_EventuallyFree</B>(<I>clientData, freeProc</I>)
+</DL>
+<DD><A HREF="Preserve.htm#M4" NAME="L548">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="Preserve.htm#M5" NAME="L549">DESCRIPTION</A>
+<DD><A HREF="Preserve.htm#M6" NAME="L550">SEE ALSO</A>
+<DD><A HREF="Preserve.htm#M7" NAME="L551">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
-Tcl_Preserve, Tcl_Release, Tcl_EventuallyFree - avoid freeing storage while it's being used
+Tcl_Preserve, Tcl_Release, Tcl_EventuallyFree - avoid freeing storage while it is being used
 <H3><A NAME="M3">SYNOPSIS</A></H3>
 <B>#include &lt;tcl.h&gt;</B><BR>
 <B>Tcl_Preserve</B>(<I>clientData</I>)<BR>
 <B>Tcl_Release</B>(<I>clientData</I>)<BR>
 <B>Tcl_EventuallyFree</B>(<I>clientData, freeProc</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>ClientData <B>clientData</B> (in)<DD>
 Token describing structure to be freed or reallocated.  Usually a pointer
 to memory for structure.
@@ -21,7 +44,7 @@ having to do with widget deletion, but are also useful in many other
 situations.  When a widget is deleted, its
 widget record (the structure holding information specific to the
 widget) must be returned to the storage allocator.
-However, it's possible that the widget record is in active use
+However, it is possible that the widget record is in active use
 by one of the procedures on the stack at the time of the deletion.
 This can happen, for example, if the command associated with a button
 widget causes the button to be destroyed:  an X event causes an
@@ -90,8 +113,8 @@ counts in a separate structure.
 <B><A HREF="../TclLib/Interp.htm">Tcl_Interp</A></B>, <B><A HREF="../TclLib/Alloc.htm">Tcl_Alloc</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/F.htm#free">free</A>, <A href="../Keywords/R.htm#reference count">reference count</A>, <A href="../Keywords/S.htm#storage">storage</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

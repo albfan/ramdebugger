@@ -1,6 +1,49 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_Namespace manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_Namespace manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> Namespace</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="Namespace.htm#M2" NAME="L439">NAME</A>
+<DL><DD>Tcl_AppendExportList, Tcl_CreateNamespace, Tcl_DeleteNamespace, Tcl_Export, Tcl_FindCommand, Tcl_FindNamespace, Tcl_ForgetImport, Tcl_GetCurrentNamespace, Tcl_GetGloblaNamespace, Tcl_GetNamespaceUnknownHandler, Tcl_Import, Tcl_SetNamespaceUnknownHandler - manipulate namespaces</DD></DL>
+<DD><A HREF="Namespace.htm#M3" NAME="L440">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>Tcl_Namespace *
+<DD><B>Tcl_CreateNamespace</B>(<I>interp, name, clientData, deleteProc</I>)
+<DD><B>Tcl_DeleteNamespace</B>(<I>nsPtr</I>)
+<DD>int
+<DD><B>Tcl_AppendExportList</B>(<I>interp, nsPtr, objPtr</I>)
+<DD>int
+<DD><B>Tcl_Export</B>(<I>interp, nsPtr, pattern, resetListFirst</I>)
+<DD>int
+<DD><B>Tcl_Import</B>(<I>interp, nsPtr, pattern, allowOverwrite</I>)
+<DD>int
+<DD><B>Tcl_ForgetImport</B>(<I>interp, nsPtr, pattern</I>)
+<DD>Tcl_Namespace *
+<DD><B>Tcl_GetCurrentNamespace</B>(<I>interp</I>)
+<DD>Tcl_Namespace *
+<DD><B>Tcl_GetGlobalNamespace</B>(<I>interp</I>)
+<DD>Tcl_Namespace *
+<DD><B>Tcl_FindNamespace</B>(<I>interp, name, contextNsPtr, flags</I>)
+<DD>Tcl_Command
+<DD><B>Tcl_FindCommand</B>(<I>interp, name, contextNsPtr, flags</I>)
+<DD>Tcl_Obj *
+<DD><B>Tcl_GetNamespaceUnknownHandler(</B><I>interp, nsPtr</I>)
+<DD>int
+<DD><B>Tcl_SetNamespaceUnknownHandler(</B><I>interp, nsPtr, handlerPtr</I>)
+</DL>
+<DD><A HREF="Namespace.htm#M4" NAME="L441">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="Namespace.htm#M5" NAME="L442">DESCRIPTION</A>
+<DD><A HREF="Namespace.htm#M6" NAME="L443">SEE ALSO</A>
+<DD><A HREF="Namespace.htm#M7" NAME="L444">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
-Tcl_AppendExportList, Tcl_CreateNamespace, Tcl_DeleteNamespace, Tcl_Export, Tcl_FindCommand, Tcl_FindNamespace, Tcl_ForgetImport, Tcl_GetCurrentNamespace, Tcl_GetGloblaNamespace, Tcl_Import - manipulate namespaces
+Tcl_AppendExportList, Tcl_CreateNamespace, Tcl_DeleteNamespace, Tcl_Export, Tcl_FindCommand, Tcl_FindNamespace, Tcl_ForgetImport, Tcl_GetCurrentNamespace, Tcl_GetGloblaNamespace, Tcl_GetNamespaceUnknownHandler, Tcl_Import, Tcl_SetNamespaceUnknownHandler - manipulate namespaces
 <H3><A NAME="M3">SYNOPSIS</A></H3>
 <B>#include &lt;tcl.h&gt;</B><BR>
 Tcl_Namespace *<BR>
@@ -22,8 +65,12 @@ Tcl_Namespace *<BR>
 <B>Tcl_FindNamespace</B>(<I>interp, name, contextNsPtr, flags</I>)<BR>
 Tcl_Command<BR>
 <B>Tcl_FindCommand</B>(<I>interp, name, contextNsPtr, flags</I>)<BR>
+Tcl_Obj *<BR>
+<B>Tcl_GetNamespaceUnknownHandler(</B><I>interp, nsPtr</I>)<BR>
+int<BR>
+<B>Tcl_SetNamespaceUnknownHandler(</B><I>interp, nsPtr, handlerPtr</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in/out)<DD>
 The interpreter in which the namespace exists and where name lookups
 are performed. Also where error result messages are written.
@@ -63,6 +110,9 @@ global namespace), <B>TCL_NAMESPACE_ONLY</B> (just for <B>Tcl_FindCommand</B>;
 indicates that the search is always to be conducted relative to the
 context namespace), and <B>TCL_LEAVE_ERR_MSG</B> (indicates that an error
 message should be left in the interpreter if the search fails.)
+<P><DT>Tcl_Obj <B>*handlerPtr</B> (in)<DD>
+A script fragment to be installed as the unknown command handler for the
+namespace, or NULL to reset the handler to its default.
 <P></DL>
 <H3><A NAME="M5">DESCRIPTION</A></H3>
 Namespaces are hierarchic naming contexts that can contain commands
@@ -115,12 +165,19 @@ namespace cannot be found, NULL is returned.
 <B>Tcl_FindCommand</B> searches for a command named <I>name</I> within
 the context of the namespace <I>contextNsPtr</I>.  If the command
 cannot be found, NULL is returned.
+<P>
+<B>Tcl_GetNamespaceUnknownHandler</B> returns the unknown command handler
+for the namespace, or NULL if none is set.
+<P>
+<B>Tcl_SetNamespaceUnknownHandler</B> sets the unknown command handler for
+the namespace. If <I>handlerPtr</I> is NULL, then the handler is reset to
+its default.
 
 <H3><A NAME="M6">SEE ALSO</A></H3>
 <B><A HREF="../TclLib/CrtCommand.htm">Tcl_CreateCommand</A></B>, <B>Tcl_ListObjAppendElements</B>, <B><A HREF="../TclLib/SetVar.htm">Tcl_SetVar</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/N.htm#namespace">namespace</A>, <A href="../Keywords/C.htm#command">command</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 2003 Donal K. Fellows
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 2003 Donal K. Fellows
+</div>
 </BODY></HTML>

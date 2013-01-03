@@ -1,4 +1,29 @@
-<HTML><HEAD><TITLE>Library Procedures - Tk_Name manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_Name manual page - Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> Name</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="Name.htm#M2" NAME="L471">NAME</A>
+<DL><DD>Tk_Name, Tk_PathName, Tk_NameToWindow - convert between names and window tokens</DD></DL>
+<DD><A HREF="Name.htm#M3" NAME="L472">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>Tk_Uid
+<DD><B>Tk_Name</B>(<I>tkwin</I>)
+<DD>char *
+<DD><B>Tk_PathName</B>(<I>tkwin</I>)
+<DD>Tk_Window
+<DD><B>Tk_NameToWindow</B>(<I>interp, pathName, tkwin</I>)
+</DL>
+<DD><A HREF="Name.htm#M4" NAME="L473">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="Name.htm#M5" NAME="L474">DESCRIPTION</A>
+<DD><A HREF="Name.htm#M6" NAME="L475">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_Name, Tk_PathName, Tk_NameToWindow - convert between names and window tokens
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -10,12 +35,12 @@ char *<BR>
 Tk_Window<BR>
 <B>Tk_NameToWindow</B>(<I>interp, pathName, tkwin</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Tk_Window <B>tkwin</B> (in)<DD>
 Token for window.
 <P><DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (out)<DD>
 Interpreter to use for error reporting.
-<P><DT>CONST char <B>*pathName</B> (in)<DD>
+<P><DT>const char <B>*pathName</B> (in)<DD>
 Character string containing path name of window.
 <P></DL>
 <H3><A NAME="M5">DESCRIPTION</A></H3>
@@ -38,9 +63,17 @@ The <B>Tk_PathName</B> macro returns a
 hierarchical name for <I>tkwin</I>.
 Path names have a structure similar to file names in Unix but with
 dots between elements instead of slashes:  the main window for
-an application has the path name ``.'';  its children have names like
-``.a'' and ``.b''; their children have names like ``.a.aa'' and
-``.b.bb''; and so on.  A window is considered to be a child of
+an application has the path name
+&#8220;.&#8221;;
+its children have names like
+&#8220;.a&#8221;
+and
+&#8220;.b&#8221;;
+their children have names like
+&#8220;.a.aa&#8221;
+and
+&#8220;.b.bb&#8221;;
+and so on.  A window is considered to be a child of
 another window for naming purposes if the second window was named
 as the first window's <I>parent</I> when the first window was created.
 This is not always the same as the X window hierarchy.  For
@@ -63,8 +96,8 @@ need not be the case:  any window in the desired hierarchy may be used.
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/N.htm#name">name</A>, <A href="../Keywords/P.htm#path name">path name</A>, <A href="../Keywords/T.htm#token">token</A>, <A href="../Keywords/W.htm#window">window</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

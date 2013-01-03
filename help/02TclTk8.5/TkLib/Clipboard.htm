@@ -1,4 +1,27 @@
-<HTML><HEAD><TITLE>Tk Library Procedures - Tk_ClipboardClear manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_ClipboardClear manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> Clipboard</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="Clipboard.htm#M2" NAME="L36">NAME</A>
+<DL><DD>Tk_ClipboardClear, Tk_ClipboardAppend - Manage the clipboard</DD></DL>
+<DD><A HREF="Clipboard.htm#M3" NAME="L37">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>int
+<DD><B>Tk_ClipboardClear</B>(<I>interp, tkwin</I>)
+<DD>int
+<DD><B>Tk_ClipboardAppend</B>(<I>interp, tkwin, target, format, buffer</I>)
+</DL>
+<DD><A HREF="Clipboard.htm#M4" NAME="L38">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="Clipboard.htm#M5" NAME="L39">DESCRIPTION</A>
+<DD><A HREF="Clipboard.htm#M6" NAME="L40">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_ClipboardClear, Tk_ClipboardAppend - Manage the clipboard
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -8,7 +31,7 @@ int<BR>
 int<BR>
 <B>Tk_ClipboardAppend</B>(<I>interp, tkwin, target, format, buffer</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter to use for reporting errors.
 <P><DT>Tk_Window <B>tkwin</B> (in)<DD>
@@ -62,8 +85,8 @@ any calling function should take care to be reentrant at the point
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#append">append</A>, <A href="../Keywords/C.htm#clipboard">clipboard</A>, <A href="../Keywords/C.htm#clear">clear</A>, <A href="../Keywords/F.htm#format">format</A>, <A href="../Keywords/T.htm#type">type</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

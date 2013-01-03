@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Built-In Commands - split manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>split manual page - Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> split</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 split - Split a string into a proper Tcl list
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -18,21 +24,21 @@ If <I>splitChars</I> is an empty string then each character of
 <H3><A NAME="M5">EXAMPLES</A></H3>
 Divide up a USENET group name into its hierarchical components:
 <PRE><B>split</B> &quot;comp.lang.tcl.announce&quot; .
-     <I>=&gt; comp lang tcl announce</I></PRE>
+      <I><font size="+1">&#8594;</font> comp lang tcl announce</I></PRE>
 <P>
 See how the <B>split</B> command splits on <I>every</I> character in
 <I>splitChars</I>, which can result in information loss if you are not
 careful:
 <PRE><B>split</B> &quot;alpha beta gamma&quot; &quot;temp&quot;
-     <I>=&gt; al {ha b} {} {a ga} {} a</I></PRE>
+      <I><font size="+1">&#8594;</font> al {ha b} {} {a ga} {} a</I></PRE>
 <P>
 Extract the list words from a string that is not a well-formed list:
 <PRE><B>split</B> &quot;Example with {unbalanced brace character&quot;
-     <I>=&gt; Example with &#92;{unbalanced brace character</I></PRE>
+      <I><font size="+1">&#8594;</font> Example with &#92;{unbalanced brace character</I></PRE>
 <P>
 Split a string into its constituent characters
 <PRE><B>split</B> &quot;Hello world&quot; {}
-     <I>=&gt; H e l l o { } w o r l d</I></PRE>
+      <I><font size="+1">&#8594;</font> H e l l o { } w o r l d</I></PRE>
 <H4><A NAME="M6">PARSING RECORD-ORIENTED FILES</A></H4>
 Parse a Unix /etc/passwd file, which consists of one entry per line,
 with each line consisting of a colon-separated list of fields:
@@ -59,8 +65,8 @@ foreach rec $records {
 <B><A HREF="../TclCmd/join.htm">join</A></B>, <B><A HREF="../TclCmd/list.htm">list</A></B>, <B><A HREF="../TclCmd/string.htm">string</A></B>
 <H3><A NAME="M8">KEYWORDS</A></H3>
 <A href="../Keywords/L.htm#list">list</A>, <A href="../Keywords/S.htm#split">split</A>, <A href="../Keywords/S.htm#string">string</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Built-In Commands - set manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>set manual page - Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> set</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 set - Read and write variables
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -7,7 +13,7 @@ set - Read and write variables
 Returns the value of variable <I>varName</I>.
 If <I>value</I> is specified, then set
 the value of <I>varName</I> to <I>value</I>, creating a new variable
-if one doesn't already exist, and return its value.
+if one does not already exist, and return its value.
 If <I>varName</I> contains an open parenthesis and ends with a
 close parenthesis, then it refers to an array element:  the characters
 before the first open parenthesis are the name of the array,
@@ -28,7 +34,7 @@ unless <I>varName</I> was declared to resolve differently through one of the
 <B><A HREF="../TclCmd/global.htm">global</A></B>, <B><A HREF="../TclCmd/variable.htm">variable</A></B> or <B><A HREF="../TclCmd/upvar.htm">upvar</A></B> commands.
 <H3><A NAME="M5">EXAMPLES</A></H3>
 Store a random number in the variable <I>r</I>:
-<PRE><B>set</B> r [expr rand()]</PRE>
+<PRE><B>set</B> r [expr {rand()}]</PRE>
 <P>
 Store a short message in an array element:
 <PRE><B>set</B> anAry(msg) &quot;Hello, World!&quot;</PRE>
@@ -48,8 +54,8 @@ practice instead of doing double-dereferencing):
 <B><A HREF="../TclCmd/expr.htm">expr</A></B>, <B><A HREF="../TclCmd/global.htm">global</A></B>, <B><A HREF="../TclCmd/namespace.htm">namespace</A></B>, <B><A HREF="../TclCmd/proc.htm">proc</A></B>, <B><A HREF="../TclCmd/trace.htm">trace</A></B>, <B><A HREF="../TclCmd/unset.htm">unset</A></B>, <B><A HREF="../TclCmd/upvar.htm">upvar</A></B>, <B><A HREF="../TclCmd/variable.htm">variable</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/R.htm#read">read</A>, <A href="../Keywords/W.htm#write">write</A>, <A href="../Keywords/V.htm#variable">variable</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

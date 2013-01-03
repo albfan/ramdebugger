@@ -4,6 +4,8 @@
 # DisplayVar
 ################################################################################
 
+namespace eval RamDebugger {}
+
 proc RamDebugger::DisplayVar { X Y x y } {
     variable text
     variable remoteserverType
@@ -11,7 +13,7 @@ proc RamDebugger::DisplayVar { X Y x y } {
 
     if { $debuggerstate != "debug" } { return }
 
-    if { $X != [winfo pointerx $text] || $Y != [winfo pointery $text] } {
+    if { abs($X-[winfo pointerx $text])> 3 || abs($Y-[winfo pointery $text])> 3 } {
 	return
     }
     set var [GetSelOrWordInIndex @$x,$y]
@@ -208,13 +210,24 @@ proc RamDebugger::DisplayVarWindowEval { what w { res "" } } {
     }
 }
 
-proc RamDebugger::GetSelOrWordInIndex { idx } {
+proc RamDebugger::GetSelOrWordInIndex { args } {
     variable text
+    
+    set optional {
+	{ -return_range boolean 0 }
+    }
+    set compulsory "idx"
+    parse_args $optional $compulsory $args
+
     
     set range [$text tag ranges sel]
     if { $range != "" && [$text compare [lindex $range 0] <= $idx] && \
 	[$text compare [lindex $range 1] >= $idx] } {
-	return [eval $text get $range]
+	if { $return_range } {
+	    return $range
+	} else {
+	    return [$text get {*}$range]
+	}
     } else {
 	if { $idx != "" } {
 	    set var ""
@@ -241,7 +254,11 @@ proc RamDebugger::GetSelOrWordInIndex { idx } {
 	    }
 	} else { set var "" }
     }
-    return $var
+    if { $return_range } {
+	return [list [$text index "$idx0+1c"] [$text index "$idx1-1c"]]
+    } else {
+	return $var
+    }
 }
 
 proc RamDebugger::ToggleTransientWinAll { mainwindow } {
@@ -1654,6 +1671,7 @@ proc RamDebugger::AboutWindow {} {
 	icons "Adrian Davis" BSD NO
 	tkdnd "George Petasis" BSD NO
 	tkdiff "John M. Klassa" GPL NO
+	tkcvs  "DEL" GPL YES
     }
     foreach "pack author lic mod" $data {
 	$w.lf.lb insert end [list $pack $author $lic $mod]
@@ -2365,6 +2383,13 @@ proc RamDebugger::SearchInFiles {} {
 	    -values $values
 
     set ::RamDebugger::searchextensions [lindex [$f.e2 cget -values] 0]
+    
+    set dir $options(defaultdir)
+    set ipos [lsearch -exact $options(SearchInFiles,dirs) $dir]
+    if { $ipos != -1 } {
+	set options(SearchInFiles,dirs) [lreplace $options(SearchInFiles,dirs) $ipos $ipos]
+    }
+    set options(SearchInFiles,dirs) [linsert $options(SearchInFiles,dirs) 0 $dir]
 
     ttk::label $f.l3 -text [_ "Directory:"]
     ttk::combobox $f.e3 -textvariable ::RamDebugger::searchdir \
@@ -2552,6 +2577,9 @@ proc RamDebugger::SearchWindow { { replace 0 } }  {
     ttk::label $f.l1 -text "Search:"
     ttk::combobox $f.e1 -textvariable ::RamDebugger::searchstring -values $options(old_searchs)
 
+    # to avoid problems with paste, that sometimes pastes too to the main window
+    bind $f.e1 "[bind [winfo class $f.e1] $f.e1]; break"
+    
     set cmd "$f.e1 configure -values \$RamDebugger::options(old_searchs)"
     trace add variable ::RamDebugger::options(old_searchs) write "$cmd ;#"
     bind $f.e1 <Destroy> [list trace remove variable \
@@ -2831,6 +2859,118 @@ proc RamDebugger::SearchReplace { w what args } {
     }
 }
 
+proc RamDebugger::inline_replace { w search_entry } {
+    variable text
+    
+    set focus [focus]
+    set grab [grab current]
+    
+    set x [dict get [place info $search_entry] -x]
+    set x1 [expr {$x+[winfo width $search_entry]+2}]
+    destroy $w.replace
+    entry $w.replace -width 25 -textvariable RamDebugger::replacestring -relief solid -bd 1
+    place $w.replace -in $w -x $x1 -rely 1 -y -1 -anchor sw
+    set err [catch { clipboard get } data]
+    if { !$err && [string length $data] < 20 } {
+	$w.replace delete 0 end
+	$w.replace insert end $data
+	$w.replace selection range 0 end
+    }
+    focus $w.replace
+    grab $w.replace
+    
+    bind $w.replace <Return> [list RamDebugger::inline_replace_end $w $focus $grab $search_entry accept]
+    bind $w.replace <Control-i> [list RamDebugger::inline_replace_end $w $focus $grab $search_entry accept]
+    bind $w.replace <Escape> [list RamDebugger::inline_replace_end $w $focus $grab $search_entry end]
+    bind $w.replace <1> "[list RamDebugger::inline_replace_end $w $focus $grab $search_entry end];break"
+    
+    set cmd1 "[list RamDebugger::inline_replace_end $w $focus $grab $search_entry accept];"
+    append cmd1 "[list RamDebugger::textPaste_insert_after $text];"
+    set cmd2 "RamDebugger::Search $w iforward"
+    set cmd3 "RamDebugger::Search $w iforward_all"
+    bind $w.replace <Control-j> "$cmd1; $cmd2; break"
+    bind $w.replace <Control-J> "$cmd1; $cmd3; break"
+
+    set msg [_ "Press <Return> or Ctrl+I to continue search and replace\nCtrl+J to replace\nCtrl+Shift+J to replace all"]
+    tooltip::tooltip $w.replace $msg
+    
+    label $w.searchl2 -text $msg -justify left -bd 1 -relief solid
+    set x2 [expr {$x1+[winfo reqwidth $w.replace]+2}]
+    place $w.searchl2 -in $w -x $x2 -rely 1 -y -1 -anchor sw
+    bind $w.replace <Destroy> [list destroy $w.searchl2]
+}
+
+proc RamDebugger::inline_replace_end { w focus grab search_entry what } {
+    variable text
+    
+    if { $what eq "accept" } {
+	clipboard clear
+	clipboard append $RamDebugger::replacestring
+	
+	set cmd1 "[list RamDebugger::textPaste_insert_after $text];RamDebugger::Search $w iforward"
+	set cmd2 "[list RamDebugger::textPaste_insert_after $text];RamDebugger::Search $w iforward_all"
+	bind $search_entry <Control-j> "$cmd1; break"
+	bind $search_entry <Control-J> "$cmd2; break"
+    }
+    destroy $w.replace
+    if { $focus ne "" } { focus -force $focus }
+    if { $grab ne "" } { grab $grab }
+}
+
+proc RamDebugger::textPaste_insert_after { w } {
+
+    set err [catch {::tk::GetSelection $w CLIPBOARD} sel]
+    if { $err } { return }
+    
+    set oldSeparator [$w cget -autoseparators]
+    if {$oldSeparator} {
+	$w configure -autoseparators 0
+	$w edit separator
+    }
+    if {[tk windowingsystem] ne "x11"} {
+	catch { $w delete sel.first sel.last }
+    }
+    set d [expr {[string length $sel]-[string length $::RamDebugger::searchstring]}]
+    set RamDebugger::SearchPos [$w index "insert+${d}c"]
+    $w insert insert $sel
+    if {$oldSeparator} {
+	$w edit separator
+	$w configure -autoseparators 1
+    }
+}
+
+proc RamDebugger::Search_get_selection { active_text } {
+    if { [$active_text tag ranges sel] ne "" } {
+	set txt [$active_text get {*}[$active_text tag ranges sel]]
+    } else {
+	set err [catch { clipboard get } txt]
+	if { $err } { set txt "" }
+    }
+    set save_traces [trace info variable RamDebugger::searchstring]
+    foreach i $save_traces {
+	trace remove variable RamDebugger::searchstring {*}$i
+    }
+    set RamDebugger::searchstring $txt
+    set RamDebugger::Lastsearchstring $txt
+    
+    foreach i $save_traces {
+	trace add variable RamDebugger::searchstring {*}$i
+    }
+}
+
+proc RamDebugger::Search_goHome { active_text } {
+    
+    $active_text mark set insert 1.0
+    $active_text see 1.0
+    
+    set ::RamDebugger::SearchIni 1.0
+    set ::RamDebugger::SearchPos 1.0
+#     if { [info exists ::RamDebugger::Lastsearchstring] } {
+#         set ::RamDebugger::lastwascreation $::RamDebugger::Lastsearchstring
+#     } else { set ::RamDebugger::lastwascreation "" }
+    set ::RamDebugger::Lastsearchstring $RamDebugger::searchstring
+}    
+
 proc RamDebugger::Search { w what { raiseerror 0 } {f "" } } {
     variable text
     variable options
@@ -2882,6 +3022,11 @@ proc RamDebugger::Search { w what { raiseerror 0 } {f "" } } {
 	    entry $w.search -width 25 -textvariable RamDebugger::searchstring -relief solid -bd 1
 	    place $w.search -in $w -x 2 -rely 1 -y -1 -anchor sw
 
+	    set msg1 [_ "Press Ctrl+J to replace"]
+	    set msg2 [_ "Press Ctrl+C to use selection for search"]
+	    set msg3 [_ "Press Home to search from beginning"]
+	    tooltip::tooltip $w.search $msg1\n$msg2\n$msg3
+
 	    focus $active_text
 	    bindtags $active_text [linsert [bindtags $active_text] 0 $w.search]
 	    #bind $w.search <FocusOut> "destroy $w.search ; break"
@@ -2901,11 +3046,22 @@ proc RamDebugger::Search { w what { raiseerror 0 } {f "" } } {
 	    bind $w.search <Control-i> "RamDebugger::Search $w iforward ; break"
 	    bind $w.search <Control-r> "RamDebugger::Search $w ibackward ; break"
 	    bind $w.search <Control-g> "RamDebugger::Search $w stop ; break"
-
+	    bind $w.search <Control-c> "RamDebugger::Search_get_selection $active_text; break"
+	    bind $w.search <Home> "RamDebugger::Search_goHome $active_text; break"
+	    
+	    if { $active_text eq $text } {
+		bind $w.search <Control-j> "RamDebugger::inline_replace $w $w.search; break"
+		
+		label $w.searchl1 -text $msg1
+		set x1 [expr {2+[winfo reqwidth $w.search]+2}]
+		place $w.searchl1 -in $w -x $x1 -rely 1 -y -1 -anchor sw
+		after 2000 [list catch [list destroy $w.searchl1]]
+	    }
 	    set ::RamDebugger::searchstring ""
 	    trace var RamDebugger::searchstring w "[list RamDebugger::Search $w {}];#"
 	    bind $w.search <Destroy> [list trace vdelete RamDebugger::searchstring w \
 		"[list RamDebugger::Search $w {}];#"]
+	    bind $w.search <Destroy> "+ [list destroy $w.searchl1]"
 	    bind $w.search <Destroy> "+ [list bindtags $active_text [lreplace [bindtags $active_text] 0 0]] ; break"
 	    foreach i [bind Text] {
 		if { [lsearch -exact [list <Motion>] $i] != -1 } { continue }
@@ -2916,15 +3072,28 @@ proc RamDebugger::Search { w what { raiseerror 0 } {f "" } } {
 		        bind $w.search $i "destroy $w.search" }
 		}
 	    }
+	    if { $what eq "iforward_get_insert" } {
+		set range [GetSelOrWordInIndex -return_range 1 insert]
+		$active_text mark set insert [lindex $range 0]
+	    }
 	    set idx [$active_text index insert]
+	    
 	    if { $idx == "" } { set idx 1.0 }
 	    set ::RamDebugger::SearchIni $idx
 	    set ::RamDebugger::SearchPos $idx
 	    set ::RamDebugger::searchcase -1
 	    set ::RamDebugger::searchmode -exact
-	    if { [info exists ::RamDebugger::Lastsearchstring] } {
+	    
+	    if { $what eq "iforward_get_insert" } {
+		set ::RamDebugger::Lastsearchstring ""
+		set ::RamDebugger::SearchType "-forwards"
+		set ::RamDebugger::searchstring [GetSelOrWordInIndex insert]
+		return
+	    } elseif { [info exists ::RamDebugger::Lastsearchstring] } {
 		set ::RamDebugger::lastwascreation $::RamDebugger::Lastsearchstring
-	    } else { set ::RamDebugger::lastwascreation "" }
+	    } else {
+		set ::RamDebugger::lastwascreation ""
+	    }
 	    set ::RamDebugger::Lastsearchstring ""
 	} else {
 	    if { $::RamDebugger::searchstring == "" && $::RamDebugger::lastwascreation != "" } {
@@ -2936,7 +3105,7 @@ proc RamDebugger::Search { w what { raiseerror 0 } {f "" } } {
 	}
     }
     switch $what {
-	iforward {
+	iforward - iforward_all {
 	    set ::RamDebugger::SearchType -forwards
 	}
 	ibackward {
@@ -2986,6 +3155,10 @@ proc RamDebugger::Search { w what { raiseerror 0 } {f "" } } {
 	set idx [eval $active_text search $search_options [list $RamDebugger::searchstring] \
 		     $idx $stopindex]
 	if { $idx == "" } {
+	    if { $what eq "iforward_all" } {
+		destroy $w.search
+		return
+	    }
 	    if { $raiseerror } {
 		error "Search not found"
 	    }
@@ -3042,9 +3215,13 @@ proc RamDebugger::Search { w what { raiseerror 0 } {f "" } } {
 	    }
 	    $active_text mark set insert $idx2
 	    $active_text see $RamDebugger::SearchPos
+	    
+	    if { $what eq "iforward_all" } {
+		tk_textPaste $text
+		after idle [list RamDebugger::Search $w iforward_all]
+	    }
 	}
 	set RamDebugger::Lastsearchstring $RamDebugger::searchstring
-
     }
 }
 
@@ -3052,22 +3229,50 @@ proc RamDebugger::Search { w what { raiseerror 0 } {f "" } } {
 # OpenProgram OpenConsole
 ################################################################################
 
-proc RamDebugger::OpenProgram { what } {
+proc RamDebugger::OpenProgram { what args } {
     variable MainDir
-
+    variable currentfile
+    
+    set argv $args
     switch $what {
 	visualregexp { set file [file join $MainDir addons visualregexp visual_regexp.tcl] }
-	tkcvs { set file [file join $MainDir addons tkcvs bin tkcvs.tcl] }
-	tkdiff { set file [file join $MainDir addons tkdiff.tcl] }
+	tkcvs {
+	    set file [file join $MainDir addons tkcvs bin tkcvs.tcl]
+	    if {  [llength $args] == 0 && [file isdirectory [file dirname $currentfile]] } {
+		lappend argv -dir [file dirname $currentfile]
+	    }
+	}
+	tkdiff { set file [file join $MainDir addons tkcvs bin tkdiff.tcl] }
     }
-#tkdiff { set file [file join $MainDir addons tkcvs bin tkdiff.tcl] }
-    if { [interp exists $what] } { interp delete $what }
-    interp create $what
+    if { ![interp exists $what] } {
+	interp create $what
+    }
     interp alias $what exit_interp "" interp delete $what
     $what eval [list proc exit { args } "destroy . ; exit_interp"]
+    interp alias $what puts "" RamDebugger::_OpenProgram_puts
     $what eval [list load {} Tk]
-    $what eval { set argc 0 ; set argv "" }
+    $what eval [list set argc [llength $argv]]
+    $what eval [list set argv $argv]
     $what eval [list source $file]
+}
+
+proc RamDebugger::_OpenProgram_puts { args } {
+    variable textOUT
+    
+    lassign [list stdout "" 1] channelId string hasnewline
+    switch [llength $args] {
+	1 { lassign $args string }
+	2 { lassign $args channelId string }
+	3 { lassign $args channelId string hasnewline }
+	default {
+	    error "error in RamDebugger::_OpenProgram_puts"
+	}
+    } 
+    if { [info exists textOUT] && [winfo exists $textOUT] } {
+	RamDebugger::RecieveOutputFromProgram $channelId $string $hasnewline
+    } elseif { $channelId eq "stderr" } {
+	#tk_messageBox -message $string
+    }
 }
 
 proc RamDebugger::revalforTkcon { comm } {
@@ -3629,6 +3834,7 @@ proc RamDebugger::MacrosDo { what { f "" } } {
 		return
 	    }
 	    set macro [lindex [$DialogWinTop::user($w,list) get $idx] 0]
+	    #tk_messageBox -message [array get ::env]
 	    RamDebugger::Macros::$macro $text
 	}
 	default {
@@ -3877,7 +4083,7 @@ proc RamDebugger::CountLOCInFiles { parent } {
 	-helptext [_ "Delete dir from the list"] -command "RamDebugger::DelDirFromLOC"
 
     label $f.l2 -text [_ "Enter patterns (ex: .tcl .cc):"] -grid "0 2 w"
-    entry $f.e2 -textvar DialogWin::user(patterns) -width 30 -grid "0 2 px3"
+    entry $f.e2 -textvar DialogWin::user(patterns) -width 80 -grid "0 2 px3"
 
     trace var DialogWin::user(programname) w "RamDebugger::UpdateProgramNameInLOC $f ;#"
 
@@ -3987,7 +4193,7 @@ proc RamDebugger::CountLOCInFilesDo { parent program dirs patterns } {
     set w [winfo toplevel $f]
     
     set sw [ScrolledWindow $f.lf -relief sunken -borderwidth 0 -grid "0 2"]
-    text $sw.text -background white -wrap word -width 80 -height 40 \
+    text $sw.text -background white -wrap word -width 80 -height 35 \
 	-exportselection 0 -font FixedFont -highlightthickness 0
     $sw setwidget $sw.text
     
@@ -4018,125 +4224,6 @@ proc RamDebugger::CountLOCInFilesDo { parent program dirs patterns } {
 
     DialogWinTop::CreateWindow $f
 }
-
-
-
-################################################################################
-#    parse args
-#
-# example:
-#  proc myproc { args } {
-#     set optional {
-#         { -view_binding binding "" }
-#         { -file file "" }
-#         { -restart_file boolean 0 }
-#         { -flag1 "" 0 }
-#     }
-#     set compulsory "levels"
-#     parse_args $optional $compulsory $args
-#
-#     if { $view_binding ne "" } { puts hohoho }
-#     if { $flag1 } { puts "activated flag" }
-#  }
-# 
-################################################################################
-
-proc ::parse_args { args } {
-
-    set optional {
-	{ -raise_compulsory_error boolean 1 }
-	{ -compulsory_min min_number "" }
-    }
-    set compulsory "optional compulsory arguments"
-
-    set cmdname [lindex [info level [expr {[info level]-1}]] 0]
-
-    if { [string match -* [lindex $args 0]] } {
-	parse_args $optional $compulsory $args
-    } else {
-	set raise_compulsory_error 1
-	set compulsory_min ""
-	if { [llength $args] != [llength $compulsory] } {
-	    uplevel 1 [list error [_parse_args_string $cmdname $optional \
-		        $compulsory $args]]
-	    return ""
-	}
-	foreach $compulsory $args break
-    }
-
-    foreach i $optional {
-	foreach "name namevalue default" $i break
-	set opts_value($name) $namevalue
-	set opts($name) $default
-    }
-    while { [string match -* [lindex $arguments 0]] } {
-	if { [lindex $arguments 0] eq "--" } { break }
-	foreach "name value" [lrange $arguments 0 1] break
-	if { [regexp {(.*)=(.*)} $name {} name value] } {
-	    set has_att_value 1
-	} else {
-	    set has_att_value 0
-	}
-	if { [info exists opts($name)] } {
-	    if { $has_att_value } {
-		set opts($name) $value
-		set arguments [lrange $arguments 1 end]
-	    } elseif { $opts_value($name) eq "" } {
-		set opts($name) 1
-		set arguments [lrange $arguments 1 end]
-	    } else {
-		set opts($name) $value
-		set arguments [lrange $arguments 2 end]
-	    }
-	} else {
-	    uplevel 1 [list error [_parse_args_string $cmdname $optional \
-		        $compulsory $args]]
-	    return ""
-	}
-    }
-    if { $raise_compulsory_error } {
-	if { $compulsory_min ne "" } {
-	    if { [llength $arguments] < $compulsory_min || \
-		[llength $arguments] > [llength $compulsory] } {
-		uplevel 1 [list error [_parse_args_string $cmdname $optional $compulsory]]
-		return ""
-	    }
-	} elseif { [llength $arguments] != [llength $compulsory] } {
-	    uplevel 1 [list error [_parse_args_string $cmdname $optional \
-		        $compulsory $args]]
-	    return ""
-	}
-
-    }
-    foreach name [array names opts] {
-	uplevel 1 [list set [string trimleft $name -] $opts($name)]
-    }
-    set inum 0
-    foreach i $compulsory {
-	uplevel 1 [list set $i [lindex $arguments $inum]]
-	incr inum
-    }
-    return [lrange $arguments $inum end]
-}
-
-proc ::_parse_args_string { cmd optional compulsory arguments } {
-
-    set str "error. usage: $cmd "
-    foreach i $optional {
-	foreach "name namevalue default" $i break
-	append str "?$name $namevalue? "
-    }
-    append str $compulsory
-    append str "\n\targs: $arguments"
-    return $str
-}
-
-
-
-
-
-
-
 
 
 

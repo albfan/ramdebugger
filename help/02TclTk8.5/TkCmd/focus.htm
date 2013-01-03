@@ -1,25 +1,28 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - focus manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>focus manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> focus</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="focus.htm#M2" NAME="L534">NAME</A>
-<DL><DD>focus - Manage the input focus</DL>
-<DD><A HREF="focus.htm#M3" NAME="L535">SYNOPSIS</A>
+<DD><A HREF="focus.htm#M2" NAME="L594">NAME</A>
+<DL><DD>focus - Manage the input focus</DD></DL>
+<DD><A HREF="focus.htm#M3" NAME="L595">SYNOPSIS</A>
 <DL>
-<DD><B>focus</B>
-<DD><B>focus </B><I>window</I>
-<DD><B>focus </B><I>option</I> ?<I>arg arg ...</I>?
 </DL>
-<DD><A HREF="focus.htm#M4" NAME="L536">DESCRIPTION</A>
-<DL>
-<DD><A HREF="focus.htm#M5" NAME="L537"><B>focus</B></A>
-<DD><A HREF="focus.htm#M6" NAME="L538"><B>focus </B><I>window</I></A>
-<DD><A HREF="focus.htm#M7" NAME="L539"><B>focus -displayof</B> <I>window</I></A>
-<DD><A HREF="focus.htm#M8" NAME="L540"><B>focus -force </B><I>window</I></A>
-<DD><A HREF="focus.htm#M9" NAME="L541"><B>focus -lastfor</B> <I>window</I></A>
+<DD><A HREF="focus.htm#M4" NAME="L596">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="focus.htm#M5" NAME="L597"><B>focus</B></A>
+<DD><A HREF="focus.htm#M6" NAME="L598"><B>focus </B><I>window</I></A>
+<DD><A HREF="focus.htm#M7" NAME="L599"><B>focus -displayof</B> <I>window</I></A>
+<DD><A HREF="focus.htm#M8" NAME="L600"><B>focus -force </B><I>window</I></A>
+<DD><A HREF="focus.htm#M9" NAME="L601"><B>focus -lastfor</B> <I>window</I></A>
 </DL>
-<DD><A HREF="focus.htm#M10" NAME="L542">QUIRKS</A>
-<DD><A HREF="focus.htm#M11" NAME="L543">EXAMPLE</A>
-<DD><A HREF="focus.htm#M12" NAME="L544">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="focus.htm#M10" NAME="L602">QUIRKS</A>
+<DD><A HREF="focus.htm#M11" NAME="L603">EXAMPLE</A>
+<DD><A HREF="focus.htm#M12" NAME="L604">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 focus - Manage the input focus
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -61,7 +64,7 @@ things.
 <P>
 The <B>focus</B> command can take any of the following forms:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>focus</B></A><DD>
 Returns the path name of the focus window on the display containing
 the application's main window,  or an empty string if no window in
@@ -73,18 +76,18 @@ displays.
 If the application currently has the input focus on <I>window</I>'s
 display, this command resets the input focus for <I>window</I>'s display
 to <I>window</I> and returns an empty string.
-If the application doesn't currently have the  input focus on
+If the application does not currently have the input focus on
 <I>window</I>'s display, <I>window</I> will be remembered as the focus
 for its top-level;  the next time the focus arrives at the top-level,
 Tk will redirect it to <I>window</I>.
 If <I>window</I> is an empty string then the command does nothing.
 <P><DT><A NAME="M7"><B>focus -displayof</B> <I>window</I></A><DD>
 Returns the name of the focus window on the display containing <I>window</I>.
-If the focus window for <I>window</I>'s display isn't in this
+If the focus window for <I>window</I>'s display is not in this
 application, the return value is an empty string.
 <P><DT><A NAME="M8"><B>focus -force </B><I>window</I></A><DD>
 Sets the focus of <I>window</I>'s display to <I>window</I>, even if
-the application doesn't currently have the input focus for the display.
+the application does not currently have the input focus for the display.
 This command should be used sparingly, if at all.
 In normal usage, an application should not claim the focus for
 itself;  instead, it should wait for the window manager to give it
@@ -100,7 +103,7 @@ will receive the input focus the next time the window manager gives
 the focus to the top-level.
 <P></DL>
 <H3><A NAME="M10">QUIRKS</A></H3>
-When an internal window receives the input focus, Tk doesn't actually
+When an internal window receives the input focus, Tk does not actually
 set the X focus to that window;  as far as X is concerned, the focus
 will stay on the top-level window containing the window with the focus.
 However, Tk generates FocusIn and FocusOut events just as if the X
@@ -133,8 +136,8 @@ bind .after &lt;Shift-Tab&gt; {
 <B>focus</B> .before</PRE>
 <H3><A NAME="M12">KEYWORDS</A></H3>
 <A href="../Keywords/E.htm#events">events</A>, <A href="../Keywords/F.htm#focus">focus</A>, <A href="../Keywords/K.htm#keyboard">keyboard</A>, <A href="../Keywords/T.htm#top-level">top-level</A>, <A href="../Keywords/W.htm#window manager">window manager</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

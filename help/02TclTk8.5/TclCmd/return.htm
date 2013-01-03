@@ -1,35 +1,38 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - return manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>return manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> return</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="return.htm#M2" NAME="L1272">NAME</A>
-<DL><DD>return - Return from a procedure, or set return code of a script</DL>
-<DD><A HREF="return.htm#M3" NAME="L1273">SYNOPSIS</A>
+<DD><A HREF="return.htm#M2" NAME="L1406">NAME</A>
+<DL><DD>return - Return from a procedure, or set return code of a script</DD></DL>
+<DD><A HREF="return.htm#M3" NAME="L1407">SYNOPSIS</A>
 <DL>
-<DD><B>return </B>?<I>result</I>?
-<DD><B>return </B>?<B>-code </B><I>code</I>? ?<I>result</I>?
-<DD><B>return </B>?<I>option value </I>...? ?<I>result</I>?
 </DL>
-<DD><A HREF="return.htm#M4" NAME="L1274">DESCRIPTION</A>
-<DD><A HREF="return.htm#M5" NAME="L1275">EXCEPTIONAL RETURN CODES</A>
-<DL>
-<DD><A HREF="return.htm#M6" NAME="L1276"><B>ok (or 0)</B></A>
-<DD><A HREF="return.htm#M7" NAME="L1277"><B>error (1)</B></A>
-<DD><A HREF="return.htm#M8" NAME="L1278"><B>return (2)</B></A>
-<DD><A HREF="return.htm#M9" NAME="L1279"><B>break (3)</B></A>
-<DD><A HREF="return.htm#M10" NAME="L1280"><B>continue (4)</B></A>
-<DD><A HREF="return.htm#M11" NAME="L1281"><I>value</I></A>
+<DD><A HREF="return.htm#M4" NAME="L1408">DESCRIPTION</A>
+<DD><A HREF="return.htm#M5" NAME="L1409">EXCEPTIONAL RETURN CODES</A>
+<DL class="exceptional return codes">
+<DD><A HREF="return.htm#M6" NAME="L1410"><B>ok (or 0)</B></A>
+<DD><A HREF="return.htm#M7" NAME="L1411"><B>error (1)</B></A>
+<DD><A HREF="return.htm#M8" NAME="L1412"><B>return (2)</B></A>
+<DD><A HREF="return.htm#M9" NAME="L1413"><B>break (3)</B></A>
+<DD><A HREF="return.htm#M10" NAME="L1414"><B>continue (4)</B></A>
+<DD><A HREF="return.htm#M11" NAME="L1415"><I>value</I></A>
 </DL>
-<DD><A HREF="return.htm#M12" NAME="L1282">RETURN OPTIONS</A>
-<DL>
-<DD><A HREF="return.htm#M13" NAME="L1283"><B>-errorcode </B><I>list</I></A>
-<DD><A HREF="return.htm#M14" NAME="L1284"><B>-errorinfo </B><I>info</I></A>
-<DD><A HREF="return.htm#M15" NAME="L1285"><B>-level </B><I>level</I></A>
-<DD><A HREF="return.htm#M16" NAME="L1286"><B>-options </B><I>options</I></A>
+<DD><A HREF="return.htm#M12" NAME="L1416">RETURN OPTIONS</A>
+<DL class="return options">
+<DD><A HREF="return.htm#M13" NAME="L1417"><B>-errorcode </B><I>list</I></A>
+<DD><A HREF="return.htm#M14" NAME="L1418"><B>-errorinfo </B><I>info</I></A>
+<DD><A HREF="return.htm#M15" NAME="L1419"><B>-level </B><I>level</I></A>
+<DD><A HREF="return.htm#M16" NAME="L1420"><B>-options </B><I>options</I></A>
 </DL>
-<DD><A HREF="return.htm#M17" NAME="L1287">RETURN CODE HANDLING MECHANISMS</A>
-<DD><A HREF="return.htm#M18" NAME="L1288">EXAMPLES</A>
-<DD><A HREF="return.htm#M19" NAME="L1289">SEE ALSO</A>
-<DD><A HREF="return.htm#M20" NAME="L1290">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="return.htm#M17" NAME="L1421">RETURN CODE HANDLING MECHANISMS</A>
+<DD><A HREF="return.htm#M18" NAME="L1422">EXAMPLES</A>
+<DD><A HREF="return.htm#M19" NAME="L1423">SEE ALSO</A>
+<DD><A HREF="return.htm#M20" NAME="L1424">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 return - Return from a procedure, or set return code of a script
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -54,13 +57,13 @@ will be returned as the result of the <B><A HREF="../TclCmd/source.htm">source</
 In addition to the result of a procedure, the return
 code of a procedure may also be set by <B>return</B>
 through use of the <B>-code</B> option.
-In the usual case where the <B>-code</B> option isn't
+In the usual case where the <B>-code</B> option is not
 specified the procedure will return normally.
 However, the <B>-code</B> option may be used to generate an
 exceptional return from the procedure.
 <I>Code</I> may have any of the following values:
 <P>
-<DL>
+<DL class="exceptional return codes">
 <DT><A NAME="M6"><B>ok (or 0)</B></A><DD>
 Normal return:  same as if the option is omitted.  The return code
 of the procedure is 0 (<B>TCL_OK</B>).
@@ -103,14 +106,15 @@ in Tcl also produces a dictionary of return options.  In general
 usage, all <I>option value</I> pairs given as arguments to <B>return</B>
 become entries in the return options dictionary, and any values at all
 are acceptable except as noted below.  The <B><A HREF="../TclCmd/catch.htm">catch</A></B> command may be
-used to capture all of this information -- the return code, the result,
-and the return options dictionary -- that arise from evaluation of a script.
+used to capture all of this information &#8212; the return code, the result,
+and the return options dictionary &#8212; that arise from evaluation of a
+script.
 <P>
 As documented above, the <B>-code</B> entry in the return options dictionary
 receives special treatment by Tcl.  There are other return options also
 recognized and treated specially by Tcl.  They are:
 <P>
-<DL>
+<DL class="return options">
 <DT><A NAME="M13"><B>-errorcode </B><I>list</I></A><DD>
 The <B>-errorcode</B> option receives special treatment only when the value
 of the <B>-code</B> option is <B>TCL_ERROR</B>.  Then the <I>list</I> value
@@ -169,8 +173,8 @@ evaluation to terminate without evaluating all commands in sequence.
 Some of Tcl's built-in commands evaluate scripts as part of their
 functioning.  These commands can make use of exceptional return
 codes to enable special features.  For example, the built-in
-Tcl commands that provide loops -- such as <B><A HREF="../TclCmd/while.htm">while</A></B>, <B><A HREF="../TclCmd/for.htm">for</A></B>,
-and <B><A HREF="../TclCmd/foreach.htm">foreach</A></B> -- evaluate a script that is the body of the
+Tcl commands that provide loops &#8212; such as <B><A HREF="../TclCmd/while.htm">while</A></B>, <B><A HREF="../TclCmd/for.htm">for</A></B>,
+and <B><A HREF="../TclCmd/foreach.htm">foreach</A></B> &#8212; evaluate a script that is the body of the
 loop.  If evaluation of the loop body returns the return code
 of <B>TCL_BREAK</B> or <B>TCL_CONTINUE</B>, the loop command can react in such
 a way as to give the <B>break</B> and <B>continue</B> commands
@@ -278,8 +282,8 @@ to create a procedure replacement for <B>return</B> itself:
 <B>break</B>, <B><A HREF="../TclCmd/catch.htm">catch</A></B>, <B>continue</B>, <B><A HREF="../TclCmd/dict.htm">dict</A></B>, <B>error</B>, <B><A HREF="../TclCmd/proc.htm">proc</A></B>, <B><A HREF="../TclCmd/source.htm">source</A></B>, <B><A HREF="../TclCmd/tclvars.htm">tclvars</A></B>
 <H3><A NAME="M20">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#break">break</A>, <A href="../Keywords/C.htm#catch">catch</A>, <A href="../Keywords/C.htm#continue">continue</A>, <A href="../Keywords/E.htm#error">error</A>, <A href="../Keywords/P.htm#procedure">procedure</A>, <A href="../Keywords/R.htm#return">return</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

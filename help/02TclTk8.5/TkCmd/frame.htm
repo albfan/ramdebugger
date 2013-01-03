@@ -1,12 +1,17 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - frame manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>frame manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> frame</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="frame.htm#M2" NAME="L585">NAME</A>
-<DL><DD>frame - Create and manipulate frame widgets</DL>
-<DD><A HREF="frame.htm#M3" NAME="L586">SYNOPSIS</A>
+<DD><A HREF="frame.htm#M2" NAME="L655">NAME</A>
+<DL><DD>frame - Create and manipulate frame widgets</DD></DL>
+<DD><A HREF="frame.htm#M3" NAME="L656">SYNOPSIS</A>
 <DL>
-<DD><B>frame</B> <I>pathName</I> ?<I>options</I>?
 </DL>
-<DD><A HREF="frame.htm#M4" NAME="L587">STANDARD OPTIONS</A>
+<DD><A HREF="frame.htm#M4" NAME="L657">STANDARD OPTIONS</A>
 <DL>
 <DD><A HREF="options.htm#M-borderwidth">-borderwidth or -bd, borderWidth, BorderWidth</A>
 <DD><A HREF="options.htm#M-cursor">-cursor, cursor, Cursor</A>
@@ -18,26 +23,26 @@
 <DD><A HREF="options.htm#M-relief">-relief, relief, Relief</A>
 <DD><A HREF="options.htm#M-takefocus">-takefocus, takeFocus, TakeFocus</A>
 </DL>
-<DD><A HREF="frame.htm#M5" NAME="L588">WIDGET-SPECIFIC OPTIONS</A>
+<DD><A HREF="frame.htm#M5" NAME="L658">WIDGET-SPECIFIC OPTIONS</A>
 <DL>
-<DD><A HREF="frame.htm#M6" NAME="L589">-background, background, Background</A>
-<DD><A HREF="frame.htm#M7" NAME="L590">-class, class, Class</A>
-<DD><A HREF="frame.htm#M8" NAME="L591">-colormap, colormap, Colormap</A>
-<DD><A HREF="frame.htm#M9" NAME="L592">-container, container, Container</A>
-<DD><A HREF="frame.htm#M10" NAME="L593">-height, height, Height</A>
-<DD><A HREF="frame.htm#M11" NAME="L594">-visual, visual, Visual</A>
-<DD><A HREF="frame.htm#M12" NAME="L595">-width, width, Width</A>
+<DD><A HREF="frame.htm#M6" NAME="L659">-background, background, Background</A>
+<DD><A HREF="frame.htm#M7" NAME="L660">-class, class, Class</A>
+<DD><A HREF="frame.htm#M8" NAME="L661">-colormap, colormap, Colormap</A>
+<DD><A HREF="frame.htm#M9" NAME="L662">-container, container, Container</A>
+<DD><A HREF="frame.htm#M10" NAME="L663">-height, height, Height</A>
+<DD><A HREF="frame.htm#M11" NAME="L664">-visual, visual, Visual</A>
+<DD><A HREF="frame.htm#M12" NAME="L665">-width, width, Width</A>
 </DL>
-<DD><A HREF="frame.htm#M13" NAME="L596">DESCRIPTION</A>
-<DD><A HREF="frame.htm#M14" NAME="L597">WIDGET COMMAND</A>
-<DL>
-<DD><A HREF="frame.htm#M15" NAME="L598"><I>pathName </I><B>cget</B> <I>option</I></A>
-<DD><A HREF="frame.htm#M16" NAME="L599"><I>pathName </I><B>configure</B> ?<I>option</I>? <I>?value option value ...</I>?</A>
+<DD><A HREF="frame.htm#M13" NAME="L666">DESCRIPTION</A>
+<DD><A HREF="frame.htm#M14" NAME="L667">WIDGET COMMAND</A>
+<DL class="widget command">
+<DD><A HREF="frame.htm#M15" NAME="L668"><I>pathName </I><B>cget</B> <I>option</I></A>
+<DD><A HREF="frame.htm#M16" NAME="L669"><I>pathName </I><B>configure</B> ?<I>option</I>? <I>?value option value ...</I>?</A>
 </DL>
-<DD><A HREF="frame.htm#M17" NAME="L600">BINDINGS</A>
-<DD><A HREF="frame.htm#M18" NAME="L601">SEE ALSO</A>
-<DD><A HREF="frame.htm#M19" NAME="L602">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="frame.htm#M17" NAME="L670">BINDINGS</A>
+<DD><A HREF="frame.htm#M18" NAME="L671">SEE ALSO</A>
+<DD><A HREF="frame.htm#M19" NAME="L672">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 frame - Create and manipulate frame widgets
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -141,7 +146,6 @@ A frame is a simple widget.  Its primary purpose is to act as a
 spacer or container for complex window layouts.  The only features
 of a frame are its background color and an optional 3-D border to make the
 frame appear raised or sunken.
-
 <H3><A NAME="M14">WIDGET COMMAND</A></H3>
 The <B>frame</B> command creates a new Tcl command whose
 name is the same as the path name of the frame's window.  This
@@ -153,7 +157,7 @@ the frame widget's path name.  <I>Option</I> and the <I>arg</I>s
 determine the exact behavior of the command.  The following
 commands are possible for frame widgets:
 <P>
-<DL>
+<DL class="widget command">
 <DT><A NAME="M15"><I>pathName </I><B>cget</B> <I>option</I></A><DD>
 Returns the current value of the configuration option given
 by <I>option</I>.
@@ -172,18 +176,16 @@ modifies the given widget option(s) to have the given value(s);  in
 this case the command returns an empty string.
 <I>Option</I> may have any of the values accepted by the <B>frame</B>
 command.
-
 <P></DL>
 <H3><A NAME="M17">BINDINGS</A></H3>
 When a new frame is created, it has no default event bindings:
 frames are not intended to be interactive.
-
 <H3><A NAME="M18">SEE ALSO</A></H3>
-<B><A HREF="../TkCmd/labelframe.htm">labelframe</A></B>, <B><A HREF="../TkCmd/toplevel.htm">toplevel</A></B>
+<B><A HREF="../TkCmd/labelframe.htm">labelframe</A></B>, <B><A HREF="../TkCmd/toplevel.htm">toplevel</A></B>, <B><A HREF="../TkCmd/ttk_frame.htm">ttk::frame</A></B>
 <H3><A NAME="M19">KEYWORDS</A></H3>
 <A href="../Keywords/F.htm#frame">frame</A>, <A href="../Keywords/W.htm#widget">widget</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

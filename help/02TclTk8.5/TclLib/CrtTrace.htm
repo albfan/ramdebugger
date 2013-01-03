@@ -1,4 +1,28 @@
-<HTML><HEAD><TITLE>Library Procedures - Tcl_CreateTrace manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_CreateTrace manual page - Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> CrtTrace</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="CrtTrace.htm#M2" NAME="L164">NAME</A>
+<DL><DD>Tcl_CreateTrace, Tcl_CreateObjTrace, Tcl_DeleteTrace - arrange for command execution to be traced</DD></DL>
+<DD><A HREF="CrtTrace.htm#M3" NAME="L165">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>Tcl_Trace
+<DD><B>Tcl_CreateTrace</B>(<I>interp, level, proc, clientData</I>)
+<DD>Tcl_Trace
+<DD><B>Tcl_CreateObjTrace</B>(<I>interp, level, flags, objProc, clientData, deleteProc</I>)
+<DD><B>Tcl_DeleteTrace</B>(<I>interp, trace</I>)
+</DL>
+<DD><A HREF="CrtTrace.htm#M4" NAME="L166">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="CrtTrace.htm#M5" NAME="L167">DESCRIPTION</A>
+<DD><A HREF="CrtTrace.htm#M6" NAME="L168">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_CreateTrace, Tcl_CreateObjTrace, Tcl_DeleteTrace - arrange for command execution to be traced
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -9,7 +33,7 @@ Tcl_Trace<BR>
 <B>Tcl_CreateObjTrace</B>(<I>interp, level, flags, objProc, clientData, deleteProc</I>)<BR>
 <B>Tcl_DeleteTrace</B>(<I>interp, trace</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter containing command to be traced or untraced.
 <P><DT>int <B>level</B> (in)<DD>
@@ -22,10 +46,10 @@ A value of 0 means that commands at any level are traced.
 <P><DT>int <B>flags</B> (in)<DD>
 Flags governing the trace execution.  See below for details.
 <P><DT>Tcl_CmdObjTraceProc <B>*objProc</B> (in)<DD>
-Procedure to call for each command that's executed.  See below for
+Procedure to call for each command that is executed.  See below for
 details of the calling sequence.
 <P><DT>Tcl_CmdTraceProc <B>*proc</B> (in)<DD>
-Procedure to call for each command that's executed.  See below for
+Procedure to call for each command that is executed.  See below for
 details on the calling sequence.
 <P><DT>ClientData <B>clientData</B> (in)<DD>
 Arbitrary one-word value to pass to <I>objProc</I> or <I>proc</I>.
@@ -162,9 +186,9 @@ associated with a call to <B>Tcl_CreateTrace</B> to abort execution of
 <I>command</I>.
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#command">command</A>, <A href="../Keywords/C.htm#create">create</A>, <A href="../Keywords/D.htm#delete">delete</A>, <A href="../Keywords/I.htm#interpreter">interpreter</A>, <A href="../Keywords/T.htm#trace">trace</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1989-1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 2002 by Kevin B. Kenny. All rights reserved.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1989-1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+Copyright &copy; 2002 by Kevin B. Kenny. All rights reserved.
+</div>
 </BODY></HTML>

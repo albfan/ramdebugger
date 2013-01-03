@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Built-In Commands - uplevel manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>uplevel manual page - Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> uplevel</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 uplevel - Execute a script in a different stack frame
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -36,16 +42,16 @@ the command
 <PRE><B>uplevel</B> {set x 42}</PRE>
 then the <B><A HREF="../TclCmd/set.htm">set</A></B> command will modify the same variable <B>x</B> in <B>b</B>'s
 context:  the procedure <B>c</B> does not appear to be on the call stack
-when <B>d</B> is executing.  The command ``<B>info level</B>'' may
+when <B>d</B> is executing.  The <B><A HREF="../TclCmd/info.htm">info level</A></B> command may
 be used to obtain the level of the current procedure.
 <P>
 <B>Uplevel</B> makes it possible to implement new control
 constructs as Tcl procedures (for example, <B>uplevel</B> could
 be used to implement the <B><A HREF="../TclCmd/while.htm">while</A></B> construct as a Tcl procedure).
 <P>
-<B>namespace eval</B> is another way (besides procedure calls)
-that the Tcl naming context can change.
-It adds a call frame to the stack to represent the namespace context.
+The <B>namespace eval</B> and <B><A HREF="../TclCmd/apply.htm">apply</A></B> commands offer other ways
+(besides procedure calls) that the Tcl naming context can change.
+They add a call frame to the stack to represent the namespace context.
 This means each <B>namespace eval</B> command
 counts as another call level for <B>uplevel</B> and <B><A HREF="../TclCmd/upvar.htm">upvar</A></B> commands.
 For example, <B>info level 1</B> will return a list
@@ -72,11 +78,11 @@ loop body:
     }
 }</PRE>
 <H3><A NAME="M6">SEE ALSO</A></H3>
-<B><A HREF="../TclCmd/namespace.htm">namespace</A></B>, <B><A HREF="../TclCmd/upvar.htm">upvar</A></B>
+<B><A HREF="../TclCmd/apply.htm">apply</A></B>, <B><A HREF="../TclCmd/namespace.htm">namespace</A></B>, <B><A HREF="../TclCmd/upvar.htm">upvar</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#context">context</A>, <A href="../Keywords/L.htm#level">level</A>, <A href="../Keywords/N.htm#namespace">namespace</A>, <A href="../Keywords/S.htm#stack frame">stack frame</A>, <A href="../Keywords/V.htm#variables">variables</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1993 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

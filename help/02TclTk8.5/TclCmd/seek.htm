@@ -1,21 +1,10 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - seek manual page</TITLE></HEAD><BODY>
-<DL>
-<DD><A HREF="seek.htm#M2" NAME="L1338">NAME</A>
-<DL><DD>seek - Change the access position for an open channel</DL>
-<DD><A HREF="seek.htm#M3" NAME="L1339">SYNOPSIS</A>
-<DL>
-<DD><B>seek </B><I>channelId offset </I>?<I>origin</I>?
-</DL>
-<DD><A HREF="seek.htm#M4" NAME="L1340">DESCRIPTION</A>
-<DL>
-<DD><A HREF="seek.htm#M5" NAME="L1341"><B>start</B></A>
-<DD><A HREF="seek.htm#M6" NAME="L1342"><B>current</B></A>
-<DD><A HREF="seek.htm#M7" NAME="L1343"><B>end</B></A>
-</DL>
-<DD><A HREF="seek.htm#M8" NAME="L1344">EXAMPLES</A>
-<DD><A HREF="seek.htm#M9" NAME="L1345">SEE ALSO</A>
-<DD><A HREF="seek.htm#M10" NAME="L1346">KEYWORDS</A>
-</DL><HR>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>seek manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> seek</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 seek - Change the access position for an open channel
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -33,7 +22,7 @@ arguments specify the position at which the next read or write will occur
 for <I>channelId</I>. <I>Offset</I> must be an integer (which may be
 negative) and <I>origin</I> must be one of the following:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>start</B></A><DD>
 The new access position will be <I>offset</I> bytes from the start
 of the underlying file or device.
@@ -81,8 +70,8 @@ close $f</PRE>
 <B><A HREF="../TclCmd/file.htm">file</A></B>, <B><A HREF="../TclCmd/open.htm">open</A></B>, <B><A HREF="../TclCmd/close.htm">close</A></B>, <B><A HREF="../TclCmd/gets.htm">gets</A></B>, <B><A HREF="../TclCmd/tell.htm">tell</A></B>, <B><A HREF="../TclLib/StdChannels.htm">Tcl_StandardChannels</A></B>
 <H3><A NAME="M10">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#access position">access position</A>, <A href="../Keywords/F.htm#file">file</A>, <A href="../Keywords/S.htm#seek">seek</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

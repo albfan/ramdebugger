@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_CreateTimerHandler manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_CreateTimerHandler manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> CrtTimerHdlr</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_CreateTimerHandler, Tcl_DeleteTimerHandler - call a procedure at a given time
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -7,7 +13,7 @@ Tcl_TimerToken<BR>
 <B>Tcl_CreateTimerHandler</B>(<I>milliseconds, proc, clientData</I>)<BR>
 <B>Tcl_DeleteTimerHandler</B>(<I>token</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>int <B>milliseconds</B> (in)<DD>
 How many milliseconds to wait before invoking <I>proc</I>.
 <P><DT>Tcl_TimerProc <B>*proc</B> (in)<DD>
@@ -28,7 +34,7 @@ dispatch events through <B><A HREF="../TclLib/DoOneEvent.htm">Tcl_DoOneEvent</A>
 such as <B><A HREF="../TclCmd/vwait.htm">vwait</A></B>.
 The call to <I>proc</I> may not be made at the exact time given by
 <I>milliseconds</I>:  it will be made at the next opportunity
-after that time.  For example, if <B><A HREF="../TclLib/DoOneEvent.htm">Tcl_DoOneEvent</A></B> isn't
+after that time.  For example, if <B><A HREF="../TclLib/DoOneEvent.htm">Tcl_DoOneEvent</A></B> is not
 called until long after the time has elapsed, or if there
 are other pending events to process before the call to
 <I>proc</I>, then the call to <I>proc</I> will be delayed.
@@ -55,8 +61,8 @@ then the procedure does nothing.
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#callback">callback</A>, <A href="../Keywords/C.htm#clock">clock</A>, <A href="../Keywords/H.htm#handler">handler</A>, <A href="../Keywords/T.htm#timer">timer</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

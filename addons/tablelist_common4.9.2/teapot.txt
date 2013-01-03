@@ -1,0 +1,7 @@
+Package tablelist::common 4.9.2
+Meta activestatetags ActiveTcl Public Tklib
+Meta as::origin      http://sourceforge.net/projects/tcllib
+Meta entity          package
+Meta name            tablelist::common
+Meta platform        tcl
+Meta version         4.9.2

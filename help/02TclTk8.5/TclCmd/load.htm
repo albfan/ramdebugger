@@ -1,23 +1,10 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - load manual page</TITLE></HEAD><BODY>
-<DL>
-<DD><A HREF="load.htm#M2" NAME="L806">NAME</A>
-<DL><DD>load - Load machine code and initialize new commands</DL>
-<DD><A HREF="load.htm#M3" NAME="L807">SYNOPSIS</A>
-<DL>
-<DD><B>load </B><I>fileName</I>
-<DD><B>load </B><I>fileName packageName</I>
-<DD><B>load </B><I>fileName packageName interp</I>
-</DL>
-<DD><A HREF="load.htm#M4" NAME="L808">DESCRIPTION</A>
-<DD><A HREF="load.htm#M5" NAME="L809">PORTABILITY ISSUES</A>
-<DL>
-<DD><A HREF="load.htm#M6" NAME="L810"><B>Windows</B></A>
-</DL>
-<DD><A HREF="load.htm#M7" NAME="L811">BUGS</A>
-<DD><A HREF="load.htm#M8" NAME="L812">EXAMPLE</A>
-<DD><A HREF="load.htm#M9" NAME="L813">SEE ALSO</A>
-<DD><A HREF="load.htm#M10" NAME="L814">KEYWORDS</A>
-</DL><HR>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>load manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> load</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 load - Load machine code and initialize new commands
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -106,14 +93,18 @@ package by that name, and uses it if it is found.  If several
 different files have been <B>load</B>ed with different versions of
 the package, Tcl picks the file that was loaded first.
 <H3><A NAME="M5">PORTABILITY ISSUES</A></H3>
-<DL>
+<DL class="portability issues">
 <DT><A NAME="M6"><B>Windows</B></A><DD>
-When a load fails with &quot;library not found&quot; error, it is also possible
+When a load fails with
+&#8220;library not found&#8221;
+error, it is also possible
 that a dependent library was not found.  To see the dependent libraries,
-type ``dumpbin -imports &lt;dllname&gt;'' in a DOS console to see what the
-library must import.
-When loading a DLL in the current directory, Windows will ignore ``./'' as
-a path specifier and use a search heuristic to find the DLL instead.
+type
+&#8220;dumpbin -imports &lt;dllname&gt;&#8221;
+in a DOS console to see what the library must import.
+When loading a DLL in the current directory, Windows will ignore
+&#8220;./&#8221;
+as a path specifier and use a search heuristic to find the DLL instead.
 To avoid this, load the DLL with:
 <PRE><B>load</B> [file join [pwd] mylib.DLL]</PRE>
 <P></DL>
@@ -151,7 +142,7 @@ switch $tcl_platform(platform) {
       <B>load</B> [file join [pwd] foo.dll]
    }
    unix {
-      <B>load</B> ./libfoo[info sharedlibextension]
+      <B>load</B> [file join [pwd] libfoo[info sharedlibextension]]
    }
 }
 
@@ -161,7 +152,7 @@ foo</PRE>
 <B><A HREF="../TclCmd/info.htm">info sharedlibextension</A></B>, <B><A HREF="../TclLib/StaticPkg.htm">Tcl_StaticPackage</A></B>, <B>safe</B>
 <H3><A NAME="M10">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#binary code">binary code</A>, <A href="../Keywords/L.htm#loading">loading</A>, <A href="../Keywords/S.htm#safe interpreter">safe interpreter</A>, <A href="../Keywords/S.htm#shared library">shared library</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1995-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

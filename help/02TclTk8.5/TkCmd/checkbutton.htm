@@ -1,12 +1,17 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - checkbutton manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>checkbutton manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> checkbutton</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="checkbutton.htm#M2" NAME="L315">NAME</A>
-<DL><DD>checkbutton - Create and manipulate checkbutton widgets</DL>
-<DD><A HREF="checkbutton.htm#M3" NAME="L316">SYNOPSIS</A>
+<DD><A HREF="checkbutton.htm#M2" NAME="L367">NAME</A>
+<DL><DD>checkbutton - Create and manipulate checkbutton widgets</DD></DL>
+<DD><A HREF="checkbutton.htm#M3" NAME="L368">SYNOPSIS</A>
 <DL>
-<DD><B>checkbutton</B><I> pathName </I>?<I>options</I>?
 </DL>
-<DD><A HREF="checkbutton.htm#M4" NAME="L317">STANDARD OPTIONS</A>
+<DD><A HREF="checkbutton.htm#M4" NAME="L369">STANDARD OPTIONS</A>
 <DL>
 <DD><A HREF="options.htm#M-activebackground">-activebackground, activeBackground, Foreground</A>
 <DD><A HREF="options.htm#M-activeforeground">-activeforeground, activeForeground, Background</A>
@@ -33,40 +38,41 @@
 <DD><A HREF="options.htm#M-underline">-underline, underline, Underline</A>
 <DD><A HREF="options.htm#M-wraplength">-wraplength, wrapLength, WrapLength</A>
 </DL>
-<DD><A HREF="checkbutton.htm#M5" NAME="L318">WIDGET-SPECIFIC OPTIONS</A>
+<DD><A HREF="checkbutton.htm#M5" NAME="L370">WIDGET-SPECIFIC OPTIONS</A>
 <DL>
-<DD><A HREF="checkbutton.htm#M6" NAME="L319">-command, command, Command</A>
-<DD><A HREF="checkbutton.htm#M7" NAME="L320">-height, height, Height</A>
-<DD><A HREF="checkbutton.htm#M8" NAME="L321">-indicatoron, indicatorOn, IndicatorOn</A>
-<DD><A HREF="checkbutton.htm#M9" NAME="L322">-offrelief, offRelief, OffRelief</A>
-<DD><A HREF="checkbutton.htm#M10" NAME="L323">-offvalue, offValue, Value</A>
-<DD><A HREF="checkbutton.htm#M11" NAME="L324">-onvalue, onValue, Value</A>
-<DD><A HREF="checkbutton.htm#M12" NAME="L325">-overrelief, overRelief, OverRelief</A>
-<DD><A HREF="checkbutton.htm#M13" NAME="L326">-selectcolor, selectColor, Background</A>
-<DD><A HREF="checkbutton.htm#M14" NAME="L327">-selectimage, selectImage, SelectImage</A>
-<DD><A HREF="checkbutton.htm#M15" NAME="L328">-state, state, State</A>
-<DD><A HREF="checkbutton.htm#M16" NAME="L329">-tristateimage, tristateImage, TristateImage</A>
-<DD><A HREF="checkbutton.htm#M17" NAME="L330">-tristatevalue, tristateValue, Value</A>
-<DD><A HREF="checkbutton.htm#M18" NAME="L331">-variable, variable, Variable</A>
-<DD><A HREF="checkbutton.htm#M19" NAME="L332">-width, width, Width</A>
+<DD><A HREF="checkbutton.htm#M6" NAME="L371">-command, command, Command</A>
+<DD><A HREF="checkbutton.htm#M7" NAME="L372">-height, height, Height</A>
+<DD><A HREF="checkbutton.htm#M8" NAME="L373">-indicatoron, indicatorOn, IndicatorOn</A>
+<DD><A HREF="checkbutton.htm#M9" NAME="L374">-offrelief, offRelief, OffRelief</A>
+<DD><A HREF="checkbutton.htm#M10" NAME="L375">-offvalue, offValue, Value</A>
+<DD><A HREF="checkbutton.htm#M11" NAME="L376">-onvalue, onValue, Value</A>
+<DD><A HREF="checkbutton.htm#M12" NAME="L377">-overrelief, overRelief, OverRelief</A>
+<DD><A HREF="checkbutton.htm#M13" NAME="L378">-selectcolor, selectColor, Background</A>
+<DD><A HREF="checkbutton.htm#M14" NAME="L379">-selectimage, selectImage, SelectImage</A>
+<DD><A HREF="checkbutton.htm#M15" NAME="L380">-state, state, State</A>
+<DD><A HREF="checkbutton.htm#M16" NAME="L381">-tristateimage, tristateImage, TristateImage</A>
+<DD><A HREF="checkbutton.htm#M17" NAME="L382">-tristatevalue, tristateValue, Value</A>
+<DD><A HREF="checkbutton.htm#M18" NAME="L383">-variable, variable, Variable</A>
+<DD><A HREF="checkbutton.htm#M19" NAME="L384">-width, width, Width</A>
 </DL>
-<DD><A HREF="checkbutton.htm#M20" NAME="L333">DESCRIPTION</A>
-<DD><A HREF="checkbutton.htm#M21" NAME="L334">WIDGET COMMAND</A>
-<DL>
-<DD><A HREF="checkbutton.htm#M22" NAME="L335"><I>pathName </I><B>cget</B> <I>option</I></A>
-<DD><A HREF="checkbutton.htm#M23" NAME="L336"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
-<DD><A HREF="checkbutton.htm#M24" NAME="L337"><I>pathName </I><B>deselect</B></A>
-<DD><A HREF="checkbutton.htm#M25" NAME="L338"><I>pathName </I><B>flash</B></A>
-<DD><A HREF="checkbutton.htm#M26" NAME="L339"><I>pathName </I><B>invoke</B></A>
-<DD><A HREF="checkbutton.htm#M27" NAME="L340"><I>pathName </I><B>select</B></A>
-<DD><A HREF="checkbutton.htm#M28" NAME="L341"><I>pathName </I><B>toggle</B></A>
+<DD><A HREF="checkbutton.htm#M20" NAME="L385">DESCRIPTION</A>
+<DD><A HREF="checkbutton.htm#M21" NAME="L386">WIDGET COMMAND</A>
+<DL class="widget command">
+<DD><A HREF="checkbutton.htm#M22" NAME="L387"><I>pathName </I><B>cget</B> <I>option</I></A>
+<DD><A HREF="checkbutton.htm#M23" NAME="L388"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
+<DD><A HREF="checkbutton.htm#M24" NAME="L389"><I>pathName </I><B>deselect</B></A>
+<DD><A HREF="checkbutton.htm#M25" NAME="L390"><I>pathName </I><B>flash</B></A>
+<DD><A HREF="checkbutton.htm#M26" NAME="L391"><I>pathName </I><B>invoke</B></A>
+<DD><A HREF="checkbutton.htm#M27" NAME="L392"><I>pathName </I><B>select</B></A>
+<DD><A HREF="checkbutton.htm#M28" NAME="L393"><I>pathName </I><B>toggle</B></A>
 </DL>
-<DD><A HREF="checkbutton.htm#M29" NAME="L342">BINDINGS</A>
-<DL>
+<DD><A HREF="checkbutton.htm#M29" NAME="L394">BINDINGS</A>
+<DL class="bindings">
 </DL>
-<DD><A HREF="checkbutton.htm#M30" NAME="L343">SEE ALSO</A>
-<DD><A HREF="checkbutton.htm#M31" NAME="L344">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="checkbutton.htm#M30" NAME="L395">EXAMPLE</A>
+<DD><A HREF="checkbutton.htm#M31" NAME="L396">SEE ALSO</A>
+<DD><A HREF="checkbutton.htm#M32" NAME="L397">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 checkbutton - Create and manipulate checkbutton widgets
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -114,7 +120,7 @@ be updated before the command is invoked.
 If an image or bitmap is being displayed in the button then the value is in
 screen units (i.e. any of the forms acceptable to <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>);
 for text it is in lines of text.
-If this option isn't specified, the button's desired height is computed
+If this option is not specified, the button's desired height is computed
 from the size of the image or bitmap or text being displayed in it.
 <P><DT>Command-Line Name: <B><A NAME="M8">-indicatoron</A></B>
 <DT>Database Name: <B>indicatorOn</B>
@@ -127,9 +133,13 @@ selected and raised otherwise.
 <DT>Database Name: <B>offRelief</B>
 <DT>Database Class: <B>OffRelief</B>
 <DD>Specifies the relief for the checkbutton when the indicator is not drawn and
-the checkbutton is off.  The default value is &quot;raised&quot;.  By setting this option
-to &quot;flat&quot; and setting -indicatoron to false and -overrelief to raised,
-the effect is achieved 
+the checkbutton is off.  The default value is
+&#8220;raised&#8221;.
+By setting this option to
+&#8220;flat&#8221;
+and setting <B>-indicatoron</B> to false and <B>-overrelief</B> to
+&#8220;raised&#8221;,
+the effect is achieved
 of having a flat button that raises on mouse-over and which is
 depressed when activated.  This is the behavior typically exhibited by
 the Bold, Italic, and Underline checkbuttons on the toolbar of a 
@@ -138,12 +148,14 @@ word-processor, for example.
 <DT>Database Name: <B>offValue</B>
 <DT>Database Class: <B>Value</B>
 <DD>Specifies value to store in the button's associated variable whenever
-this button is deselected.  Defaults to ``0''.
+this button is deselected.  Defaults to
+&#8220;0&#8221;.
 <P><DT>Command-Line Name: <B><A NAME="M11">-onvalue</A></B>
 <DT>Database Name: <B>onValue</B>
 <DT>Database Class: <B>Value</B>
 <DD>Specifies value to store in the button's associated variable whenever
-this button is selected.  Defaults to ``1''.
+this button is selected.  Defaults to
+&#8220;1&#8221;.
 <P><DT>Command-Line Name: <B><A NAME="M12">-overrelief</A></B>
 <DT>Database Name: <B>overRelief</B>
 <DT>Database Class: <B>OverRelief</B>
@@ -157,9 +169,8 @@ The empty string is the default value.
 <DT>Database Name: <B>selectColor</B>
 <DT>Database Class: <B>Background</B>
 <DD>Specifies a background color to use when the button is selected.
-If <B>indicatorOn</B> is true then the color applies to the indicator.
-Under Windows, this color is used as the background for the indicator
-regardless of the select state.
+If <B>indicatorOn</B> is true then the color is used as the background for
+the indicator regardless of the select state.
 If <B>indicatorOn</B> is false, this color is used as the background
 for the entire widget, in place of <B>background</B> or <B>activeBackground</B>,
 whenever the widget is selected.
@@ -196,7 +207,8 @@ specified.
 <DT>Database Name: <B>tristateValue</B>
 <DT>Database Class: <B>Value</B>
 <DD>Specifies the value that causes the checkbutton to display the multi-value 
-selection, also known as the tri-state mode.  Defaults to ``&quot;&quot;''
+selection, also known as the tri-state mode.  Defaults to
+&#8220;&#8221;.
 <P><DT>Command-Line Name: <B><A NAME="M18">-variable</A></B>
 <DT>Database Name: <B><A HREF="../TclCmd/variable.htm">variable</A></B>
 <DT>Database Class: <B><A HREF="../TclCmd/variable.htm">Variable</A></B>
@@ -211,7 +223,7 @@ window's path name).
 If an image or bitmap is being displayed in the button then the value is in
 screen units (i.e. any of the forms acceptable to <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>);
 for text it is in characters.
-If this option isn't specified, the button's desired width is computed
+If this option is not specified, the button's desired width is computed
 from the size of the image or bitmap or text being displayed in it.
 </DL>
 <H3><A NAME="M20">DESCRIPTION</A></H3>
@@ -258,20 +270,30 @@ the indicator is drawn with a tri-state appearance and is in the tri-state
 mode indicating mixed or multiple values.  (This is used when the check 
 box represents the state of multiple items.)
 The indicator is drawn in a platform dependent manner.  Under Unix and 
-Windows, the background interior of the box is ``grayed''.  Under Mac, 
-the indicator is drawn with a dash mark inside.
+Windows, the background interior of the box is
+&#8220;grayed&#8221;.
+Under Mac, the indicator is drawn with a dash mark inside.
 By default, the name of the variable associated with a checkbutton is the
 same as the <I>name</I> used to create the checkbutton.
-The variable name, and the ``on'', ``off'' and ``tristate'' values stored in 
-it, may be modified with options on the command line or in the option
-database.
+The variable name, and the
+&#8220;on&#8221;,
+&#8220;off&#8221;
+and
+&#8220;tristate&#8221;
+values stored in it, may be modified with options on the command line
+or in the option database.
 Configuration options may also be used to modify the way the
 indicator is displayed (or whether it is displayed at all).
 By default a checkbutton is configured to select and deselect
 itself on alternate button clicks.
 In addition, each checkbutton monitors its associated variable and
 automatically selects and deselects itself when the variables value
-changes to and from the button's ``on'', ``off'' and ``tristate'' values.
+changes to and from the button's
+&#8220;on&#8221;,
+&#8220;off&#8221;
+and
+&#8220;tristate&#8221;
+values.
 <H3><A NAME="M21">WIDGET COMMAND</A></H3>
 The <B>checkbutton</B> command creates a new Tcl command whose
 name is <I>pathName</I>.  This
@@ -282,7 +304,7 @@ operations on the widget.  It has the following general form:
 determine the exact behavior of the command.  The following
 commands are possible for checkbutton widgets:
 <P>
-<DL>
+<DL class="widget command">
 <DT><A NAME="M22"><I>pathName </I><B>cget</B> <I>option</I></A><DD>
 Returns the current value of the configuration option given
 by <I>option</I>.
@@ -302,7 +324,8 @@ this case the command returns an empty string.
 <I>Option</I> may have any of the values accepted by the <B>checkbutton</B>
 command.
 <P><DT><A NAME="M24"><I>pathName </I><B>deselect</B></A><DD>
-Deselects the checkbutton and sets the associated variable to its ``off''
+Deselects the checkbutton and sets the associated variable to its
+&#8220;off&#8221;
 value.
 <P><DT><A NAME="M25"><I>pathName </I><B>flash</B></A><DD>
 Flashes the checkbutton.  This is accomplished by redisplaying the checkbutton
@@ -318,7 +341,8 @@ The return value is the return value from the Tcl command, or an
 empty string if there is no command associated with the checkbutton.
 This command is ignored if the checkbutton's state is <B>disabled</B>.
 <P><DT><A NAME="M27"><I>pathName </I><B>select</B></A><DD>
-Selects the checkbutton and sets the associated variable to its ``on''
+Selects the checkbutton and sets the associated variable to its
+&#8220;on&#8221;
 value.
 <P><DT><A NAME="M28"><I>pathName </I><B>toggle</B></A><DD>
 Toggles the selection state of the button, redisplaying it and
@@ -328,7 +352,7 @@ modifying its associated variable to reflect the new state.
 Tk automatically creates class bindings for checkbuttons that give them
 the following default behavior:
 <P>
-<DL>
+<DL class="bindings">
 <DT>[1]<DD>
 On Unix systems, a checkbutton activates whenever the mouse passes
 over it and deactivates whenever the mouse leaves the checkbutton.  On
@@ -351,13 +375,21 @@ actions occur:  the checkbutton is completely non-responsive.
 <P>
 The behavior of checkbuttons can be changed by defining new bindings for
 individual widgets or by redefining the class bindings.
-
-<H3><A NAME="M30">SEE ALSO</A></H3>
-<B><A HREF="../TkCmd/button.htm">button</A></B>, <B><A HREF="../TkCmd/options.htm">options</A></B>, <B><A HREF="../TkCmd/radiobutton.htm">radiobutton</A></B>
-<H3><A NAME="M31">KEYWORDS</A></H3>
+<H3><A NAME="M30">EXAMPLE</A></H3>
+This example shows a group of uncoupled checkbuttons.
+<P>
+<PRE>labelframe .lbl -text &quot;Steps:&quot;
+    <B>checkbutton</B> .c1 -text Lights  -variable lights
+    <B>checkbutton</B> .c2 -text Cameras -variable cameras
+    <B>checkbutton</B> .c3 -text Action! -variable action
+    pack .c1 .c2 .c3 -in .lbl
+    pack .lbl</PRE>
+<H3><A NAME="M31">SEE ALSO</A></H3>
+<B><A HREF="../TkCmd/button.htm">button</A></B>, <B><A HREF="../TkCmd/options.htm">options</A></B>, <B><A HREF="../TkCmd/radiobutton.htm">radiobutton</A></B>, <B><A HREF="../TkCmd/ttk_checkbutton.htm">ttk::checkbutton</A></B>
+<H3><A NAME="M32">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#checkbutton">checkbutton</A>, <A href="../Keywords/W.htm#widget">widget</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

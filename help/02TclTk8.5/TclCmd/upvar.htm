@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Built-In Commands - upvar manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>upvar manual page - Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> upvar</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 upvar - Create link to variable in a different stack frame
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -9,7 +15,7 @@ procedure to refer to variables in an enclosing procedure call or
 to global variables.
 <I>Level</I> may have any of the forms permitted for the <B><A HREF="../TclCmd/uplevel.htm">uplevel</A></B>
 command, and may be omitted if the first letter of the first <I>otherVar</I>
-isn't <B>#</B> or a digit (it defaults to <B>1</B>).
+is not <B>#</B> or a digit (it defaults to <B>1</B>).
 For each <I>otherVar</I> argument, <B>upvar</B> makes the variable
 by that name in the procedure frame given by <I>level</I> (or at
 global level, if <I>level</I> is <B>#0</B>) accessible
@@ -63,7 +69,10 @@ unexpected manner.  If a variable trace is defined on <I>otherVar</I>, that
 trace will be triggered by actions involving <I>myVar</I>.  However,
 the trace procedure will be passed the name of <I>myVar</I>, rather
 than the name of <I>otherVar</I>.  Thus, the output of the following code
-will be &quot;<I>localVar</I>&quot; rather than &quot;<I>originalVar</I>&quot;:
+will be
+&#8220;<I>localVar</I>&#8221;
+rather than
+&#8220;<I>originalVar</I>&#8221;:
 <PRE>proc <I>traceproc</I> { name index op } {
    puts $name
 }
@@ -91,8 +100,8 @@ the value from the variable instead of adding it:
 <B><A HREF="../TclCmd/global.htm">global</A></B>, <B><A HREF="../TclCmd/namespace.htm">namespace</A></B>, <B><A HREF="../TclCmd/uplevel.htm">uplevel</A></B>, <B><A HREF="../TclCmd/variable.htm">variable</A></B>
 <H3><A NAME="M8">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#context">context</A>, <A href="../Keywords/F.htm#frame">frame</A>, <A href="../Keywords/G.htm#global">global</A>, <A href="../Keywords/L.htm#level">level</A>, <A href="../Keywords/N.htm#namespace">namespace</A>, <A href="../Keywords/P.htm#procedure">procedure</A>, <A href="../Keywords/V.htm#variable">variable</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1993 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

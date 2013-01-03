@@ -1,4 +1,28 @@
-<HTML><HEAD><TITLE>Library Procedures - Tk_CreateErrorHandler manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_CreateErrorHandler manual page - Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> CrtErrHdlr</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="CrtErrHdlr.htm#M2" NAME="L110">NAME</A>
+<DL><DD>Tk_CreateErrorHandler, Tk_DeleteErrorHandler - handle X protocol errors</DD></DL>
+<DD><A HREF="CrtErrHdlr.htm#M3" NAME="L111">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>Tk_ErrorHandler
+<DD><B>Tk_CreateErrorHandler</B>(<I>display, error, request, minor, proc, clientData</I>)
+<DD><B>Tk_DeleteErrorHandler</B>(<I>handler</I>)
+</DL>
+<DD><A HREF="CrtErrHdlr.htm#M4" NAME="L112">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="CrtErrHdlr.htm#M5" NAME="L113">DESCRIPTION</A>
+<DL class="description">
+</DL>
+<DD><A HREF="CrtErrHdlr.htm#M6" NAME="L114">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_CreateErrorHandler, Tk_DeleteErrorHandler - handle X protocol errors
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -7,7 +31,7 @@ Tk_ErrorHandler<BR>
 <B>Tk_CreateErrorHandler</B>(<I>display, error, request, minor, proc, clientData</I>)<BR>
 <B>Tk_DeleteErrorHandler</B>(<I>handler</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Display <B>*display</B> (in)<DD>
 Display whose errors are to be handled.
 <P><DT>int <B><A HREF="../TclCmd/error.htm">error</A></B> (in)<DD>
@@ -34,12 +58,12 @@ call to <B>Tk_CreateErrorHandler</B>).
 (<I>proc</I>) to be called whenever certain protocol errors occur on a
 particular display (<I>display</I>).  Protocol errors occur when
 the X protocol is used incorrectly, such as attempting to map a window
-that doesn't exist.  See the Xlib documentation for <B>XSetErrorHandler</B>
+that does not exist.  See the Xlib documentation for <B>XSetErrorHandler</B>
 for more information on the kinds of errors that can occur.
 For <I>proc</I> to be invoked
 to handle a particular error, five things must occur:
 <P>
-<DL>
+<DL class="description">
 <DT>[1]<DD>
 The error must pertain to <I>display</I>.
 <P><DT>[2]<DD>
@@ -83,14 +107,13 @@ If more than more than one handler matches a particular error, then
 they are invoked in turn.  The handlers will be invoked in reverse
 order of creation:  most recently declared handler first.
 If any handler returns 0, then subsequent (older) handlers will
-not be invoked.  If no handler returns 0, then Tk invokes X'es
+not be invoked.  If no handler returns 0, then Tk invokes X's
 default error handler, which prints an error message and aborts the
 program.  If you wish to have a default handler that deals with errors
 that no other handler can deal with, then declare it first.
 <P>
-The X documentation states that ``the error handler should not call
-any functions (directly or indirectly) on the display that will
-generate protocol requests or that will look for input events.''
+The X documentation states that
+&#8220;the error handler should not call any functions (directly or indirectly) on the display that will generate protocol requests or that will look for input events.&#8221;
 This restriction applies to handlers declared by <B>Tk_CreateErrorHandler</B>;
 disobey it at your own risk.
 <P>
@@ -128,8 +151,8 @@ applications should use only <B>Tk_CreateErrorHandler</B>.
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#callback">callback</A>, <A href="../Keywords/E.htm#error">error</A>, <A href="../Keywords/E.htm#event">event</A>, <A href="../Keywords/H.htm#handler">handler</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

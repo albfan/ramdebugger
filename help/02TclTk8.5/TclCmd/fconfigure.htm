@@ -1,36 +1,39 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - fconfigure manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>fconfigure manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> fconfigure</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="fconfigure.htm#M2" NAME="L393">NAME</A>
-<DL><DD>fconfigure - Set and get options on a channel</DL>
-<DD><A HREF="fconfigure.htm#M3" NAME="L394">SYNOPSIS</A>
+<DD><A HREF="fconfigure.htm#M2" NAME="L415">NAME</A>
+<DL><DD>fconfigure - Set and get options on a channel</DD></DL>
+<DD><A HREF="fconfigure.htm#M3" NAME="L416">SYNOPSIS</A>
 <DL>
-<DD><B>fconfigure </B><I>channelId</I>
-<DD><B>fconfigure </B><I>channelId</I> <I>name</I>
-<DD><B>fconfigure </B><I>channelId</I> <I>name value </I>?<I>name value ...</I>?
 </DL>
-<DD><A HREF="fconfigure.htm#M4" NAME="L395">DESCRIPTION</A>
-<DL>
-<DD><A HREF="fconfigure.htm#M5" NAME="L396"><B>-blocking</B> <I>boolean</I></A>
-<DD><A HREF="fconfigure.htm#M6" NAME="L397"><B>-buffering</B> <I>newValue</I></A>
-<DD><A HREF="fconfigure.htm#M7" NAME="L398"><B>-buffersize</B> <I>newSize</I></A>
-<DD><A HREF="fconfigure.htm#M8" NAME="L399"><B>-encoding</B> <I>name</I></A>
-<DD><A HREF="fconfigure.htm#M9" NAME="L400"><B>-eofchar</B> <I>char</I></A>
-<DD><A HREF="fconfigure.htm#M10" NAME="L401"><B>-eofchar</B> <B>{</B><I>inChar outChar</I><B>}</B></A>
-<DD><A HREF="fconfigure.htm#M11" NAME="L402"><B>-translation</B> <I>mode</I></A>
-<DD><A HREF="fconfigure.htm#M12" NAME="L403"><B>-translation</B> <B>{</B><I>inMode outMode</I><B>}</B></A>
-<DL>
-<DD><A HREF="fconfigure.htm#M13" NAME="L404"><B>auto</B></A>
-<DD><A HREF="fconfigure.htm#M14" NAME="L405"><B>binary</B></A>
-<DD><A HREF="fconfigure.htm#M15" NAME="L406"><B>cr</B></A>
-<DD><A HREF="fconfigure.htm#M16" NAME="L407"><B>crlf</B></A>
-<DD><A HREF="fconfigure.htm#M17" NAME="L408"><B>lf</B></A>
+<DD><A HREF="fconfigure.htm#M4" NAME="L417">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="fconfigure.htm#M5" NAME="L418"><B>-blocking</B> <I>boolean</I></A>
+<DD><A HREF="fconfigure.htm#M6" NAME="L419"><B>-buffering</B> <I>newValue</I></A>
+<DD><A HREF="fconfigure.htm#M7" NAME="L420"><B>-buffersize</B> <I>newSize</I></A>
+<DD><A HREF="fconfigure.htm#M8" NAME="L421"><B>-encoding</B> <I>name</I></A>
+<DD><A HREF="fconfigure.htm#M9" NAME="L422"><B>-eofchar</B> <I>char</I></A>
+<DD><A HREF="fconfigure.htm#M10" NAME="L423"><B>-eofchar</B> <B>{</B><I>inChar outChar</I><B>}</B></A>
+<DD><A HREF="fconfigure.htm#M11" NAME="L424"><B>-translation</B> <I>mode</I></A>
+<DD><A HREF="fconfigure.htm#M12" NAME="L425"><B>-translation</B> <B>{</B><I>inMode outMode</I><B>}</B></A>
+<DL class="description">
+<DD><A HREF="fconfigure.htm#M13" NAME="L426"><B>auto</B></A>
+<DD><A HREF="fconfigure.htm#M14" NAME="L427"><B>binary</B></A>
+<DD><A HREF="fconfigure.htm#M15" NAME="L428"><B>cr</B></A>
+<DD><A HREF="fconfigure.htm#M16" NAME="L429"><B>crlf</B></A>
+<DD><A HREF="fconfigure.htm#M17" NAME="L430"><B>lf</B></A>
 </DL>
 </DL>
-<DD><A HREF="fconfigure.htm#M18" NAME="L409">STANDARD CHANNELS</A>
-<DD><A HREF="fconfigure.htm#M19" NAME="L410">EXAMPLES</A>
-<DD><A HREF="fconfigure.htm#M20" NAME="L411">SEE ALSO</A>
-<DD><A HREF="fconfigure.htm#M21" NAME="L412">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="fconfigure.htm#M18" NAME="L431">STANDARD CHANNELS</A>
+<DD><A HREF="fconfigure.htm#M19" NAME="L432">EXAMPLES</A>
+<DD><A HREF="fconfigure.htm#M20" NAME="L433">SEE ALSO</A>
+<DD><A HREF="fconfigure.htm#M21" NAME="L434">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 fconfigure - Set and get options on a channel
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -60,14 +63,15 @@ entry for the command that creates each type of channels for the options
 that that specific type of channel supports. For example, see the manual
 entry for the <B><A HREF="../TclCmd/socket.htm">socket</A></B> command for its additional options.
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>-blocking</B> <I>boolean</I></A><DD>
 The <B>-blocking</B> option determines whether I/O operations on the
 channel can cause the process to block indefinitely.
 The value of the option must be a proper boolean value.
 Channels are normally in blocking mode;  if a channel is placed into
 nonblocking mode it will affect the operation of the <B><A HREF="../TclCmd/gets.htm">gets</A></B>,
-<B><A HREF="../TclCmd/read.htm">read</A></B>, <B><A HREF="../TclCmd/puts.htm">puts</A></B>, <B><A HREF="../TclCmd/flush.htm">flush</A></B>, and <B><A HREF="../TclCmd/close.htm">close</A></B> commands;
+<B><A HREF="../TclCmd/read.htm">read</A></B>, <B><A HREF="../TclCmd/puts.htm">puts</A></B>, <B><A HREF="../TclCmd/flush.htm">flush</A></B>, and <B><A HREF="../TclCmd/close.htm">close</A></B> commands by
+allowing them to operate asynchronously;
 see the documentation for those commands for details.
 For nonblocking mode to work correctly, the application must be
 using the Tcl event loop (e.g. by calling <B><A HREF="../TclLib/DoOneEvent.htm">Tcl_DoOneEvent</A></B> or
@@ -125,6 +129,9 @@ channel, a two-element list will always be returned.  The default value
 for <B>-eofchar</B> is the empty string in all cases except for files
 under Windows.  In that case the <B>-eofchar</B> is Control-z (&#92;x1a) for
 reading and the empty string for writing.
+The acceptable range for <B>-eofchar</B> values is &#92;x01 - &#92;x7f;
+attempting to set <B>-eofchar</B> to a value outside of this range will
+generate an error.
 <P><DT><A NAME="M11"><B>-translation</B> <I>mode</I></A><DD>
 <P><DT><A NAME="M12"><B>-translation</B> <B>{</B><I>inMode outMode</I><B>}</B></A><DD>
 In Tcl scripts the end of a line is always represented using a single
@@ -150,7 +157,7 @@ writing.  When querying the translation mode of a read-write channel, a
 two-element list will always be returned.  The following values are
 currently supported:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M13"><B>auto</B></A><DD>
 As the input translation mode, <B>auto</B> treats any of newline
 (<B>lf</B>), carriage return (<B>cr</B>), or carriage return followed by a
@@ -167,6 +174,11 @@ No end-of-line translations are performed.  This is nearly identical to
 end-of-file character to the empty string (which disables it) and sets the
 encoding to <B><A HREF="../TclCmd/binary.htm">binary</A></B> (which disables encoding filtering).  See the
 description of <B>-eofchar</B> and <B>-encoding</B> for more information.
+<P>
+Internally, i.e. when it comes to the actual behaviour of the
+translator this value <B>is</B> identical to <B>lf</B> and is therefore
+reported as such when queried. Even if <B><A HREF="../TclCmd/binary.htm">binary</A></B> was used to set
+the translation.
 <P><DT><A NAME="M15"><B>cr</B></A><DD>
 The end of a line in the underlying file or device is represented by a
 single carriage return character.  As the input translation mode,
@@ -237,7 +249,7 @@ set words {}
 while {[llength $words] &lt; 3} {
    gets $f line
    if {[string match &quot;#*&quot; $line]} continue
-   lappend words {expand}[join [scan $line %d%d%d]]
+   lappend words {*}[join [scan $line %d%d%d]]
 }
 
 # Those words supply the size of the image and its
@@ -255,7 +267,7 @@ close $f</PRE>
 <B><A HREF="../TclCmd/close.htm">close</A></B>, <B><A HREF="../TclCmd/flush.htm">flush</A></B>, <B><A HREF="../TclCmd/gets.htm">gets</A></B>, <B><A HREF="../TclCmd/open.htm">open</A></B>, <B><A HREF="../TclCmd/puts.htm">puts</A></B>, <B><A HREF="../TclCmd/read.htm">read</A></B>, <B><A HREF="../TclCmd/socket.htm">socket</A></B>, <B><A HREF="../TclLib/StdChannels.htm">Tcl_StandardChannels</A></B>
 <H3><A NAME="M21">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#blocking">blocking</A>, <A href="../Keywords/B.htm#buffering">buffering</A>, <A href="../Keywords/C.htm#carriage return">carriage return</A>, <A href="../Keywords/E.htm#end of line">end of line</A>, <A href="../Keywords/F.htm#flushing">flushing</A>, <A href="../Keywords/L.htm#linemode">linemode</A>, <A href="../Keywords/N.htm#newline">newline</A>, <A href="../Keywords/N.htm#nonblocking">nonblocking</A>, <A href="../Keywords/P.htm#platform">platform</A>, <A href="../Keywords/T.htm#translation">translation</A>, <A href="../Keywords/E.htm#encoding">encoding</A>, <A href="../Keywords/F.htm#filter">filter</A>, <A href="../Keywords/B.htm#byte array">byte array</A>, <A href="../Keywords/B.htm#binary">binary</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1995-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

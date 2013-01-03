@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Library Procedures - Tk_MapWindow manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_MapWindow manual page - Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> MapWindow</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_MapWindow, Tk_UnmapWindow - map or unmap a window
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -7,7 +13,7 @@ Tk_Window<BR>
 <B>Tk_MapWindow</B>(<I>tkwin</I>)<BR>
 <B>Tk_UnmapWindow</B>(<I>tkwin</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Tk_Window <B>tkwin</B> (in)<DD>
 Token for window.
 <P></DL>
@@ -15,7 +21,7 @@ Token for window.
 These procedures may be used to map and unmap windows
 managed by Tk.  <B>Tk_MapWindow</B> maps the window given
 by <I>tkwin</I>, and also creates an X window corresponding
-to <I>tkwin</I> if it doesn't already exist.  See the
+to <I>tkwin</I> if it does not already exist.  See the
 <B><A HREF="../TkLib/CrtWindow.htm">Tk_CreateWindow</A></B> manual entry for information on
 deferred window creation.
 <B>Tk_UnmapWindow</B> unmaps <I>tkwin</I>'s window
@@ -23,7 +29,7 @@ from the screen.
 <P>
 If <I>tkwin</I> is a child window (i.e. <B><A HREF="../TkLib/CrtWindow.htm">Tk_CreateWindow</A></B> was
 used to create a child window), then event handlers interested in map 
-and unmap events are invoked immediately.  If <I>tkwin</I> isn't an 
+and unmap events are invoked immediately.  If <I>tkwin</I> is not an 
 internal window, then the event handlers will be invoked later, after 
 X has seen the request and returned an event for it.
 <P>
@@ -35,8 +41,8 @@ directly.
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/M.htm#map">map</A>, <A href="../Keywords/U.htm#unmap">unmap</A>, <A href="../Keywords/W.htm#window">window</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

@@ -1,6 +1,40 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_AddErrorInfo manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_AddErrorInfo manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> AddErrInfo</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="AddErrInfo.htm#M2" NAME="L7">NAME</A>
+<DL><DD>Tcl_GetReturnOptions, Tcl_SetReturnOptions, Tcl_AddErrorInfo, Tcl_AppendObjToErrorInfo, Tcl_AddObjErrorInfo, Tcl_SetObjErrorCode, Tcl_SetErrorCode, Tcl_SetErrorCodeVA, Tcl_PosixError, Tcl_LogCommandInfo - retrieve or record information about errors and other return options</DD></DL>
+<DD><A HREF="AddErrInfo.htm#M3" NAME="L8">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>Tcl_Obj *
+<DD><B>Tcl_GetReturnOptions</B>(<I>interp, code</I>)
+<DD>int 
+<DD><B>Tcl_SetReturnOptions</B>(<I>interp, options</I>)
+<DD><B>Tcl_AddErrorInfo</B>(<I>interp, message</I>)
+<DD><B>Tcl_AppendObjToErrorInfo</B>(<I>interp, objPtr</I>)
+<DD><B>Tcl_AddObjErrorInfo</B>(<I>interp, message, length</I>)
+<DD><B>Tcl_SetObjErrorCode</B>(<I>interp, errorObjPtr</I>)
+<DD><B>Tcl_SetErrorCode</B>(<I>interp, element, element, ... </I><B>(char *) NULL</B>)
+<DD><B>Tcl_SetErrorCodeVA</B>(<I>interp, argList</I>)
+<DD>const char *
+<DD><B>Tcl_PosixError</B>(<I>interp</I>)
+<DD>void
+<DD><B>Tcl_LogCommandInfo</B>(<I>interp, script, command, commandLength</I>)
+</DL>
+<DD><A HREF="AddErrInfo.htm#M4" NAME="L9">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="AddErrInfo.htm#M5" NAME="L10">DESCRIPTION</A>
+<DD><A HREF="AddErrInfo.htm#M6" NAME="L11">SEE ALSO</A>
+<DD><A HREF="AddErrInfo.htm#M7" NAME="L12">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
-Tcl_GetReturnOptions, Tcl_SetReturnOptions, Tcl_AddErrorInfo, Tcl_AddObjErrorInfo, Tcl_SetObjErrorCode, Tcl_SetErrorCode, Tcl_SetErrorCodeVA, Tcl_PosixError, Tcl_LogCommandInfo - retrieve or record information about errors and other return options
+Tcl_GetReturnOptions, Tcl_SetReturnOptions, Tcl_AddErrorInfo, Tcl_AppendObjToErrorInfo, Tcl_AddObjErrorInfo, Tcl_SetObjErrorCode, Tcl_SetErrorCode, Tcl_SetErrorCodeVA, Tcl_PosixError, Tcl_LogCommandInfo - retrieve or record information about errors and other return options
 <H3><A NAME="M3">SYNOPSIS</A></H3>
 <B>#include &lt;tcl.h&gt;</B><BR>
 Tcl_Obj *<BR>
@@ -8,6 +42,7 @@ Tcl_Obj *<BR>
 int <BR>
 <B>Tcl_SetReturnOptions</B>(<I>interp, options</I>)<BR>
 <B>Tcl_AddErrorInfo</B>(<I>interp, message</I>)<BR>
+<B>Tcl_AppendObjToErrorInfo</B>(<I>interp, objPtr</I>)<BR>
 <B>Tcl_AddObjErrorInfo</B>(<I>interp, message, length</I>)<BR>
 <B>Tcl_SetObjErrorCode</B>(<I>interp, errorObjPtr</I>)<BR>
 <B>Tcl_SetErrorCode</B>(<I>interp, element, element, ... </I><B>(char *) NULL</B>)<BR>
@@ -17,7 +52,7 @@ const char *<BR>
 void<BR>
 <B>Tcl_LogCommandInfo</B>(<I>interp, script, command, commandLength</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter in which to record information.
 <P><DT>int <B>code</B> ()<DD>
@@ -32,6 +67,9 @@ this points to the first byte of an array of <I>length</I> bytes
 containing a string to append to the <B>-errorinfo</B> return option.
 This byte array may contain embedded null bytes
 unless <I>length</I> is negative.
+<P><DT>Tcl_Obj <B>*objPtr</B> (in)<DD>
+A message to be appended to the <B>-errorinfo</B> return option
+in the form of a Tcl_Obj value.
 <P><DT>int <B>length</B> (in)<DD>
 The number of bytes to copy from <I>message</I> when
 appending to the <B>-errorinfo</B> return option.
@@ -43,7 +81,7 @@ String to record as one element of the <B>-errorcode</B> return option.
 Last <I>element</I> argument must be NULL.
 <P><DT>va_list <B>argList</B> (in)<DD>
 An argument list which must have been initialized using
-<B>TCL_VARARGS_START</B>, and cleared using <B>va_end</B>.
+<B>va_start</B>, and cleared using <B>va_end</B>.
 <P><DT>const char <B>*script</B> (in)<DD>
 Pointer to first character in script containing command (must be &lt;= command)
 <P><DT>const char <B>*command</B> (in)<DD>
@@ -56,7 +94,7 @@ The <B>Tcl_SetReturnOptions</B> and <B>Tcl_GetReturnOptions</B>
 routines expose the same capabilities as the <B><A HREF="../TclCmd/return.htm">return</A></B> and
 <B><A HREF="../TclCmd/catch.htm">catch</A></B> commands, respectively, in the form of a C interface.
 <P>
-<B><A HREF="../TclLib/SetResult.htm">Tcl_GetObjResult</A></B> retrieves the dictionary of return options
+<B>Tcl_GetReturnOptions</B> retrieves the dictionary of return options
 from an interpreter following a script evaluation.
 Routines such as <B><A HREF="../TclLib/Eval.htm">Tcl_Eval</A></B> are called to evaluate a
 script in an interpreter.  These routines return an integer
@@ -65,7 +103,7 @@ both a result and a dictionary of return options generated
 by script evaluation.  Just as <B><A HREF="../TclLib/SetResult.htm">Tcl_GetObjResult</A></B> retrieves
 the result, <B>Tcl_GetReturnOptions</B> retrieves the dictionary
 of return options.  The integer completion code should be
-passed as the <I>code</I> argument to <B><A HREF="../TclLib/SetResult.htm">Tcl_GetObjResult</A></B>
+passed as the <I>code</I> argument to <B>Tcl_GetReturnOptions</B>
 so that all required options will be present in the dictionary.
 Specifically, a <I>code</I> value of <B>TCL_ERROR</B> will
 ensure that entries for the keys <B>-errorinfo</B>,
@@ -108,7 +146,7 @@ like so:
     <A HREF="../TclLib/SetResult.htm">Tcl_SetObjResult</A>(interp, objv[objc]);
 }
 return Tcl_SetReturnOptions(interp, <A HREF="../TclLib/ListObj.htm">Tcl_NewListObj</A>(objc-1, objv+1));</PRE>
-(It's not really implemented that way.  Internal access
+(It is not really implemented that way.  Internal access
 privileges allow for a more efficient alternative that meshes
 better with the bytecode compiler.)
 <P>
@@ -130,7 +168,7 @@ operations that were in progress when an error occurred,
 and is intended to be human-readable.
 The <B>-errorcode</B> option holds a list of items that
 are intended to be machine-readable.
-The first item in the <B>-errocode</B> value identifies the class of
+The first item in the <B>-errorcode</B> value identifies the class of
 error that occurred
 (e.g. POSIX means an error occurred in a POSIX system call)
 and additional elements hold additional pieces
@@ -169,8 +207,13 @@ The value of the <B>-errorline</B> return option (retrieved
 via a call to <B>Tcl_GetReturnOptions</B>) often makes up
 a useful part of the <I>message</I> passed to <B>Tcl_AddErrorInfo</B>.
 <P>
+<B>Tcl_AppendObjToErrorInfo</B> is an alternative interface to the
+same functionality as <B>Tcl_AddErrorInfo</B>.  <B>Tcl_AppendObjToErrorInfo</B>
+is called when the string value to be appended to the <B>-errorinfo</B> option
+is available as a <B>Tcl_Obj</B> instead of as a <B>char</B> array.
+<P>
 <B>Tcl_AddObjErrorInfo</B> is nearly identical
-to <B>Tcl_AddObjErrorInfo</B>, except that it has an additional <I>length</I>
+to <B>Tcl_AddErrorInfo</B>, except that it has an additional <I>length</I>
 argument.  This allows the <I>message</I> string to contain 
 embedded null bytes.  This is essentially never a good idea.
 If the <I>message</I> needs to contain the null character <B>U+0000</B>,
@@ -236,7 +279,7 @@ setting <B>errorInfo</B> or <B>errorCode</B> directly with
 <B><A HREF="../TclLib/SetVar.htm">Tcl_ObjSetVar2</A></B>.
 <P>
 If the procedure <B><A HREF="../TclLib/SetResult.htm">Tcl_ResetResult</A></B> is called,
-it clears all of the state of ther interpreter associated with
+it clears all of the state of the interpreter associated with
 script evaluation, including the entire return options dictionary.
 In particular, the <B>-errorinfo</B> and <B>-errorcode</B> options
 are reset.  
@@ -246,14 +289,14 @@ occurred after all.
 The global variables <B>errorInfo</B> and
 <B>errorCode</B> are not modified by <B><A HREF="../TclLib/SetResult.htm">Tcl_ResetResult</A></B>
 so they continue to hold a record of information about the
-more recent error seen in an interpreter.
+most recent error seen in an interpreter.
 
 <H3><A NAME="M6">SEE ALSO</A></H3>
 <B><A HREF="../TclLib/Object.htm">Tcl_DecrRefCount</A></B>, <B><A HREF="../TclLib/Object.htm">Tcl_IncrRefCount</A></B>, <B><A HREF="../TclLib/Interp.htm">Tcl_Interp</A></B>, <B><A HREF="../TclLib/SetResult.htm">Tcl_ResetResult</A></B>, <B><A HREF="../TclLib/SetErrno.htm">Tcl_SetErrno</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/E.htm#error">error</A>, <A href="../Keywords/O.htm#object">object</A>, <A href="../Keywords/O.htm#object result">object result</A>, <A href="../Keywords/S.htm#stack">stack</A>, <A href="../Keywords/T.htm#trace">trace</A>, <A href="../Keywords/V.htm#variable">variable</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1989-1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1989-1993 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

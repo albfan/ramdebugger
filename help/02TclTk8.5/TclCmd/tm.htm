@@ -1,40 +1,42 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - tm manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>tm manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> tm</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="tm.htm#M2" NAME="L1630">NAME</A>
-<DL><DD>tm - Facilities for locating and loading of Tcl Modules</DL>
-<DD><A HREF="tm.htm#M3" NAME="L1631">SYNOPSIS</A>
+<DD><A HREF="tm.htm#M2" NAME="L1798">NAME</A>
+<DL><DD>tm - Facilities for locating and loading of Tcl Modules</DD></DL>
+<DD><A HREF="tm.htm#M3" NAME="L1799">SYNOPSIS</A>
 <DL>
-<DD><B>::tcl::tm::path</B> <B>add</B> <I>path</I>...
-<DD><B>::tcl::tm::path</B> <B>remove</B> <I>path</I>...
-<DD><B>::tcl::tm::path</B> <B>list</B>
-<DD><B>::tcl::tm::roots</B> <I>path</I>...
 </DL>
-<DD><A HREF="tm.htm#M4" NAME="L1632">DESCRIPTION</A>
-<DL>
-<DD><A HREF="tm.htm#M5" NAME="L1633"><B>::tcl::tm::path</B> <B>add</B> <I>path</I>...</A>
-<DD><A HREF="tm.htm#M6" NAME="L1634"><B>::tcl::tm::path</B> <B>remove</B> <I>path</I>...</A>
-<DD><A HREF="tm.htm#M7" NAME="L1635"><B>::tcl::tm::path</B> <B>list</B></A>
-<DD><A HREF="tm.htm#M8" NAME="L1636"><B>::tcl::tm::roots</B> <I>path</I>...</A>
+<DD><A HREF="tm.htm#M4" NAME="L1800">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="tm.htm#M5" NAME="L1801"><B>::tcl::tm::path</B> <B>add</B> <I>path</I>...</A>
+<DD><A HREF="tm.htm#M6" NAME="L1802"><B>::tcl::tm::path</B> <B>remove</B> <I>path</I>...</A>
+<DD><A HREF="tm.htm#M7" NAME="L1803"><B>::tcl::tm::path</B> <B>list</B></A>
+<DD><A HREF="tm.htm#M8" NAME="L1804"><B>::tcl::tm::roots</B> <I>path</I>...</A>
 </DL>
-<DD><A HREF="tm.htm#M9" NAME="L1637">MODULE DEFINITION</A>
-<DD><A HREF="tm.htm#M10" NAME="L1638">FINDING MODULES</A>
-<DD><A HREF="tm.htm#M11" NAME="L1639">DEFAULT PATHS</A>
-<DD><A HREF="tm.htm#M12" NAME="L1640">SYSTEM SPECIFIC PATHS</A>
-<DL>
-<DD><A HREF="tm.htm#M13" NAME="L1641"><B>file normalize [info library]/../tcl</B><I>X</I><B>/</B><I>X</I><B>.</B><I>y</I></A>
-<DD><A HREF="tm.htm#M14" NAME="L1642"><B>file normalize EXEC/tcl</B><I>X</I><B>/</B><I>X</I><B>.</B><I>y</I></A>
+<DD><A HREF="tm.htm#M9" NAME="L1805">MODULE DEFINITION</A>
+<DD><A HREF="tm.htm#M10" NAME="L1806">FINDING MODULES</A>
+<DD><A HREF="tm.htm#M11" NAME="L1807">DEFAULT PATHS</A>
+<DD><A HREF="tm.htm#M12" NAME="L1808">SYSTEM SPECIFIC PATHS</A>
+<DL class="system specific paths">
+<DD><A HREF="tm.htm#M13" NAME="L1809"><B>file normalize [info library]/../tcl</B><I>X</I><B>/</B><I>X</I><B>.</B><I>y</I></A>
+<DD><A HREF="tm.htm#M14" NAME="L1810"><B>file normalize EXEC/tcl</B><I>X</I><B>/</B><I>X</I><B>.</B><I>y</I></A>
 </DL>
-<DD><A HREF="tm.htm#M15" NAME="L1643">SITE SPECIFIC PATHS</A>
-<DL>
-<DD><A HREF="tm.htm#M16" NAME="L1644"><B>file normalize [info library]/../tcl</B><I>X</I><B>/site-tcl</B></A>
+<DD><A HREF="tm.htm#M15" NAME="L1811">SITE SPECIFIC PATHS</A>
+<DL class="site specific paths">
+<DD><A HREF="tm.htm#M16" NAME="L1812"><B>file normalize [info library]/../tcl</B><I>X</I><B>/site-tcl</B></A>
 </DL>
-<DD><A HREF="tm.htm#M17" NAME="L1645">USER SPECIFIC PATHS</A>
-<DL>
-<DD><A HREF="tm.htm#M18" NAME="L1646"><B>$::env(TCL</B><I>X</I><B>.</B><I>y</I><B>_TM_PATH)</B></A>
+<DD><A HREF="tm.htm#M17" NAME="L1813">USER SPECIFIC PATHS</A>
+<DL class="user specific paths">
+<DD><A HREF="tm.htm#M18" NAME="L1814"><B>$::env(TCL</B><I>X</I><B>.</B><I>y</I><B>_TM_PATH)</B></A>
 </DL>
-<DD><A HREF="tm.htm#M19" NAME="L1647">SEE ALSO</A>
-<DD><A HREF="tm.htm#M20" NAME="L1648">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="tm.htm#M19" NAME="L1815">SEE ALSO</A>
+<DD><A HREF="tm.htm#M20" NAME="L1816">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 tm - Facilities for locating and loading of Tcl Modules
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -46,7 +48,7 @@ tm - Facilities for locating and loading of Tcl Modules
 This document describes the facilities for locating and loading Tcl
 Modules. The following commands are supported:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>::tcl::tm::path</B> <B>add</B> <I>path</I>...</A><DD>
 The paths are added at the head to the list of module paths, in order
 of appearance. This means that the last argument ends up as the new
@@ -72,15 +74,18 @@ Returns a list containing all registered module paths, in the order
 that they are searched for modules.
 <P><DT><A NAME="M8"><B>::tcl::tm::roots</B> <I>path</I>...</A><DD>
 Similar to <B>path add</B>, and layered on top of it. This command
-takes a list of paths, extends each with &quot;<B>tcl</B><I>X</I><B>/site-tcl</B>&quot;,
-and &quot;<B>tcl</B><I>X</I><B>/</B><I>X</I><B>.</B><I>y</I>&quot;, for major version <I>X</I> of the
+takes a list of paths, extends each with
+&#8220;<B>tcl</B><I>X</I><B>/site-tcl</B>&#8221;,
+and
+&#8220;<B>tcl</B><I>X</I><B>/</B><I>X</I><B>.</B><I>y</I>&#8221;,
+for major version <I>X</I> of the
 Tcl interpreter and minor version <I>y</I> less than or equal to the
 minor version of the interpreter, and adds the resulting set of paths
 to the list of paths to search.
 <P>
 This command is used internally by the system to set up the
 system-specific default paths.
-<P>The command has been exposed to allow a buildsystem to define
+<P>The command has been exposed to allow a build system to define
 additional root paths beyond those described by this document.
 <P></DL>
 <H3><A NAME="M9">MODULE DEFINITION</A></H3>
@@ -116,12 +121,17 @@ This is called the <I>Module path</I>. Neither the <B>auto_path</B> nor
 the <B>tcl_pkgPath</B> variables are used.
 All directories on the module path have to obey one restriction:
 <DL><DD>
+<P>
 For any two directories, neither is an ancestor directory of the
 other.
 </DL>
 <P>
 This is required to avoid ambiguities in package naming. If for
-example the two directories &quot;<I>foo/</I>&quot; and &quot;<I>foo/cool</I>&quot; were on
+example the two directories
+&#8220;<I>foo/</I>&#8221;
+and
+&#8220;<I>foo/cool</I>&#8221;
+were on
 the path a package named <B>cool::ice</B> could be found via the
 names <B>cool::ice</B> or <B>ice</B>, the latter potentially
 obscuring a package named <B>ice</B>, unqualified.
@@ -129,15 +139,21 @@ obscuring a package named <B>ice</B>, unqualified.
 Before the search is started, the name of the requested package is
 translated into a partial path, using the following algorithm:
 <DL><DD>
-All occurrences of &quot;<B>::</B>&quot; in the package name are replaced by
+<P>
+All occurrences of
+&#8220;<B>::</B>&#8221;
+in the package name are replaced by
 the appropriate directory separator character for the platform we are
-on. On Unix, for example, this is &quot;<B>/</B>&quot;.
+on. On Unix, for example, this is
+&#8220;<B>/</B>&#8221;.
 </DL>
 <P>
 Example:
 <DL><DD>
+<P>
 The requested package is <B>encoding::base64</B>. The generated
-partial path is &quot;<I>encoding/base64</I>&quot;
+partial path is
+&#8220;<I>encoding/base64</I>&#8221;.
 </DL>
 <P>
 After this translation the package is looked for in all module paths,
@@ -163,11 +179,12 @@ and the <I>provide script</I> embedded in the above is:
 Both package name <B>PNAME</B> and package version <B>PVERSION</B> are
 extracted from the filename <B>MF</B> according to the definition
 below:
-<PRE><B>MF</B> = /module_path/<B>PNAME'</B>-<B>PVERSION</B>.tm</PRE>
+<PRE><B>MF</B> = /module_path/<B>PNAME&#8242;</B>-<B>PVERSION</B>.tm</PRE>
 <P>
-Where <B>PNAME'</B> is the partial path of the module as defined in
-section <B>FINDING MODULES</B>, and translated into <B></B>PNAME by
-changing all directory separators to &quot;<B>::</B>&quot;,
+Where <B>PNAME&#8242;</B> is the partial path of the module as defined in
+section <B>FINDING MODULES</B>, and translated into <B>PNAME</B> by
+changing all directory separators to
+&#8220;<B>::</B>&#8221;,
 and <B>module_path</B> is the path (from the list of paths to search)
 that we found the module file under.
 <P>
@@ -199,7 +216,7 @@ The paths are added in the order as they are listed below, and for
 lists of paths defined by an environment variable in the order they
 are found in the variable.
 <H4><A NAME="M12">SYSTEM SPECIFIC PATHS</A></H4>
-<DL>
+<DL class="system specific paths">
 <DT><A NAME="M13"><B>file normalize [info library]/../tcl</B><I>X</I><B>/</B><I>X</I><B>.</B><I>y</I></A><DD>
 In other words, the interpreter will look into a directory specified
 by its major version and whose minor versions are less than or equal
@@ -224,13 +241,13 @@ For a build with <B>PREFIX</B> = <B>EXEC_PREFIX</B> the two sets are
 identical.
 <P></DL>
 <H4><A NAME="M15">SITE SPECIFIC PATHS</A></H4>
-<DL>
+<DL class="site specific paths">
 <DT><A NAME="M16"><B>file normalize [info library]/../tcl</B><I>X</I><B>/site-tcl</B></A><DD>
 Note that this is always a single entry because <I>X</I> is always a
 specific value (the current major version of Tcl).
 <P></DL>
 <H4><A NAME="M17">USER SPECIFIC PATHS</A></H4>
-<DL>
+<DL class="user specific paths">
 <DT><A NAME="M18"><B>$::env(TCL</B><I>X</I><B>.</B><I>y</I><B>_TM_PATH)</B></A><DD>
 A list of paths, separated by either <B>:</B> (Unix) or <B>;</B>
 (Windows). This is user and site specific as this environment variable
@@ -250,13 +267,14 @@ environment variables:
 <B>$::env(TCL8.0_TM_PATH)</B></PRE>
 <P></DL>
 <H3><A NAME="M19">SEE ALSO</A></H3>
-<B><A HREF="../TclCmd/package.htm">package</A></B>, <B>Tcl Improvement Proposal #189 &quot;<I>Tcl Modules</I>&quot; (online
-at http://tip.tcl.tk/189.html)</B>, <B>Tcl Improvement Proposal #190
-&quot;<I>Implementation Choices for Tcl Modules</I>&quot; (online at
-http://tip.tcl.tk/190.html)</B>
+<B><A HREF="../TclCmd/package.htm">package</A></B>, <B>Tcl Improvement Proposal #189
+&#8220;<I>Tcl Modules</I>&#8221;
+(online at http://tip.tcl.tk/189.html)</B>, <B>Tcl Improvement Proposal #190
+&#8220;<I>Implementation Choices for Tcl Modules</I>&#8221;
+(online at http://tip.tcl.tk/190.html)</B>
 <H3><A NAME="M20">KEYWORDS</A></H3>
 <A href="../Keywords/M.htm#modules">modules</A>, <A href="../Keywords/P.htm#package">package</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 2004 Andreas Kupries <andreas_kupries@users.sourceforge.net>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 2004 Andreas Kupries &lt;andreas_kupries(at)users.sourceforge.net&gt;
+</div>
 </BODY></HTML>

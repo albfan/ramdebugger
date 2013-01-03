@@ -7,7 +7,7 @@
 #   - Private procedures implementing the tablelist widget command
 #   - Private callback procedures
 #
-# Copyright (c) 2000-2007  Csaba Nemethi (E-mail: csaba.nemethi@t-online.de)
+# Copyright (c) 2000-2008  Csaba Nemethi (E-mail: csaba.nemethi@t-online.de)
 #==============================================================================
 
 #
@@ -175,12 +175,14 @@ namespace eval tablelist {
 	-text			{text			Text		}
 	-title			{title			Title		}
 	-width			{width			Width		}
+	-wrap			{wrap			Wrap		}
     }
 
     #
     # Extend some elements of the array colConfigSpecs
     #
     lappend colConfigSpecs(-align)		- left
+    lappend colConfigSpecs(-changesnipside)	- 0
     lappend colConfigSpecs(-editable)		- 0
     lappend colConfigSpecs(-editwindow)		- entry
     lappend colConfigSpecs(-hide)		- 0
@@ -191,6 +193,7 @@ namespace eval tablelist {
     lappend colConfigSpecs(-sortmode)		- ascii
     lappend colConfigSpecs(-stretchable)	- 0
     lappend colConfigSpecs(-width)		- 0
+    lappend colConfigSpecs(-wrap)		- 0
 
     if {$usingTile} {
 	unset colConfigSpecs(-labelheight)
@@ -264,6 +267,7 @@ namespace eval tablelist {
 	-image			{image			Image		}
 	-selectbackground	{selectBackground	Foreground	}
 	-selectforeground	{selectForeground	Background	}
+	-stretchwindow		{stretchWindow		StretchWindow	}
 	-text			{text			Text		}
 	-window			{window			Window		}
 	-windowdestroy		{windowDestroy		WindowDestroy	}
@@ -274,6 +278,7 @@ namespace eval tablelist {
     #
     lappend cellConfigSpecs(-editable)		- 0
     lappend cellConfigSpecs(-editwindow)	- entry
+    lappend cellConfigSpecs(-stretchwindow)	- 0
 
     #
     # Use a list to facilitate the handling of the command options 
@@ -281,18 +286,19 @@ namespace eval tablelist {
     variable cmdOpts [list \
 	activate activatecell attrib bbox bodypath bodytag cancelediting \
 	cellcget cellconfigure cellindex cellselection cget columncget \
-	columnconfigure columncount columnindex columnwidth configure \
+	columnconfigure columncount columnindex columnwidth config \
 	configcelllist configcells configcolumnlist configcolumns \
-	configrowlist configrows containing containingcell containingcolumn \
-	curcellselection curselection delete deletecolumns editcell \
-	editwinpath entrypath fillcolumn finishediting get getcells \
-	getcolumns getkeys imagelabelpath index insert insertcolumnlist \
-	insertcolumns insertlist iselemsnipped istitlesnipped itemlistvar \
-	labelpath labels move movecolumn nearest nearestcell nearestcolumn \
-	rejectinput resetsortinfo rowcget rowconfigure scan see seecell \
-	seecolumn selection separatorpath separators size sort sortbycolumn \
-	sortbycolumnlist sortcolumn sortcolumnlist sortorder sortorderlist \
-	togglecolumnhide togglerowhide windowpath xview yview]
+	configrowlist configrows configure containing containingcell \
+	containingcolumn curcellselection curselection delete deletecolumns \
+	editcell editwinpath entrypath fillcolumn finishediting formatinfo \
+	get getcells getcolumns getkeys imagelabelpath index insert \
+	insertcolumnlist insertcolumns insertlist iselemsnipped \
+	istitlesnipped itemlistvar labelpath labels move movecolumn nearest \
+	nearestcell nearestcolumn rejectinput resetsortinfo rowcget \
+	rowconfigure scan see seecell seecolumn selection separatorpath \
+	separators size sort sortbycolumn sortbycolumnlist sortcolumn \
+	sortcolumnlist sortorder sortorderlist togglecolumnhide togglerowhide \
+	windowpath xview yview]
     if {!$canElide} {
 	set idx [lsearch -exact $cmdOpts togglerowhide]
 	set cmdOpts [lreplace $cmdOpts $idx $idx]
@@ -343,7 +349,7 @@ namespace eval tablelist {
 	proc strMap {charMap str} {
 	    foreach {key val} $charMap {
 		#
-		# We will only need this for noncritical key values
+		# We will only need this for noncritical key and str values
 		#
 		regsub -all $key $str $val str
 	    }
@@ -520,6 +526,9 @@ proc tablelist::tablelist args {
 	    sortOrder		 ""
 	    editRow		-1
 	    editCol		-1
+	    fmtKey		 ""
+	    fmtRow		-1
+	    fmtCol		-1
 	    prevCell		 ""
 	    prevCol		-1
 	    forceAdjust		 0
@@ -689,17 +698,11 @@ proc tablelist::tablelist args {
     }
 
     #
-    # Move the original widget command into the current namespace
-    # and build a new widget procedure in the global one
+    # Move the original widget command into the current namespace and
+    # create an alias of the original name for a new widget procedure
     #
     rename ::$win $win
-    proc ::$win args [format {
-	if {[catch {tablelist::tablelistWidgetCmd %s $args} result] == 0} {
-	    return $result
-	} else {
-	    return -code error $result
-	}
-    } [list $win]]
+    interp alias {} ::$win {} tablelist::tablelistWidgetCmd $win
 
     #
     # Register a callback to be invoked whenever the PRIMARY
@@ -732,14 +735,14 @@ proc tablelist::tablelist args {
 #
 # Processes the Tcl command corresponding to a tablelist widget.
 #------------------------------------------------------------------------------
-proc tablelist::tablelistWidgetCmd {win argList} {
-    if {[llength $argList] == 0} {
+proc tablelist::tablelistWidgetCmd {win args} {
+    if {[llength $args] == 0} {
 	mwutil::wrongNumArgs "$win option ?arg arg ...?"
     }
 
     variable cmdOpts
-    set cmd [mwutil::fullOpt "option" [lindex $argList 0] $cmdOpts]
-    return [${cmd}SubCmd $win [lrange $argList 1 end]]
+    set cmd [mwutil::fullOpt "option" [lindex $args 0] $cmdOpts]
+    return [${cmd}SubCmd $win [lrange $args 1 end]]
 }
 
 #------------------------------------------------------------------------------
@@ -1056,14 +1059,10 @@ proc tablelist::columnwidthSubCmd {win argList} {
 }
 
 #------------------------------------------------------------------------------
-# tablelist::configureSubCmd
+# tablelist::configSubCmd
 #------------------------------------------------------------------------------
-proc tablelist::configureSubCmd {win argList} {
-    synchronize $win
-    displayItems $win
-    variable configSpecs
-    return [mwutil::configureSubCmd $win configSpecs tablelist::doConfig \
-	    tablelist::doCget $argList]
+proc tablelist::configSubCmd {win argList} {
+    return [configureSubCmd $win $argList]
 }
 
 #------------------------------------------------------------------------------
@@ -1176,6 +1175,17 @@ proc tablelist::configrowsSubCmd {win argList} {
     }
 
     return ""
+}
+
+#------------------------------------------------------------------------------
+# tablelist::configureSubCmd
+#------------------------------------------------------------------------------
+proc tablelist::configureSubCmd {win argList} {
+    synchronize $win
+    displayItems $win
+    variable configSpecs
+    return [mwutil::configureSubCmd $win configSpecs tablelist::doConfig \
+	    tablelist::doCget $argList]
 }
 
 #------------------------------------------------------------------------------
@@ -1481,6 +1491,18 @@ proc tablelist::finisheditingSubCmd {win argList} {
     synchronize $win
     displayItems $win
     return [doFinishEditing $win]
+}
+
+#------------------------------------------------------------------------------
+# tablelist::formatinfoSubCmd
+#------------------------------------------------------------------------------
+proc tablelist::formatinfoSubCmd {win argList} {
+    if {[llength $argList] != 0} {
+	mwutil::wrongNumArgs "$win formatinfo"
+    }
+
+    upvar ::tablelist::ns${win}::data data
+    return [list $data(fmtKey) $data(fmtRow) $data(fmtCol)]
 }
 
 #------------------------------------------------------------------------------
@@ -1804,9 +1826,10 @@ proc tablelist::iselemsnippedSubCmd {win argList} {
 
     upvar ::tablelist::ns${win}::data data
     set item [lindex $data(itemList) $row]
+    set key [lindex $item end]
     set fullText [lindex $item $col]
     if {[lindex $data(fmtCmdFlagList) $col]} {
-	set fullText [uplevel #0 $data($col-formatcommand) [list $fullText]]
+	set fullText [formatElem $win $key $row $col $fullText]
     }
     set fullText [strToDispStr $fullText]
 
@@ -1817,13 +1840,12 @@ proc tablelist::iselemsnippedSubCmd {win argList} {
 	    set pixels $data($col-maxPixels)
 	}
     }
-    if {$pixels == 0} {
+    if {$pixels == 0 || $data($col-wrap)} {
 	return 0
     }
 
     set text $fullText
-    set key [lindex $item end]
-    getAuxData $win $key $col auxType auxWidth
+    getAuxData $win $key $col auxType auxWidth $pixels
     set cellFont [getCellFont $win $key $col]
     incr pixels $data($col-delta)
 
@@ -3119,8 +3141,7 @@ proc tablelist::curCellSelection {win {getKeys 0}} {
     set w $data(body)
     set selRange [$w tag nextrange select 1.0]
     while {[llength $selRange] != 0} {
-	set selStart [lindex $selRange 0]
-	set selEnd [lindex $selRange 1]
+	foreach {selStart selEnd} $selRange {}
 	set line [expr {int($selStart)}]
 	set row [expr {$line - 1}]
 
@@ -3224,6 +3245,7 @@ proc tablelist::deleteRows {win first last updateListVar} {
 	variable canElide
 	set colWidthsChanged 0
 	set snipStr $data(-snipstring)
+	set row 0
 	foreach item $itemListRange {
 	    #
 	    # Format the item
@@ -3231,7 +3253,7 @@ proc tablelist::deleteRows {win first last updateListVar} {
 	    set key [lindex $item end]
 	    set dispItem [lrange $item 0 $data(lastCol)]
 	    if {$data(hasFmtCmds)} {
-		set dispItem [formatItem $win $dispItem]
+		set dispItem [formatItem $win $key $row $dispItem]
 	    }
 
 	    set col 0
@@ -3257,6 +3279,8 @@ proc tablelist::deleteRows {win first last updateListVar} {
 	    if {$colWidthsChanged} {
 		break
 	    }
+
+	    incr row
 	}
     }
 
@@ -3541,6 +3565,13 @@ proc tablelist::insertRows {win index argList updateListVar} {
     incr data(itemCount) $argCount
     set data(lastRow) [expr {$data(itemCount) - 1}]
 
+    if {![info exists data(dispId)]} {
+	#
+	# Arrange for the inserted items to be displayed at idle time
+	#
+	set data(dispId) [after idle [list tablelist::displayItems $win]]
+    }
+
     #
     # Update the indices anchorRow and activeRow
     #
@@ -3558,13 +3589,6 @@ proc tablelist::insertRows {win index argList updateListVar} {
     #
     if {$data(editRow) >= 0} {
 	set data(editRow) [lsearch $data(itemList) "* $data(editKey)"]
-    }
-
-    if {![info exists data(dispId)]} {
-	#
-	# Arrange for the inserted items to be displayed at idle time
-	#
-	set data(dispId) [after idle [list tablelist::displayItems $win]]
     }
 
     return ""
@@ -3617,7 +3641,7 @@ proc tablelist::displayItems win {
 	#
 	set dispItem [lrange $item 0 $data(lastCol)]
 	if {$data(hasFmtCmds)} {
-	    set dispItem [formatItem $win $dispItem]
+	    set dispItem [formatItem $win $key $row $dispItem]
 	}
 
 	if {$isEmpty} {
@@ -3671,9 +3695,20 @@ proc tablelist::displayItems win {
 		}
 		if {$pixels != 0} {
 		    incr pixels $data($col-delta)
+
+		    if {$data($col-wrap) && !$multiline} {
+			if {[font measure $colFont -displayof $win $text] >
+			    $pixels} {
+			    set multiline 1
+			}
+		    }
+
 		    set snipSide \
 			$snipSides($alignment,$data($col-changesnipside))
 		    if {$multiline} {
+			if {$data($col-wrap)} {
+			    set snipSide ""
+			}
 			set list [split $text "\n"]
 			set text [joinList $win $list $colFont \
 				  $pixels $snipSide $snipStr]
@@ -3685,7 +3720,7 @@ proc tablelist::displayItems win {
 
 		if {$multiline} {
 		    lappend insertArgs "\t\t" $colTags
-		    lappend multilineData $col $text $colFont $alignment
+		    lappend multilineData $col $text $colFont $pixels $alignment
 		} else {
 		    lappend insertArgs "\t$text\t" $colTags
 		}
@@ -3738,9 +3773,20 @@ proc tablelist::displayItems win {
 		}
 		if {$pixels != 0} {
 		    incr pixels $data($col-delta)
+
+		    if {$data($col-wrap) && !$multiline} {
+			if {[font measure $widgetFont -displayof $win $text] >
+			    $pixels} {
+			    set multiline 1
+			}
+		    }
+
 		    set snipSide \
 			$snipSides($alignment,$data($col-changesnipside))
 		    if {$multiline} {
+			if {$data($col-wrap)} {
+			    set snipSide ""
+			}
 			set list [split $text "\n"]
 			set text [joinList $win $list $widgetFont \
 				  $pixels $snipSide $snipStr]
@@ -3752,7 +3798,8 @@ proc tablelist::displayItems win {
 
 		if {$multiline} {
 		    append insertStr "\t\t"
-		    lappend multilineData $col $text $widgetFont $alignment
+		    lappend multilineData $col $text $widgetFont \
+					  $pixels $alignment
 		} else {
 		    append insertStr "\t$text\t"
 		}
@@ -3768,10 +3815,10 @@ proc tablelist::displayItems win {
 	#
 	# Embed the message widgets displaying multiline elements
 	#
-	foreach {col text font alignment} $multilineData {
+	foreach {col text font pixels alignment} $multilineData {
 	    findTabs $win $line $col $col tabIdx1 tabIdx2
-	    set msgScript [list ::tablelist::displayText $win \
-			   $key $col $text $font $alignment]
+	    set msgScript [list ::tablelist::displayText $win $key \
+			   $col $text $font $pixels $alignment]
 	    $w window create $tabIdx2 -pady $padY -create $msgScript
 	}
     }
@@ -4434,9 +4481,10 @@ proc tablelist::fetchSelection {win offset maxChars} {
 	    set isFirstCol 1
 	}
 
+	set key [lindex $item end]
 	set text [lindex $item $col]
 	if {[lindex $data(fmtCmdFlagList) $col]} {
-	    set text [uplevel #0 $data($col-formatcommand) [list $text]]
+	    set text [formatElem $win $key $row $col $text]
 	}
 
 	if {!$isFirstCol} {

@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>Column Names In A Result Set</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: "Verdana" "sans-serif";
+    padding: 8px 1%;
+}
+
+a { color: #45735f }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:240px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.toolbar {
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding:1px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #80a796; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* rounded corners */
+.se  { background: url(../images/se.png) 100% 100% no-repeat #80a796}
+.sw  { background: url(../images/sw.png) 0% 100% no-repeat }
+.ne  { background: url(../images/ne.png) 100% 0% no-repeat }
+.nw  { background: url(../images/nw.png) 0% 0% no-repeat }
+
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="../index.html">
+<img class="logo" src="../images/SQLite.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% style="clear:both"><tr><td>
+  <div class="se"><div class="sw"><div class="ne"><div class="nw">
+  <div class="toolbar">
+    <a href="../about.html">About</a>
+    <a href="../sitemap.html">Sitemap</a>
+    <a href="../docs.html">Documentation</a>
+    <a href="../download.html">Download</a>
+    <a href="../copyright.html">License</a>
+    <a href="../news.html">News</a>
+    <a href="http://www.sqlite.org/cvstrac/index">Developers</a>
+    <a href="../support.html">Support</a>
+  </div></div></div></div></div>
+</td></tr></table>
+  
+<a href="intro.html"><h2>SQLite C Interface</h2></a><h2>Column Names In A Result Set</h2><blockquote><pre>const char *sqlite3_column_name(sqlite3_stmt*, int N);
+const void *sqlite3_column_name16(sqlite3_stmt*, int N);
+</pre></blockquote><p>
+These routines return the name assigned to a particular column
+in the result set of a <a href="../lang_select.html">SELECT</a> statement.  The sqlite3_column_name()
+interface returns a pointer to a zero-terminated UTF-8 string
+and sqlite3_column_name16() returns a pointer to a zero-terminated
+UTF-16 string.  The first parameter is the <a href="../c3ref/stmt.html">prepared statement</a>
+that implements the <a href="../lang_select.html">SELECT</a> statement. The second parameter is the
+column number.  The leftmost column is number 0.</p>
+
+<p>The returned string pointer is valid until either the <a href="../c3ref/stmt.html">prepared statement</a>
+is destroyed by <a href="../c3ref/finalize.html">sqlite3_finalize()</a> or until the next call to
+sqlite3_column_name() or sqlite3_column_name16() on the same column.</p>
+
+<p>If sqlite3_malloc() fails during the processing of either routine
+(for example during a conversion from UTF-8 to UTF-16) then a
+NULL pointer is returned.</p>
+
+<p>The name of a result column is the value of the "AS" clause for
+that column, if there is an AS clause.  If there is no AS clause
+then the name of the column is unspecified and may change from
+one release of SQLite to the next.</p>
+
+<p><h3>Invariants:</h3>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr><td valign="top">H13721</td> 
+<td valign="top">
+A successful invocation of the <a href="../c3ref/column_name.html">sqlite3_column_name(S,N)</a>
+interface returns the name of the Nth column (where 0 is
+the leftmost column) for the result set of the
+<a href="../c3ref/stmt.html">prepared statement</a> S as a zero-terminated UTF-8 string.</td></tr>
+<tr><td valign="top">H13723</td> 
+<td valign="top">
+A successful invocation of the <a href="../c3ref/column_name.html">sqlite3_column_name16(S,N)</a>
+interface returns the name of the Nth column (where 0 is
+the leftmost column) for the result set of the
+<a href="../c3ref/stmt.html">prepared statement</a> S as a zero-terminated UTF-16 string
+in the native byte order.</td></tr>
+<tr><td valign="top">H13724</td> 
+<td valign="top">
+The <a href="../c3ref/column_name.html">sqlite3_column_name()</a> and <a href="../c3ref/column_name.html">sqlite3_column_name16()</a>
+interfaces return a NULL pointer if they are unable to
+allocate memory to hold their normal return strings.</td></tr>
+<tr><td valign="top">H13725</td> 
+<td valign="top">
+If the N parameter to <a href="../c3ref/column_name.html">sqlite3_column_name(S,N)</a> or
+<a href="../c3ref/column_name.html">sqlite3_column_name16(S,N)</a> is out of range, then the
+interfaces return a NULL pointer.</td></tr>
+<tr><td valign="top">H13726</td> 
+<td valign="top">
+The strings returned by <a href="../c3ref/column_name.html">sqlite3_column_name(S,N)</a> and
+<a href="../c3ref/column_name.html">sqlite3_column_name16(S,N)</a> are valid until the next
+call to either routine with the same S and N parameters
+or until <a href="../c3ref/finalize.html">sqlite3_finalize(S)</a> is called.</td></tr>
+<tr><td valign="top">H13727</td> 
+<td valign="top">
+When a result column of a <a href="../lang_select.html">SELECT</a> statement contains
+an AS clause, the name of that column is the identifier
+to the right of the AS keyword.</td></tr>
+</table>
+</p><p>See also lists of
+  <a href="objlist.html">Objects</a>,
+  <a href="constlist.html">Constants</a>, and
+  <a href="funclist.html">Functions</a>.</p><hr><small><i>
+This page last modified 2008/12/09 18:44:04 UTC
+</i></small></div></body></html>

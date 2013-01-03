@@ -1,54 +1,59 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - grid manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>grid manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> grid</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="grid.htm#M2" NAME="L631">NAME</A>
-<DL><DD>grid - Geometry manager that arranges widgets in a grid</DL>
-<DD><A HREF="grid.htm#M3" NAME="L632">SYNOPSIS</A>
+<DD><A HREF="grid.htm#M2" NAME="L705">NAME</A>
+<DL><DD>grid - Geometry manager that arranges widgets in a grid</DD></DL>
+<DD><A HREF="grid.htm#M3" NAME="L706">SYNOPSIS</A>
 <DL>
-<DD><B>grid </B><I>option arg </I>?<I>arg ...</I>?
 </DL>
-<DD><A HREF="grid.htm#M4" NAME="L633">DESCRIPTION</A>
-<DL>
-<DD><A HREF="grid.htm#M5" NAME="L634"><B>grid </B><I>slave </I>?<I>slave ...</I>? ?<I>options</I>?</A>
-<DD><A HREF="grid.htm#M6" NAME="L635"><B>grid anchor </B><I>master</I> ?<I>anchor</I>?</A>
-<DD><A HREF="grid.htm#M7" NAME="L636"><B>grid bbox </B><I>master</I> ?<I>column row</I>? ?<I>column2 row2</I>?</A>
-<DD><A HREF="grid.htm#M8" NAME="L637"><B>grid columnconfigure </B><I>master index </I>?<I>-option value...</I>?</A>
-<DD><A HREF="grid.htm#M9" NAME="L638"><B>grid configure </B><I>slave </I>?<I>slave ...</I>? ?<I>options</I>?</A>
-<DL>
-<DD><A HREF="grid.htm#M10" NAME="L639"><B>-column </B><I>n</I></A>
-<DD><A HREF="grid.htm#M11" NAME="L640"><B>-columnspan </B><I>n</I></A>
-<DD><A HREF="grid.htm#M12" NAME="L641"><B>-in </B><I>other</I></A>
-<DD><A HREF="grid.htm#M13" NAME="L642"><B>-ipadx </B><I>amount</I></A>
-<DD><A HREF="grid.htm#M14" NAME="L643"><B>-ipady </B><I>amount</I></A>
-<DD><A HREF="grid.htm#M15" NAME="L644"><B>-padx </B><I>amount</I></A>
-<DD><A HREF="grid.htm#M16" NAME="L645"><B>-pady </B><I>amount</I></A>
-<DD><A HREF="grid.htm#M17" NAME="L646"><B>-row </B><I>n</I></A>
-<DD><A HREF="grid.htm#M18" NAME="L647"><B>-rowspan </B><I>n</I></A>
-<DD><A HREF="grid.htm#M19" NAME="L648"><B>-sticky </B><I>style</I></A>
+<DD><A HREF="grid.htm#M4" NAME="L707">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="grid.htm#M5" NAME="L708"><B>grid </B><I>slave </I>?<I>slave ...</I>? ?<I>options</I>?</A>
+<DD><A HREF="grid.htm#M6" NAME="L709"><B>grid anchor </B><I>master</I> ?<I>anchor</I>?</A>
+<DD><A HREF="grid.htm#M7" NAME="L710"><B>grid bbox </B><I>master</I> ?<I>column row</I>? ?<I>column2 row2</I>?</A>
+<DD><A HREF="grid.htm#M8" NAME="L711"><B>grid columnconfigure </B><I>master index </I>?<I>-option value...</I>?</A>
+<DD><A HREF="grid.htm#M9" NAME="L712"><B>grid configure </B><I>slave </I>?<I>slave ...</I>? ?<I>options</I>?</A>
+<DL class="description">
+<DD><A HREF="grid.htm#M10" NAME="L713"><B>-column </B><I>n</I></A>
+<DD><A HREF="grid.htm#M11" NAME="L714"><B>-columnspan </B><I>n</I></A>
+<DD><A HREF="grid.htm#M12" NAME="L715"><B>-in </B><I>other</I></A>
+<DD><A HREF="grid.htm#M13" NAME="L716"><B>-ipadx </B><I>amount</I></A>
+<DD><A HREF="grid.htm#M14" NAME="L717"><B>-ipady </B><I>amount</I></A>
+<DD><A HREF="grid.htm#M15" NAME="L718"><B>-padx </B><I>amount</I></A>
+<DD><A HREF="grid.htm#M16" NAME="L719"><B>-pady </B><I>amount</I></A>
+<DD><A HREF="grid.htm#M17" NAME="L720"><B>-row </B><I>n</I></A>
+<DD><A HREF="grid.htm#M18" NAME="L721"><B>-rowspan </B><I>n</I></A>
+<DD><A HREF="grid.htm#M19" NAME="L722"><B>-sticky </B><I>style</I></A>
 </DL>
-<DD><A HREF="grid.htm#M20" NAME="L649"><B>grid forget </B><I>slave </I>?<I>slave ...</I>?</A>
-<DD><A HREF="grid.htm#M21" NAME="L650"><B>grid info </B><I>slave</I></A>
-<DD><A HREF="grid.htm#M22" NAME="L651"><B>grid location </B><I>master x y</I></A>
-<DD><A HREF="grid.htm#M23" NAME="L652"><B>grid propagate </B><I>master</I> ?<I>boolean</I>?</A>
-<DD><A HREF="grid.htm#M24" NAME="L653"><B>grid rowconfigure </B><I>master index </I>?<I>-option value...</I>?</A>
-<DD><A HREF="grid.htm#M25" NAME="L654"><B>grid remove </B><I>slave </I>?<I>slave ...</I>?</A>
-<DD><A HREF="grid.htm#M26" NAME="L655"><B>grid size </B><I>master</I></A>
-<DD><A HREF="grid.htm#M27" NAME="L656"><B>grid slaves </B><I>master</I> ?<I>-option value</I>?</A>
+<DD><A HREF="grid.htm#M20" NAME="L723"><B>grid forget </B><I>slave </I>?<I>slave ...</I>?</A>
+<DD><A HREF="grid.htm#M21" NAME="L724"><B>grid info </B><I>slave</I></A>
+<DD><A HREF="grid.htm#M22" NAME="L725"><B>grid location </B><I>master x y</I></A>
+<DD><A HREF="grid.htm#M23" NAME="L726"><B>grid propagate </B><I>master</I> ?<I>boolean</I>?</A>
+<DD><A HREF="grid.htm#M24" NAME="L727"><B>grid rowconfigure </B><I>master index </I>?<I>-option value...</I>?</A>
+<DD><A HREF="grid.htm#M25" NAME="L728"><B>grid remove </B><I>slave </I>?<I>slave ...</I>?</A>
+<DD><A HREF="grid.htm#M26" NAME="L729"><B>grid size </B><I>master</I></A>
+<DD><A HREF="grid.htm#M27" NAME="L730"><B>grid slaves </B><I>master</I> ?<I>-option value</I>?</A>
 </DL>
-<DD><A HREF="grid.htm#M28" NAME="L657">RELATIVE PLACEMENT</A>
-<DL>
-<DD><A HREF="grid.htm#M29" NAME="L658"><B>-</B></A>
-<DD><A HREF="grid.htm#M30" NAME="L659"><B>x</B></A>
-<DD><A HREF="grid.htm#M31" NAME="L660"><B>^</B></A>
+<DD><A HREF="grid.htm#M28" NAME="L731">RELATIVE PLACEMENT</A>
+<DL class="relative placement">
+<DD><A HREF="grid.htm#M29" NAME="L732"><B>-</B></A>
+<DD><A HREF="grid.htm#M30" NAME="L733"><B>x</B></A>
+<DD><A HREF="grid.htm#M31" NAME="L734"><B>^</B></A>
 </DL>
-<DD><A HREF="grid.htm#M32" NAME="L661">THE GRID ALGORITHM</A>
-<DD><A HREF="grid.htm#M33" NAME="L662">GEOMETRY PROPAGATION</A>
-<DD><A HREF="grid.htm#M34" NAME="L663">RESTRICTIONS ON MASTER WINDOWS</A>
-<DD><A HREF="grid.htm#M35" NAME="L664">STACKING ORDER</A>
-<DD><A HREF="grid.htm#M36" NAME="L665">CREDITS</A>
-<DD><A HREF="grid.htm#M37" NAME="L666">EXAMPLES</A>
-<DD><A HREF="grid.htm#M38" NAME="L667">SEE ALSO</A>
-<DD><A HREF="grid.htm#M39" NAME="L668">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="grid.htm#M32" NAME="L735">THE GRID ALGORITHM</A>
+<DD><A HREF="grid.htm#M33" NAME="L736">GEOMETRY PROPAGATION</A>
+<DD><A HREF="grid.htm#M34" NAME="L737">RESTRICTIONS ON MASTER WINDOWS</A>
+<DD><A HREF="grid.htm#M35" NAME="L738">STACKING ORDER</A>
+<DD><A HREF="grid.htm#M36" NAME="L739">CREDITS</A>
+<DD><A HREF="grid.htm#M37" NAME="L740">EXAMPLES</A>
+<DD><A HREF="grid.htm#M38" NAME="L741">SEE ALSO</A>
+<DD><A HREF="grid.htm#M39" NAME="L742">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 grid - Geometry manager that arranges widgets in a grid
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -60,7 +65,7 @@ of another window, called the geometry master (or master window).
 The <B>grid</B> command can have any of several forms, depending
 on the <I>option</I> argument:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>grid </B><I>slave </I>?<I>slave ...</I>? ?<I>options</I>?</A><DD>
 If the first argument to <B>grid</B> is suitable as the first slave
 argument to <B>grid configure</B>, either a window name (any value
@@ -114,7 +119,9 @@ grid geometry manager requests a size from the containing window.
 If only an option is specified, with no value,
 the current value of that option is returned.
 If only the master window and index is specified, all the current settings
-are returned in a list of &quot;-option value&quot; pairs.
+are returned in a list of
+&#8220;-option value&#8221;
+pairs.
 <P><DT><A NAME="M9"><B>grid configure </B><I>slave </I>?<I>slave ...</I>? ?<I>options</I>?</A><DD>
 The arguments consist of the names of one or more slave windows
 followed by pairs of arguments that specify how
@@ -125,12 +132,14 @@ location of a <I>slave</I>, as described in the <B>RELATIVE PLACEMENT</B>
 section, below.
 The following options are supported:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M10"><B>-column </B><I>n</I></A><DD>
 Insert the slave so that it occupies the <I>n</I>th column in the grid.
 Column numbers start with 0.  If this option is not supplied, then the
 slave is arranged just to the right of previous slave specified on this
-call to <I>grid</I>, or column &quot;0&quot; if it is the first slave.  For each
+call to <B>grid</B>, or column
+&#8220;0&#8221;
+if it is the first slave.  For each
 <B>x</B> that immediately precedes the <I>slave</I>, the column position
 is incremented by one.  Thus the <B>x</B> represents a blank column
 for this row in the grid.
@@ -186,12 +195,15 @@ option may be used to position (or stretch) the slave within its cell.
 <B>n</B>, <B>s</B>, <B>e</B> or <B>w</B>.
 The string can optionally contains spaces or
 commas, but they are ignored.  Each letter refers to a side (north, south,
-east, or west) that the slave will &quot;stick&quot; to.  If both <B>n</B> and <B>s</B> (or
-<B>e</B> and <B>w</B>) are specified, the slave will be stretched to fill the entire
+east, or west) that the slave will
+&#8220;stick&#8221;
+to.  If both <B>n</B> and <B>s</B> (or <B>e</B> and <B>w</B>) are
+specified, the slave will be stretched to fill the entire
 height (or width) of its cavity.  The <B>sticky</B> option subsumes the
 combination of <B>-anchor</B> and <B>-fill</B> that is used by <B><A HREF="../TkCmd/pack.htm">pack</A></B>.
-The default is <B>{}</B>, which causes the slave to be centered in its cavity,
-at its requested size.
+The default is
+&#8220;&#8221;,
+which causes the slave to be centered in its cavity, at its requested size.
 </DL><P>If any of the slaves are already managed by the geometry manager
 then any unspecified options for them retain their previous values rather
 than receiving default values.<DL>
@@ -207,12 +219,14 @@ default settings are used.
 Returns a list whose elements are the current configuration state of
 the slave given by <I>slave</I> in the same option-value form that
 might be specified to <B>grid configure</B>.
-The first two elements of the list are ``<B>-in </B><I>master</I>'' where
-<I>master</I> is the slave's master.
+The first two elements of the list are
+&#8220;<B>-in </B><I>master</I>&#8221;
+where <I>master</I> is the slave's master.
 <P><DT><A NAME="M22"><B>grid location </B><I>master x y</I></A><DD>
 Given  <I>x</I> and <I>y</I> values in screen units relative to the master window, 
 the column and row number at that <I>x</I> and <I>y</I> location is returned.
-For locations that are above or to the left of the grid, <B>-1</B> is returned.
+For locations that are above or to the left of the grid, <B>-1</B> is
+returned.
 <P><DT><A NAME="M23"><B>grid propagate </B><I>master</I> ?<I>boolean</I>?</A><DD>
 If <I>boolean</I> has a true boolean value such as <B>1</B> or <B>on</B>
 then propagation is enabled for <I>master</I>, which must be a window
@@ -256,7 +270,9 @@ grid geometry manager requests a size from the containing window.
 If only an option is specified, with no value,
 the current value of that option is returned.
 If only the master window and index is specified, all the current settings
-are returned in a list of &quot;-option value&quot; pairs.
+are returned in a list of
+&#8220;-option value&#8221;
+pairs.
 <P><DT><A NAME="M25"><B>grid remove </B><I>slave </I>?<I>slave ...</I>?</A><DD>
 Removes each of the <I>slave</I>s from grid for its
 master and unmaps their windows.
@@ -292,7 +308,7 @@ relative to other <I>slave</I>s in the same grid command, and the presence
 of the characters <B>-</B>, <B>x</B>, and <B>^</B> in <B>grid</B>
 command where <I>slave</I> names are normally expected.
 <P>
-<DL>
+<DL class="relative placement">
 <DT><A NAME="M29"><B>-</B></A><DD>
 This increases the columnspan of the <I>slave</I> to the left.  Several
 <B>-</B>'s in a row will successively increase the columnspan. A <B>-</B>
@@ -380,7 +396,7 @@ In addition, all slaves in one call to <B>grid</B> must have the same master.
 If the master for a slave is not its parent then you must make sure
 that the slave is higher in the stacking order than the master.
 Otherwise the master will obscure the slave and it will appear as
-if the slave hasn't been managed correctly.
+if the slave has not been managed correctly.
 The easiest way to make sure the slave is higher than the master is
 to create the master window first:  the most recently created window
 will be highest in the stacking order.
@@ -402,7 +418,9 @@ scrollbar .t.h -orient horizontal -command {.t.txt xview}
 <B>grid rowconfigure</B>    .t .t.txt -weight 1
 <B>grid columnconfigure</B> .t .t.txt -weight 1</PRE>
 <P>
-Three widgets of equal width, despite their different &quot;natural&quot; widths:
+Three widgets of equal width, despite their different
+&#8220;natural&#8221;
+widths:
 <PRE>button .b -text &quot;Foo&quot;
 entry .e -variable foo
 label .l -text &quot;This is a fairly long piece of text&quot;
@@ -412,7 +430,7 @@ label .l -text &quot;This is a fairly long piece of text&quot;
 <B><A HREF="../TkCmd/pack.htm">pack</A></B>, <B><A HREF="../TkCmd/place.htm">place</A></B>
 <H3><A NAME="M39">KEYWORDS</A></H3>
 <A href="../Keywords/G.htm#geometry manager">geometry manager</A>, <A href="../Keywords/L.htm#location">location</A>, <A href="../Keywords/G.htm#grid">grid</A>, <A href="../Keywords/C.htm#cell">cell</A>, <A href="../Keywords/P.htm#propagation">propagation</A>, <A href="../Keywords/S.htm#size">size</A>, <A href="../Keywords/P.htm#pack">pack</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

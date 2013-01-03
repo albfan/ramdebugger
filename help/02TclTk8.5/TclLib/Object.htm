@@ -1,4 +1,36 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_Obj manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_Obj manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> Object</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="Object.htm#M2" NAME="L459">NAME</A>
+<DL><DD>Tcl_NewObj, Tcl_DuplicateObj, Tcl_IncrRefCount, Tcl_DecrRefCount, Tcl_IsShared, Tcl_InvalidateStringRep - manipulate Tcl objects</DD></DL>
+<DD><A HREF="Object.htm#M3" NAME="L460">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>Tcl_Obj *
+<DD><B>Tcl_NewObj</B>()
+<DD>Tcl_Obj *
+<DD><B>Tcl_DuplicateObj</B>(<I>objPtr</I>)
+<DD><B>Tcl_IncrRefCount</B>(<I>objPtr</I>)
+<DD><B>Tcl_DecrRefCount</B>(<I>objPtr</I>)
+<DD>int
+<DD><B>Tcl_IsShared</B>(<I>objPtr</I>)
+<DD><B>Tcl_InvalidateStringRep</B>(<I>objPtr</I>)
+</DL>
+<DD><A HREF="Object.htm#M4" NAME="L461">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="Object.htm#M5" NAME="L462">INTRODUCTION</A>
+<DD><A HREF="Object.htm#M6" NAME="L463">THE TCL_OBJ STRUCTURE</A>
+<DD><A HREF="Object.htm#M7" NAME="L464">EXAMPLE OF THE LIFETIME OF AN OBJECT</A>
+<DD><A HREF="Object.htm#M8" NAME="L465">STORAGE MANAGEMENT OF OBJECTS</A>
+<DD><A HREF="Object.htm#M9" NAME="L466">SEE ALSO</A>
+<DD><A HREF="Object.htm#M10" NAME="L467">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_NewObj, Tcl_DuplicateObj, Tcl_IncrRefCount, Tcl_DecrRefCount, Tcl_IsShared, Tcl_InvalidateStringRep - manipulate Tcl objects
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -13,7 +45,7 @@ int<BR>
 <B>Tcl_IsShared</B>(<I>objPtr</I>)<BR>
 <B>Tcl_InvalidateStringRep</B>(<I>objPtr</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Tcl_Obj <B>*objPtr</B> (in)<DD>
 Points to an object;
 must have been the result of a previous call to <B>Tcl_NewObj</B>.
@@ -87,7 +119,6 @@ Seven types are predefined in the Tcl core
 including integer, double, list, and bytecode.
 Extension writers can extend the set of types
 by using the procedure <B><A HREF="../TclLib/ObjectType.htm">Tcl_RegisterObjType</A></B> .
-
 <H3><A NAME="M6">THE TCL_OBJ STRUCTURE</A></H3>
 Each Tcl object is represented by a <B>Tcl_Obj</B> structure
 which is defined as follows.
@@ -100,10 +131,15 @@ which is defined as follows.
                 long <I>longValue</I>;
                 double <I>doubleValue</I>;
                 void *<I>otherValuePtr</I>;
+                Tcl_WideInt <I>wideValue</I>;
                 struct {
                         void *<I>ptr1</I>;
                         void *<I>ptr2</I>;
                 } <I>twoPtrValue</I>;
+                struct {
+                        void *<I>ptr</I>;
+                        unsigned long <I>value</I>;
+                } <I>ptrAndLongRep</I>;
         } <I>internalRep</I>;
 } Tcl_Obj;</PRE>
 The <I>bytes</I> and the <I>length</I> members together hold
@@ -131,8 +167,9 @@ The <I>internalRep</I> union member holds
 an object's internal representation.
 This is either a (long) integer, a double-precision floating-point number,
 a pointer to a value containing additional information
-needed by the object's type to represent the object,
-or two arbitrary pointers.
+needed by the object's type to represent the object, a Tcl_WideInt
+integer, two arbitrary pointers, or a pair made up of an unsigned long
+integer and a pointer.
 <P>
 The <I>refCount</I> member is used to tell when it is safe to free
 an object's storage.
@@ -202,7 +239,6 @@ creates a new internal representation for an object
 and changes its <I>typePtr</I>.
 See the man page for <B><A HREF="../TclLib/ObjectType.htm">Tcl_RegisterObjType</A></B>
 to see how to create a new object type.
-
 <H3><A NAME="M7">EXAMPLE OF THE LIFETIME OF AN OBJECT</A></H3>
 As an example of the lifetime of an object,
 consider the following sequence of commands:
@@ -233,7 +269,6 @@ The string representation of <I>x</I>'s object is needed
 and is recomputed.
 The string representation is now <B>124</B>
 and both representations are again valid.
-
 <H3><A NAME="M8">STORAGE MANAGEMENT OF OBJECTS</A></H3>
 Tcl objects are allocated on the heap and are shared as much as possible
 to reduce storage requirements.
@@ -249,7 +284,7 @@ if the object's reference count drops to zero, frees its storage.
 An object shared by different code or data structures has
 <I>refCount</I> greater than 1.
 Incrementing an object's reference count ensures that
-it won't be freed too early or have its value change accidentally.
+it will not be freed too early or have its value change accidentally.
 <P>
 As an example, the bytecode interpreter shares argument objects
 between calling and called Tcl procedures to avoid having to copy objects.
@@ -265,7 +300,7 @@ When an object's reference count drops less than or equal to zero,
 <B>Tcl_DecrRefCount</B> reclaims its storage.
 Most command procedures do not have to be concerned about
 reference counting since they use an object's value immediately
-and don't retain a pointer to the object after they return.
+and do not retain a pointer to the object after they return.
 However, if they do retain a pointer to an object in a data structure,
 they must be careful to increment its reference count
 since the retained pointer is a new reference.
@@ -280,27 +315,31 @@ by using <B>Tcl_DuplicateObj</B>;
 this returns a new duplicate of the original object
 that has <I>refCount</I> 0.
 If the object is not shared,
-the command procedure &quot;owns&quot; the object and can safely modify it directly.
+the command procedure
+&#8220;owns&#8221;
+the object and can safely modify it directly.
 For example, the following code appears in the command procedure
 that implements <B><A HREF="../TclCmd/linsert.htm">linsert</A></B>.
 This procedure modifies the list object passed to it in <I>objv[1]</I>
 by inserting <I>objc-3</I> new elements before <I>index</I>.
+<P>
 <PRE>listPtr = objv[1];
 if (Tcl_IsShared(listPtr)) {
-        listPtr = Tcl_DuplicateObj(listPtr);
+    listPtr = Tcl_DuplicateObj(listPtr);
 }
-result = <A HREF="../TclLib/ListObj.htm">Tcl_ListObjReplace</A>(interp, listPtr, index, 0, (objc-3), &amp;(objv[3]));</PRE>
+result = <A HREF="../TclLib/ListObj.htm">Tcl_ListObjReplace</A>(interp, listPtr, index, 0,
+        (objc-3), &amp;(objv[3]));</PRE>
+<P>
 As another example, <B><A HREF="../TclCmd/incr.htm">incr</A></B>'s command procedure
 must check whether the variable's object is shared before
 incrementing the integer in its internal representation.
 If it is shared, it needs to duplicate the object
 in order to avoid accidentally changing values in other data structures.
-
 <H3><A NAME="M9">SEE ALSO</A></H3>
 <B><A HREF="../TclLib/ObjectType.htm">Tcl_ConvertToType</A></B>, <B><A HREF="../TclLib/IntObj.htm">Tcl_GetIntFromObj</A></B>, <B><A HREF="../TclLib/ListObj.htm">Tcl_ListObjAppendElement</A></B>, <B><A HREF="../TclLib/ListObj.htm">Tcl_ListObjIndex</A></B>, <B><A HREF="../TclLib/ListObj.htm">Tcl_ListObjReplace</A></B>, <B><A HREF="../TclLib/ObjectType.htm">Tcl_RegisterObjType</A></B>
 <H3><A NAME="M10">KEYWORDS</A></H3>
 <A href="../Keywords/I.htm#internal representation">internal representation</A>, <A href="../Keywords/O.htm#object">object</A>, <A href="../Keywords/O.htm#object creation">object creation</A>, <A href="../Keywords/O.htm#object type">object type</A>, <A href="../Keywords/R.htm#reference counting">reference counting</A>, <A href="../Keywords/S.htm#string representation">string representation</A>, <A href="../Keywords/T.htm#type conversion">type conversion</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1996-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1996-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

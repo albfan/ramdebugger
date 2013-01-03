@@ -1,4 +1,46 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_DictObj manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_DictObj manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> DictObj</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="DictObj.htm#M2" NAME="L174">NAME</A>
+<DL><DD>Tcl_NewDictObj, Tcl_DictObjPut, Tcl_DictObjGet, Tcl_DictObjRemove, Tcl_DictObjSize, Tcl_DictObjFirst, Tcl_DictObjNext, Tcl_DictObjDone, Tcl_DictObjPutKeyList, Tcl_DictObjRemoveKeyList - manipulate Tcl objects as dictionaries</DD></DL>
+<DD><A HREF="DictObj.htm#M3" NAME="L175">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>Tcl_Obj *
+<DD><B>Tcl_NewDictObj</B>()
+<DD>int
+<DD><B>Tcl_DictObjGet</B>(<I>interp, dictPtr, keyPtr, valuePtrPtr</I>)
+<DD>int
+<DD><B>Tcl_DictObjPut</B>(<I>interp, dictPtr, keyPtr, valuePtr</I>)
+<DD>int
+<DD><B>Tcl_DictObjRemove</B>(<I>interp, dictPtr, keyPtr</I>)
+<DD>int
+<DD><B>Tcl_DictObjSize</B>(<I>interp, dictPtr, sizePtr</I>)
+<DD>int
+<DD><B>Tcl_DictObjFirst</B>(<I>interp, dictPtr, searchPtr,
+<DD>                 keyPtrPtr, valuePtrPtr, donePtr</I>)
+<DD>void
+<DD><B>Tcl_DictObjNext</B>(<I>searchPtr, keyPtrPtr, valuePtrPtr, donePtr</I>)
+<DD>void
+<DD><B>Tcl_DictObjDone</B>(<I>searchPtr</I>)
+<DD>int
+<DD><B>Tcl_DictObjPutKeyList</B>(<I>interp, dictPtr, keyc, keyv, valuePtr</I>)
+<DD>int
+<DD><B>Tcl_DictObjRemoveKeyList</B>(<I>interp, dictPtr, keyc, keyv</I>)
+</DL>
+<DD><A HREF="DictObj.htm#M4" NAME="L176">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="DictObj.htm#M5" NAME="L177">DESCRIPTION</A>
+<DD><A HREF="DictObj.htm#M6" NAME="L178">EXAMPLE</A>
+<DD><A HREF="DictObj.htm#M7" NAME="L179">SEE ALSO</A>
+<DD><A HREF="DictObj.htm#M8" NAME="L180">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_NewDictObj, Tcl_DictObjPut, Tcl_DictObjGet, Tcl_DictObjRemove, Tcl_DictObjSize, Tcl_DictObjFirst, Tcl_DictObjNext, Tcl_DictObjDone, Tcl_DictObjPutKeyList, Tcl_DictObjRemoveKeyList - manipulate Tcl objects as dictionaries
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -25,7 +67,7 @@ int<BR>
 int<BR>
 <B>Tcl_DictObjRemoveKeyList</B>(<I>interp, dictPtr, keyc, keyv</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 If an error occurs while converting an object to be a dictionary object,
 an error message is left in the interpreter's result object
@@ -75,9 +117,14 @@ sub-dictionaries of the main dictionary object passed to them.
 <P></DL>
 <H3><A NAME="M5">DESCRIPTION</A></H3>
 Tcl dictionary objects have an internal representation that supports
-efficient mapping from keys to values and which does not guarantee any
-particular ordering of keys within the dictionary (the underlying
-basic data-structure is a hash table created with <B><A HREF="../TclLib/Hash.htm">Tcl_InitObjHashTable</A></B>).
+efficient mapping from keys to values and which guarantees that the
+particular ordering of keys within the dictionary remains the same
+modulo any keys being deleted (which removes them from the order) or
+added (which adds them to the end of the order). If reinterpreted as a
+list, the values at the even-valued indices in the list will be the
+keys of the dictionary, and each will be followed (in the odd-valued
+index) bu the value associated with that key.
+<P>
 The procedures described in this man page are used to
 create, modify, index, and iterate over dictionary objects from C code.
 <P>
@@ -134,16 +181,20 @@ The order of iteration is implementation-defined.  If the
 <B>Tcl_DictObjFirst</B> returns <B>TCL_ERROR</B> and the iteration is not
 commenced, and otherwise it returns <B>TCL_OK</B>.
 <P>
-If the last call to <B>Tcl_DictObjFirst</B> or <B>Tcl_DictObjNext</B>
-(for a particular <I>searchPtr</I>) set the variable indicated by the
-<I>donePtr</I> argument to zero but no further key/value pairs are
-desired from that particular iteration, the <I>searchPtr</I> argument
-must be passed to <B>Tcl_DictObjDone</B> to release any internal locks
-held by the searching process.  If <B>Tcl_DictObjNext</B> is called on
-a particular <I>searchPtr</I> after <B>Tcl_DictObjDone</B> is called on
-it, the variable pointed to by <I>donePtr</I> will always be set to 1
-(and nothing else will happen). It is safe to call
-<B>Tcl_DictObjDone</B> multiple times on the same <I>searchPtr</I>.
+When <B>Tcl_DictObjFirst</B> is called upon a dictionary, a lock is placed on
+the dictionary to enable that dictionary to be iterated over safely without
+regard for whether the dictionary is modified during the iteration. Because of
+this, once the iteration over a dictionary's keys has finished (whether
+because all values have been iterated over as indicated by the variable
+indicated by the <I>donePtr</I> argument being set to one, or because no
+further values are required) the <B>Tcl_DictObjDone</B> function must be called
+with the same <I>searchPtr</I> as was passed to <B>Tcl_DictObjFirst</B> so that
+the internal locks can be released. Once a particular <I>searchPtr</I> is
+passed to <B>Tcl_DictObjDone</B>, passing it to <B>Tcl_DictObjNext</B> (without
+first initializing it with <B>Tcl_DictObjFirst</B>) will result in no values
+being produced and the variable pointed to by <I>donePtr</I> being set to one.
+It is safe to call <B>Tcl_DictObjDone</B> multiple times on the same
+<I>searchPtr</I> for each call to <B>Tcl_DictObjFirst</B>.
 <P>
 The procedures <B>Tcl_DictObjPutKeyList</B> and
 <B>Tcl_DictObjRemoveKeyList</B> are the close analogues of
@@ -162,7 +213,7 @@ keys must exist and have dictionaries as their values.
 <H3><A NAME="M6">EXAMPLE</A></H3>
 Using the dictionary iteration interface to search determine if there
 is a key that maps to itself:
-
+<P>
 <PRE>Tcl_DictSearch search;
 Tcl_Obj *key, *value;
 int done;
@@ -178,11 +229,11 @@ int done;
  * is performed. However it is safe to try to release the lock
  * even if we've finished iterating over the loop.
  */
-if (Tcl_DictObjFirst(interp, objPtr, &amp;search,
+if (<B>Tcl_DictObjFirst</B>(interp, objPtr, &amp;search,
         &amp;key, &amp;value, &amp;done) != TCL_OK) {
     return TCL_ERROR;
 }
-for (; done ; Tcl_DictObjNext(&amp;search, &amp;key, &amp;value, &amp;done)) {
+for (; done ; <B>Tcl_DictObjNext</B>(&amp;search, &amp;key, &amp;value, &amp;done)) {
     /*
      * Note that strcmp() is not a good way of comparing
      * objects and is just used here for demonstration
@@ -192,14 +243,14 @@ for (; done ; Tcl_DictObjNext(&amp;search, &amp;key, &amp;value, &amp;done)) {
         break;
     }
 }
-Tcl_DictObjDone(&amp;search);
+<B>Tcl_DictObjDone</B>(&amp;search);
 <A HREF="../TclLib/SetResult.htm">Tcl_SetObjResult</A>(interp, <A HREF="../TclLib/BoolObj.htm">Tcl_NewBooleanObj</A>(!done));
 return TCL_OK;</PRE>
 <H3><A NAME="M7">SEE ALSO</A></H3>
 <B><A HREF="../TclLib/Object.htm">Tcl_NewObj</A></B>, <B><A HREF="../TclLib/Object.htm">Tcl_DecrRefCount</A></B>, <B><A HREF="../TclLib/Object.htm">Tcl_IncrRefCount</A></B>, <B><A HREF="../TclLib/Hash.htm">Tcl_InitObjHashTable</A></B>
 <H3><A NAME="M8">KEYWORDS</A></H3>
 <A href="../Keywords/D.htm#dict">dict</A>, <A href="../Keywords/D.htm#dict object">dict object</A>, <A href="../Keywords/D.htm#dictionary">dictionary</A>, <A href="../Keywords/D.htm#dictionary object">dictionary object</A>, <A href="../Keywords/H.htm#hash table">hash table</A>, <A href="../Keywords/I.htm#iteration">iteration</A>, <A href="../Keywords/O.htm#object">object</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 2003 Donal K. Fellows
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 2003 Donal K. Fellows
+</div>
 </BODY></HTML>

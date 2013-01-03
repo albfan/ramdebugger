@@ -1,4 +1,30 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_Panic manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_Panic manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> Panic</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="Panic.htm#M2" NAME="L520">NAME</A>
+<DL><DD>Tcl_Panic, Tcl_PanicVA, Tcl_SetPanicProc - report fatal error and abort</DD></DL>
+<DD><A HREF="Panic.htm#M3" NAME="L521">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>void
+<DD><B>Tcl_Panic</B>(<I>format</I>, <I>arg</I>, <I>arg</I>, <I>...</I>)
+<DD>void
+<DD><B>Tcl_PanicVA</B>(<I>format</I>, <I>argList</I>)
+<DD>void
+<DD><B>Tcl_SetPanicProc</B>(<I>panicProc</I>)
+</DL>
+<DD><A HREF="Panic.htm#M4" NAME="L522">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="Panic.htm#M5" NAME="L523">DESCRIPTION</A>
+<DD><A HREF="Panic.htm#M6" NAME="L524">SEE ALSO</A>
+<DD><A HREF="Panic.htm#M7" NAME="L525">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_Panic, Tcl_PanicVA, Tcl_SetPanicProc - report fatal error and abort
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -10,14 +36,14 @@ void<BR>
 void<BR>
 <B>Tcl_SetPanicProc</B>(<I>panicProc</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>const char* <B><A HREF="../TclCmd/format.htm">format</A></B> (in)<DD>
 A printf-style format string.
 <P><DT><B>arg</B> (in)<DD>
 Arguments matching the format string.
 <P><DT>va_list <B>argList</B> (in)<DD>
 An argument list of arguments matching the format string.
-Must have been initialized using <B>TCL_VARARGS_START</B>,
+Must have been initialized using <B>va_start</B>,
 and cleared using <B>va_end</B>.
 <P><DT>Tcl_PanicProc <B>*panicProc</B> (in)<DD>
 Procedure to report fatal error message and abort.
@@ -76,6 +102,6 @@ taking a variable number of arguments it takes an argument list.
 <B>abort</B>, <B>printf</B>, <B><A HREF="../TclCmd/exec.htm">exec</A></B>, <B><A HREF="../TclCmd/format.htm">format</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#abort">abort</A>, <A href="../Keywords/F.htm#fatal">fatal</A>, <A href="../Keywords/E.htm#error">error</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+</div>
 </BODY></HTML>

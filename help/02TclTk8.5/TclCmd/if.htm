@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Built-In Commands - if manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>if manual page - Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> if</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 if - Execute scripts conditionally
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -17,7 +23,8 @@ then <B>body2</B> is executed, and so on.
 If none of the expressions evaluates to true then <I>bodyN</I> is
 executed.
 The <B>then</B> and <B>else</B> arguments are optional
-``noise words'' to make the command easier to read.
+&#8220;noise words&#8221;
+to make the command easier to read.
 There may be any number of <B>elseif</B> clauses, including zero.
 <I>BodyN</I> may also be omitted as long as <B>else</B> is omitted too.
 The return value from the command is the result of the body script
@@ -54,8 +61,8 @@ good idea to use the optional <B>then</B> keyword for clarity:
 <B><A HREF="../TclCmd/expr.htm">expr</A></B>, <B><A HREF="../TclCmd/for.htm">for</A></B>, <B><A HREF="../TclCmd/foreach.htm">foreach</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#boolean">boolean</A>, <A href="../Keywords/C.htm#conditional">conditional</A>, <A href="../Keywords/E.htm#else">else</A>, <A href="../Keywords/F.htm#false">false</A>, <A href="../Keywords/I.htm#if">if</A>, <A href="../Keywords/T.htm#true">true</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

@@ -1,4 +1,39 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_DString manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_DString manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> DString</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="DString.htm#M2" NAME="L204">NAME</A>
+<DL><DD>Tcl_DStringInit, Tcl_DStringAppend, Tcl_DStringAppendElement, Tcl_DStringStartSublist, Tcl_DStringEndSublist, Tcl_DStringLength, Tcl_DStringValue, Tcl_DStringSetLength, Tcl_DStringTrunc, Tcl_DStringFree, Tcl_DStringResult, Tcl_DStringGetResult - manipulate dynamic strings</DD></DL>
+<DD><A HREF="DString.htm#M3" NAME="L205">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD><B>Tcl_DStringInit</B>(<I>dsPtr</I>)
+<DD>char *
+<DD><B>Tcl_DStringAppend</B>(<I>dsPtr, bytes, length</I>)
+<DD>char *
+<DD><B>Tcl_DStringAppendElement</B>(<I>dsPtr, element</I>)
+<DD><B>Tcl_DStringStartSublist</B>(<I>dsPtr</I>)
+<DD><B>Tcl_DStringEndSublist</B>(<I>dsPtr</I>)
+<DD>int
+<DD><B>Tcl_DStringLength</B>(<I>dsPtr</I>)
+<DD>char *
+<DD><B>Tcl_DStringValue</B>(<I>dsPtr</I>)
+<DD><B>Tcl_DStringSetLength</B>(<I>dsPtr, newLength</I>)
+<DD><B>Tcl_DStringTrunc</B>(<I>dsPtr, newLength</I>)
+<DD><B>Tcl_DStringFree</B>(<I>dsPtr</I>)
+<DD><B>Tcl_DStringResult</B>(<I>interp, dsPtr</I>)
+<DD><B>Tcl_DStringGetResult</B>(<I>interp, dsPtr</I>)
+</DL>
+<DD><A HREF="DString.htm#M4" NAME="L206">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="DString.htm#M5" NAME="L207">DESCRIPTION</A>
+<DD><A HREF="DString.htm#M6" NAME="L208">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_DStringInit, Tcl_DStringAppend, Tcl_DStringAppendElement, Tcl_DStringStartSublist, Tcl_DStringEndSublist, Tcl_DStringLength, Tcl_DStringValue, Tcl_DStringSetLength, Tcl_DStringTrunc, Tcl_DStringFree, Tcl_DStringResult, Tcl_DStringGetResult - manipulate dynamic strings
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -20,7 +55,7 @@ char *<BR>
 <B>Tcl_DStringResult</B>(<I>interp, dsPtr</I>)<BR>
 <B>Tcl_DStringGetResult</B>(<I>interp, dsPtr</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Tcl_DString <B>*dsPtr</B> (in/out)<DD>
 Pointer to structure that is used to manage a dynamic string.
 <P><DT>const char <B>*bytes</B> (in)<DD>
@@ -61,14 +96,16 @@ the new string.  The string can also be retrieved from the
 <I>string</I> field of the Tcl_DString structure.
 <P>
 <B>Tcl_DStringAppendElement</B> is similar to <B>Tcl_DStringAppend</B>
-except that it doesn't take a <I>length</I> argument (it appends
+except that it does not take a <I>length</I> argument (it appends
 all of <I>element</I>) and it converts the string to a proper list element
 before appending.
 <B>Tcl_DStringAppendElement</B> adds a separator space before the
 new list element unless the new list element is the first in a
 list or sub-list (i.e. either the current string is empty, or it
-contains the single character ``{'', or the last two characters of
-the current string are `` {'').
+contains the single character
+&#8220;{&#8221;,
+or the last two characters of the current string are
+&#8220; {&#8221;).
 <B>Tcl_DStringAppendElement</B> returns a pointer to the
 characters of the new string.
 <P>
@@ -106,7 +143,7 @@ will still need to be called.
 This procedure is now deprecated.  <B>Tcl_DStringSetLength</B>  should
 be used instead.
 <P>
-<B>Tcl_DStringFree</B> should be called when you're finished using
+<B>Tcl_DStringFree</B> should be called when you are finished using
 the string.  It frees up any memory that was allocated for the string
 and reinitializes the string's value to an empty string.
 <P>
@@ -125,8 +162,8 @@ the string.
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#append">append</A>, <A href="../Keywords/D.htm#dynamic string">dynamic string</A>, <A href="../Keywords/F.htm#free">free</A>, <A href="../Keywords/R.htm#result">result</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

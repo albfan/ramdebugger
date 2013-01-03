@@ -1,4 +1,31 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_CreateMathFunc manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_CreateMathFunc manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> CrtMathFnc</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="CrtMathFnc.htm#M2" NAME="L141">NAME</A>
+<DL><DD>Tcl_CreateMathFunc, Tcl_GetMathFuncInfo, Tcl_ListMathFuncs - Define, query and enumerate math functions for expressions</DD></DL>
+<DD><A HREF="CrtMathFnc.htm#M3" NAME="L142">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>void
+<DD><B>Tcl_CreateMathFunc</B>(<I>interp, name, numArgs, argTypes, proc, clientData</I>)
+<DD>int
+<DD><B>Tcl_GetMathFuncInfo</B>(<I>interp, name, numArgsPtr, argTypesPtr, procPtr,
+<DD>                    clientDataPtr</I>)
+<DD>Tcl_Obj *
+<DD><B>Tcl_ListMathFuncs</B>(<I>interp, pattern</I>)
+</DL>
+<DD><A HREF="CrtMathFnc.htm#M4" NAME="L143">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="CrtMathFnc.htm#M5" NAME="L144">DESCRIPTION</A>
+<DD><A HREF="CrtMathFnc.htm#M6" NAME="L145">SEE ALSO</A>
+<DD><A HREF="CrtMathFnc.htm#M7" NAME="L146">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_CreateMathFunc, Tcl_GetMathFuncInfo, Tcl_ListMathFuncs - Define, query and enumerate math functions for expressions
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -11,7 +38,7 @@ int<BR>
 Tcl_Obj *<BR>
 <B>Tcl_ListMathFuncs</B>(<I>interp, pattern</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter in which new function will be defined.
 <P><DT>const char <B>*name</B> (in)<DD>
@@ -57,7 +84,7 @@ in the <B>tcl::mathfunc</B> namespace.
 <P>
 In the <B>Tcl_CreateMathFunc</B> interface,
 <I>Name</I> is the name of the function as it will appear in expressions.
-If <I>name</I> doesn't already exist in the <B>::tcl::mathfunc</B>
+If <I>name</I> does not already exist in the <B>::tcl::mathfunc</B>
 namespace, then a new command is created in that namespace.
 If <I>name</I> does exist, then the existing function is replaced.
 <I>NumArgs</I> and <I>argTypes</I> describe the arguments to the function.
@@ -128,16 +155,14 @@ pointed to by <I>argTypesPointer</I>.
 <P>
 <B>Tcl_ListMathFuncs</B> returns a Tcl object containing a list of all
 the math functions defined in the interpreter whose name matches
-<I>pattern</I>.  In the case of an error, NULL is returned and an error
-message is left in the interpreter result, and otherwise the returned
-object will have a reference count of zero.
+<I>pattern</I>.  The returned object has a reference count of zero.
 
-<H3><A NAME="M6">KEYWORDS</A></H3>
-<A href="../Keywords/E.htm#expression">expression</A>, <A href="../Keywords/M.htm#mathematical function">mathematical function</A>
-<H3><A NAME="M7">SEE ALSO</A></H3>
+<H3><A NAME="M6">SEE ALSO</A></H3>
 <B><A HREF="../TclCmd/expr.htm">expr</A></B>, <B><A HREF="../TclCmd/info.htm">info</A></B>, <B><A HREF="../TclLib/CrtObjCmd.htm">Tcl_CreateObjCommand</A></B>, <B><A HREF="../TclLib/Alloc.htm">Tcl_Free</A></B>, <B><A HREF="../TclLib/ListObj.htm">Tcl_NewListObj</A></B>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1989-1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<H3><A NAME="M7">KEYWORDS</A></H3>
+<A href="../Keywords/E.htm#expression">expression</A>, <A href="../Keywords/M.htm#mathematical function">mathematical function</A>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1989-1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

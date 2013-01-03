@@ -1,26 +1,57 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_Ensemble manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_Ensemble manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> Ensemble</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="Ensemble.htm#M2" NAME="L230">NAME</A>
-<DL><DD>Tcl_CreateEnsemble, Tcl_FindEnsemble, Tcl_GetEnsembleFlags, Tcl_GetEnsembleMappingDict, Tcl_GetEnsembleNamespace, Tcl_GetEnsembleUnknownHandler, Tcl_GetEnsmelbeSubcommandList, Tcl_IsEnsemble, Tcl_SetEnsembleFlags, Tcl_SetEnsembleMappingDict, Tcl_SetEnsembleSubcommandList, Tcl_SetEnsembleUnknownHandler - manipulate ensemble commands</DL>
-<DD><A HREF="Ensemble.htm#M3" NAME="L231">SYNOPSIS</A>
+<DD><A HREF="Ensemble.htm#M2" NAME="L231">NAME</A>
+<DL><DD>Tcl_CreateEnsemble, Tcl_FindEnsemble, Tcl_GetEnsembleFlags, Tcl_GetEnsembleMappingDict, Tcl_GetEnsembleNamespace, Tcl_GetEnsembleUnknownHandler, Tcl_GetEnsembleSubcommandList, Tcl_IsEnsemble, Tcl_SetEnsembleFlags, Tcl_SetEnsembleMappingDict, Tcl_SetEnsembleSubcommandList, Tcl_SetEnsembleUnknownHandler - manipulate ensemble commands</DD></DL>
+<DD><A HREF="Ensemble.htm#M3" NAME="L232">SYNOPSIS</A>
 <DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>Tcl_Command
+<DD><B>Tcl_CreateEnsemble</B>(<I>interp, name, namespacePtr, ensFlags</I>)
+<DD>Tcl_Command
+<DD><B>Tcl_FindEnsemble</B>(<I>interp, cmdNameObj, flags</I>)
+<DD>int
+<DD><B>Tcl_IsEnsemble</B>(<I>token</I>)
+<DD>int
+<DD><B>Tcl_GetEnsembleFlags</B>(<I>interp, token, ensFlagsPtr</I>)
+<DD>int
+<DD><B>Tcl_SetEnsembleFlags</B>(<I>interp, token, ensFlags</I>)
+<DD>int
+<DD><B>Tcl_GetEnsembleMappingDict</B>(<I>interp, token, dictObjPtr</I>)
+<DD>int
+<DD><B>Tcl_SetEnsembleMappingDict</B>(<I>interp, token, dictObj</I>)
+<DD>int
+<DD><B>Tcl_GetEnsembleSubcommandList</B>(<I>interp, token, listObjPtr</I>)
+<DD>int
+<DD><B>Tcl_SetEnsembleSubcommandList</B>(<I>interp, token, listObj</I>)
+<DD>int
+<DD><B>Tcl_GetEnsembleUnknownHandler</B>(<I>interp, token, listObjPtr</I>)
+<DD>int
+<DD><B>Tcl_SetEnsembleUnknownHandler</B>(<I>interp, token, listObj</I>)
+<DD>int
+<DD><B>Tcl_GetEnsembleNamespace</B>(<I>interp, token, namespacePtrPtr</I>)
 </DL>
-<DD><A HREF="Ensemble.htm#M4" NAME="L232">ARGUMENTS</A>
-<DL>
+<DD><A HREF="Ensemble.htm#M4" NAME="L233">ARGUMENTS</A>
+<DL class="arguments">
 </DL>
-<DD><A HREF="Ensemble.htm#M5" NAME="L233">DESCRIPTION</A>
-<DD><A HREF="Ensemble.htm#M6" NAME="L234">ENSEMBLE PROPERTIES</A>
-<DL>
-<DD><A HREF="Ensemble.htm#M7" NAME="L235"><B>flags</B> (read-write)</A>
-<DD><A HREF="Ensemble.htm#M8" NAME="L236"><B>mapping dictionary</B> (read-write)</A>
-<DD><A HREF="Ensemble.htm#M9" NAME="L237"><B>subcommand list</B> (read-write)</A>
-<DD><A HREF="Ensemble.htm#M10" NAME="L238"><B>unknown subcommand handler command prefix</B> (read-write)</A>
-<DD><A HREF="Ensemble.htm#M11" NAME="L239"><B>bound namespace</B> (read-only)</A>
+<DD><A HREF="Ensemble.htm#M5" NAME="L234">DESCRIPTION</A>
+<DD><A HREF="Ensemble.htm#M6" NAME="L235">ENSEMBLE PROPERTIES</A>
+<DL class="ensemble properties">
+<DD><A HREF="Ensemble.htm#M7" NAME="L236"><B>flags</B> (read-write)</A>
+<DD><A HREF="Ensemble.htm#M8" NAME="L237"><B>mapping dictionary</B> (read-write)</A>
+<DD><A HREF="Ensemble.htm#M9" NAME="L238"><B>subcommand list</B> (read-write)</A>
+<DD><A HREF="Ensemble.htm#M10" NAME="L239"><B>unknown subcommand handler command prefix</B> (read-write)</A>
+<DD><A HREF="Ensemble.htm#M11" NAME="L240"><B>bound namespace</B> (read-only)</A>
 </DL>
-<DD><A HREF="Ensemble.htm#M12" NAME="L240">SEE ALSO</A>
-</DL><HR>
+<DD><A HREF="Ensemble.htm#M12" NAME="L241">SEE ALSO</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
-Tcl_CreateEnsemble, Tcl_FindEnsemble, Tcl_GetEnsembleFlags, Tcl_GetEnsembleMappingDict, Tcl_GetEnsembleNamespace, Tcl_GetEnsembleUnknownHandler, Tcl_GetEnsmelbeSubcommandList, Tcl_IsEnsemble, Tcl_SetEnsembleFlags, Tcl_SetEnsembleMappingDict, Tcl_SetEnsembleSubcommandList, Tcl_SetEnsembleUnknownHandler - manipulate ensemble commands
+Tcl_CreateEnsemble, Tcl_FindEnsemble, Tcl_GetEnsembleFlags, Tcl_GetEnsembleMappingDict, Tcl_GetEnsembleNamespace, Tcl_GetEnsembleUnknownHandler, Tcl_GetEnsembleSubcommandList, Tcl_IsEnsemble, Tcl_SetEnsembleFlags, Tcl_SetEnsembleMappingDict, Tcl_SetEnsembleSubcommandList, Tcl_SetEnsembleUnknownHandler - manipulate ensemble commands
 <H3><A NAME="M3">SYNOPSIS</A></H3>
 <B>#include &lt;tcl.h&gt;</B><BR>
 Tcl_Command<BR>
@@ -48,10 +79,12 @@ int<BR>
 int<BR>
 <B>Tcl_GetEnsembleNamespace</B>(<I>interp, token, namespacePtrPtr</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in/out)<DD>
 The interpreter in which the ensemble is to be created or found. Also
-where error result messages are written.
+where error result messages are written. The functions whose names
+start with <B>Tcl_GetEnsemble</B> may have a NULL for the <I>interp</I>,
+but all other functions must not.
 <P><DT>const char <B>*name</B> (in)<DD>
 The name of the ensemble command to be created.
 <P><DT>Tcl_Namespace <B>*namespacePtr</B> (in)<DD>
@@ -119,7 +152,7 @@ ensemble, or 0 otherwise.
 Every ensemble has four read-write properties and a read-only
 property. The properties are:
 <P>
-<DL>
+<DL class="ensemble properties">
 <DT><A NAME="M7"><B>flags</B> (read-write)</A><DD>
 The set of flags for the ensemble, expressed as a
 bit-field. Currently, the only public flag is TCL_ENSEMBLE_PREFIX
@@ -176,7 +209,7 @@ using <B>Tcl_GetEnsembleNamespace</B> which returns a Tcl result code
 <P></DL>
 <H3><A NAME="M12">SEE ALSO</A></H3>
 <B><A HREF="../TclCmd/namespace.htm">namespace</A></B>, <B><A HREF="../TclLib/CrtObjCmd.htm">Tcl_DeleteCommandFromToken</A></B>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 2005 Donal K. Fellows
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 2005 Donal K. Fellows
+</div>
 </BODY></HTML>

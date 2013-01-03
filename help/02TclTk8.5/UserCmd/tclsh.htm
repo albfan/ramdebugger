@@ -1,15 +1,20 @@
-<HTML><HEAD><TITLE>Applications - tclsh manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>tclsh manual page - Applications</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">UserCmd</a> <small>&gt;</small> tclsh</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
 <DD><A HREF="tclsh.htm#M2" NAME="L2">NAME</A>
-<DL><DD>tclsh - Simple shell containing Tcl interpreter</DL>
+<DL><DD>tclsh - Simple shell containing Tcl interpreter</DD></DL>
 <DD><A HREF="tclsh.htm#M3" NAME="L3">SYNOPSIS</A>
 <DL>
-<DD><B>tclsh</B> ?-encoding <I>name</I>? ?<I>fileName arg arg ...</I>?
 </DL>
 <DD><A HREF="tclsh.htm#M4" NAME="L4">DESCRIPTION</A>
 <DD><A HREF="tclsh.htm#M5" NAME="L5">SCRIPT FILES</A>
 <DD><A HREF="tclsh.htm#M6" NAME="L6">VARIABLES</A>
-<DL>
+<DL class="variables">
 <DD><A HREF="tclsh.htm#M7" NAME="L7"><B>argc</B></A>
 <DD><A HREF="tclsh.htm#M8" NAME="L8"><B>argv</B></A>
 <DD><A HREF="tclsh.htm#M9" NAME="L9"><B>argv0</B></A>
@@ -19,7 +24,7 @@
 <DD><A HREF="tclsh.htm#M12" NAME="L12">STANDARD CHANNELS</A>
 <DD><A HREF="tclsh.htm#M13" NAME="L13">SEE ALSO</A>
 <DD><A HREF="tclsh.htm#M14" NAME="L14">KEYWORDS</A>
-</DL><HR>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 tclsh - Simple shell containing Tcl interpreter
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -47,12 +52,17 @@ Instead of reading commands from standard input <B>tclsh</B> will
 read Tcl commands from the named file;  <B>tclsh</B> will exit
 when it reaches the end of the file.
 The end of the file may be marked either by the physical end of
-the medium, or by the character, '&#92;032' ('&#92;u001a', control-Z).
+the medium, or by the character,
+&#8220;&#92;032&#8221;
+(&#8220;&#92;u001a&#8221;, control-Z).
 If this character is present in the file, the <B>tclsh</B> application
 will read text up to but not including the character.  An application
 that requires this character in the file may safely encode it as
-``&#92;032'', ``&#92;x1a'', or ``&#92;u001a''; or may generate it by use of commands 
-such as <B><A HREF="../TclCmd/format.htm">format</A></B> or <B><A HREF="../TclCmd/binary.htm">binary</A></B>.
+&#8220;&#92;032&#8221;,
+&#8220;&#92;x1a&#8221;,
+or
+&#8220;&#92;u001a&#8221;;
+or may generate it by use of commands such as <B><A HREF="../TclCmd/format.htm">format</A></B> or <B><A HREF="../TclCmd/binary.htm">binary</A></B>.
 There is no automatic evaluation of <B>.tclshrc</B> when the name
 of a script file is presented on the <B>tclsh</B> command
 line, but the script file can always <B><A HREF="../TclCmd/source.htm">source</A></B> it if desired.
@@ -62,8 +72,8 @@ If you create a Tcl script in a file whose first line is
 then you can invoke the script file directly from your shell if
 you mark the file as executable.
 This assumes that <B>tclsh</B> has been installed in the default
-location in /usr/local/bin;  if it's installed somewhere else
-then you'll have to modify the above line to match.
+location in /usr/local/bin;  if it is installed somewhere else
+then you will have to modify the above line to match.
 Many UNIX systems do not allow the <B>#!</B> line to exceed about
 30 characters in length, so be sure that the <B>tclsh</B>
 executable can be accessed with a short file name.
@@ -74,7 +84,7 @@ following three lines:
 # the next line restarts using tclsh &#92;
 exec tclsh &quot;$0&quot; &quot;$@&quot;</B></PRE>
 This approach has three advantages over the approach in the previous
-paragraph.  First, the location of the <B>tclsh</B> binary doesn't have
+paragraph.  First, the location of the <B>tclsh</B> binary does not have
 to be hard-wired into the script:  it can be anywhere in your shell
 search path.  Second, it gets around the 30-character file name limit
 in the previous approach.
@@ -101,7 +111,7 @@ start up uniformly across different versions of Tcl.
 <H3><A NAME="M6">VARIABLES</A></H3>
 <B>Tclsh</B> sets the following Tcl variables:
 <P>
-<DL>
+<DL class="variables">
 <DT><A NAME="M7"><B>argc</B></A><DD>
 Contains a count of the number of <I>arg</I> arguments (0 if none),
 not including the name of the script file.
@@ -119,14 +129,16 @@ device), 0 otherwise.
 <P></DL>
 <H3><A NAME="M11">PROMPTS</A></H3>
 When <B>tclsh</B> is invoked interactively it normally prompts for each
-command with ``<B>% </B>''.  You can change the prompt by setting the
+command with
+&#8220;<B>% </B>&#8221;.
+You can change the prompt by setting the
 variables <B>tcl_prompt1</B> and <B>tcl_prompt2</B>.  If variable
 <B>tcl_prompt1</B> exists then it must consist of a Tcl script
 to output a prompt;  instead of outputting a prompt <B>tclsh</B>
 will evaluate the script in <B>tcl_prompt1</B>.
 The variable <B>tcl_prompt2</B> is used in a similar way when
-a newline is typed but the current command isn't yet complete;
-if <B>tcl_prompt2</B> isn't set then no prompt is output for
+a newline is typed but the current command is not yet complete;
+if <B>tcl_prompt2</B> is not set then no prompt is output for
 incomplete commands.
 
 <H3><A NAME="M12">STANDARD CHANNELS</A></H3>
@@ -136,8 +148,8 @@ See <B><A HREF="../TclLib/StdChannels.htm">Tcl_StandardChannels</A></B> for more
 <B><A HREF="../TclCmd/encoding.htm">encoding</A></B>, <B><A HREF="../TclCmd/fconfigure.htm">fconfigure</A></B>, <B><A HREF="../TclCmd/tclvars.htm">tclvars</A></B>
 <H3><A NAME="M14">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#argument">argument</A>, <A href="../Keywords/I.htm#interpreter">interpreter</A>, <A href="../Keywords/P.htm#prompt">prompt</A>, <A href="../Keywords/S.htm#script file">script file</A>, <A href="../Keywords/S.htm#shell">shell</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

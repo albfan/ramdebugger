@@ -1,12 +1,17 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - scale manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>scale manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> scale</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="scale.htm#M2" NAME="L1134">NAME</A>
-<DL><DD>scale - Create and manipulate scale widgets</DL>
-<DD><A HREF="scale.htm#M3" NAME="L1135">SYNOPSIS</A>
+<DD><A HREF="scale.htm#M2" NAME="L1211">NAME</A>
+<DL><DD>scale - Create and manipulate scale widgets</DD></DL>
+<DD><A HREF="scale.htm#M3" NAME="L1212">SYNOPSIS</A>
 <DL>
-<DD><B>scale</B> <I>pathName </I>?<I>options</I>?
 </DL>
-<DD><A HREF="scale.htm#M4" NAME="L1136">STANDARD OPTIONS</A>
+<DD><A HREF="scale.htm#M4" NAME="L1213">STANDARD OPTIONS</A>
 <DL>
 <DD><A HREF="options.htm#M-activebackground">-activebackground, activeBackground, Foreground</A>
 <DD><A HREF="options.htm#M-background">-background or -bg, background, Background</A>
@@ -24,39 +29,39 @@
 <DD><A HREF="options.htm#M-takefocus">-takefocus, takeFocus, TakeFocus</A>
 <DD><A HREF="options.htm#M-troughcolor">-troughcolor, troughColor, Background</A>
 </DL>
-<DD><A HREF="scale.htm#M5" NAME="L1137">WIDGET-SPECIFIC OPTIONS</A>
+<DD><A HREF="scale.htm#M5" NAME="L1214">WIDGET-SPECIFIC OPTIONS</A>
 <DL>
-<DD><A HREF="scale.htm#M6" NAME="L1138">-bigincrement, bigIncrement, BigIncrement</A>
-<DD><A HREF="scale.htm#M7" NAME="L1139">-command, command, Command</A>
-<DD><A HREF="scale.htm#M8" NAME="L1140">-digits, digits, Digits</A>
-<DD><A HREF="scale.htm#M9" NAME="L1141">-from, from, From</A>
-<DD><A HREF="scale.htm#M10" NAME="L1142">-label, label, Label</A>
-<DD><A HREF="scale.htm#M11" NAME="L1143">-length, length, Length</A>
-<DD><A HREF="scale.htm#M12" NAME="L1144">-resolution, resolution, Resolution</A>
-<DD><A HREF="scale.htm#M13" NAME="L1145">-showvalue, showValue, ShowValue</A>
-<DD><A HREF="scale.htm#M14" NAME="L1146">-sliderlength, sliderLength, SliderLength</A>
-<DD><A HREF="scale.htm#M15" NAME="L1147">-sliderrelief, sliderRelief, SliderRelief</A>
-<DD><A HREF="scale.htm#M16" NAME="L1148">-state, state, State</A>
-<DD><A HREF="scale.htm#M17" NAME="L1149">-tickinterval, tickInterval, TickInterval</A>
-<DD><A HREF="scale.htm#M18" NAME="L1150">-to, to, To</A>
-<DD><A HREF="scale.htm#M19" NAME="L1151">-variable, variable, Variable</A>
-<DD><A HREF="scale.htm#M20" NAME="L1152">-width, width, Width</A>
+<DD><A HREF="scale.htm#M6" NAME="L1215">-bigincrement, bigIncrement, BigIncrement</A>
+<DD><A HREF="scale.htm#M7" NAME="L1216">-command, command, Command</A>
+<DD><A HREF="scale.htm#M8" NAME="L1217">-digits, digits, Digits</A>
+<DD><A HREF="scale.htm#M9" NAME="L1218">-from, from, From</A>
+<DD><A HREF="scale.htm#M10" NAME="L1219">-label, label, Label</A>
+<DD><A HREF="scale.htm#M11" NAME="L1220">-length, length, Length</A>
+<DD><A HREF="scale.htm#M12" NAME="L1221">-resolution, resolution, Resolution</A>
+<DD><A HREF="scale.htm#M13" NAME="L1222">-showvalue, showValue, ShowValue</A>
+<DD><A HREF="scale.htm#M14" NAME="L1223">-sliderlength, sliderLength, SliderLength</A>
+<DD><A HREF="scale.htm#M15" NAME="L1224">-sliderrelief, sliderRelief, SliderRelief</A>
+<DD><A HREF="scale.htm#M16" NAME="L1225">-state, state, State</A>
+<DD><A HREF="scale.htm#M17" NAME="L1226">-tickinterval, tickInterval, TickInterval</A>
+<DD><A HREF="scale.htm#M18" NAME="L1227">-to, to, To</A>
+<DD><A HREF="scale.htm#M19" NAME="L1228">-variable, variable, Variable</A>
+<DD><A HREF="scale.htm#M20" NAME="L1229">-width, width, Width</A>
 </DL>
-<DD><A HREF="scale.htm#M21" NAME="L1153">DESCRIPTION</A>
-<DD><A HREF="scale.htm#M22" NAME="L1154">WIDGET COMMAND</A>
-<DL>
-<DD><A HREF="scale.htm#M23" NAME="L1155"><I>pathName </I><B>cget</B> <I>option</I></A>
-<DD><A HREF="scale.htm#M24" NAME="L1156"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
-<DD><A HREF="scale.htm#M25" NAME="L1157"><I>pathName </I><B>coords </B>?<I>value</I>?</A>
-<DD><A HREF="scale.htm#M26" NAME="L1158"><I>pathName </I><B>get</B> ?<I>x y</I>?</A>
-<DD><A HREF="scale.htm#M27" NAME="L1159"><I>pathName </I><B>identify</B> <I>x y</I></A>
-<DD><A HREF="scale.htm#M28" NAME="L1160"><I>pathName </I><B>set</B> <I>value</I></A>
+<DD><A HREF="scale.htm#M21" NAME="L1230">DESCRIPTION</A>
+<DD><A HREF="scale.htm#M22" NAME="L1231">WIDGET COMMAND</A>
+<DL class="widget command">
+<DD><A HREF="scale.htm#M23" NAME="L1232"><I>pathName </I><B>cget</B> <I>option</I></A>
+<DD><A HREF="scale.htm#M24" NAME="L1233"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
+<DD><A HREF="scale.htm#M25" NAME="L1234"><I>pathName </I><B>coords </B>?<I>value</I>?</A>
+<DD><A HREF="scale.htm#M26" NAME="L1235"><I>pathName </I><B>get</B> ?<I>x y</I>?</A>
+<DD><A HREF="scale.htm#M27" NAME="L1236"><I>pathName </I><B>identify</B> <I>x y</I></A>
+<DD><A HREF="scale.htm#M28" NAME="L1237"><I>pathName </I><B>set</B> <I>value</I></A>
 </DL>
-<DD><A HREF="scale.htm#M29" NAME="L1161">BINDINGS</A>
-<DL>
+<DD><A HREF="scale.htm#M29" NAME="L1238">BINDINGS</A>
+<DL class="bindings">
 </DL>
-<DD><A HREF="scale.htm#M30" NAME="L1162">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="scale.htm#M30" NAME="L1239">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 scale - Create and manipulate scale widgets
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -85,7 +90,8 @@ scale - Create and manipulate scale widgets
 <DT>Database Name: <B>bigIncrement</B>
 <DT>Database Class: <B>BigIncrement</B>
 <DD>Some interactions with the scale cause its value to change by
-``large'' increments;  this option specifies the size of the
+&#8220;large&#8221;
+increments;  this option specifies the size of the
 large increments.  If specified as 0, the large increments default
 to 1/10 the range of the scale.
 <P><DT>Command-Line Name: <B><A NAME="M7">-command</A></B>
@@ -153,7 +159,7 @@ or <B>sunken</B>.
 <DD>Specifies one of three states for the scale:  <B>normal</B>,
 <B>active</B>, or <B>disabled</B>.
 If the scale is disabled then the value may not be changed and the scale
-won't activate.
+will not activate.
 If the scale is active, the slider is displayed using the color
 specified by the <B>activeBackground</B> option.
 <P><DT>Command-Line Name: <B><A NAME="M17">-tickinterval</A></B>
@@ -229,7 +235,7 @@ operations on the widget.  It has the following general form:
 determine the exact behavior of the command.  The following
 commands are possible for scale widgets:
 <P>
-<DL>
+<DL class="widget command">
 <DT><A NAME="M23"><I>pathName </I><B>cget</B> <I>option</I></A><DD>
 Returns the current value of the configuration option given
 by <I>option</I>.
@@ -268,7 +274,7 @@ the slider;  <B>trough1</B> means that the point is over the
 portion of the slider above  or to the left of the slider;
 and <B>trough2</B> means that the point is over the portion
 of the slider below or to the right of the slider.
-If the point isn't over one of these elements, an empty string
+If the point is not over one of these elements, an empty string
 is returned.
 <P><DT><A NAME="M28"><I>pathName </I><B>set</B> <I>value</I></A><DD>
 This command is invoked to change the current value of the scale,
@@ -282,7 +288,7 @@ the following default behavior.
 Where the behavior is different for vertical and horizontal scales,
 the horizontal behavior is described in parentheses.
 <P>
-<DL>
+<DL class="bindings">
 <DT>[1]<DD>
 If button 1 is pressed in the trough, the scale's value will
 be incremented or decremented by the value of the <B>resolution</B>
@@ -325,8 +331,8 @@ individual widgets or by redefining the class bindings.
 
 <H3><A NAME="M30">KEYWORDS</A></H3>
 <A href="../Keywords/S.htm#scale">scale</A>, <A href="../Keywords/S.htm#slider">slider</A>, <A href="../Keywords/T.htm#trough">trough</A>, <A href="../Keywords/W.htm#widget">widget</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

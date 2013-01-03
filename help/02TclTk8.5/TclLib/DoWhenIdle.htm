@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_DoWhenIdle manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_DoWhenIdle manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> DoWhenIdle</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_DoWhenIdle, Tcl_CancelIdleCall - invoke a procedure when there are no pending events
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -6,7 +12,7 @@ Tcl_DoWhenIdle, Tcl_CancelIdleCall - invoke a procedure when there are no pendin
 <B>Tcl_DoWhenIdle</B>(<I>proc, clientData</I>)<BR>
 <B>Tcl_CancelIdleCall</B>(<I>proc, clientData</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Tcl_IdleProc <B>*proc</B> (in)<DD>
 Procedure to invoke.
 <P><DT>ClientData <B>clientData</B> (in)<DD>
@@ -16,7 +22,7 @@ Arbitrary one-word value to pass to <I>proc</I>.
 <B>Tcl_DoWhenIdle</B> arranges for <I>proc</I> to be invoked
 when the application becomes idle.  The application is
 considered to be idle when <B><A HREF="../TclLib/DoOneEvent.htm">Tcl_DoOneEvent</A></B> has been
-called, couldn't find any events to handle, and is about
+called, could not find any events to handle, and is about
 to go to sleep waiting for an event to occur.  At this
 point all pending <B>Tcl_DoWhenIdle</B> handlers are
 invoked.  For each call to <B>Tcl_DoWhenIdle</B> there will
@@ -43,7 +49,7 @@ all of the handlers are removed.  If no existing handlers match
 <I>proc</I> and <I>clientData</I> then nothing happens.
 <P>
 <B>Tcl_DoWhenIdle</B> is most useful in situations where
-(a) a piece of work will have to be done but (b) it's
+(a) a piece of work will have to be done but (b) it is
 possible that something will happen in the near future
 that will change what has to be done or require something
 different to be done.  <B>Tcl_DoWhenIdle</B> allows the
@@ -65,8 +71,8 @@ better to use a timer handler with a zero timeout period.
 
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#callback">callback</A>, <A href="../Keywords/D.htm#defer">defer</A>, <A href="../Keywords/I.htm#idle callback">idle callback</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

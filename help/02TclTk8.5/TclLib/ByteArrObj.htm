@@ -1,4 +1,32 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_ByteArrayObj manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_ByteArrayObj manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> ByteArrObj</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="ByteArrObj.htm#M2" NAME="L56">NAME</A>
+<DL><DD>Tcl_NewByteArrayObj, Tcl_SetByteArrayObj, Tcl_GetByteArrayFromObj, Tcl_SetByteArrayLength - manipulate Tcl objects as a arrays of bytes</DD></DL>
+<DD><A HREF="ByteArrObj.htm#M3" NAME="L57">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>Tcl_Obj *
+<DD><B>Tcl_NewByteArrayObj</B>(<I>bytes, length</I>)
+<DD>void 
+<DD><B>Tcl_SetByteArrayObj</B>(<I>objPtr, bytes, length</I>)
+<DD>unsigned char *
+<DD><B>Tcl_GetByteArrayFromObj</B>(<I>objPtr, lengthPtr</I>)
+<DD>unsigned char *
+<DD><B>Tcl_SetByteArrayLength</B>(<I>objPtr, length</I>)
+</DL>
+<DD><A HREF="ByteArrObj.htm#M4" NAME="L58">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="ByteArrObj.htm#M5" NAME="L59">DESCRIPTION</A>
+<DD><A HREF="ByteArrObj.htm#M6" NAME="L60">SEE ALSO</A>
+<DD><A HREF="ByteArrObj.htm#M7" NAME="L61">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_NewByteArrayObj, Tcl_SetByteArrayObj, Tcl_GetByteArrayFromObj, Tcl_SetByteArrayLength - manipulate Tcl objects as a arrays of bytes
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -12,7 +40,7 @@ unsigned char *<BR>
 unsigned char *<BR>
 <B>Tcl_SetByteArrayLength</B>(<I>objPtr, length</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>const unsigned char <B>*bytes</B> (in)<DD>
 The array of bytes used to initialize or set a byte-array object.
 <P><DT>int <B>length</B> (in)<DD>
@@ -71,7 +99,7 @@ pointer to the object's new array of bytes.
 <B><A HREF="../TclLib/StringObj.htm">Tcl_GetStringFromObj</A></B>, <B><A HREF="../TclLib/Object.htm">Tcl_NewObj</A></B>, <B><A HREF="../TclLib/Object.htm">Tcl_IncrRefCount</A></B>, <B><A HREF="../TclLib/Object.htm">Tcl_DecrRefCount</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/O.htm#object">object</A>, <A href="../Keywords/B.htm#byte array">byte array</A>, <A href="../Keywords/U.htm#utf">utf</A>, <A href="../Keywords/U.htm#unicode">unicode</A>, <A href="../Keywords/I.htm#internationalization">internationalization</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

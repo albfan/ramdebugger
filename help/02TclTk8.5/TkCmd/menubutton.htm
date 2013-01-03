@@ -1,12 +1,17 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - menubutton manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>menubutton manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> menubutton</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="menubutton.htm#M2" NAME="L871">NAME</A>
-<DL><DD>menubutton - Create and manipulate menubutton widgets</DL>
-<DD><A HREF="menubutton.htm#M3" NAME="L872">SYNOPSIS</A>
+<DD><A HREF="menubutton.htm#M2" NAME="L946">NAME</A>
+<DL><DD>menubutton - Create and manipulate menubutton widgets</DD></DL>
+<DD><A HREF="menubutton.htm#M3" NAME="L947">SYNOPSIS</A>
 <DL>
-<DD><B>menubutton</B> <I>pathName </I>?<I>options</I>?
 </DL>
-<DD><A HREF="menubutton.htm#M4" NAME="L873">STANDARD OPTIONS</A>
+<DD><A HREF="menubutton.htm#M4" NAME="L948">STANDARD OPTIONS</A>
 <DL>
 <DD><A HREF="options.htm#M-activebackground">-activebackground, activeBackground, Foreground</A>
 <DD><A HREF="options.htm#M-activeforeground">-activeforeground, activeForeground, Background</A>
@@ -33,26 +38,27 @@
 <DD><A HREF="options.htm#M-underline">-underline, underline, Underline</A>
 <DD><A HREF="options.htm#M-wraplength">-wraplength, wrapLength, WrapLength</A>
 </DL>
-<DD><A HREF="menubutton.htm#M5" NAME="L874">WIDGET-SPECIFIC OPTIONS</A>
+<DD><A HREF="menubutton.htm#M5" NAME="L949">WIDGET-SPECIFIC OPTIONS</A>
 <DL>
-<DD><A HREF="menubutton.htm#M6" NAME="L875">-direction, direction, Height</A>
-<DD><A HREF="menubutton.htm#M7" NAME="L876">-height, height, Height</A>
-<DD><A HREF="menubutton.htm#M8" NAME="L877">-indicatoron, indicatorOn, IndicatorOn</A>
-<DD><A HREF="menubutton.htm#M9" NAME="L878">-menu, menu, MenuName</A>
-<DD><A HREF="menubutton.htm#M10" NAME="L879">-state, state, State</A>
-<DD><A HREF="menubutton.htm#M11" NAME="L880">-width, width, Width</A>
+<DD><A HREF="menubutton.htm#M6" NAME="L950">-direction, direction, Height</A>
+<DD><A HREF="menubutton.htm#M7" NAME="L951">-height, height, Height</A>
+<DD><A HREF="menubutton.htm#M8" NAME="L952">-indicatoron, indicatorOn, IndicatorOn</A>
+<DD><A HREF="menubutton.htm#M9" NAME="L953">-menu, menu, MenuName</A>
+<DD><A HREF="menubutton.htm#M10" NAME="L954">-state, state, State</A>
+<DD><A HREF="menubutton.htm#M11" NAME="L955">-width, width, Width</A>
 </DL>
-<DD><A HREF="menubutton.htm#M12" NAME="L881">INTRODUCTION</A>
-<DD><A HREF="menubutton.htm#M13" NAME="L882">WIDGET COMMAND</A>
-<DL>
-<DD><A HREF="menubutton.htm#M14" NAME="L883"><I>pathName </I><B>cget</B> <I>option</I></A>
-<DD><A HREF="menubutton.htm#M15" NAME="L884"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
+<DD><A HREF="menubutton.htm#M12" NAME="L956">INTRODUCTION</A>
+<DD><A HREF="menubutton.htm#M13" NAME="L957">WIDGET COMMAND</A>
+<DL class="widget command">
+<DD><A HREF="menubutton.htm#M14" NAME="L958"><I>pathName </I><B>cget</B> <I>option</I></A>
+<DD><A HREF="menubutton.htm#M15" NAME="L959"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
 </DL>
-<DD><A HREF="menubutton.htm#M16" NAME="L885">DEFAULT BINDINGS</A>
-<DL>
+<DD><A HREF="menubutton.htm#M16" NAME="L960">DEFAULT BINDINGS</A>
+<DL class="default bindings">
 </DL>
-<DD><A HREF="menubutton.htm#M17" NAME="L886">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="menubutton.htm#M17" NAME="L961">SEE ALSO</A>
+<DD><A HREF="menubutton.htm#M18" NAME="L962">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 menubutton - Create and manipulate menubutton widgets
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -103,7 +109,7 @@ reversed if the menu would show offscreen.
 If an image or bitmap is being displayed in the menubutton then the value is in
 screen units (i.e. any of the forms acceptable to <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>);
 for text it is in lines of text.
-If this option isn't specified, the menubutton's desired height is computed
+If this option is not specified, the menubutton's desired height is computed
 from the size of the image or bitmap or text being displayed in it.
 <P><DT>Command-Line Name: <B><A NAME="M8">-indicatoron</A></B>
 <DT>Database Name: <B>indicatorOn</B>
@@ -138,7 +144,7 @@ In this state the <B>disabledForeground</B> and
 If an image or bitmap is being displayed in the menubutton then the value is in
 screen units (i.e. any of the forms acceptable to <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>);
 for text it is in characters.
-If this option isn't specified, the menubutton's desired width is computed
+If this option is not specified, the menubutton's desired width is computed
 from the size of the image or bitmap or text being displayed in it.
 </DL>
 <H3><A NAME="M12">INTRODUCTION</A></H3>
@@ -177,7 +183,6 @@ new menubutton is posted instead.
 There are several interactions between menubuttons and menus;  see
 the <B><A HREF="../TkCmd/menu.htm">menu</A></B> manual entry for information on various menu configurations,
 such as pulldown menus and option menus.
-
 <H3><A NAME="M13">WIDGET COMMAND</A></H3>
 The <B>menubutton</B> command creates a new Tcl command whose
 name is <I>pathName</I>.  This
@@ -188,7 +193,7 @@ operations on the widget.  It has the following general form:
 determine the exact behavior of the command.  The following
 commands are possible for menubutton widgets:
 <P>
-<DL>
+<DL class="widget command">
 <DT><A NAME="M14"><I>pathName </I><B>cget</B> <I>option</I></A><DD>
 Returns the current value of the configuration option given
 by <I>option</I>.
@@ -207,13 +212,12 @@ modifies the given widget option(s) to have the given value(s);  in
 this case the command returns an empty string.
 <I>Option</I> may have any of the values accepted by the <B>menubutton</B>
 command.
-
 <P></DL>
 <H3><A NAME="M16">DEFAULT BINDINGS</A></H3>
 Tk automatically creates class bindings for menubuttons that give them
 the following default behavior:
 <P>
-<DL>
+<DL class="default bindings">
 <DT>[1]<DD>
 A menubutton activates whenever the mouse passes over it and deactivates
 whenever the mouse leaves it.
@@ -249,7 +253,7 @@ lower-case or upper-case equivalent), may be typed in any window
 under the menubutton's toplevel to post the menubutton.
 <P><DT>[8]<DD>
 The F10 key may be typed in any window to post the first menubutton
-under its toplevel window that isn't disabled.
+under its toplevel window that is not disabled.
 <P><DT>[9]<DD>
 If a menubutton has the input focus, the space and return keys
 post the menubutton.
@@ -260,11 +264,12 @@ actions occur:  the menubutton is completely non-responsive.
 <P>
 The behavior of menubuttons can be changed by defining new bindings for
 individual widgets or by redefining the class bindings.
-
-<H3><A NAME="M17">KEYWORDS</A></H3>
+<H3><A NAME="M17">SEE ALSO</A></H3>
+<B><A HREF="../TkCmd/ttk_menubutton.htm">ttk::menubutton</A></B>, <B><A HREF="../TkCmd/menu.htm">menu</A></B>
+<H3><A NAME="M18">KEYWORDS</A></H3>
 <A href="../Keywords/M.htm#menubutton">menubutton</A>, <A href="../Keywords/W.htm#widget">widget</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

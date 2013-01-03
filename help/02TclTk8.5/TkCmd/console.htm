@@ -1,31 +1,36 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - console manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>console manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> console</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="console.htm#M2" NAME="L375">NAME</A>
-<DL><DD>console - Control the console on systems without a real console</DL>
-<DD><A HREF="console.htm#M3" NAME="L376">SYNOPSIS</A>
-<DL>
-<DD><B>console</B> <I>subcommand</I> ?<I>arg ...</I>?
-</DL>
-<DD><A HREF="console.htm#M4" NAME="L377">DESCRIPTION</A>
-<DL>
-<DD><A HREF="console.htm#M5" NAME="L378"><B>console eval </B><I>script</I></A>
-<DD><A HREF="console.htm#M6" NAME="L379"><B>console hide</B></A>
-<DD><A HREF="console.htm#M7" NAME="L380"><B>console show</B></A>
-<DD><A HREF="console.htm#M8" NAME="L381"><B>console title </B>?<I>string</I>?</A>
-</DL>
-<DD><A HREF="console.htm#M9" NAME="L382">ACCESS TO THE MAIN INTERPRETER</A>
-<DL>
-<DD><A HREF="console.htm#M10" NAME="L383"><B>consoleinterp eval </B><I>script</I></A>
-<DD><A HREF="console.htm#M11" NAME="L384"><B>consoleinterp record </B><I>script</I></A>
-</DL>
-<DD><A HREF="console.htm#M12" NAME="L385">ADDITIONAL TRAP CALLS</A>
-<DD><A HREF="console.htm#M13" NAME="L386">DEFAULT BINDINGS</A>
+<DD><A HREF="console.htm#M2" NAME="L432">NAME</A>
+<DL><DD>console - Control the console on systems without a real console</DD></DL>
+<DD><A HREF="console.htm#M3" NAME="L433">SYNOPSIS</A>
 <DL>
 </DL>
-<DD><A HREF="console.htm#M14" NAME="L387">EXAMPLE</A>
-<DD><A HREF="console.htm#M15" NAME="L388">KEYWORDS</A>
-<DD><A HREF="console.htm#M16" NAME="L389">SEE ALSO</A>
-</DL><HR>
+<DD><A HREF="console.htm#M4" NAME="L434">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="console.htm#M5" NAME="L435"><B>console eval </B><I>script</I></A>
+<DD><A HREF="console.htm#M6" NAME="L436"><B>console hide</B></A>
+<DD><A HREF="console.htm#M7" NAME="L437"><B>console show</B></A>
+<DD><A HREF="console.htm#M8" NAME="L438"><B>console title </B>?<I>string</I>?</A>
+</DL>
+<DD><A HREF="console.htm#M9" NAME="L439">ACCESS TO THE MAIN INTERPRETER</A>
+<DL class="access to the main interpreter">
+<DD><A HREF="console.htm#M10" NAME="L440"><B>consoleinterp eval </B><I>script</I></A>
+<DD><A HREF="console.htm#M11" NAME="L441"><B>consoleinterp record </B><I>script</I></A>
+</DL>
+<DD><A HREF="console.htm#M12" NAME="L442">ADDITIONAL TRAP CALLS</A>
+<DD><A HREF="console.htm#M13" NAME="L443">DEFAULT BINDINGS</A>
+<DL class="default bindings">
+</DL>
+<DD><A HREF="console.htm#M14" NAME="L444">EXAMPLE</A>
+<DD><A HREF="console.htm#M15" NAME="L445">SEE ALSO</A>
+<DD><A HREF="console.htm#M16" NAME="L446">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 console - Control the console on systems without a real console
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -37,10 +42,16 @@ a real console.  It is implemented as a separate interpreter with the
 Tk toolkit loaded, and control over this interpreter is given through
 the <B>console</B> command.  The behaviour of the console window is
 defined mainly through the contents of the <I>console.tcl</I> file in
-the Tk library.
+the Tk library. Except for TkAqua, this command is not available when
+Tk is loaded into a tclsh interpreter with
+&#8220;<B>package require Tk</B>&#8221;,
+as a conventional terminal is expected to be present in that case.
+In TkAqua, this command is ony available when stdin is <B>/dev/null</B>
+(as is the case e.g. when the application embedding Tk is started
+from the Mac OS X Finder).
 <P>
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>console eval </B><I>script</I></A><DD>
 Evaluate the <I>script</I> argument as a Tcl script in the console
 interpreter.  The normal interpreter is accessed through the
@@ -64,7 +75,7 @@ scripts to be evaluated in the main interpreter.  It supports two
 subcommands: <B><A HREF="../TclCmd/eval.htm">eval</A></B> and <B>record</B>.
 <P>
 <P>
-<DL>
+<DL class="access to the main interpreter">
 <DT><A NAME="M10"><B>consoleinterp eval </B><I>script</I></A><DD>
 Evaluates <I>script</I> as a Tcl script at the global level in the main
 interpreter.
@@ -95,7 +106,7 @@ that is.)
 The default script creates a console window (implemented using a text
 widget) that has the following behaviour:
 <P>
-<DL>
+<DL class="default bindings">
 <DT>[1]<DD>
 Pressing the tab key inserts a TAB character (as defined by the Tcl
 &#92;t escape.)
@@ -143,11 +154,11 @@ Not all platforms have the <B>console</B> command, so debugging code
 often has the following code fragment in it so output produced by
 <B><A HREF="../TclCmd/puts.htm">puts</A></B> can be seen while during development:
 <PRE>catch {<B>console show</B>}</PRE>
-<H3><A NAME="M15">KEYWORDS</A></H3>
-<A href="../Keywords/C.htm#console">console</A>, <A href="../Keywords/I.htm#interpreter">interpreter</A>, <A href="../Keywords/W.htm#window">window</A>, <A href="../Keywords/I.htm#interactive">interactive</A>, <A href="../Keywords/O.htm#output channels">output channels</A>
-<H3><A NAME="M16">SEE ALSO</A></H3>
+<H3><A NAME="M15">SEE ALSO</A></H3>
 <B><A HREF="../TkCmd/destroy.htm">destroy</A></B>, <B><A HREF="../TclCmd/fconfigure.htm">fconfigure</A></B>, <B><A HREF="../TclCmd/history.htm">history</A></B>, <B><A HREF="../TclCmd/interp.htm">interp</A></B>, <B><A HREF="../TclCmd/puts.htm">puts</A></B>, <B><A HREF="../TkCmd/text.htm">text</A></B>, <B><A HREF="../TkCmd/wm.htm">wm</A></B>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 2001 Donal K. Fellows
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<H3><A NAME="M16">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#console">console</A>, <A href="../Keywords/I.htm#interpreter">interpreter</A>, <A href="../Keywords/W.htm#window">window</A>, <A href="../Keywords/I.htm#interactive">interactive</A>, <A href="../Keywords/O.htm#output channels">output channels</A>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 2001 Donal K. Fellows
+</div>
 </BODY></HTML>

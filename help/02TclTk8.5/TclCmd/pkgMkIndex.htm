@@ -1,29 +1,34 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - pkg_mkIndex manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>pkg_mkIndex manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> pkgMkIndex</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="pkgMkIndex.htm#M2" NAME="L1083">NAME</A>
-<DL><DD>pkg_mkIndex - Build an index for automatic loading of packages</DL>
-<DD><A HREF="pkgMkIndex.htm#M3" NAME="L1084">SYNOPSIS</A>
+<DD><A HREF="pkgMkIndex.htm#M2" NAME="L1169">NAME</A>
+<DL><DD>pkg_mkIndex - Build an index for automatic loading of packages</DD></DL>
+<DD><A HREF="pkgMkIndex.htm#M3" NAME="L1170">SYNOPSIS</A>
 <DL>
-<DD><B>pkg_mkIndex ?</B><I>-direct</I>?  ?<I>-lazy</I>?  ?<I>-load pkgPat</I>? ?<I>-verbose</I>? <I>dir</I> ?<I>pattern pattern ...</I>?
 </DL>
-<DD><A HREF="pkgMkIndex.htm#M4" NAME="L1085">DESCRIPTION</A>
-<DL>
+<DD><A HREF="pkgMkIndex.htm#M4" NAME="L1171">DESCRIPTION</A>
+<DL class="description">
 </DL>
-<DD><A HREF="pkgMkIndex.htm#M5" NAME="L1086">OPTIONS</A>
-<DL>
-<DD><A HREF="pkgMkIndex.htm#M6" NAME="L1087"><B>-direct</B></A>
-<DD><A HREF="pkgMkIndex.htm#M7" NAME="L1088"><B>-lazy</B></A>
-<DD><A HREF="pkgMkIndex.htm#M8" NAME="L1089"><B>-load </B><I>pkgPat</I></A>
-<DD><A HREF="pkgMkIndex.htm#M9" NAME="L1090"><B>-verbose</B></A>
-<DD><A HREF="pkgMkIndex.htm#M10" NAME="L1091"><B>--</B></A>
+<DD><A HREF="pkgMkIndex.htm#M5" NAME="L1172">OPTIONS</A>
+<DL class="options">
+<DD><A HREF="pkgMkIndex.htm#M6" NAME="L1173"><B>-direct</B></A>
+<DD><A HREF="pkgMkIndex.htm#M7" NAME="L1174"><B>-lazy</B></A>
+<DD><A HREF="pkgMkIndex.htm#M8" NAME="L1175"><B>-load </B><I>pkgPat</I></A>
+<DD><A HREF="pkgMkIndex.htm#M9" NAME="L1176"><B>-verbose</B></A>
+<DD><A HREF="pkgMkIndex.htm#M10" NAME="L1177"><B>--</B></A>
 </DL>
-<DD><A HREF="pkgMkIndex.htm#M11" NAME="L1092">PACKAGES AND THE AUTO-LOADER</A>
-<DD><A HREF="pkgMkIndex.htm#M12" NAME="L1093">HOW IT WORKS</A>
-<DD><A HREF="pkgMkIndex.htm#M13" NAME="L1094">DIRECT LOADING</A>
-<DD><A HREF="pkgMkIndex.htm#M14" NAME="L1095">COMPLEX CASES</A>
-<DD><A HREF="pkgMkIndex.htm#M15" NAME="L1096">SEE ALSO</A>
-<DD><A HREF="pkgMkIndex.htm#M16" NAME="L1097">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="pkgMkIndex.htm#M11" NAME="L1178">PACKAGES AND THE AUTO-LOADER</A>
+<DD><A HREF="pkgMkIndex.htm#M12" NAME="L1179">HOW IT WORKS</A>
+<DD><A HREF="pkgMkIndex.htm#M13" NAME="L1180">DIRECT LOADING</A>
+<DD><A HREF="pkgMkIndex.htm#M14" NAME="L1181">COMPLEX CASES</A>
+<DD><A HREF="pkgMkIndex.htm#M15" NAME="L1182">SEE ALSO</A>
+<DD><A HREF="pkgMkIndex.htm#M16" NAME="L1183">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 pkg_mkIndex - Build an index for automatic loading of packages
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -35,7 +40,7 @@ It is used to create index files that allow packages to be loaded
 automatically when <B>package require</B> commands are executed.
 To use <B>pkg_mkIndex</B>, follow these steps:
 <P>
-<DL>
+<DL class="description">
 <DT>[1]<DD>
 Create the package(s).
 Each package may consist of one or more Tcl script files or binary files.
@@ -51,7 +56,7 @@ The <I>dir</I> argument gives the name of a directory and each
 <I>pattern</I> argument is a <B><A HREF="../TclCmd/glob.htm">glob</A></B>-style pattern that selects
 script or binary files in <I>dir</I>.
 The default pattern is <B>*.tcl</B> and <B>*.[info sharedlibextension]</B>.
-<BR>
+<P>
 <B>Pkg_mkIndex</B> will create a file <B>pkgIndex.tcl</B> in <I>dir</I>
 with package information about all the files given by the <I>pattern</I>
 arguments.
@@ -64,8 +69,7 @@ If you have a package split among scripts and binary files,
 or if you have dependencies among files,
 you may have to use the <B>-load</B> option
 or adjust the order in which <B>pkg_mkIndex</B> processes
-the files.  See COMPLEX CASES below.
-
+the files.  See <B>COMPLEX CASES</B> below.
 <P><DT>[3]<DD>
 Install the package as a subdirectory of one of the directories given by
 the <B>tcl_pkgPath</B> variable.  If <B>$tcl_pkgPath</B> contains more
@@ -79,7 +83,7 @@ the package's script and/or binary files as well as the <B>pkgIndex.tcl</B>
 file.  As long as the package is installed as a subdirectory of a
 directory in <B>$tcl_pkgPath</B> it will automatically be found during
 <B>package require</B> commands.
-<BR>
+<P>
 If you install the package anywhere else, then you must ensure that
 the directory containing the package is in the <B>auto_path</B> global variable
 or an immediate subdirectory of one of the directories in <B>auto_path</B>.
@@ -105,12 +109,11 @@ in <B>auto_path</B>, but only one will actually be loaded in a given
 interpreter, based on the first call to <B>package require</B>.
 Different versions of a package may be loaded in different
 interpreters.
-
 <P></DL>
 <H3><A NAME="M5">OPTIONS</A></H3>
 The optional switches are:
 <P>
-<DL>
+<DL class="options">
 <DT><A NAME="M6"><B>-direct</B></A><DD>
 The generated index will implement direct loading of the package
 upon <B>package require</B>.  This is the default.
@@ -130,7 +133,6 @@ Generate output during the indexing process.  Output is via
 the <B>tclLog</B> procedure, which by default prints to stderr.
 <P><DT><A NAME="M10"><B>--</B></A><DD>
 End of the flags, in case <I>dir</I> begins with a dash.
-
 <P></DL>
 <H3><A NAME="M11">PACKAGES AND THE AUTO-LOADER</A></H3>
 The package management facilities overlap somewhat with the auto-loader,
@@ -150,7 +152,6 @@ If you use <B>pkg_mkIndex</B> to index a package, its commands cannot
 be invoked until <B>package require</B> has been used to select a
 version;  in contrast, packages indexed with <B><A HREF="../TclCmd/library.htm">auto_mkindex</A></B>
 can be used immediately since there is no version control.
-
 <H3><A NAME="M12">HOW IT WORKS</A></H3>
 <B>Pkg_mkIndex</B> depends on the <B>package unknown</B> command,
 the <B>package ifneeded</B> command, and the auto-loader.
@@ -166,13 +167,12 @@ availability of the package, and they setup auto-loader
 information to load the files of the package.
 If the <I>-lazy</I> flag was provided when the <B>pkgIndex.tcl</B>
 was generated,
-a given file of a given version of a given package isn't
+a given file of a given version of a given package is not
 actually loaded until the first time one of its commands
 is invoked.
 Thus, after invoking <B>package require</B> you may
 not see the package's commands in the interpreter, but you will be able
 to invoke the commands and they will be auto-loaded.
-
 <H3><A NAME="M13">DIRECT LOADING</A></H3>
 Some packages, for instance packages which use namespaces and export
 commands or those which require special initialization, might select
@@ -180,7 +180,6 @@ that their package files be loaded immediately upon <B>package require</B>
 instead of delaying the actual loading to the first use of one of the
 package's command. This is the default mode when generating the package
 index.  It can be overridden by specifying the <I>-lazy</I> argument.
-
 <H3><A NAME="M14">COMPLEX CASES</A></H3>
 Most complex cases of dependencies among scripts
 and binary files, and packages being split among scripts and
@@ -227,7 +226,7 @@ will be available when the second file is processed.
 You may also need to load the first package into the
 temporary interpreter used to create the index by using
 the <B>-load</B> flag;
-it won't hurt to specify package patterns that are not yet loaded.
+it will not hurt to specify package patterns that are not yet loaded.
 <P>
 If you have a package that is split across scripts and a binary file,
 then you should avoid the <B>-load</B> flag. The problem is that
@@ -236,12 +235,11 @@ other files that provide part of the same package.
 If you must use <B>-load</B>,
 then you must specify the scripts first; otherwise the package loaded from
 the binary file may mask the package defined by the scripts.
-
 <H3><A NAME="M15">SEE ALSO</A></H3>
 <B><A HREF="../TclCmd/package.htm">package</A></B>
 <H3><A NAME="M16">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#auto-load">auto-load</A>, <A href="../Keywords/I.htm#index">index</A>, <A href="../Keywords/P.htm#package">package</A>, <A href="../Keywords/V.htm#version">version</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

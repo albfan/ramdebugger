@@ -1,4 +1,37 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_ObjType manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_ObjType manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> ObjectType</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="ObjectType.htm#M2" NAME="L468">NAME</A>
+<DL><DD>Tcl_RegisterObjType, Tcl_GetObjType, Tcl_AppendAllObjTypes, Tcl_ConvertToType  - manipulate Tcl object types</DD></DL>
+<DD><A HREF="ObjectType.htm#M3" NAME="L469">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD><B>Tcl_RegisterObjType</B>(<I>typePtr</I>)
+<DD>Tcl_ObjType *
+<DD><B>Tcl_GetObjType</B>(<I>typeName</I>)
+<DD>int
+<DD><B>Tcl_AppendAllObjTypes</B>(<I>interp, objPtr</I>)
+<DD>int
+<DD><B>Tcl_ConvertToType</B>(<I>interp, objPtr, typePtr</I>)
+</DL>
+<DD><A HREF="ObjectType.htm#M4" NAME="L470">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="ObjectType.htm#M5" NAME="L471">DESCRIPTION</A>
+<DD><A HREF="ObjectType.htm#M6" NAME="L472">THE TCL_OBJTYPE STRUCTURE</A>
+<DD><A HREF="ObjectType.htm#M7" NAME="L473">THE NAME FIELD</A>
+<DD><A HREF="ObjectType.htm#M8" NAME="L474">THE SETFROMANYPROC FIELD</A>
+<DD><A HREF="ObjectType.htm#M9" NAME="L475">THE UPDATESTRINGPROC FIELD</A>
+<DD><A HREF="ObjectType.htm#M10" NAME="L476">THE DUPINTREPPROC FIELD</A>
+<DD><A HREF="ObjectType.htm#M11" NAME="L477">THE FREEINTREPPROC FIELD</A>
+<DD><A HREF="ObjectType.htm#M12" NAME="L478">SEE ALSO</A>
+<DD><A HREF="ObjectType.htm#M13" NAME="L479">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_RegisterObjType, Tcl_GetObjType, Tcl_AppendAllObjTypes, Tcl_ConvertToType  - manipulate Tcl object types
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -11,7 +44,7 @@ int<BR>
 int<BR>
 <B>Tcl_ConvertToType</B>(<I>interp, objPtr, typePtr</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Tcl_ObjType <B>*typePtr</B> (in)<DD>
 Points to the structure containing information about the Tcl object type.
 This storage must live forever,
@@ -65,32 +98,35 @@ unless <I>interp</I> is NULL.
 Otherwise, it returns <B>TCL_OK</B>.
 Passing a NULL <I>interp</I> allows this procedure to be used
 as a test whether the conversion can be done (and in fact was done).
-
 <H3><A NAME="M6">THE TCL_OBJTYPE STRUCTURE</A></H3>
 Extension writers can define new object types by defining four
 procedures,
 initializing a Tcl_ObjType structure to describe the type,
 and calling <B>Tcl_RegisterObjType</B>.
 The <B>Tcl_ObjType</B> structure is defined as follows:
-<PRE>typedef struct Tcl_ObjType {
-        char *<I>name</I>;
-        Tcl_FreeInternalRepProc *<I>freeIntRepProc</I>;
-        Tcl_DupInternalRepProc *<I>dupIntRepProc</I>;
-        Tcl_UpdateStringProc *<I>updateStringProc</I>;
-        Tcl_SetFromAnyProc *<I>setFromAnyProc</I>;
-} Tcl_ObjType;</PRE>
 <P>
+<PRE>typedef struct Tcl_ObjType {
+    char *<I>name</I>;
+    Tcl_FreeInternalRepProc *<I>freeIntRepProc</I>;
+    Tcl_DupInternalRepProc *<I>dupIntRepProc</I>;
+    Tcl_UpdateStringProc *<I>updateStringProc</I>;
+    Tcl_SetFromAnyProc *<I>setFromAnyProc</I>;
+} Tcl_ObjType;</PRE>
+<H4><A NAME="M7">THE NAME FIELD</A></H4>
 The <I>name</I> member describes the name of the type, e.g. <B>int</B>.
 Extension writers can look up an object type using its name
 with the <B>Tcl_GetObjType</B> procedure.
 The remaining four members are pointers to procedures
 called by the generic Tcl object code:
-<P>
+<H4><A NAME="M8">THE SETFROMANYPROC FIELD</A></H4>
 The <I>setFromAnyProc</I> member contains the address of a function
 called to create a valid internal representation
 from an object's string representation.
-<PRE>typedef int (Tcl_SetFromAnyProc) (<A HREF="../TclLib/Interp.htm">Tcl_Interp</A> *<I>interp</I>, Tcl_Obj *<I>objPtr</I>);</PRE>
-If an internal representation can't be created from the string,
+<P>
+<PRE>typedef int (Tcl_SetFromAnyProc) (<A HREF="../TclLib/Interp.htm">Tcl_Interp</A> *<I>interp</I>,
+        Tcl_Obj *<I>objPtr</I>);</PRE>
+<P>
+If an internal representation cannot be created from the string,
 it returns <B>TCL_ERROR</B> and puts a message
 describing the error in the result object for <I>interp</I>
 unless <I>interp</I> is NULL.
@@ -113,11 +149,13 @@ and sets <I>objPtr</I>'s <I>typePtr</I> member to point to the integer type's
 Tcl_ObjType structure.
 Do not release <I>objPtr</I>'s old internal representation unless you
 replace it with a new one or reset the <I>typePtr</I> member to NULL.
-<P>
+<H4><A NAME="M9">THE UPDATESTRINGPROC FIELD</A></H4>
 The <I>updateStringProc</I> member contains the address of a function
 called to create a valid string representation
 from an object's internal representation.
+<P>
 <PRE>typedef void (Tcl_UpdateStringProc) (Tcl_Obj *<I>objPtr</I>);</PRE>
+<P>
 <I>objPtr</I>'s <I>bytes</I> member is always NULL when it is called.
 It must always set <I>bytes</I> non-NULL before returning.
 We require the string representation's byte array
@@ -132,10 +170,13 @@ builds an array of strings for each element object
 and then calls <B><A HREF="../TclLib/SplitList.htm">Tcl_Merge</A></B>
 to construct a string with proper Tcl list structure.
 It stores this string as the list object's string representation.
-<P>
+<H4><A NAME="M10">THE DUPINTREPPROC FIELD</A></H4>
 The <I>dupIntRepProc</I> member contains the address of a function
 called to copy an internal representation from one object to another.
-<PRE>typedef void (Tcl_DupInternalRepProc) (Tcl_Obj *<I>srcPtr</I>, Tcl_Obj *<I>dupPtr</I>);</PRE>
+<P>
+<PRE>typedef void (Tcl_DupInternalRepProc) (Tcl_Obj *<I>srcPtr</I>,
+        Tcl_Obj *<I>dupPtr</I>);</PRE>
+<P>
 <I>dupPtr</I>'s internal representation is made a copy of <I>srcPtr</I>'s
 internal representation.
 Before the call,
@@ -148,10 +189,12 @@ The built-in list type's <I>dupIntRepProc</I>
 allocates a new array that points at the original element objects;
 the elements are shared between the two lists
 (and their reference counts are incremented to reflect the new references).
-<P>
+<H4><A NAME="M11">THE FREEINTREPPROC FIELD</A></H4>
 The <I>freeIntRepProc</I> member contains the address of a function
 that is called when an object is freed.
+<P>
 <PRE>typedef void (Tcl_FreeInternalRepProc) (Tcl_Obj *<I>objPtr</I>);</PRE>
+<P>
 The <I>freeIntRepProc</I> function can deallocate the storage
 for the object's internal representation
 and do other type-specific processing necessary when an object is freed.
@@ -166,12 +209,11 @@ to indicate that the internal representation does not require freeing.
 The <I>freeIntRepProc</I> implementation should not access the
 <I>bytes</I> member of the object, as this may potentially have already
 been deleted.
-
-<H3><A NAME="M7">SEE ALSO</A></H3>
+<H3><A NAME="M12">SEE ALSO</A></H3>
 <B><A HREF="../TclLib/Object.htm">Tcl_NewObj</A></B>, <B><A HREF="../TclLib/Object.htm">Tcl_DecrRefCount</A></B>, <B><A HREF="../TclLib/Object.htm">Tcl_IncrRefCount</A></B>
-<H3><A NAME="M8">KEYWORDS</A></H3>
+<H3><A NAME="M13">KEYWORDS</A></H3>
 <A href="../Keywords/I.htm#internal representation">internal representation</A>, <A href="../Keywords/O.htm#object">object</A>, <A href="../Keywords/O.htm#object type">object type</A>, <A href="../Keywords/S.htm#string representation">string representation</A>, <A href="../Keywords/T.htm#type conversion">type conversion</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1996-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1996-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

@@ -1,33 +1,31 @@
-<HTML><HEAD><TITLE>Tcl Bundled Packages - dde manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>dde manual page - Tcl Bundled Packages</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> dde</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="dde.htm#M2" NAME="L251">NAME</A>
-<DL><DD>dde - Execute a Dynamic Data Exchange command</DL>
-<DD><A HREF="dde.htm#M3" NAME="L252">SYNOPSIS</A>
+<DD><A HREF="dde.htm#M2" NAME="L272">NAME</A>
+<DL><DD>dde - Execute a Dynamic Data Exchange command</DD></DL>
+<DD><A HREF="dde.htm#M3" NAME="L273">SYNOPSIS</A>
 <DL>
-<DD><B>package require dde 1.3</B>
-<DD><B>dde servername</B> ?<B>-force</B>? ?<B>-handler </B><I>proc</I>? ?<B>--</B>? ?<I>topic</I>?
-<DD><B>dde execute</B> ?<B>-async</B>? <I>service topic data</I>
-<DD><B>dde poke</B> <I>service topic item data</I>
-<DD><B>dde request</B> ?<B>-binary</B>? <I>service topic item</I>
-<DD><B>dde services </B><I>service topic</I>
-<DD><B>dde eval</B> ?<B>-async</B>? <I>topic cmd </I>?<I>arg arg ...</I>?
 </DL>
-<DD><A HREF="dde.htm#M4" NAME="L253">DESCRIPTION</A>
-<DD><A HREF="dde.htm#M5" NAME="L254">DDE COMMANDS</A>
-<DL>
-<DD><A HREF="dde.htm#M6" NAME="L255"><B>dde servername </B>?<B>-force</B>? ?<B>-handler </B><I>proc</I>? ?<B>--</B>? ?<I>topic</I>?</A>
-<DD><A HREF="dde.htm#M7" NAME="L256"></A>
-<DD><A HREF="dde.htm#M8" NAME="L257"><B>dde execute</B> ?<B>-async</B>? <I>service topic data</I></A>
-<DD><A HREF="dde.htm#M9" NAME="L258"><B>dde poke </B><I>service topic item data</I></A>
-<DD><A HREF="dde.htm#M10" NAME="L259"><B>dde request</B> ?<B>-binary</B>? <I>service topic item</I></A>
-<DD><A HREF="dde.htm#M11" NAME="L260"><B>dde services </B><I>service topic</I></A>
-<DD><A HREF="dde.htm#M12" NAME="L261"><B>dde eval</B> ?<B>-async</B>? <I>topic cmd </I>?<I>arg arg ...</I>?</A>
+<DD><A HREF="dde.htm#M4" NAME="L274">DESCRIPTION</A>
+<DD><A HREF="dde.htm#M5" NAME="L275">DDE COMMANDS</A>
+<DL class="dde commands">
+<DD><A HREF="dde.htm#M6" NAME="L276"><B>dde servername </B>?<B>-force</B>? ?<B>-handler </B><I>proc</I>? ?<B>--</B>? ?<I>topic</I>?</A>
+<DD><A HREF="dde.htm#M7" NAME="L277"><B>dde execute</B> ?<B>-async</B>? <I>service topic data</I></A>
+<DD><A HREF="dde.htm#M8" NAME="L278"><B>dde poke </B><I>service topic item data</I></A>
+<DD><A HREF="dde.htm#M9" NAME="L279"><B>dde request</B> ?<B>-binary</B>? <I>service topic item</I></A>
+<DD><A HREF="dde.htm#M10" NAME="L280"><B>dde services </B><I>service topic</I></A>
+<DD><A HREF="dde.htm#M11" NAME="L281"><B>dde eval</B> ?<B>-async</B>? <I>topic cmd </I>?<I>arg arg ...</I>?</A>
 </DL>
-<DD><A HREF="dde.htm#M13" NAME="L262">DDE AND TCL</A>
-<DD><A HREF="dde.htm#M14" NAME="L263">EXAMPLE</A>
-<DD><A HREF="dde.htm#M15" NAME="L264">SEE ALSO</A>
-<DD><A HREF="dde.htm#M16" NAME="L265">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="dde.htm#M12" NAME="L282">DDE AND TCL</A>
+<DD><A HREF="dde.htm#M13" NAME="L283">EXAMPLE</A>
+<DD><A HREF="dde.htm#M14" NAME="L284">SEE ALSO</A>
+<DD><A HREF="dde.htm#M15" NAME="L285">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 dde - Execute a Dynamic Data Exchange command
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -53,24 +51,28 @@ has the service name <B>Excel</B>.
 The following commands are a subset of the full Dynamic Data Exchange
 set of commands.
 <P>
-<DL>
+<DL class="dde commands">
 <DT><A NAME="M6"><B>dde servername </B>?<B>-force</B>? ?<B>-handler </B><I>proc</I>? ?<B>--</B>? ?<I>topic</I>?</A><DD>
 <B>dde servername</B> registers the interpreter as a DDE server with
 the service name <B>TclEval</B> and the topic name specified by <I>topic</I>.
 If no <I>topic</I> is given, <B>dde servername</B> returns the name
 of the current topic or the empty string if it is not registered as a
 service. If the given <I>topic</I> name is already in use, then a
-suffix of the form ' #2' or ' #3' is appended to the name to make it
+suffix of the form
+&#8220; #2&#8221;
+or
+&#8220; #3&#8221;
+is appended to the name to make it
 unique. The command's result will be the name actually used. The
 <B>-force</B> option is used to force registration of precisely the
 given <I>topic</I> name.
-<P><DT><A NAME="M7"></A><DD>
+<P>
 The <B>-handler</B> option specifies a Tcl procedure that will be called to
 process calls to the dde server. If the package has been loaded into a
 safe interpreter then a <B>-handler</B> procedure must be defined. The
 procedure is called with all the arguments provided by the remote
 call.
-<P><DT><A NAME="M8"><B>dde execute</B> ?<B>-async</B>? <I>service topic data</I></A><DD>
+<P><DT><A NAME="M7"><B>dde execute</B> ?<B>-async</B>? <I>service topic data</I></A><DD>
 <B>dde execute</B> takes the <I>data</I> and sends it to the server indicated
 by <I>service</I> with the topic indicated by <I>topic</I>. Typically,
 <I>service</I> is the name of an application, and <I>topic</I> is a file to
@@ -80,7 +82,7 @@ script is run in the application.  The <B>-async</B> option requests
 asynchronous invocation.  The command returns an error message if the
 script did not run, unless the <B>-async</B> flag was used, in which case
 the command returns immediately with no error.
-<P><DT><A NAME="M9"><B>dde poke </B><I>service topic item data</I></A><DD>
+<P><DT><A NAME="M8"><B>dde poke </B><I>service topic item data</I></A><DD>
 <B>dde poke</B> passes the <I>data</I> to the server indicated by
 <I>service</I> using the <I>topic</I> and <I>item</I> specified.  Typically,
 <I>service</I> is the name of an application.  <I>topic</I> is application
@@ -88,7 +90,7 @@ specific but can be a command to the server or the name of a file to work
 on.  The <I>item</I> is also application specific and is often not used, but
 it must always be non-null.  The <I>data</I> field is given to the remote
 application.
-<P><DT><A NAME="M10"><B>dde request</B> ?<B>-binary</B>? <I>service topic item</I></A><DD>
+<P><DT><A NAME="M9"><B>dde request</B> ?<B>-binary</B>? <I>service topic item</I></A><DD>
 <B>dde request</B> is typically used to get the value of something; the
 value of a cell in Microsoft Excel or the text of a selection in
 Microsoft Word. <I>service</I> is typically the name of an application,
@@ -97,7 +99,7 @@ application-specific. The command returns the value of <I>item</I> as
 defined in the application.  Normally this is interpreted to be a
 string with terminating null.  If <B>-binary</B> is specified, the
 result is returned as a byte array.
-<P><DT><A NAME="M11"><B>dde services </B><I>service topic</I></A><DD>
+<P><DT><A NAME="M10"><B>dde services </B><I>service topic</I></A><DD>
 <B>dde services</B> returns a list of service-topic pairs that
 currently exist on the machine. If <I>service</I> and <I>topic</I> are
 both empty strings ({}), then all service-topic pairs currently
@@ -107,7 +109,7 @@ returned. If <I>service</I> is non-empty and <I>topic</I> is, all topics
 for a given service are returned. If both are non-empty, if that
 service-topic pair currently exists, it is returned; otherwise, an
 empty string is returned.
-<P><DT><A NAME="M12"><B>dde eval</B> ?<B>-async</B>? <I>topic cmd </I>?<I>arg arg ...</I>?</A><DD>
+<P><DT><A NAME="M11"><B>dde eval</B> ?<B>-async</B>? <I>topic cmd </I>?<I>arg arg ...</I>?</A><DD>
 <B>dde eval</B> evaluates a command and its arguments using the interpreter
 specified by <I>topic</I>. The DDE service must be the <B>TclEval</B>
 service.  The <B>-async</B> option requests asynchronous invocation.  The
@@ -115,7 +117,7 @@ command returns an error message if the script did not run, unless the
 <B>-async</B> flag was used, in which case the command returns immediately
 with no error.  This command can be used to replace send on Windows.
 <P></DL>
-<H3><A NAME="M13">DDE AND TCL</A></H3>
+<H3><A NAME="M12">DDE AND TCL</A></H3>
 A Tcl interpreter always has a service name of <B>TclEval</B>.  Each
 different interpreter of all running Tcl applications must be
 given a unique
@@ -147,17 +149,17 @@ without adding the <B>&amp;</B> to place the process in the background).
 If for any reason the event queue is not flushed, DDE commands may
 hang until the event queue is flushed.  This can create a deadlock
 situation.
-<H3><A NAME="M14">EXAMPLE</A></H3>
+<H3><A NAME="M13">EXAMPLE</A></H3>
 This asks Internet Explorer (which must already be running) to go to a
 particularly important website:
 <PRE>package require dde
 <B>dde execute</B> iexplore WWW_OpenURL http://www.tcl.tk/</PRE>
-<H3><A NAME="M15">SEE ALSO</A></H3>
+<H3><A NAME="M14">SEE ALSO</A></H3>
 <B><A HREF="../TkCmd/tk.htm">tk</A></B>, <B><A HREF="../TkCmd/winfo.htm">winfo</A></B>, <B><A HREF="../TkCmd/send.htm">send</A></B>
-<H3><A NAME="M16">KEYWORDS</A></H3>
+<H3><A NAME="M15">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#application">application</A>, <A href="../Keywords/D.htm#dde">dde</A>, <A href="../Keywords/N.htm#name">name</A>, <A href="../Keywords/R.htm#remote execution">remote execution</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 2001 ActiveState Corporation.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1997 Sun Microsystems, Inc.
+Copyright &copy; 2001 ActiveState Corporation.
+</div>
 </BODY></HTML>

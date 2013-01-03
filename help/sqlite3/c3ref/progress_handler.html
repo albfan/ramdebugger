@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>Query Progress Callbacks</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: "Verdana" "sans-serif";
+    padding: 8px 1%;
+}
+
+a { color: #45735f }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:240px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.toolbar {
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding:1px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #80a796; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* rounded corners */
+.se  { background: url(../images/se.png) 100% 100% no-repeat #80a796}
+.sw  { background: url(../images/sw.png) 0% 100% no-repeat }
+.ne  { background: url(../images/ne.png) 100% 0% no-repeat }
+.nw  { background: url(../images/nw.png) 0% 0% no-repeat }
+
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="../index.html">
+<img class="logo" src="../images/SQLite.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% style="clear:both"><tr><td>
+  <div class="se"><div class="sw"><div class="ne"><div class="nw">
+  <div class="toolbar">
+    <a href="../about.html">About</a>
+    <a href="../sitemap.html">Sitemap</a>
+    <a href="../docs.html">Documentation</a>
+    <a href="../download.html">Download</a>
+    <a href="../copyright.html">License</a>
+    <a href="../news.html">News</a>
+    <a href="http://www.sqlite.org/cvstrac/index">Developers</a>
+    <a href="../support.html">Support</a>
+  </div></div></div></div></div>
+</td></tr></table>
+  
+<a href="intro.html"><h2>SQLite C Interface</h2></a><h2>Query Progress Callbacks</h2><blockquote><pre>void sqlite3_progress_handler(sqlite3*, int, int(*)(void*), void*);
+</pre></blockquote><p>
+This routine configures a callback function - the
+progress callback - that is invoked periodically during long
+running calls to <a href="../c3ref/exec.html">sqlite3_exec()</a>, <a href="../c3ref/step.html">sqlite3_step()</a> and
+<a href="../c3ref/free_table.html">sqlite3_get_table()</a>.  An example use for this
+interface is to keep a GUI updated during a large query.</p>
+
+<p>If the progress callback returns non-zero, the operation is
+interrupted.  This feature can be used to implement a
+"Cancel" button on a GUI progress dialog box.</p>
+
+<p>The progress handler must not do anything that will modify
+the database connection that invoked the progress handler.
+Note that <a href="../c3ref/prepare.html">sqlite3_prepare_v2()</a> and <a href="../c3ref/step.html">sqlite3_step()</a> both modify their
+database connections for the meaning of "modify" in this paragraph.</p>
+
+<p><h3>Invariants:</h3>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr><td valign="top">H12911</td> 
+<td valign="top">
+The callback function registered by sqlite3_progress_handler()
+is invoked periodically during long running calls to
+<a href="../c3ref/step.html">sqlite3_step()</a>.</td></tr>
+<tr><td valign="top">H12912</td> 
+<td valign="top">
+The progress callback is invoked once for every N virtual
+machine opcodes, where N is the second argument to
+the <a href="../c3ref/progress_handler.html">sqlite3_progress_handler()</a> call that registered
+the callback.  If N is less than 1, sqlite3_progress_handler()
+acts as if a NULL progress handler had been specified.</td></tr>
+<tr><td valign="top">H12913</td> 
+<td valign="top">
+The progress callback itself is identified by the third
+argument to sqlite3_progress_handler().</td></tr>
+<tr><td valign="top">H12914</td> 
+<td valign="top">
+The fourth argument to sqlite3_progress_handler() is a
+void pointer passed to the progress callback
+function each time it is invoked.</td></tr>
+<tr><td valign="top">H12915</td> 
+<td valign="top">
+If a call to <a href="../c3ref/step.html">sqlite3_step()</a> results in fewer than N opcodes
+being executed, then the progress callback is never invoked.</td></tr>
+<tr><td valign="top">H12916</td> 
+<td valign="top">
+Every call to <a href="../c3ref/progress_handler.html">sqlite3_progress_handler()</a>
+overwrites any previously registered progress handler.</td></tr>
+<tr><td valign="top">H12917</td> 
+<td valign="top">
+If the progress handler callback is NULL then no progress
+handler is invoked.</td></tr>
+<tr><td valign="top">H12918</td> 
+<td valign="top">
+If the progress callback returns a result other than 0, then
+the behavior is a if <a href="../c3ref/interrupt.html">sqlite3_interrupt()</a> had been called.
+<S30500></td></tr>
+</table>
+</p><p>See also lists of
+  <a href="objlist.html">Objects</a>,
+  <a href="constlist.html">Constants</a>, and
+  <a href="funclist.html">Functions</a>.</p><hr><small><i>
+This page last modified 2008/12/09 18:44:04 UTC
+</i></small></div></body></html>

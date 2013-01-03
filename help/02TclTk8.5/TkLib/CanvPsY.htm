@@ -1,4 +1,34 @@
-<HTML><HEAD><TITLE>Tk Library Procedures - Tk_CanvasPs manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_CanvasPs manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> CanvPsY</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="CanvPsY.htm#M2" NAME="L21">NAME</A>
+<DL><DD>Tk_CanvasPsY, Tk_CanvasPsBitmap, Tk_CanvasPsColor, Tk_CanvasPsFont, Tk_CanvasPsPath, Tk_CanvasPsStipple - utility procedures for generating Postscript for canvases</DD></DL>
+<DD><A HREF="CanvPsY.htm#M3" NAME="L22">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>double
+<DD><B>Tk_CanvasPsY</B>(<I>canvas, canvasY</I>)
+<DD>int
+<DD><B>Tk_CanvasPsBitmap</B>(<I>interp, canvas, bitmap, x, y, width, height</I>)
+<DD>int
+<DD><B>Tk_CanvasPsColor</B>(<I>interp, canvas, colorPtr</I>)
+<DD>int
+<DD><B>Tk_CanvasPsFont</B>(<I>interp, canvas, tkFont</I>)
+<DD><B>Tk_CanvasPsPath</B>(<I>interp, canvas, coordPtr, numPoints</I>)
+<DD>int
+<DD><B>Tk_CanvasPsStipple</B>(<I>interp, canvas, bitmap</I>)
+</DL>
+<DD><A HREF="CanvPsY.htm#M4" NAME="L23">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="CanvPsY.htm#M5" NAME="L24">DESCRIPTION</A>
+<DD><A HREF="CanvPsY.htm#M6" NAME="L25">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_CanvasPsY, Tk_CanvasPsBitmap, Tk_CanvasPsColor, Tk_CanvasPsFont, Tk_CanvasPsPath, Tk_CanvasPsStipple - utility procedures for generating Postscript for canvases
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -15,7 +45,7 @@ int<BR>
 int<BR>
 <B>Tk_CanvasPsStipple</B>(<I>interp, canvas, bitmap</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Tk_Canvas <B><A HREF="../TkCmd/canvas.htm">canvas</A></B> (in)<DD>
 A token that identifies a canvas widget for which Postscript is
 being generated.
@@ -101,7 +131,7 @@ returned, unless an error occurs, in which case <B>TCL_ERROR</B> is returned and
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#bitmap">bitmap</A>, <A href="../Keywords/C.htm#canvas">canvas</A>, <A href="../Keywords/C.htm#color">color</A>, <A href="../Keywords/F.htm#font">font</A>, <A href="../Keywords/P.htm#path">path</A>, <A href="../Keywords/P.htm#Postscript">Postscript</A>, <A href="../Keywords/S.htm#stipple">stipple</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

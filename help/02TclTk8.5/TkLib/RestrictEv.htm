@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Library Procedures - Tk_RestrictEvents manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_RestrictEvents manual page - Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> RestrictEv</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_RestrictEvents - filter and selectively delay X events
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -6,7 +12,7 @@ Tk_RestrictEvents - filter and selectively delay X events
 Tk_RestrictProc *<BR>
 <B>Tk_RestrictEvents</B>(<I>proc, clientData, prevClientDataPtr</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Tk_RestrictProc <B>*proc</B> (in)<DD>
 Predicate procedure to call to filter incoming X events.
 NULL means do not restrict events at all.
@@ -53,8 +59,9 @@ bindings with the <B><A HREF="../TkCmd/bind.htm">bind</A></B> Tcl command or by 
 <B><A HREF="../TkLib/EventHndlr.htm">Tk_CreateEventHandler</A></B> and <B><A HREF="../TkLib/EventHndlr.htm">Tk_DeleteEventHandler</A></B> from C.
 The main place where <B>Tk_RestrictEvents</B> must be used is when
 performing synchronous actions (for example, if you need to wait
-for a particular event to occur on a particular window but you don't
-want to invoke any handlers for any other events).  The ``obvious''
+for a particular event to occur on a particular window but you do not
+want to invoke any handlers for any other events).  The
+&#8220;obvious&#8221;
 solution in these situations is to call <B>XNextEvent</B> or
 <B>XWindowEvent</B>, but these procedures cannot be used because
 Tk keeps its own event queue that is separate from the X event
@@ -62,8 +69,8 @@ queue.  Instead, call <B>Tk_RestrictEvents</B> to set up a filter,
 then call <B>Tk_DoOneEvent</B> to retrieve the desired event(s).
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/D.htm#delay">delay</A>, <A href="../Keywords/E.htm#event">event</A>, <A href="../Keywords/F.htm#filter">filter</A>, <A href="../Keywords/R.htm#restriction">restriction</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

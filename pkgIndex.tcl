@@ -1,5 +1,5 @@
 
-set Version 6.2
+set Version 6.3
 
 proc LoadRamDebugger { dir version } {
     if { [info exists ::GIDDEFAULT] } {
@@ -30,6 +30,7 @@ proc LoadRamDebugger { dir version } {
 	ramdebugger eval [list set argc 0]
 	ramdebugger eval [list set argv $argv]
     }
+    ramdebugger eval [list set is_package 1]
     ramdebugger eval [list set auto_path $::auto_path]
     ramdebugger eval [list set argv0 [file join $dir RamDebugger.tcl]]
     catch { ramdebugger hide exit }

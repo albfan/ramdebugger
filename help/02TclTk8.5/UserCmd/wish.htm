@@ -1,13 +1,18 @@
-<HTML><HEAD><TITLE>Tk Applications - wish manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>wish manual page - Tk Applications</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">UserCmd</a> <small>&gt;</small> wish</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
 <DD><A HREF="wish.htm#M2" NAME="L15">NAME</A>
-<DL><DD>wish - Simple windowing shell</DL>
+<DL><DD>wish - Simple windowing shell</DD></DL>
 <DD><A HREF="wish.htm#M3" NAME="L16">SYNOPSIS</A>
 <DL>
-<DD><B>wish</B> ?-encoding <I>name</I>? ?<I>fileName arg arg ...</I>?
 </DL>
 <DD><A HREF="wish.htm#M4" NAME="L17">OPTIONS</A>
-<DL>
+<DL class="options">
 <DD><A HREF="wish.htm#M5" NAME="L18"><B>-encoding </B><I>name</I></A>
 <DD><A HREF="wish.htm#M6" NAME="L19"><B>-colormap </B><I>new</I></A>
 <DD><A HREF="wish.htm#M7" NAME="L20"><B>-display </B><I>display</I></A>
@@ -16,13 +21,13 @@
 <DD><A HREF="wish.htm#M10" NAME="L23"><B>-sync</B></A>
 <DD><A HREF="wish.htm#M11" NAME="L24"><B>-use</B> <I>id</I></A>
 <DD><A HREF="wish.htm#M12" NAME="L25"><B>-visual </B><I>visual</I></A>
-<DD><A HREF="wish.htm#M13" NAME="L26"><B>-&nbsp;-</B></A>
+<DD><A HREF="wish.htm#M13" NAME="L26"><B>--</B></A>
 </DL>
 <DD><A HREF="wish.htm#M14" NAME="L27">DESCRIPTION</A>
-<DD><A HREF="wish.htm#M15" NAME="L28">OPTIONS</A>
+<DD><A HREF="wish.htm#M15" NAME="L28">OPTION PROCESSING</A>
 <DD><A HREF="wish.htm#M16" NAME="L29">APPLICATION NAME AND CLASS</A>
 <DD><A HREF="wish.htm#M17" NAME="L30">VARIABLES</A>
-<DL>
+<DL class="variables">
 <DD><A HREF="wish.htm#M18" NAME="L31"><B>argc</B></A>
 <DD><A HREF="wish.htm#M19" NAME="L32"><B>argv</B></A>
 <DD><A HREF="wish.htm#M20" NAME="L33"><B>argv0</B></A>
@@ -32,13 +37,13 @@
 <DD><A HREF="wish.htm#M23" NAME="L36">SCRIPT FILES</A>
 <DD><A HREF="wish.htm#M24" NAME="L37">PROMPTS</A>
 <DD><A HREF="wish.htm#M25" NAME="L38">KEYWORDS</A>
-</DL><HR>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 wish - Simple windowing shell
 <H3><A NAME="M3">SYNOPSIS</A></H3>
-<B>wish</B> ?-encoding <I>name</I>? ?<I>fileName arg arg ...</I>?<BR>
+<B>wish</B> ?<B>-encoding </B><I>name</I>? ?<I>fileName arg arg ...</I>?<BR>
 <H3><A NAME="M4">OPTIONS</A></H3>
-<DL>
+<DL class="options">
 <DT><A NAME="M5"><B>-encoding </B><I>name</I></A><DD>
 Specifies the encoding of the text stored in <I>fileName</I>.
 This option is only recognized prior to the <I>fileName</I> argument.
@@ -73,7 +78,7 @@ refers to a Tk <B><A HREF="../TkCmd/frame.htm">frame</A></B> or <B><A HREF="../T
 Specifies the visual to use for the window.
 <I>Visual</I> may have any of the forms supported by the <B><A HREF="../TkLib/GetVisual.htm">Tk_GetVisual</A></B>
 procedure.
-<P><DT><A NAME="M13"><B>-&nbsp;-</B></A><DD>
+<P><DT><A NAME="M13"><B>--</B></A><DD>
 Pass all remaining arguments through to the script's <B>argv</B>
 variable without interpreting them.
 This provides a mechanism for passing arguments such as <B>-name</B>
@@ -89,15 +94,17 @@ arguments, ?<B>-encoding </B><I>name</I>? ?<I>fileName</I>? specify the
 name of a script file, and, optionally, the
 encoding of the text data stored in that script file.  A value
 for <I>fileName</I> is recognized if the appropriate argument
-does not start with ``-''.
+does not start with
+&#8220;-&#8221;.
 <P>
 If there are no arguments, or the arguments do not specify a <I>fileName</I>,
 then wish reads Tcl commands interactively from standard input.
 It will continue processing commands until all windows have been
 deleted or until end-of-file is reached on standard input.
-If there exists a file <B>.wishrc</B> in the home directory of
-the user, <B>wish</B> evaluates the file as a Tcl script
-just before reading the first command from standard input.
+If there exists a file
+&#8220;<B>.wishrc</B>&#8221;
+in the home directory of the user, <B>wish</B> evaluates the file as a
+Tcl script just before reading the first command from standard input.
 <P>
 If arguments to <B>wish</B> do specify a <I>fileName</I>, then 
 <I>fileName</I> is treated as the name of a script file.
@@ -105,23 +112,29 @@ If arguments to <B>wish</B> do specify a <I>fileName</I>, then
 presumably creates a user interface), then it will respond to events
 until all windows have been deleted.
 Commands will not be read from standard input.
-There is no automatic evaluation of <B>.wishrc</B> when the name
-of a script file is presented on the <B>wish</B> command line,
+There is no automatic evaluation of
+&#8220;<B>.wishrc</B>&#8221;
+when the name of a script file is presented on the <B>wish</B> command line,
 but the script file can always <B><A HREF="../TclCmd/source.htm">source</A></B> it if desired.
-
-<H3><A NAME="M15">OPTIONS</A></H3>
+<P>
+Note that on Windows, the <B>wish</B><I>version</I><B>.exe</B> program varies
+from the <B><A HREF="../UserCmd/tclsh.htm">tclsh</A></B><I>version</I><B>.exe</B> program in an additional
+important way: it does not connect to a standard Windows console and
+is instead a windowed program. Because of this, it additionally
+provides access to its own <B><A HREF="../TkCmd/console.htm">console</A></B> command.
+<H3><A NAME="M15">OPTION PROCESSING</A></H3>
 <B>Wish</B> automatically processes all of the command-line options
 described in the <B><A HREF="../TkCmd/options.htm">OPTIONS</A></B> summary above.
 Any other command-line arguments besides these are passed through
 to the application using the <B>argc</B> and <B>argv</B> variables
 described later.
-
 <H3><A NAME="M16">APPLICATION NAME AND CLASS</A></H3>
 The name of the application, which is used for purposes such as
 <B><A HREF="../TkCmd/send.htm">send</A></B> commands, is taken from the <B>-name</B> option,
 if it is specified;  otherwise it is taken from <I>fileName</I>,
 if it is specified, or from the command name by which
-<B>wish</B> was invoked.  In the last two cases, if the name contains a ``/''
+<B>wish</B> was invoked.  In the last two cases, if the name contains a
+&#8220;/&#8221;
 character, then only the characters after the last slash are used
 as the application name.
 <P>
@@ -129,18 +142,17 @@ The class of the application, which is used for purposes such as
 specifying options with a <B>RESOURCE_MANAGER</B> property or .Xdefaults
 file, is the same as its name except that the first letter is
 capitalized.
-
 <H3><A NAME="M17">VARIABLES</A></H3>
 <B>Wish</B> sets the following Tcl variables:
 <P>
-<DL>
+<DL class="variables">
 <DT><A NAME="M18"><B>argc</B></A><DD>
 Contains a count of the number of <I>arg</I> arguments (0 if none),
 not including the options described above.
 <P><DT><A NAME="M19"><B>argv</B></A><DD>
 Contains a Tcl list whose elements are the <I>arg</I> arguments
-that follow a <B>-&nbsp;-</B> option or don't match any of the
-options described in OPTIONS above, in order, or an empty string
+that follow a <B>--</B> option or do not match any of the
+options described in <B><A HREF="../TkCmd/options.htm">OPTIONS</A></B> above, in order, or an empty string
 if there are no such arguments.
 <P><DT><A NAME="M20"><B>argv0</B></A><DD>
 Contains <I>fileName</I> if it was specified.
@@ -155,7 +167,6 @@ window's geometry.
 Contains 1 if <B>wish</B> is reading commands interactively (<I>fileName</I>
 was not specified and standard input is a terminal-like
 device), 0 otherwise.
-
 <P></DL>
 <H3><A NAME="M23">SCRIPT FILES</A></H3>
 If you create a Tcl script in a file whose first line is
@@ -163,8 +174,8 @@ If you create a Tcl script in a file whose first line is
 then you can invoke the script file directly from your shell if
 you mark it as executable.
 This assumes that <B>wish</B> has been installed in the default
-location in /usr/local/bin;  if it's installed somewhere else
-then you'll have to modify the above line to match.
+location in /usr/local/bin;  if it is installed somewhere else
+then you will have to modify the above line to match.
 Many UNIX systems do not allow the <B>#!</B> line to exceed about
 30 characters in length, so be sure that the <B>wish</B> executable
 can be accessed with a short file name.
@@ -175,7 +186,7 @@ following three lines:
 # the next line restarts using wish &#92;
 exec wish &quot;$0&quot; &quot;$@&quot;</B></PRE>
 This approach has three advantages over the approach in the previous
-paragraph.  First, the location of the <B>wish</B> binary doesn't have
+paragraph.  First, the location of the <B>wish</B> binary does not have
 to be hard-wired into the script:  it can be anywhere in your shell
 search path.  Second, it gets around the 30-character file name limit
 in the previous approach.
@@ -194,28 +205,34 @@ since the backslash at the end of the second line causes the third
 line to be treated as part of the comment on the second line.
 <P>
 The end of a script file may be marked either by the physical end of
-the medium, or by the character, '&#92;032' ('&#92;u001a', control-Z).
+the medium, or by the character,
+&#8220;&#92;032&#8221;
+(&#8220;&#92;u001a&#8221;, control-Z).
 If this character is present in the file, the <B>wish</B> application
 will read text up to but not including the character.  An application
 that requires this character in the file may encode it as
-``&#92;032'', ``&#92;x1a'', or ``&#92;u001a''; or may generate it by use of commands 
-such as <B><A HREF="../TclCmd/format.htm">format</A></B> or <B><A HREF="../TclCmd/binary.htm">binary</A></B>.
+&#8220;&#92;032&#8221;,
+&#8220;&#92;x1a&#8221;,
+or
+&#8220;&#92;u001a&#8221;;
+or may generate it by use of commands such as <B><A HREF="../TclCmd/format.htm">format</A></B> or <B><A HREF="../TclCmd/binary.htm">binary</A></B>.
 <H3><A NAME="M24">PROMPTS</A></H3>
 When <B>wish</B> is invoked interactively it normally prompts for each
-command with ``<B>% </B>''.  You can change the prompt by setting the
+command with
+&#8220;<B>% </B>&#8221;.
+You can change the prompt by setting the
 variables <B>tcl_prompt1</B> and <B>tcl_prompt2</B>.  If variable
 <B>tcl_prompt1</B> exists then it must consist of a Tcl script
 to output a prompt;  instead of outputting a prompt <B>wish</B>
 will evaluate the script in <B>tcl_prompt1</B>.
 The variable <B>tcl_prompt2</B> is used in a similar way when
-a newline is typed but the current command isn't yet complete;
-if <B>tcl_prompt2</B> isn't set then no prompt is output for
+a newline is typed but the current command is not yet complete;
+if <B>tcl_prompt2</B> is not set then no prompt is output for
 incomplete commands.
-
 <H3><A NAME="M25">KEYWORDS</A></H3>
 <A href="../Keywords/S.htm#shell">shell</A>, <A href="../Keywords/T.htm#toolkit">toolkit</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1991-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1991-1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

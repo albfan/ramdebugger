@@ -1,38 +1,42 @@
-<HTML><HEAD><TITLE>Tcl Bundled Packages - registry manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>registry manual page - Tcl Bundled Packages</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> registry</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="registry.htm#M2" NAME="L1229">NAME</A>
-<DL><DD>registry - Manipulate the Windows registry</DL>
-<DD><A HREF="registry.htm#M3" NAME="L1230">SYNOPSIS</A>
+<DD><A HREF="registry.htm#M2" NAME="L1363">NAME</A>
+<DL><DD>registry - Manipulate the Windows registry</DD></DL>
+<DD><A HREF="registry.htm#M3" NAME="L1364">SYNOPSIS</A>
 <DL>
-<DD><B>package require registry 1.1</B>
-<DD><B>registry </B><I>option</I> <I>keyName</I> ?<I>arg arg ...</I>?
 </DL>
-<DD><A HREF="registry.htm#M4" NAME="L1231">DESCRIPTION</A>
-<DL>
-<DD><A HREF="registry.htm#M5" NAME="L1232"><B>registry broadcast </B><I>keyName</I> ?<I>-timeout milliseconds</I>?</A>
-<DD><A HREF="registry.htm#M6" NAME="L1233"><B>registry delete </B><I>keyName</I> ?<I>valueName</I>?</A>
-<DD><A HREF="registry.htm#M7" NAME="L1234"><B>registry get </B><I>keyName valueName</I></A>
-<DD><A HREF="registry.htm#M8" NAME="L1235"><B>registry keys </B><I>keyName</I> ?<I>pattern</I>?</A>
-<DD><A HREF="registry.htm#M9" NAME="L1236"><B>registry set </B><I>keyName</I> ?<I>valueName data </I>?<I>type</I>??</A>
-<DD><A HREF="registry.htm#M10" NAME="L1237"><B>registry type </B><I>keyName valueName</I></A>
-<DD><A HREF="registry.htm#M11" NAME="L1238"><B>registry values </B><I>keyName</I> ?<I>pattern</I>?</A>
+<DD><A HREF="registry.htm#M4" NAME="L1365">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="registry.htm#M5" NAME="L1366"><B>registry broadcast </B><I>keyName</I> ?<B>-timeout </B><I>milliseconds</I>?</A>
+<DD><A HREF="registry.htm#M6" NAME="L1367"><B>registry delete </B><I>keyName</I> ?<I>valueName</I>?</A>
+<DD><A HREF="registry.htm#M7" NAME="L1368"><B>registry get </B><I>keyName valueName</I></A>
+<DD><A HREF="registry.htm#M8" NAME="L1369"><B>registry keys </B><I>keyName</I> ?<I>pattern</I>?</A>
+<DD><A HREF="registry.htm#M9" NAME="L1370"><B>registry set </B><I>keyName</I> ?<I>valueName data </I>?<I>type</I>??</A>
+<DD><A HREF="registry.htm#M10" NAME="L1371"><B>registry type </B><I>keyName valueName</I></A>
+<DD><A HREF="registry.htm#M11" NAME="L1372"><B>registry values </B><I>keyName</I> ?<I>pattern</I>?</A>
 </DL>
-<DD><A HREF="registry.htm#M12" NAME="L1239">SUPPORTED TYPES</A>
-<DL>
-<DD><A HREF="registry.htm#M13" NAME="L1240"><B>binary</B></A>
-<DD><A HREF="registry.htm#M14" NAME="L1241"><B>none</B></A>
-<DD><A HREF="registry.htm#M15" NAME="L1242"><B>sz</B></A>
-<DD><A HREF="registry.htm#M16" NAME="L1243"><B>expand_sz</B></A>
-<DD><A HREF="registry.htm#M17" NAME="L1244"><B>dword</B></A>
-<DD><A HREF="registry.htm#M18" NAME="L1245"><B>dword_big_endian</B></A>
-<DD><A HREF="registry.htm#M19" NAME="L1246"><B>link</B></A>
-<DD><A HREF="registry.htm#M20" NAME="L1247"><B>multi_sz</B></A>
-<DD><A HREF="registry.htm#M21" NAME="L1248"><B>resource_list</B></A>
+<DD><A HREF="registry.htm#M12" NAME="L1373">SUPPORTED TYPES</A>
+<DL class="supported types">
+<DD><A HREF="registry.htm#M13" NAME="L1374"><B>binary</B></A>
+<DD><A HREF="registry.htm#M14" NAME="L1375"><B>none</B></A>
+<DD><A HREF="registry.htm#M15" NAME="L1376"><B>sz</B></A>
+<DD><A HREF="registry.htm#M16" NAME="L1377"><B>expand_sz</B></A>
+<DD><A HREF="registry.htm#M17" NAME="L1378"><B>dword</B></A>
+<DD><A HREF="registry.htm#M18" NAME="L1379"><B>dword_big_endian</B></A>
+<DD><A HREF="registry.htm#M19" NAME="L1380"><B>link</B></A>
+<DD><A HREF="registry.htm#M20" NAME="L1381"><B>multi_sz</B></A>
+<DD><A HREF="registry.htm#M21" NAME="L1382"><B>resource_list</B></A>
 </DL>
-<DD><A HREF="registry.htm#M22" NAME="L1249">PORTABILITY ISSUES</A>
-<DD><A HREF="registry.htm#M23" NAME="L1250">EXAMPLE</A>
-<DD><A HREF="registry.htm#M24" NAME="L1251">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="registry.htm#M22" NAME="L1383">PORTABILITY ISSUES</A>
+<DD><A HREF="registry.htm#M23" NAME="L1384">EXAMPLE</A>
+<DD><A HREF="registry.htm#M24" NAME="L1385">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 registry - Manipulate the Windows registry
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -48,6 +52,7 @@ as a corrupted registry can leave your system in an unusable state.
 <I>KeyName</I> is the name of a registry key.  Registry keys must be
 one of the following forms:
 <DL><DD>
+<P>
 <B>&#92;&#92;</B><I>hostname</I><B>&#92;</B><I>rootname</I><B>&#92;</B><I>keypath</I>
 <P>
 <I>rootname</I><B>&#92;</B><I>keypath</I>
@@ -67,8 +72,8 @@ registry key names separated by backslash (<B>&#92;</B>) characters.
 unique abbreviation for <I>option</I> is acceptable.  The valid options
 are:
 <P>
-<DL>
-<DT><A NAME="M5"><B>registry broadcast </B><I>keyName</I> ?<I>-timeout milliseconds</I>?</A><DD>
+<DL class="description">
+<DT><A NAME="M5"><B>registry broadcast </B><I>keyName</I> ?<B>-timeout </B><I>milliseconds</I>?</A><DD>
 Sends a broadcast message to the system and running programs to notify them
 of certain updates.  This is necessary to propagate changes to key registry
 keys like Environment.  The timeout specifies the amount of time, in
@@ -76,10 +81,18 @@ milliseconds, to wait for applications to respond to the broadcast message.
 It defaults to 3000.  The following example demonstrates how to add a path
 to the global Environment and notify applications of the change without
 requiring a logoff/logon step (assumes admin privileges):
-<PRE>set regPath {HKEY_LOCAL_MACHINE&#92;SYSTEM&#92;CurrentControlSet&#92;Control&#92;Session Manager&#92;Environment}
-set curPath [registry get $regPath &quot;Path&quot;]
-registry set $regPath &quot;Path&quot; &quot;$curPath;$addPath&quot;
-registry broadcast &quot;Environment&quot;</PRE>
+<P>
+<PRE>set regPath [join {
+    HKEY_LOCAL_MACHINE
+    SYSTEM
+    CurrentControlSet
+    Control
+    {Session Manager}
+    Environment
+} &quot;&#92;&#92;&quot;]
+set curPath [<B>registry get</B> $regPath &quot;Path&quot;]
+<B>registry set</B> $regPath &quot;Path&quot; &quot;$curPath;$addPath&quot;
+<B>registry broadcast</B> &quot;Environment&quot;</PRE>
 <P><DT><A NAME="M6"><B>registry delete </B><I>keyName</I> ?<I>valueName</I>?</A><DD>
 If the optional <I>valueName</I> argument is present, the specified
 value under <I>keyName</I> will be deleted from the registry.  If the
@@ -91,31 +104,30 @@ did not exist, the command has no effect.
 Returns the data associated with the value <I>valueName</I> under the key
 <I>keyName</I>.  If either the key or the value does not exist, then an
 error is generated.  For more details on the format of the returned
-data, see SUPPORTED TYPES, below.
+data, see <B>SUPPORTED TYPES</B>, below.
 <P><DT><A NAME="M8"><B>registry keys </B><I>keyName</I> ?<I>pattern</I>?</A><DD>
-If <I>pattern</I> isn't specified, returns a list of names of all the
+If <I>pattern</I> is not specified, returns a list of names of all the
 subkeys of <I>keyName</I>.  If <I>pattern</I> is specified, only those
 names matching <I>pattern</I> are returned.  Matching is determined
 using the same rules as for <B><A HREF="../TclCmd/string.htm">string</A></B> <B>match</B>.  If the
 specified <I>keyName</I> does not exist, then an error is generated.
 <P><DT><A NAME="M9"><B>registry set </B><I>keyName</I> ?<I>valueName data </I>?<I>type</I>??</A><DD>
-If <I>valueName</I> isn't specified, creates the key <I>keyName</I> if
-it doesn't already exist.  If <I>valueName</I> is specified, creates
+If <I>valueName</I> is not specified, creates the key <I>keyName</I> if
+it does not already exist.  If <I>valueName</I> is specified, creates
 the key <I>keyName</I> and value <I>valueName</I> if necessary.  The
 contents of <I>valueName</I> are set to <I>data</I> with the type
-indicated by <I>type</I>.  If <I>type</I> isn't specified, the type
+indicated by <I>type</I>.  If <I>type</I> is not specified, the type
 <B>sz</B> is assumed.  For more details on the data and type arguments,
-see SUPPORTED TYPES below.
+see <B>SUPPORTED TYPES</B> below.
 <P><DT><A NAME="M10"><B>registry type </B><I>keyName valueName</I></A><DD>
 Returns the type of the value <I>valueName</I> in the key
 <I>keyName</I>.  For more information on the possible types, see
-SUPPORTED TYPES, below.
+<B>SUPPORTED TYPES</B>, below.
 <P><DT><A NAME="M11"><B>registry values </B><I>keyName</I> ?<I>pattern</I>?</A><DD>
-If <I>pattern</I> isn't specified, returns a list of names of all the
+If <I>pattern</I> is not specified, returns a list of names of all the
 values of <I>keyName</I>.  If <I>pattern</I> is specified, only those
 names matching <I>pattern</I> are returned.  Matching is determined
 using the same rules as for <B><A HREF="../TclCmd/string.htm">string</A></B> <B>match</B>.
-
 <P></DL>
 <H3><A NAME="M12">SUPPORTED TYPES</A></H3>
 Each value under a key in the registry contains some data of a
@@ -128,7 +140,7 @@ types, the <B>registry</B> command returns the data in a different form to
 make it easier to manipulate.  The following types are recognized by the
 registry command:
 <P>
-<DL>
+<DL class="supported types">
 <DT><A NAME="M13"><B>binary</B></A><DD>
 The registry value contains arbitrary binary data.  The data is represented
 exactly in Tcl, including any embedded nulls.
@@ -142,8 +154,9 @@ represented in Tcl as a string.
 <P><DT><A NAME="M16"><B>expand_sz</B></A><DD>
 The registry value contains a null-terminated string that contains
 unexpanded references to environment variables in the normal Windows
-style (for example, &quot;%PATH%&quot;).  The data is represented in Tcl as a
-string.
+style (for example,
+&#8220;%PATH%&#8221;).
+The data is represented in Tcl as a string.
 <P><DT><A NAME="M17"><B>dword</B></A><DD>
 The registry value contains a little-endian 32-bit number.  The data is
 represented in Tcl as a decimal string.
@@ -170,6 +183,7 @@ The registry command is only available on Windows.
 <H3><A NAME="M23">EXAMPLE</A></H3>
 Print out how double-clicking on a Tcl script file will invoke a Tcl
 interpreter:
+<P>
 <PRE>package require registry
 set ext .tcl
 
@@ -183,8 +197,8 @@ set command [<B>registry get</B> $path {}]
 puts &quot;$ext opens with $command&quot;</PRE>
 <H3><A NAME="M24">KEYWORDS</A></H3>
 <A href="../Keywords/R.htm#registry">registry</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 2002 ActiveState Corporation.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1997 Sun Microsystems, Inc.
+Copyright &copy; 2002 ActiveState Corporation.
+</div>
 </BODY></HTML>

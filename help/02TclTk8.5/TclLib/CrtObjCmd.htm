@@ -1,4 +1,44 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_CreateObjCommand manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_CreateObjCommand manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> CrtObjCmd</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="CrtObjCmd.htm#M2" NAME="L147">NAME</A>
+<DL><DD>Tcl_CreateObjCommand, Tcl_DeleteCommand, Tcl_DeleteCommandFromToken, Tcl_GetCommandInfo, Tcl_GetCommandInfoFromToken, Tcl_SetCommandInfo, Tcl_SetCommandInfoFromToken, Tcl_GetCommandName, Tcl_GetCommandFullName, Tcl_GetCommandFromObj - implement new commands in C</DD></DL>
+<DD><A HREF="CrtObjCmd.htm#M3" NAME="L148">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>Tcl_Command
+<DD><B>Tcl_CreateObjCommand</B>(<I>interp, cmdName, proc, clientData, deleteProc</I>)
+<DD>int
+<DD><B>Tcl_DeleteCommand</B>(<I>interp, cmdName</I>)
+<DD>int
+<DD><B>Tcl_DeleteCommandFromToken</B>(<I>interp, token</I>)
+<DD>int
+<DD><B>Tcl_GetCommandInfo</B>(<I>interp, cmdName, infoPtr</I>)
+<DD>int
+<DD><B>Tcl_SetCommandInfo</B>(<I>interp, cmdName, infoPtr</I>)
+<DD>int
+<DD><B>Tcl_GetCommandInfoFromToken</B>(<I>token, infoPtr</I>)
+<DD>int
+<DD><B>Tcl_SetCommandInfoFromToken</B>(<I>token, infoPtr</I>)
+<DD>const char *
+<DD><B>Tcl_GetCommandName</B>(<I>interp, token</I>)
+<DD>void
+<DD><B>Tcl_GetCommandFullName</B>(<I>interp, token, objPtr</I>)
+<DD>Tcl_Command
+<DD><B>Tcl_GetCommandFromObj</B>(<I>interp, objPtr</I>)
+</DL>
+<DD><A HREF="CrtObjCmd.htm#M4" NAME="L149">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="CrtObjCmd.htm#M5" NAME="L150">DESCRIPTION</A>
+<DD><A HREF="CrtObjCmd.htm#M6" NAME="L151">SEE ALSO</A>
+<DD><A HREF="CrtObjCmd.htm#M7" NAME="L152">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_CreateObjCommand, Tcl_DeleteCommand, Tcl_DeleteCommandFromToken, Tcl_GetCommandInfo, Tcl_GetCommandInfoFromToken, Tcl_SetCommandInfo, Tcl_SetCommandInfoFromToken, Tcl_GetCommandName, Tcl_GetCommandFullName, Tcl_GetCommandFromObj - implement new commands in C
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -24,7 +64,7 @@ void<BR>
 Tcl_Command<BR>
 <B>Tcl_GetCommandFromObj</B>(<I>interp, objPtr</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter in which to create a new command or that contains a command.
 <P><DT>char <B>*cmdName</B> (in)<DD>
@@ -88,7 +128,7 @@ Additionally, when <I>proc</I> is invoked, it must not modify the contents
 of the <I>objv</I> array by assigning new pointer values to any element of the
 array (for example, <I>objv</I>[<B>2</B>] = <B>NULL</B>) because this will
 cause memory to be lost and the runtime stack to be corrupted.  The
-<B>CONST</B> in the declaration of <I>objv</I> will cause ANSI-compliant
+<B>const</B> in the declaration of <I>objv</I> will cause ANSI-compliant
 compilers to report any such attempted assignment as an error.  However,
 it is acceptable to modify the internal representation of any individual
 object argument.  For instance, the user may call
@@ -145,7 +185,7 @@ argument passed to <B>Tcl_CreateObjCommand</B>.
 <B>Tcl_DeleteCommand</B> deletes a command from a command interpreter.
 Once the call completes, attempts to invoke <I>cmdName</I> in
 <I>interp</I> will result in errors.
-If <I>cmdName</I> isn't bound as a command in <I>interp</I> then
+If <I>cmdName</I> is not bound as a command in <I>interp</I> then
 <B>Tcl_DeleteCommand</B> does nothing and returns -1;  otherwise
 it returns 0.
 There are no restrictions on <I>cmdName</I>:  it may refer to
@@ -252,7 +292,7 @@ This name does not include any <B>::</B> namespace qualifiers.
 The command corresponding to <I>token</I> must not have been deleted.
 The string returned by <B>Tcl_GetCommandName</B> is in dynamic memory
 owned by Tcl and is only guaranteed to retain its value as long as the
-command isn't deleted or renamed;  callers should copy the string if
+command is not deleted or renamed;  callers should copy the string if
 they need to keep it for a long time.
 <P>
 <B>Tcl_GetCommandFullName</B> produces the fully qualified name
@@ -268,7 +308,7 @@ Returns NULL if the command is not found.
 <B><A HREF="../TclLib/CrtCommand.htm">Tcl_CreateCommand</A></B>, <B><A HREF="../TclLib/SetResult.htm">Tcl_ResetResult</A></B>, <B><A HREF="../TclLib/SetResult.htm">Tcl_SetObjResult</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#bind">bind</A>, <A href="../Keywords/C.htm#command">command</A>, <A href="../Keywords/C.htm#create">create</A>, <A href="../Keywords/D.htm#delete">delete</A>, <A href="../Keywords/N.htm#namespace">namespace</A>, <A href="../Keywords/O.htm#object">object</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1996-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1996-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

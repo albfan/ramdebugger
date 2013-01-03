@@ -1,50 +1,56 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - glob manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>glob manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> glob</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="glob.htm#M2" NAME="L541">NAME</A>
-<DL><DD>glob - Return names of files that match patterns</DL>
-<DD><A HREF="glob.htm#M3" NAME="L542">SYNOPSIS</A>
+<DD><A HREF="glob.htm#M2" NAME="L563">NAME</A>
+<DL><DD>glob - Return names of files that match patterns</DD></DL>
+<DD><A HREF="glob.htm#M3" NAME="L564">SYNOPSIS</A>
 <DL>
-<DD><B>glob </B>?<I>switches</I>? <I>pattern </I>?<I>pattern ...</I>?
 </DL>
-<DD><A HREF="glob.htm#M4" NAME="L543">DESCRIPTION</A>
-<DL>
-<DD><A HREF="glob.htm#M5" NAME="L544"><B>-directory</B> <I>directory</I></A>
-<DD><A HREF="glob.htm#M6" NAME="L545"><B>-join</B></A>
-<DD><A HREF="glob.htm#M7" NAME="L546"><B>-nocomplain</B></A>
-<DD><A HREF="glob.htm#M8" NAME="L547"><B>-path</B> <I>pathPrefix</I></A>
-<DD><A HREF="glob.htm#M9" NAME="L548"><B>-tails</B></A>
-<DD><A HREF="glob.htm#M10" NAME="L549"><B>-types</B> <I>typeList</I></A>
-<DD><A HREF="glob.htm#M11" NAME="L550"><B>-&nbsp;-</B></A>
+<DD><A HREF="glob.htm#M4" NAME="L565">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="glob.htm#M5" NAME="L566"><B>-directory</B> <I>directory</I></A>
+<DD><A HREF="glob.htm#M6" NAME="L567"><B>-join</B></A>
+<DD><A HREF="glob.htm#M7" NAME="L568"><B>-nocomplain</B></A>
+<DD><A HREF="glob.htm#M8" NAME="L569"><B>-path</B> <I>pathPrefix</I></A>
+<DD><A HREF="glob.htm#M9" NAME="L570"><B>-tails</B></A>
+<DD><A HREF="glob.htm#M10" NAME="L571"><B>-types</B> <I>typeList</I></A>
+<DD><A HREF="glob.htm#M11" NAME="L572"><B>--</B></A>
 </DL>
-<DL>
-<DD><A HREF="glob.htm#M12" NAME="L551"><B>?</B></A>
-<DD><A HREF="glob.htm#M13" NAME="L552"><B>*</B></A>
-<DD><A HREF="glob.htm#M14" NAME="L553"><B>[</B><I>chars</I><B>]</B></A>
-<DD><A HREF="glob.htm#M15" NAME="L554"><B>&#92;</B><I>x</I></A>
-<DD><A HREF="glob.htm#M16" NAME="L555"><B>{</B><I>a</I><B>,</B><I>b</I><B>,</B><I>...</I>}</A>
+<DL class="description">
+<DD><A HREF="glob.htm#M12" NAME="L573"><B>?</B></A>
+<DD><A HREF="glob.htm#M13" NAME="L574"><B>*</B></A>
+<DD><A HREF="glob.htm#M14" NAME="L575"><B>[</B><I>chars</I><B>]</B></A>
+<DD><A HREF="glob.htm#M15" NAME="L576"><B>&#92;</B><I>x</I></A>
+<DD><A HREF="glob.htm#M16" NAME="L577"><B>{</B><I>a</I><B>,</B><I>b</I><B>,</B><I>...</I>}</A>
 </DL>
-<DD><A HREF="glob.htm#M17" NAME="L556">PORTABILITY ISSUES</A>
-<DL>
-<DD><A HREF="glob.htm#M18" NAME="L557"><B>Windows</B></A>
+<DD><A HREF="glob.htm#M17" NAME="L578">PORTABILITY ISSUES</A>
+<DD><A HREF="glob.htm#M18" NAME="L579">EXAMPLES</A>
+<DD><A HREF="glob.htm#M19" NAME="L580">SEE ALSO</A>
+<DD><A HREF="glob.htm#M20" NAME="L581">KEYWORDS</A>
 </DL>
-<DD><A HREF="glob.htm#M19" NAME="L558">EXAMPLES</A>
-<DD><A HREF="glob.htm#M20" NAME="L559">SEE ALSO</A>
-<DD><A HREF="glob.htm#M21" NAME="L560">KEYWORDS</A>
-</DL><HR>
 <H3><A NAME="M2">NAME</A></H3>
 glob - Return names of files that match patterns
 <H3><A NAME="M3">SYNOPSIS</A></H3>
 <B>glob </B>?<I>switches</I>? <I>pattern </I>?<I>pattern ...</I>?<BR>
 <H3><A NAME="M4">DESCRIPTION</A></H3>
-This command performs file name ``globbing'' in a fashion similar to
+This command performs file name
+&#8220;globbing&#8221;
+in a fashion similar to
 the csh shell.  It returns a list of the files whose names match any
-of the <I>pattern</I> arguments.
+of the <I>pattern</I> arguments.  No particular order is guaranteed
+in the list, so if a sorted list is required the caller should use 
+<B><A HREF="../TclCmd/lsort.htm">lsort</A></B>.
 <P>
 If the initial arguments to <B>glob</B> start with <B>-</B> then
 they are treated as switches.  The following switches are
 currently supported:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>-directory</B> <I>directory</I></A><DD>
 Search for files which match the given patterns starting in the given
 <I>directory</I>.  This allows searching of directories whose name
@@ -107,9 +113,10 @@ regular files OR directories that have both read AND write permissions.
 The following are equivalent:
 <PRE><B>glob -type d *</B>
 <B>glob */</B></PRE>
-except that the first case doesn't return the trailing ``/'' and
-is more platform independent.
-<P><DT><A NAME="M11"><B>-&nbsp;-</B></A><DD>
+except that the first case doesn't return the trailing
+&#8220;/&#8221;
+and is more platform independent.
+<P><DT><A NAME="M11"><B>--</B></A><DD>
 Marks the end of switches.  The argument following this one will
 be treated as a <I>pattern</I> even if it starts with a <B>-</B>.
 <P></DL>
@@ -117,7 +124,7 @@ be treated as a <I>pattern</I> even if it starts with a <B>-</B>.
 The <I>pattern</I> arguments may contain any of the following
 special characters:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M12"><B>?</B></A><DD>
 Matches any single character.
 <P><DT><A NAME="M13"><B>*</B></A><DD>
@@ -132,20 +139,35 @@ Matches the character <I>x</I>.
 Matches any of the strings <I>a</I>, <I>b</I>, etc.
 <P></DL>
 <P>
-On Unix, as with csh, a ``.'' at the beginning of a file's name or just
-after a ``/'' must be matched explicitly or with a {} construct,
-unless the ``-types hidden'' flag is given (since ``.'' at the beginning 
-of a file's name indicates that it is hidden).  On other platforms,
-files beginning with a ``.'' are handled no differently to any others,
-except the special directories ``.'' and ``..'' which must be matched
-explicitly (this is to avoid a recursive pattern like ``glob -join * *
-* *'' from recursing up the directory hierarchy as well as down).
-In addition, all ``/'' characters must be matched explicitly.
+On Unix, as with csh, a
+&#8220;.&#8221;
+at the beginning of a file's name or just after a
+&#8220;/&#8221;
+must be matched explicitly or with a {} construct, unless the
+<B>-types hidden</B> flag is given (since
+&#8220;.&#8221;
+at the beginning of a file's name indicates that it is hidden).  On
+other platforms, files beginning with a
+&#8220;.&#8221;
+are handled no differently to any others, except the special directories
+&#8220;.&#8221;
+and
+&#8220;..&#8221;
+which must be matched explicitly (this is to avoid a recursive pattern like
+&#8220;glob -join * * * *&#8221;
+from recursing up the directory hierarchy as well as down). In addition, all
+&#8220;/&#8221;
+characters must be matched explicitly.
 <P>
-If the first character in a <I>pattern</I> is ``~'' then it refers
-to the home directory for the user whose name follows the ``~''.
-If the ``~'' is followed immediately by ``/'' then the value of
-the HOME environment variable is used.
+If the first character in a <I>pattern</I> is
+&#8220;~&#8221;
+then it refers to the home directory for the user whose name follows the
+&#8220;~&#8221;.
+If the
+&#8220;~&#8221;
+is followed immediately by
+&#8220;/&#8221;
+then the value of the HOME environment variable is used.
 <P>
 The <B>glob</B> command differs from csh globbing in two ways.
 First, it does not sort its result list (use the <B><A HREF="../TclCmd/lsort.htm">lsort</A></B>
@@ -155,27 +177,30 @@ exist;  in csh no check for existence is made unless a pattern
 contains a ?, *, or [] construct.
 <P>
 When the <B>glob</B> command returns relative paths whose filenames
-start with a tilde ``~'' (for example through <B>glob *</B> or 
-<B>glob -tails</B>, the returned list will not quote the tilde with
-``./''.  This means care must be taken if those names are later to
+start with a tilde
+&#8220;~&#8221;
+(for example through <B>glob *</B> or <B>glob -tails</B>, the returned
+list will not quote the tilde with
+&#8220;./&#8221;.
+This means care must be taken if those names are later to
 be used with <B><A HREF="../TclCmd/file.htm">file join</A></B>, to avoid them being interpreted as
 absolute paths pointing to a given user's home directory.
 <H3><A NAME="M17">PORTABILITY ISSUES</A></H3>
-Unlike other Tcl commands that will accept both network and native
-style names (see the <B><A HREF="../TclCmd/filename.htm">filename</A></B> manual entry for details on how
-native and network names are specified), the <B>glob</B> command only
-accepts native names.  
-<P>
-<DL>
-<DT><A NAME="M18"><B>Windows</B></A><DD>
+<B>Windows</B>
 For Windows UNC names, the servername and sharename components of the path
 may not contain ?, *, or [] constructs.  On Windows NT, if <I>pattern</I> is
-of the form ``<B>~</B><I>username</I><B>@</B><I>domain</I>'' it refers to the home
+of the form
+&#8220;<B>~</B><I>username</I><B>@</B><I>domain</I>&#8221;,
+it refers to the home
 directory of the user whose account information resides on the specified NT
 domain server.  Otherwise, user account information is obtained from
 the local computer.  On Windows 95 and 98, <B>glob</B> accepts patterns
-like ``.../'' and ``..../'' for successively higher up parent directories.
-
+like
+&#8220;.../&#8221;
+and
+&#8220;..../&#8221;
+for successively higher up parent directories.
+<P>
 Since the backslash character has a special meaning to the glob 
 command, glob patterns containing Windows style path separators need 
 special care. The pattern <I>C:&#92;&#92;foo&#92;&#92;*</I> is interpreted as 
@@ -185,8 +210,7 @@ interpreted as a wildcard character. One solution to this problem is
 to use the Unix style forward slash as a path separator. Windows style 
 paths can be converted to Unix style paths with the command <B>file
 join $path</B> (or <B>file normalize $path</B> in Tcl 8.4). 
-<P></DL>
-<H3><A NAME="M19">EXAMPLES</A></H3>
+<H3><A NAME="M18">EXAMPLES</A></H3>
 Find all the Tcl files in the current directory:
 <PRE><B>glob</B> *.tcl</PRE>
 <P>
@@ -197,14 +221,19 @@ what the current directory is:
 Find all subdirectories of the current directory:
 <PRE><B>glob</B> -type d *</PRE>
 <P>
-Find all files whose name contains an &quot;a&quot;, a &quot;b&quot; or the sequence &quot;cde&quot;:
+Find all files whose name contains an
+&#8220;a&#8221;,
+a
+&#8220;b&#8221;
+or the sequence
+&#8220;cde&#8221;:
 <PRE><B>glob</B> -type f *{a,b,cde}*</PRE>
-<H3><A NAME="M20">SEE ALSO</A></H3>
+<H3><A NAME="M19">SEE ALSO</A></H3>
 <B><A HREF="../TclCmd/file.htm">file</A></B>
-<H3><A NAME="M21">KEYWORDS</A></H3>
+<H3><A NAME="M20">KEYWORDS</A></H3>
 <A href="../Keywords/E.htm#exist">exist</A>, <A href="../Keywords/F.htm#file">file</A>, <A href="../Keywords/G.htm#glob">glob</A>, <A href="../Keywords/P.htm#pattern">pattern</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

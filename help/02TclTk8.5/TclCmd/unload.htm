@@ -1,28 +1,31 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - unload manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>unload manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> unload</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="unload.htm#M2" NAME="L1686">NAME</A>
-<DL><DD>unload - Unload machine code</DL>
-<DD><A HREF="unload.htm#M3" NAME="L1687">SYNOPSIS</A>
+<DD><A HREF="unload.htm#M2" NAME="L1854">NAME</A>
+<DL><DD>unload - Unload machine code</DD></DL>
+<DD><A HREF="unload.htm#M3" NAME="L1855">SYNOPSIS</A>
 <DL>
-<DD><B>unload </B>?<I>switches</I>? <I>fileName</I>
-<DD><B>unload </B>?<I>switches</I>? <I>fileName packageName</I>
-<DD><B>unload </B>?<I>switches</I>? <I>fileName packageName interp</I>
 </DL>
-<DD><A HREF="unload.htm#M4" NAME="L1688">DESCRIPTION</A>
-<DL>
-<DD><A HREF="unload.htm#M5" NAME="L1689"><B>-nocomplain</B></A>
-<DD><A HREF="unload.htm#M6" NAME="L1690"><B>-keeplibrary</B></A>
-<DD><A HREF="unload.htm#M7" NAME="L1691"><B>-&nbsp;-</B></A>
+<DD><A HREF="unload.htm#M4" NAME="L1856">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="unload.htm#M5" NAME="L1857"><B>-nocomplain</B></A>
+<DD><A HREF="unload.htm#M6" NAME="L1858"><B>-keeplibrary</B></A>
+<DD><A HREF="unload.htm#M7" NAME="L1859"><B>--</B></A>
 </DL>
-<DD><A HREF="unload.htm#M8" NAME="L1692">PORTABILITY ISSUES</A>
-<DL>
-<DD><A HREF="unload.htm#M9" NAME="L1693"><B>Unix</B></A>
+<DD><A HREF="unload.htm#M8" NAME="L1860">PORTABILITY ISSUES</A>
+<DL class="portability issues">
+<DD><A HREF="unload.htm#M9" NAME="L1861"><B>Unix</B></A>
 </DL>
-<DD><A HREF="unload.htm#M10" NAME="L1694">BUGS</A>
-<DD><A HREF="unload.htm#M11" NAME="L1695">EXAMPLE</A>
-<DD><A HREF="unload.htm#M12" NAME="L1696">SEE ALSO</A>
-<DD><A HREF="unload.htm#M13" NAME="L1697">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="unload.htm#M10" NAME="L1862">BUGS</A>
+<DD><A HREF="unload.htm#M11" NAME="L1863">EXAMPLE</A>
+<DD><A HREF="unload.htm#M12" NAME="L1864">SEE ALSO</A>
+<DD><A HREF="unload.htm#M13" NAME="L1865">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 unload - Unload machine code
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -48,14 +51,14 @@ If the initial arguments to <B>unload</B> start with <B>-</B> then
 they are treated as switches.  The following switches are
 currently supported:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>-nocomplain</B></A><DD>
-Supresses all error messages. If this switch is given <B>unload</B> will
+Suppresses all error messages. If this switch is given, <B>unload</B> will
 never report an error.
 <P><DT><A NAME="M6"><B>-keeplibrary</B></A><DD>
 This switch will prevent <B>unload</B> from issuing the operating system call
 that will unload the library from the process. 
-<P><DT><A NAME="M7"><B>-&nbsp;-</B></A><DD>
+<P><DT><A NAME="M7"><B>--</B></A><DD>
 Marks the end of switches.  The argument following this one will
 be treated as a <I>fileName</I> even if it starts with a <B>-</B>.
 <P></DL>
@@ -67,7 +70,7 @@ loaded into normal (trusted) interpreters while the second describes how many
 times the library has been loaded into safe interpreters. As a file containing
 a shared library can be loaded only once by Tcl (with the first <B><A HREF="../TclCmd/load.htm">load</A></B>
 call on the file), these counters track how many interpreters use the library.
-Each subsequent call to <B><A HREF="../TclCmd/load.htm">load</A></B> after the first, simply increaments the
+Each subsequent call to <B><A HREF="../TclCmd/load.htm">load</A></B> after the first simply increments the
 proper reference count.
 <P>
 <B>unload</B> works in the opposite direction. As a first step, <B>unload</B>
@@ -127,7 +130,7 @@ For example, the command <B>unload libxyz4.2.so</B> uses the module
 name <B>xyz</B> and the command <B>unload bin/last.so {}</B> uses the
 module name <B>last</B>.
 <H3><A NAME="M8">PORTABILITY ISSUES</A></H3>
-<DL>
+<DL class="portability issues">
 <DT><A NAME="M9"><B>Unix</B></A><DD>
 Not all unix operating systems support library unloading. Under such
 an operating system <B>unload</B> returns an error (unless -nocomplain has
@@ -158,7 +161,7 @@ without having to shut down the overall Tcl process.
 <B><A HREF="../TclCmd/info.htm">info sharedlibextension</A></B>, <B><A HREF="../TclCmd/load.htm">load</A></B>, <B>safe</B>
 <H3><A NAME="M13">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#binary code">binary code</A>, <A href="../Keywords/U.htm#unloading">unloading</A>, <A href="../Keywords/S.htm#safe interpreter">safe interpreter</A>, <A href="../Keywords/S.htm#shared library">shared library</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 2003 George Petasis, petasis@iit.demokritos.gr.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 2003 George Petasis, petasis(at)iit.demokritos.gr.
+</div>
 </BODY></HTML>

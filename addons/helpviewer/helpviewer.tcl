@@ -345,7 +345,7 @@ proc HelpViewer::FormCmd {n cmd args} {
 	select -
 	textarea -
 	input {
-	    set w [lindex $args 0]
+	    set w [lindex $args 1]
 	    label $w -image nogifsm
 	}
     }
@@ -2842,7 +2842,7 @@ if { [info exists argv0] && [info script] == $argv0 } {
     } elseif { $::tcl_platform(platform) != "windows"} {
 	set file {/c/TclTk/RamDebugger/help}
     } else {
-	set file {/Documents and Settings/ramsan/Mis documentos/myTclTk/RamDebugger/help}
+	set file {C:\Users\ramsan\Documents\myTclTk\RamDebugger\help}
     }
     HelpViewer::HelpWindow $file
 }

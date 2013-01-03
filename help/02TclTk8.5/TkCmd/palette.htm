@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - tk_setPalette manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>tk_setPalette manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> palette</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 tk_setPalette, tk_bisque - Modify the Tk color palette
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -18,12 +24,9 @@ of <I>name</I>-<I>value</I> pairs, where the first argument of the pair
 is the name of an option in the Tk option database and the second
 argument is the new value to use for that option.  The following
 database names are currently supported:
-<PRE><B>activeBackground	foreground	selectColor
-activeForeground	highlightBackground	selectBackground
-background	highlightColor	selectForeground
-disabledForeground	insertBackground	troughColor</B></PRE>
+<dl><dd><table border="0"><tr><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>activeBackground</B><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>foreground</B><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>selectColor</B><tr><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>activeForeground</B><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>highlightBackground</B><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>selectBackground</B><tr><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>background</B><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>highlightColor</B><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>selectForeground</B><tr><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>disabledForeground</B><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>insertBackground</B><td><p style="font-size:12px;padding-left:.5em;padding-right:.5em;"><B>troughColor</B></table></dl>
 <B>tk_setPalette</B> tries to compute reasonable defaults for any
-options that you don't specify.  You can specify options other
+options that you do not specify.  You can specify options other
 than the above ones and Tk will change those options on widgets as
 well.  This feature may be useful if you are using custom widgets with
 additional color options.
@@ -47,12 +50,13 @@ from the .Xdefaults file or options specified on the command-line
 that creates a widget.
 <P>
 The procedure <B>tk_bisque</B> is provided for backward compatibility:
-it restores the application's colors to the light brown (``bisque'')
+it restores the application's colors to the light brown
+(&#8220;bisque&#8221;)
 color scheme used in Tk 3.6 and earlier versions.
 
 <H3><A NAME="M5">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#bisque">bisque</A>, <A href="../Keywords/C.htm#color">color</A>, <A href="../Keywords/P.htm#palette">palette</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1995-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

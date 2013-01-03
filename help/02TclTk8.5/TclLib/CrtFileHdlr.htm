@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_CreateFileHandler manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_CreateFileHandler manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> CrtFileHdlr</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_CreateFileHandler, Tcl_DeleteFileHandler - associate procedure callbacks with files or devices (Unix only)
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -6,7 +12,7 @@ Tcl_CreateFileHandler, Tcl_DeleteFileHandler - associate procedure callbacks wit
 <B>Tcl_CreateFileHandler</B>(<I>fd, mask, proc, clientData</I>)<BR>
 <B>Tcl_DeleteFileHandler</B>(<I>fd</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>int <B>fd</B> (in)<DD>
 Unix file descriptor for an open file or device.
 <P><DT>int <B>mask</B> (in)<DD>
@@ -63,7 +69,7 @@ events while waiting for files to become ready for I/O.  For this to work
 correctly, the application may need to use non-blocking I/O operations on
 the files for which handlers are declared.  Otherwise the application may
 block if it reads or writes too much data; while waiting for the I/O to
-complete the application won't be able to service other events. Use
+complete the application will not be able to service other events. Use
 <B><A HREF="../TclLib/OpenFileChnl.htm">Tcl_SetChannelOption</A></B> with <B>-blocking</B> to set the channel into
 blocking or nonblocking mode as required.
 <P>
@@ -72,8 +78,8 @@ implementation of the Tcl notifier.
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#callback">callback</A>, <A href="../Keywords/F.htm#file">file</A>, <A href="../Keywords/H.htm#handler">handler</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_GetOpenFile manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_GetOpenFile manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> GetOpnFl</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_GetOpenFile - Return a FILE* for a channel registered in the given interpreter (Unix only)
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -6,7 +12,7 @@ Tcl_GetOpenFile - Return a FILE* for a channel registered in the given interpret
 int<BR>
 <B>Tcl_GetOpenFile</B>(<I>interp, chanID, write, checkUsage, filePtr</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Tcl interpreter from which file handle is to be obtained.
 <P><DT>const char <B>*chanID</B> (in)<DD>
@@ -15,7 +21,7 @@ String identifying channel, such as <B>stdin</B> or <B>file4</B>.
 Non-zero means the file will be used for writing, zero means it will
 be used for reading.
 <P><DT>int <B>checkUsage</B> (in)<DD>
-If non-zero, then an error will be generated if the file wasn't opened
+If non-zero, then an error will be generated if the file was not opened
 for the access indicated by <I>write</I>.
 <P><DT>ClientData <B>*filePtr</B> (out)<DD>
 Points to word in which to store pointer to FILE structure for
@@ -32,8 +38,8 @@ In some cases, such as a channel that connects to a pipeline of
 subprocesses, different FILE pointers will be returned for reading
 and writing.
 <B>Tcl_GetOpenFile</B> normally returns <B>TCL_OK</B>.
-If an error occurs in <B>Tcl_GetOpenFile</B> (e.g. <I>chanID</I> didn't
-make any sense or <I>checkUsage</I> was set and the file wasn't opened
+If an error occurs in <B>Tcl_GetOpenFile</B> (e.g. <I>chanID</I> did not
+make any sense or <I>checkUsage</I> was set and the file was not opened
 for the access specified by <I>write</I>) then <B>TCL_ERROR</B> is returned
 and the interpreter's result will contain an error message.
 In the current implementation <I>checkUsage</I> is ignored and consistency
@@ -43,7 +49,7 @@ Note that this interface is only supported on the Unix platform.
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#channel">channel</A>, <A href="../Keywords/F.htm#file handle">file handle</A>, <A href="../Keywords/P.htm#permissions">permissions</A>, <A href="../Keywords/P.htm#pipeline">pipeline</A>, <A href="../Keywords/R.htm#read">read</A>, <A href="../Keywords/W.htm#write">write</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1996-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1996-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

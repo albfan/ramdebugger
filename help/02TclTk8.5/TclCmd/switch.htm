@@ -1,26 +1,30 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - switch manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>switch manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> switch</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="switch.htm#M2" NAME="L1444">NAME</A>
-<DL><DD>switch - Evaluate one of several scripts, depending on a given value</DL>
-<DD><A HREF="switch.htm#M3" NAME="L1445">SYNOPSIS</A>
+<DD><A HREF="switch.htm#M2" NAME="L1580">NAME</A>
+<DL><DD>switch - Evaluate one of several scripts, depending on a given value</DD></DL>
+<DD><A HREF="switch.htm#M3" NAME="L1581">SYNOPSIS</A>
 <DL>
-<DD><B>switch </B>?<I>options</I>?<I> string pattern body </I>?<I>pattern body </I>...?
-<DD><B>switch </B>?<I>options</I>?<I> string </I>{<I>pattern body </I>?<I>pattern body </I>...?}
 </DL>
-<DD><A HREF="switch.htm#M4" NAME="L1446">DESCRIPTION</A>
-<DL>
-<DD><A HREF="switch.htm#M5" NAME="L1447"><B>-exact</B></A>
-<DD><A HREF="switch.htm#M6" NAME="L1448"><B>-glob</B></A>
-<DD><A HREF="switch.htm#M7" NAME="L1449"><B>-regexp</B></A>
-<DD><A HREF="switch.htm#M8" NAME="L1450"><B>-nocase</B></A>
-<DD><A HREF="switch.htm#M9" NAME="L1451"><B>-matchvar</B> <I>varName</I></A>
-<DD><A HREF="switch.htm#M10" NAME="L1452"><B>-indexvar</B> <I>varName</I></A>
-<DD><A HREF="switch.htm#M11" NAME="L1453"><B>-&nbsp;-</B></A>
+<DD><A HREF="switch.htm#M4" NAME="L1582">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="switch.htm#M5" NAME="L1583"><B>-exact</B></A>
+<DD><A HREF="switch.htm#M6" NAME="L1584"><B>-glob</B></A>
+<DD><A HREF="switch.htm#M7" NAME="L1585"><B>-regexp</B></A>
+<DD><A HREF="switch.htm#M8" NAME="L1586"><B>-nocase</B></A>
+<DD><A HREF="switch.htm#M9" NAME="L1587"><B>-matchvar</B> <I>varName</I></A>
+<DD><A HREF="switch.htm#M10" NAME="L1588"><B>-indexvar</B> <I>varName</I></A>
+<DD><A HREF="switch.htm#M11" NAME="L1589"><B>--</B></A>
 </DL>
-<DD><A HREF="switch.htm#M12" NAME="L1454">EXAMPLES</A>
-<DD><A HREF="switch.htm#M13" NAME="L1455">SEE ALSO</A>
-<DD><A HREF="switch.htm#M14" NAME="L1456">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="switch.htm#M12" NAME="L1590">EXAMPLES</A>
+<DD><A HREF="switch.htm#M13" NAME="L1591">SEE ALSO</A>
+<DD><A HREF="switch.htm#M14" NAME="L1592">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 switch - Evaluate one of several scripts, depending on a given value
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -42,7 +46,7 @@ If the initial arguments to <B>switch</B> start with <B>-</B> then
 they are treated as options.  The following options are
 currently supported:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>-exact</B></A><DD>
 Use exact matching when comparing <I>string</I> to a pattern.  This
 is the default.
@@ -81,9 +85,11 @@ capturing parenthesis in the regular expression that matched, and so
 on.  When a <B>default</B> branch is taken, the variable will have the
 empty list written to it.  This option may be specified at the same
 time as the <B>-matchvar</B> option.
-<P><DT><A NAME="M11"><B>-&nbsp;-</B></A><DD>
+<P><DT><A NAME="M11"><B>--</B></A><DD>
 Marks the end of options.  The argument following this one will
 be treated as <I>string</I> even if it starts with a <B>-</B>.
+This is not required when the matching patterns and bodies are grouped
+together in a single argument.
 <P></DL>
 <P>
 Two syntaxes are provided for the <I>pattern</I> and <I>body</I> arguments.
@@ -101,9 +107,12 @@ no command or variable substitutions are performed on them;  this makes
 the behavior of the second form different than the first form in some
 cases.
 <P>
-If a <I>body</I> is specified as ``<B>-</B>'' it means that the <I>body</I>
+If a <I>body</I> is specified as
+&#8220;<B>-</B>&#8221;
+it means that the <I>body</I>
 for the next pattern should also be used as the body for this
-pattern (if the next pattern also has a body of ``<B>-</B>''
+pattern (if the next pattern also has a body of
+&#8220;<B>-</B>&#8221;
 then the body after that is used, and so on).
 This feature makes it possible to share a single <I>body</I> among
 several patterns.
@@ -115,31 +124,31 @@ patterns, and not intermingled with the patterns.
 The <B>switch</B> command can match against variables and not just
 literals, as shown here (the result is <I>2</I>):
 <PRE>set foo &quot;abc&quot;
-<B>switch</B> abc a - b {expr 1} $foo {expr 2} default {expr 3}</PRE>
+<B>switch</B> abc a - b {expr {1}} $foo {expr {2}} default {expr {3}}</PRE>
 <P>
 Using glob matching and the fall-through body is an alternative to
 writing regular expressions with alternations, as can be seen here
 (this returns <I>1</I>):
 <PRE><B>switch</B> -glob aaab {
    a*b     -
-   b       {expr 1}
-   a*      {expr 2}
-   default {expr 3}
+   b       {expr {1}}
+   a*      {expr {2}}
+   default {expr {3}}
 }</PRE>
 <P>
 Whenever nothing matches, the <B>default</B> clause (which must be
 last) is taken.  This example has a result of <I>3</I>:
 <PRE><B>switch</B> xyz {
-   a  -
+   a -
    b {
       # Correct Comment Placement
-      expr 1
+      expr {1}
    }
    c {
-      expr 2
+      expr {2}
    }
    default {
-      expr 3
+      expr {3}
    }
 }</PRE>
 <P>
@@ -158,8 +167,8 @@ exactly matched is easily obtained using the <B>-matchvar</B> option:
 <B><A HREF="../TclCmd/for.htm">for</A></B>, <B><A HREF="../TclCmd/if.htm">if</A></B>, <B><A HREF="../TclCmd/regexp.htm">regexp</A></B>
 <H3><A NAME="M14">KEYWORDS</A></H3>
 <A href="../Keywords/S.htm#switch">switch</A>, <A href="../Keywords/M.htm#match">match</A>, <A href="../Keywords/R.htm#regular expression">regular expression</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1993 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

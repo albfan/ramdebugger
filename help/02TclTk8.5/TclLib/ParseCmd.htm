@@ -1,28 +1,52 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_ParseCommand manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_ParseCommand manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> ParseCmd</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="ParseCmd.htm#M2" NAME="L509">NAME</A>
-<DL><DD>Tcl_ParseCommand, Tcl_ParseExpr, Tcl_ParseBraces, Tcl_ParseQuotedString, Tcl_ParseVarName, Tcl_ParseVar, Tcl_FreeParse, Tcl_EvalTokens, Tcl_EvalTokensStandard - parse Tcl scripts and expressions</DL>
-<DD><A HREF="ParseCmd.htm#M3" NAME="L510">SYNOPSIS</A>
+<DD><A HREF="ParseCmd.htm#M2" NAME="L526">NAME</A>
+<DL><DD>Tcl_ParseCommand, Tcl_ParseExpr, Tcl_ParseBraces, Tcl_ParseQuotedString, Tcl_ParseVarName, Tcl_ParseVar, Tcl_FreeParse, Tcl_EvalTokens, Tcl_EvalTokensStandard - parse Tcl scripts and expressions</DD></DL>
+<DD><A HREF="ParseCmd.htm#M3" NAME="L527">SYNOPSIS</A>
 <DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>int
+<DD><B>Tcl_ParseCommand</B>(<I>interp, start, numBytes, nested, parsePtr</I>)
+<DD>int
+<DD><B>Tcl_ParseExpr</B>(<I>interp, start, numBytes, parsePtr</I>)
+<DD>int
+<DD><B>Tcl_ParseBraces</B>(<I>interp, start, numBytes, parsePtr, append, termPtr</I>)
+<DD>int
+<DD><B>Tcl_ParseQuotedString</B>(<I>interp, start, numBytes, parsePtr, append, termPtr</I>)
+<DD>int
+<DD><B>Tcl_ParseVarName</B>(<I>interp, start, numBytes, parsePtr, append</I>)
+<DD>const char *
+<DD><B>Tcl_ParseVar</B>(<I>interp, start, termPtr</I>)
+<DD><B>Tcl_FreeParse</B>(<I>usedParsePtr</I>)
+<DD>Tcl_Obj *
+<DD><B>Tcl_EvalTokens</B>(<I>interp, tokenPtr, numTokens</I>)
+<DD>int
+<DD><B>Tcl_EvalTokensStandard</B>(<I>interp, tokenPtr, numTokens</I>)
 </DL>
-<DD><A HREF="ParseCmd.htm#M4" NAME="L511">ARGUMENTS</A>
-<DL>
+<DD><A HREF="ParseCmd.htm#M4" NAME="L528">ARGUMENTS</A>
+<DL class="arguments">
 </DL>
-<DD><A HREF="ParseCmd.htm#M5" NAME="L512">DESCRIPTION</A>
-<DD><A HREF="ParseCmd.htm#M6" NAME="L513">TCL_PARSE STRUCTURE</A>
-<DL>
-<DD><A HREF="ParseCmd.htm#M7" NAME="L514"><B>TCL_TOKEN_WORD</B></A>
-<DD><A HREF="ParseCmd.htm#M8" NAME="L515"><B>TCL_TOKEN_SIMPLE_WORD</B></A>
-<DD><A HREF="ParseCmd.htm#M9" NAME="L516"><B>TCL_TOKEN_EXPAND_WORD</B></A>
-<DD><A HREF="ParseCmd.htm#M10" NAME="L517"><B>TCL_TOKEN_TEXT</B></A>
-<DD><A HREF="ParseCmd.htm#M11" NAME="L518"><B>TCL_TOKEN_BS</B></A>
-<DD><A HREF="ParseCmd.htm#M12" NAME="L519"><B>TCL_TOKEN_COMMAND</B></A>
-<DD><A HREF="ParseCmd.htm#M13" NAME="L520"><B>TCL_TOKEN_VARIABLE</B></A>
-<DD><A HREF="ParseCmd.htm#M14" NAME="L521"><B>TCL_TOKEN_SUB_EXPR</B></A>
-<DD><A HREF="ParseCmd.htm#M15" NAME="L522"><B>TCL_TOKEN_OPERATOR</B></A>
+<DD><A HREF="ParseCmd.htm#M5" NAME="L529">DESCRIPTION</A>
+<DD><A HREF="ParseCmd.htm#M6" NAME="L530">TCL_PARSE STRUCTURE</A>
+<DL class="tcl_parse structure">
+<DD><A HREF="ParseCmd.htm#M7" NAME="L531"><B>TCL_TOKEN_WORD</B></A>
+<DD><A HREF="ParseCmd.htm#M8" NAME="L532"><B>TCL_TOKEN_SIMPLE_WORD</B></A>
+<DD><A HREF="ParseCmd.htm#M9" NAME="L533"><B>TCL_TOKEN_EXPAND_WORD</B></A>
+<DD><A HREF="ParseCmd.htm#M10" NAME="L534"><B>TCL_TOKEN_TEXT</B></A>
+<DD><A HREF="ParseCmd.htm#M11" NAME="L535"><B>TCL_TOKEN_BS</B></A>
+<DD><A HREF="ParseCmd.htm#M12" NAME="L536"><B>TCL_TOKEN_COMMAND</B></A>
+<DD><A HREF="ParseCmd.htm#M13" NAME="L537"><B>TCL_TOKEN_VARIABLE</B></A>
+<DD><A HREF="ParseCmd.htm#M14" NAME="L538"><B>TCL_TOKEN_SUB_EXPR</B></A>
+<DD><A HREF="ParseCmd.htm#M15" NAME="L539"><B>TCL_TOKEN_OPERATOR</B></A>
 </DL>
-<DD><A HREF="ParseCmd.htm#M16" NAME="L523">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="ParseCmd.htm#M16" NAME="L540">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_ParseCommand, Tcl_ParseExpr, Tcl_ParseBraces, Tcl_ParseQuotedString, Tcl_ParseVarName, Tcl_ParseVar, Tcl_FreeParse, Tcl_EvalTokens, Tcl_EvalTokensStandard - parse Tcl scripts and expressions
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -45,7 +69,7 @@ Tcl_Obj *<BR>
 int<BR>
 <B>Tcl_EvalTokensStandard</B>(<I>interp, tokenPtr, numTokens</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (out)<DD>
 For procedures other than <B>Tcl_FreeParse</B>, <B>Tcl_EvalTokens</B>
 and <B>Tcl_EvalTokensStandard</B>, used only for error reporting;
@@ -94,7 +118,7 @@ and fills in the structure pointed to by <I>parsePtr</I>
 with a collection of tokens describing the information that was parsed.
 The procedures normally return <B>TCL_OK</B>.
 However, if an error occurs then they return <B>TCL_ERROR</B>,
-leave an error message in <I>interp's</I> result
+leave an error message in <I>interp</I>'s result
 (if <I>interp</I> is not NULL),
 and leave nothing in <I>parsePtr</I>.
 <P>
@@ -110,7 +134,7 @@ result, and no information is left at <I>*parsePtr</I>.
 <P>
 <B>Tcl_ParseExpr</B> parses Tcl expressions.
 Given a pointer to a script containing an expression,
-<B>Tcl_ParseCommand</B> parses the expression.
+<B>Tcl_ParseExpr</B> parses the expression.
 If the expression was parsed successfully,
 <B>Tcl_ParseExpr</B> returns <B>TCL_OK</B> and fills in the
 structure pointed to by <I>parsePtr</I> with information about the
@@ -137,15 +161,15 @@ an error message is left in <I>interp</I>'s result,
 and no information is left at <I>*parsePtr</I> or <I>*termPtr</I>.
 <P>
 <B>Tcl_ParseQuotedString</B> parses a double-quoted string such as
-<B>&quot;sum is [expr $a+$b]&quot;</B>
+<B>&quot;sum is [expr {$a+$b}]&quot;</B>
 from the beginning of the argument <I>start</I>.
-The first character of <I>start</I> must be <B>&quot;</B>. 
+The first character of <I>start</I> must be <B>&#34;</B>. 
 If the double-quoted string was parsed successfully,
 <B>Tcl_ParseQuotedString</B> returns <B>TCL_OK</B>,
 fills in the structure pointed to by <I>parsePtr</I>
 with information about the structure of the string
 (see below for details),
-and stores a pointer to the character just after the terminating <B>&quot;</B>
+and stores a pointer to the character just after the terminating <B>&#34;</B>
 in the location given by <I>*termPtr</I>.
 If an error occurs while parsing the string
 then <B>TCL_ERROR</B> is returned,
@@ -153,7 +177,7 @@ an error message is left in <I>interp</I>'s result,
 and no information is left at <I>*parsePtr</I> or <I>*termPtr</I>.
 <P>
 <B>Tcl_ParseVarName</B> parses a Tcl variable reference such as
-<B>$abc</B> or <B>$x([expr $index + 1])</B> from the beginning of its
+<B>$abc</B> or <B>$x([expr {$index + 1}])</B> from the beginning of its
 <I>start</I> argument.
 The first character of <I>start</I> must be <B>$</B>. 
 If a variable name was parsed successfully, <B>Tcl_ParseVarName</B>
@@ -161,11 +185,11 @@ returns <B>TCL_OK</B> and fills in the structure pointed to by
 <I>parsePtr</I> with information about the structure of the variable name
 (see below for details).  If an error
 occurs while parsing the command then <B>TCL_ERROR</B> is returned, an
-error message is left in <I>interp</I>'s result (if <I>interp</I> isn't
+error message is left in <I>interp</I>'s result (if <I>interp</I> is not
 NULL), and no information is left at <I>*parsePtr</I>.
 <P>
 <B>Tcl_ParseVar</B> parse a Tcl variable reference such as <B>$abc</B>
-or <B>$x([expr $index + 1])</B> from the beginning of its <I>start</I>
+or <B>$x([expr {$index + 1}])</B> from the beginning of its <I>start</I>
 argument.  The first character of <I>start</I> must be <B>$</B>.  If
 the variable name is parsed successfully, <B>Tcl_ParseVar</B> returns a
 pointer to the string value of the variable.  If an error occurs while
@@ -267,7 +291,7 @@ several component tokens, which immediately follow the parent token;
 the <I>numComponents</I> field describes how many of these there are.
 The <I>type</I> field has one of the following values:
 <P>
-<DL>
+<DL class="tcl_parse structure">
 <DT><A NAME="M7"><B>TCL_TOKEN_WORD</B></A><DD>
 This token ordinarily describes one word of a command
 but it may also describe a quoted or braced string in an expression.
@@ -288,7 +312,7 @@ sub-token.  The <I>numComponents</I> field is always 1.
 <P><DT><A NAME="M9"><B>TCL_TOKEN_EXPAND_WORD</B></A><DD>
 This token has the same meaning as <B>TCL_TOKEN_WORD</B>, except that
 the command parser notes this word began with the expansion
-prefix <B>{expand}</B>, indicating that after substitution,
+prefix <B>{*}</B>, indicating that after substitution,
 the list value of this word should be expanded to form multiple
 arguments in command evaluation.  This
 token type can only be created by Tcl_ParseCommand.
@@ -453,7 +477,7 @@ referenced by code outside of these procedures.
 
 <H3><A NAME="M16">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#backslash substitution">backslash substitution</A>, <A href="../Keywords/B.htm#braces">braces</A>, <A href="../Keywords/C.htm#command">command</A>, <A href="../Keywords/E.htm#expression">expression</A>, <A href="../Keywords/P.htm#parse">parse</A>, <A href="../Keywords/T.htm#token">token</A>, <A href="../Keywords/V.htm#variable substitution">variable substitution</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

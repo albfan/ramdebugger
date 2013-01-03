@@ -1,0 +1,141 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>Virtual File System Objects</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: "Verdana" "sans-serif";
+    padding: 8px 1%;
+}
+
+a { color: #45735f }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:240px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.toolbar {
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding:1px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #80a796; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* rounded corners */
+.se  { background: url(../images/se.png) 100% 100% no-repeat #80a796}
+.sw  { background: url(../images/sw.png) 0% 100% no-repeat }
+.ne  { background: url(../images/ne.png) 100% 0% no-repeat }
+.nw  { background: url(../images/nw.png) 0% 0% no-repeat }
+
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="../index.html">
+<img class="logo" src="../images/SQLite.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% style="clear:both"><tr><td>
+  <div class="se"><div class="sw"><div class="ne"><div class="nw">
+  <div class="toolbar">
+    <a href="../about.html">About</a>
+    <a href="../sitemap.html">Sitemap</a>
+    <a href="../docs.html">Documentation</a>
+    <a href="../download.html">Download</a>
+    <a href="../copyright.html">License</a>
+    <a href="../news.html">News</a>
+    <a href="http://www.sqlite.org/cvstrac/index">Developers</a>
+    <a href="../support.html">Support</a>
+  </div></div></div></div></div>
+</td></tr></table>
+  
+<a href="intro.html"><h2>SQLite C Interface</h2></a><h2>Virtual File System Objects</h2><blockquote><pre>sqlite3_vfs *sqlite3_vfs_find(const char *zVfsName);
+int sqlite3_vfs_register(sqlite3_vfs*, int makeDflt);
+int sqlite3_vfs_unregister(sqlite3_vfs*);
+</pre></blockquote><p>
+A virtual filesystem (VFS) is an <a href="../c3ref/vfs.html">sqlite3_vfs</a> object
+that SQLite uses to interact
+with the underlying operating system.  Most SQLite builds come with a
+single default VFS that is appropriate for the host computer.
+New VFSes can be registered and existing VFSes can be unregistered.
+The following interfaces are provided.</p>
+
+<p>The sqlite3_vfs_find() interface returns a pointer to a VFS given its name.
+Names are case sensitive.
+Names are zero-terminated UTF-8 strings.
+If there is no match, a NULL pointer is returned.
+If zVfsName is NULL then the default VFS is returned.</p>
+
+<p>New VFSes are registered with sqlite3_vfs_register().
+Each new VFS becomes the default VFS if the makeDflt flag is set.
+The same VFS can be registered multiple times without injury.
+To make an existing VFS into the default VFS, register it again
+with the makeDflt flag set.  If two different VFSes with the
+same name are registered, the behavior is undefined.  If a
+VFS is registered with a name that is NULL or an empty string,
+then the behavior is undefined.</p>
+
+<p>Unregister a VFS with the sqlite3_vfs_unregister() interface.
+If the default VFS is unregistered, another VFS is chosen as
+the default.  The choice for the new VFS is arbitrary.</p>
+
+<p><h3>Invariants:</h3>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr><td valign="top">H11203</td> 
+<td valign="top">
+The <a href="../c3ref/vfs_find.html">sqlite3_vfs_find(N)</a> interface returns a pointer to the
+registered <a href="../c3ref/vfs.html">sqlite3_vfs</a> object whose name exactly matches
+the zero-terminated UTF-8 string N, or it returns NULL if
+there is no match.</td></tr>
+<tr><td valign="top">H11206</td> 
+<td valign="top">
+If the N parameter to <a href="../c3ref/vfs_find.html">sqlite3_vfs_find(N)</a> is NULL then
+the function returns a pointer to the default <a href="../c3ref/vfs.html">sqlite3_vfs</a>
+object if there is one, or NULL if there is no default
+<a href="../c3ref/vfs.html">sqlite3_vfs</a> object.</td></tr>
+<tr><td valign="top">H11209</td> 
+<td valign="top">
+The <a href="../c3ref/vfs_find.html">sqlite3_vfs_register(P,F)</a> interface registers the
+well-formed <a href="../c3ref/vfs.html">sqlite3_vfs</a> object P using the name given
+by the zName field of the object.</td></tr>
+<tr><td valign="top">H11212</td> 
+<td valign="top">
+Using the <a href="../c3ref/vfs_find.html">sqlite3_vfs_register(P,F)</a> interface to register
+the same <a href="../c3ref/vfs.html">sqlite3_vfs</a> object multiple times is a harmless no-op.</td></tr>
+<tr><td valign="top">H11215</td> 
+<td valign="top">
+The <a href="../c3ref/vfs_find.html">sqlite3_vfs_register(P,F)</a> interface makes the <a href="../c3ref/vfs.html">sqlite3_vfs</a>
+object P the default <a href="../c3ref/vfs.html">sqlite3_vfs</a> object if F is non-zero.</td></tr>
+<tr><td valign="top">H11218</td> 
+<td valign="top">
+The <a href="../c3ref/vfs_find.html">sqlite3_vfs_unregister(P)</a> interface unregisters the
+<a href="../c3ref/vfs.html">sqlite3_vfs</a> object P so that it is no longer returned by
+subsequent calls to <a href="../c3ref/vfs_find.html">sqlite3_vfs_find()</a>.</td></tr>
+</table>
+</p><p>See also lists of
+  <a href="objlist.html">Objects</a>,
+  <a href="constlist.html">Constants</a>, and
+  <a href="funclist.html">Functions</a>.</p><hr><small><i>
+This page last modified 2008/12/09 18:44:04 UTC
+</i></small></div></body></html>

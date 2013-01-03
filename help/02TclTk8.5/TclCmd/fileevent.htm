@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - fileevent manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>fileevent manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> fileevent</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 fileevent - Execute a script when a channel becomes readable or writable
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -14,9 +20,11 @@ interact with the user while waiting for the data to arrive.  If an
 application invokes <B><A HREF="../TclCmd/gets.htm">gets</A></B> or <B><A HREF="../TclCmd/read.htm">read</A></B> on a blocking channel when
 there is no input data available, the process will block; until the input
 data arrives, it will not be able to service other events, so it will
-appear to the user to ``freeze up''.  With <B>fileevent</B>, the process can
+appear to the user to
+&#8220;freeze up&#8221;.
+With <B>fileevent</B>, the process can
 tell when data is present and only invoke <B><A HREF="../TclCmd/gets.htm">gets</A></B> or <B><A HREF="../TclCmd/read.htm">read</A></B> when
-they won't block.
+they will not block.
 <P>
 The <I>channelId</I> argument to <B>fileevent</B> refers to an open
 channel such as a Tcl standard channel (<B>stdin</B>, <B>stdout</B>,
@@ -100,8 +108,8 @@ by Mark Diekhans.
 <B><A HREF="../TclCmd/fconfigure.htm">fconfigure</A></B>, <B><A HREF="../TclCmd/gets.htm">gets</A></B>, <B><A HREF="../TclCmd/interp.htm">interp</A></B>, <B><A HREF="../TclCmd/puts.htm">puts</A></B>, <B><A HREF="../TclCmd/read.htm">read</A></B>, <B><A HREF="../TclLib/StdChannels.htm">Tcl_StandardChannels</A></B>
 <H3><A NAME="M8">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#asynchronous I/O">asynchronous I/O</A>, <A href="../Keywords/B.htm#blocking">blocking</A>, <A href="../Keywords/C.htm#channel">channel</A>, <A href="../Keywords/E.htm#event handler">event handler</A>, <A href="../Keywords/N.htm#nonblocking">nonblocking</A>, <A href="../Keywords/R.htm#readable">readable</A>, <A href="../Keywords/S.htm#script">script</A>, <A href="../Keywords/W.htm#writable.">writable.</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

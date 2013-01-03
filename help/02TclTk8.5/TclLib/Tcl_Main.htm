@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_Main manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_Main manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> Tcl_Main</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_Main, Tcl_SetMainLoop - main program and event loop definition for Tcl-based applications
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -6,7 +12,7 @@ Tcl_Main, Tcl_SetMainLoop - main program and event loop definition for Tcl-based
 <B>Tcl_Main</B>(<I>argc, argv, appInitProc</I>)<BR>
 <B>Tcl_SetMainLoop</B>(<I>mainLoopProc</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>int <B>argc</B> (in)<DD>
 Number of elements in <I>argv</I>.
 <P><DT>char <B>*argv[]</B> (in)<DD>
@@ -19,7 +25,9 @@ Address of an application-specific event loop procedure.
 <P></DL>
 <H3><A NAME="M5">DESCRIPTION</A></H3>
 <B>Tcl_Main</B> can serve as the main program for Tcl-based shell
-applications.  A ``shell application'' is a program
+applications.  A
+&#8220;shell application&#8221;
+is a program
 like tclsh or wish that supports both interactive interpretation
 of Tcl and evaluation of a script contained in a file given as
 a command line argument.  <B>Tcl_Main</B> is offered as a convenience
@@ -74,8 +82,9 @@ the Tcl variables <I>argc</I>, <I>argv</I>, <I>argv0</I>, and
 <P>
 When it has finished its own initialization, but before it processes
 commands, <B>Tcl_Main</B> calls the procedure given by the
-<I>appInitProc</I> argument.  This procedure provides a ``hook'' for
-the application to perform its own initialization of the interpreter
+<I>appInitProc</I> argument.  This procedure provides a
+&#8220;hook&#8221;
+for the application to perform its own initialization of the interpreter
 created by <B>Tcl_Main</B>, such as defining application-specific
 commands.  The procedure must have an interface that matches the
 type <B>Tcl_AppInitProc</B>:
@@ -124,9 +133,9 @@ the <B><A HREF="../TclCmd/exit.htm">exit</A></B> command.
 <B><A HREF="../UserCmd/tclsh.htm">tclsh</A></B>, <B><A HREF="../TclLib/GetStdChan.htm">Tcl_GetStdChannel</A></B>, <B><A HREF="../TclLib/StdChannels.htm">Tcl_StandardChannels</A></B>, <B><A HREF="../TclLib/AppInit.htm">Tcl_AppInit</A></B>, <B><A HREF="../TclCmd/exit.htm">exit</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#application-specific initialization">application-specific initialization</A>, <A href="../Keywords/C.htm#command-line arguments">command-line arguments</A>, <A href="../Keywords/M.htm#main program">main program</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 2000 Ajuba Solutions.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+Copyright &copy; 2000 Ajuba Solutions.
+</div>
 </BODY></HTML>

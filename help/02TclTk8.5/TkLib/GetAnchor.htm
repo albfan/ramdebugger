@@ -1,4 +1,29 @@
-<HTML><HEAD><TITLE>Tk Library Procedures - Tk_GetAnchorFromObj manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetAnchorFromObj manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> GetAnchor</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="GetAnchor.htm#M2" NAME="L222">NAME</A>
+<DL><DD>Tk_GetAnchorFromObj, Tk_GetAnchor, Tk_NameOfAnchor - translate between strings and anchor positions</DD></DL>
+<DD><A HREF="GetAnchor.htm#M3" NAME="L223">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>int
+<DD><B>Tk_GetAnchorFromObj(</B><I>interp, objPtr, anchorPtr</I><B>)</B>
+<DD>int
+<DD><B>Tk_GetAnchor(</B><I>interp, string, anchorPtr</I><B>)</B>
+<DD>const char *
+<DD><B>Tk_NameOfAnchor(</B><I>anchor</I><B>)</B>
+</DL>
+<DD><A HREF="GetAnchor.htm#M4" NAME="L224">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="GetAnchor.htm#M5" NAME="L225">DESCRIPTION</A>
+<DD><A HREF="GetAnchor.htm#M6" NAME="L226">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_GetAnchorFromObj, Tk_GetAnchor, Tk_NameOfAnchor - translate between strings and anchor positions
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -7,17 +32,26 @@ int<BR>
 <B>Tk_GetAnchorFromObj(</B><I>interp, objPtr, anchorPtr</I><B>)</B><BR>
 int<BR>
 <B>Tk_GetAnchor(</B><I>interp, string, anchorPtr</I><B>)</B><BR>
-CONST char *<BR>
+const char *<BR>
 <B>Tk_NameOfAnchor(</B><I>anchor</I><B>)</B><BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter to use for error reporting, or NULL.
 <P><DT>Tcl_Obj <B>*objPtr</B> (in/out)<DD>
-String value contains name of anchor point: <B>n</B>, <B>ne</B>,
-<B>e</B>, <B>se</B>, <B>s</B>, <B>sw</B>, <B>w</B>, <B>nw</B>, or <B>center</B>;
+String value contains name of anchor point:
+&#8220;n&#8221;,
+&#8220;ne&#8221;,
+&#8220;e&#8221;,
+&#8220;se&#8221;,
+&#8220;s&#8221;,
+&#8220;sw&#8221;,
+&#8220;w&#8221;,
+&#8220;nw&#8221;,
+or
+&#8220;center&#8221;;
 internal rep will be modified to cache corresponding Tk_Anchor.
-<P><DT>CONST char <B>*string</B> (in)<DD>
+<P><DT>const char <B>*string</B> (in)<DD>
 Same as <I>objPtr</I> except description of anchor point is passed as
 a string.
 <P><DT>int <B>*anchorPtr</B> (out)<DD>
@@ -39,10 +73,10 @@ position the top center point of the object at a particular place.
 <P>
 Under normal circumstances the return value is <B>TCL_OK</B> and
 <I>interp</I> is unused.
-If <I>string</I> doesn't contain a valid anchor position
+If <I>string</I> does not contain a valid anchor position
 or an abbreviation of one of these names, <B>TCL_ERROR</B> is returned,
 <I>*anchorPtr</I> is unmodified, and an error message is
-stored in <I>interp</I>'s result if <I>interp</I> isn't NULL.
+stored in <I>interp</I>'s result if <I>interp</I> is not NULL.
 <B>Tk_GetAnchorFromObj</B> caches information about the return
 value in <I>objPtr</I>, which speeds up future calls to
 <B>Tk_GetAnchorFromObj</B> with the same <I>objPtr</I>.
@@ -56,13 +90,13 @@ return value, so <B>Tk_GetAnchor</B> is less efficient than
 <B>Tk_NameOfAnchor</B> is the logical inverse of <B>Tk_GetAnchor</B>.
 Given an anchor position such as <B>TK_ANCHOR_N</B> it returns a
 statically-allocated string corresponding to <I>anchor</I>.
-If <I>anchor</I> isn't a legal anchor value, then
-``unknown anchor position'' is returned.
-
+If <I>anchor</I> is not a legal anchor value, then
+&#8220;unknown anchor position&#8221;
+is returned.
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#anchor position">anchor position</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1998 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1998 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

@@ -1,4 +1,32 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_AsyncCreate manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_AsyncCreate manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> Async</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="Async.htm#M2" NAME="L33">NAME</A>
+<DL><DD>Tcl_AsyncCreate, Tcl_AsyncMark, Tcl_AsyncInvoke, Tcl_AsyncDelete, Tcl_AsyncReady - handle asynchronous events</DD></DL>
+<DD><A HREF="Async.htm#M3" NAME="L34">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>Tcl_AsyncHandler
+<DD><B>Tcl_AsyncCreate</B>(<I>proc, clientData</I>)
+<DD><B>Tcl_AsyncMark</B>(<I>async</I>)
+<DD>int
+<DD><B>Tcl_AsyncInvoke</B>(<I>interp, code</I>)
+<DD><B>Tcl_AsyncDelete</B>(<I>async</I>)
+<DD>int
+<DD><B>Tcl_AsyncReady</B>()
+</DL>
+<DD><A HREF="Async.htm#M4" NAME="L35">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="Async.htm#M5" NAME="L36">DESCRIPTION</A>
+<DD><A HREF="Async.htm#M6" NAME="L37">WARNING</A>
+<DD><A HREF="Async.htm#M7" NAME="L38">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_AsyncCreate, Tcl_AsyncMark, Tcl_AsyncInvoke, Tcl_AsyncDelete, Tcl_AsyncReady - handle asynchronous events
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -12,7 +40,7 @@ int<BR>
 int<BR>
 <B>Tcl_AsyncReady</B>()<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Tcl_AsyncProc <B>*proc</B> (in)<DD>
 Procedure to invoke to handle an asynchronous event.
 <P><DT>ClientData <B>clientData</B> (in)<DD>
@@ -31,9 +59,9 @@ or 0 if <I>interp</I> is NULL.
 These procedures provide a safe mechanism for dealing with
 asynchronous events such as signals.
 If an event such as a signal occurs while a Tcl script is being
-evaluated then it isn't safe to take any substantive action to
+evaluated then it is not safe to take any substantive action to
 process the event.
-For example, it isn't safe to evaluate a Tcl script since the
+For example, it is not safe to evaluate a Tcl script since the
 interpreter may already be in the middle of evaluating a script;
 it may not even be safe to allocate memory, since a memory
 allocation could have been in progress when the event occurred.
@@ -121,7 +149,6 @@ If new handlers become ready while handlers are executing,
 <B>Tcl_AsyncInvoke</B> will invoke them all;  at each point it
 invokes the highest-priority (oldest) ready handler, repeating
 this over and over until there are no longer any ready handlers.
-
 <H3><A NAME="M6">WARNING</A></H3>
 It is almost always a bad idea for an asynchronous event
 handler to modify the interpreter's result or return a code different
@@ -137,9 +164,9 @@ the interpreter's state by calling <B><A HREF="../TclLib/SaveResult.htm">Tcl_Res
 and then returning the <I>code</I> argument.
 
 <H3><A NAME="M7">KEYWORDS</A></H3>
-<A href="../Keywords/A.htm#asynchronous event">asynchronous event</A>, <A href="../Keywords/H.htm#handler">handler</A>, <A href="../Keywords/S.htm#signal">signal</A>, <A href="../Keywords/T.htm#Tcl_SaveInterpState">Tcl_SaveInterpState</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1989-1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<A href="../Keywords/A.htm#asynchronous event">asynchronous event</A>, <A href="../Keywords/H.htm#handler">handler</A>, <A href="../Keywords/S.htm#signal">signal</A>, <A href="../Keywords/T.htm#Tcl_SaveInterpState">Tcl_SaveInterpState</A>, <A href="../Keywords/T.htm#thread">thread</A>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1989-1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

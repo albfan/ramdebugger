@@ -1,12 +1,47 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_PkgRequire manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_PkgRequire manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> PkgRequire</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="PkgRequire.htm#M2" NAME="L541">NAME</A>
+<DL><DD>Tcl_PkgRequire, Tcl_PkgRequireEx, Tcl_PkgRequireProc, Tcl_PkgPresent, Tcl_PkgPresentEx, Tcl_PkgProvide, Tcl_PkgProvideEx - package version control</DD></DL>
+<DD><A HREF="PkgRequire.htm#M3" NAME="L542">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>const char *
+<DD><B>Tcl_PkgRequire</B>(<I>interp, name, version, exact</I>)
+<DD>const char *
+<DD><B>Tcl_PkgRequireEx</B>(<I>interp, name, version, exact, clientDataPtr</I>)
+<DD>int
+<DD><B>Tcl_PkgRequireProc</B>(<I>interp, name, objc, objv, clientDataPtr</I>)
+<DD>const char *
+<DD><B>Tcl_PkgPresent</B>(<I>interp, name, version, exact</I>)
+<DD>const char *
+<DD><B>Tcl_PkgPresentEx</B>(<I>interp, name, version, exact, clientDataPtr</I>)
+<DD>int
+<DD><B>Tcl_PkgProvide</B>(<I>interp, name, version</I>)
+<DD>int
+<DD><B>Tcl_PkgProvideEx</B>(<I>interp, name, version, clientData</I>)
+</DL>
+<DD><A HREF="PkgRequire.htm#M4" NAME="L543">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="PkgRequire.htm#M5" NAME="L544">DESCRIPTION</A>
+<DD><A HREF="PkgRequire.htm#M6" NAME="L545">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
-Tcl_PkgRequire, Tcl_PkgRequireEx, Tcl_PkgPresent, Tcl_PkgPresentEx, Tcl_PkgProvide, Tcl_PkgProvideEx - package version control
+Tcl_PkgRequire, Tcl_PkgRequireEx, Tcl_PkgRequireProc, Tcl_PkgPresent, Tcl_PkgPresentEx, Tcl_PkgProvide, Tcl_PkgProvideEx - package version control
 <H3><A NAME="M3">SYNOPSIS</A></H3>
 <B>#include &lt;tcl.h&gt;</B><BR>
 const char *<BR>
 <B>Tcl_PkgRequire</B>(<I>interp, name, version, exact</I>)<BR>
 const char *<BR>
 <B>Tcl_PkgRequireEx</B>(<I>interp, name, version, exact, clientDataPtr</I>)<BR>
+int<BR>
+<B>Tcl_PkgRequireProc</B>(<I>interp, name, objc, objv, clientDataPtr</I>)<BR>
 const char *<BR>
 <B>Tcl_PkgPresent</B>(<I>interp, name, version, exact</I>)<BR>
 const char *<BR>
@@ -16,7 +51,7 @@ int<BR>
 int<BR>
 <B>Tcl_PkgProvideEx</B>(<I>interp, name, version, clientData</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter where package is needed or available.
 <P><DT>const char <B>*name</B> (in)<DD>
@@ -36,6 +71,10 @@ Arbitrary value to be associated with the package.
 Pointer to place to store the value associated with the matching
 package. It is only changed if the pointer is not NULL and the
 function completed successfully.
+<P><DT>int <B>objc</B> (in)<DD>
+Number of requirements.
+<P><DT>Tcl_Obj* <B>objv[]</B> (in)<DD>
+Array of requirements.
 <P></DL>
 <H3><A NAME="M5">DESCRIPTION</A></H3>
 These procedures provide C-level interfaces to Tcl's package and
@@ -63,10 +102,14 @@ in the interpreter's result.
 allow the setting and retrieving of the client data associated with
 the package. In all other respects they are equivalent to the matching
 functions.
+<P>
+<B>Tcl_PkgRequireProc</B> is the form of <B>package require</B> handling
+multiple requirements. The other forms are present for backward
+compatibility and translate their invokations to this form.
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/P.htm#package">package</A>, <A href="../Keywords/P.htm#present">present</A>, <A href="../Keywords/P.htm#provide">provide</A>, <A href="../Keywords/R.htm#require">require</A>, <A href="../Keywords/V.htm#version">version</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

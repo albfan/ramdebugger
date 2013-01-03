@@ -1,11 +1,17 @@
-<HTML><HEAD><TITLE>Tk Library Procedures - Tk_FreeXId manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_FreeXId manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> FreeXId</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_FreeXId - make X resource identifier available for reuse
 <H3><A NAME="M3">SYNOPSIS</A></H3>
 <B>#include &lt;tk.h&gt;</B><BR>
 <B>Tk_FreeXId(</B><I>display, id</I><B>)</B><BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Display <B>*display</B> (in)<DD>
 Display for which <I>id</I> was allocated.
 <P><DT>XID <B>id</B> (in)<DD>
@@ -29,14 +35,13 @@ However, if you allocate resources directly from Xlib, for example
 by calling <B>XCreatePixmap</B>, then you should call <B>Tk_FreeXId</B>
 when you call the corresponding Xlib free procedure, such as
 <B>XFreePixmap</B>.
-If you don't call <B>Tk_FreeXId</B> then the resource identifier will
+If you do not call <B>Tk_FreeXId</B> then the resource identifier will
 be lost, which could cause problems if the application runs long enough
 to lose all of the available identifiers.
-
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/R.htm#resource identifier">resource identifier</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

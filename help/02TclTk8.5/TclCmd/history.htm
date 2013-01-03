@@ -1,28 +1,33 @@
-<HTML><HEAD><TITLE>Built-In Commands - history manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>history manual page - Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> history</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="history.htm#M2" NAME="L567">NAME</A>
-<DL><DD>history - Manipulate the history list</DL>
-<DD><A HREF="history.htm#M3" NAME="L568">SYNOPSIS</A>
+<DD><A HREF="history.htm#M2" NAME="L588">NAME</A>
+<DL><DD>history - Manipulate the history list</DD></DL>
+<DD><A HREF="history.htm#M3" NAME="L589">SYNOPSIS</A>
 <DL>
-<DD><B>history </B>?<I>option</I>? ?<I>arg arg ...</I>?
 </DL>
-<DD><A HREF="history.htm#M4" NAME="L569">DESCRIPTION</A>
-<DL>
+<DD><A HREF="history.htm#M4" NAME="L590">DESCRIPTION</A>
+<DL class="description">
 </DL>
-<DL>
-<DD><A HREF="history.htm#M5" NAME="L570"><B>history</B></A>
-<DD><A HREF="history.htm#M6" NAME="L571"><B>history add</B><I> command </I>?<B>exec</B>?</A>
-<DD><A HREF="history.htm#M7" NAME="L572"><B>history change</B><I> newValue</I> ?<I>event</I>?</A>
-<DD><A HREF="history.htm#M8" NAME="L573"><B>history clear</B></A>
-<DD><A HREF="history.htm#M9" NAME="L574"><B>history event</B> ?<I>event</I>?</A>
-<DD><A HREF="history.htm#M10" NAME="L575"><B>history info </B>?<I>count</I>?</A>
-<DD><A HREF="history.htm#M11" NAME="L576"><B>history keep </B>?<I>count</I>?</A>
-<DD><A HREF="history.htm#M12" NAME="L577"><B>history nextid</B></A>
-<DD><A HREF="history.htm#M13" NAME="L578"><B>history redo </B>?<I>event</I>?</A>
+<DL class="description">
+<DD><A HREF="history.htm#M5" NAME="L591"><B>history</B></A>
+<DD><A HREF="history.htm#M6" NAME="L592"><B>history add</B><I> command </I>?<B>exec</B>?</A>
+<DD><A HREF="history.htm#M7" NAME="L593"><B>history change</B><I> newValue</I> ?<I>event</I>?</A>
+<DD><A HREF="history.htm#M8" NAME="L594"><B>history clear</B></A>
+<DD><A HREF="history.htm#M9" NAME="L595"><B>history event</B> ?<I>event</I>?</A>
+<DD><A HREF="history.htm#M10" NAME="L596"><B>history info </B>?<I>count</I>?</A>
+<DD><A HREF="history.htm#M11" NAME="L597"><B>history keep </B>?<I>count</I>?</A>
+<DD><A HREF="history.htm#M12" NAME="L598"><B>history nextid</B></A>
+<DD><A HREF="history.htm#M13" NAME="L599"><B>history redo </B>?<I>event</I>?</A>
 </DL>
-<DD><A HREF="history.htm#M14" NAME="L579">HISTORY REVISION</A>
-<DD><A HREF="history.htm#M15" NAME="L580">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="history.htm#M14" NAME="L600">HISTORY REVISION</A>
+<DD><A HREF="history.htm#M15" NAME="L601">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 history - Manipulate the history list
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -30,11 +35,12 @@ history - Manipulate the history list
 <H3><A NAME="M4">DESCRIPTION</A></H3>
 The <B>history</B> command performs one of several operations related to
 recently-executed commands recorded in a history list.  Each of
-these recorded commands is referred to as an ``<A HREF="../TkCmd/event.htm">event</A>''.  When
-specifying an event to the <B>history</B> command, the following
+these recorded commands is referred to as an
+&#8220;event&#8221;.
+When specifying an event to the <B>history</B> command, the following
 forms may be used:
 <P>
-<DL>
+<DL class="description">
 <DT>[1]<DD>
 A number:  if positive, it refers to the event with
 that number (all events are numbered starting at 1).  If the number
@@ -50,14 +56,14 @@ matches the event in the sense of the <B><A HREF="../TclCmd/string.htm">string m
 <P>
 The <B>history</B> command can take any of the following forms:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>history</B></A><DD>
 Same
 as <B>history info</B>, described below.
 <P><DT><A NAME="M6"><B>history add</B><I> command </I>?<B>exec</B>?</A><DD>
 Adds the <I>command</I> argument to the history list as a new event.  If
 <B>exec</B> is specified (or abbreviated) then the command is also
-executed and its result is returned.  If <B>exec</B> isn't specified
+executed and its result is returned.  If <B>exec</B> is not specified
 then an empty string is returned as result.
 <P><DT><A NAME="M7"><B>history change</B><I> newValue</I> ?<I>event</I>?</A><DD>
 Replaces the value recorded for an event with <I>newValue</I>.  <I>Event</I>
@@ -97,18 +103,18 @@ The current mechanism is more limited, and the old
 history operations <B>substitute</B> and <B>words</B> have been removed.
 (As a consolation, the <B>clear</B> operation was added.)
 <P>
-The history option <B>redo</B> results in much simpler ``history revision''.
+The history option <B>redo</B> results in much simpler
+&#8220;history revision&#8221;.
 When this option is invoked then the most recent event
 is modified to eliminate the history command and replace it with
 the result of the history command.
 If you want to redo an event without modifying history, then use
 the <B><A HREF="../TkCmd/event.htm">event</A></B> operation to retrieve some event,
 and the <B>add</B> operation to add it to history and execute it.
-
 <H3><A NAME="M15">KEYWORDS</A></H3>
 <A href="../Keywords/E.htm#event">event</A>, <A href="../Keywords/H.htm#history">history</A>, <A href="../Keywords/R.htm#record">record</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1993 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

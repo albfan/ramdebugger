@@ -1,4 +1,33 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_Exit manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_Exit manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> Exit</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="Exit.htm#M2" NAME="L256">NAME</A>
+<DL><DD>Tcl_Exit, Tcl_Finalize, Tcl_CreateExitHandler, Tcl_DeleteExitHandler, Tcl_ExitThread, Tcl_FinalizeThread, Tcl_CreateThreadExitHandler, Tcl_DeleteThreadExitHandler, Tcl_SetExitProc - end the application or thread (and invoke exit handlers)</DD></DL>
+<DD><A HREF="Exit.htm#M3" NAME="L257">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD><B>Tcl_Exit</B>(<I>status</I>)
+<DD><B>Tcl_Finalize</B>()
+<DD><B>Tcl_CreateExitHandler</B>(<I>proc, clientData</I>)
+<DD><B>Tcl_DeleteExitHandler</B>(<I>proc, clientData</I>)
+<DD><B>Tcl_ExitThread</B>(<I>status</I>)
+<DD><B>Tcl_FinalizeThread</B>()
+<DD><B>Tcl_CreateThreadExitHandler</B>(<I>proc, clientData</I>)
+<DD><B>Tcl_DeleteThreadExitHandler</B>(<I>proc, clientData</I>)
+<DD>Tcl_ExitProc *
+<DD><B>Tcl_SetExitProc</B>(<I>proc</I>)
+</DL>
+<DD><A HREF="Exit.htm#M4" NAME="L258">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="Exit.htm#M5" NAME="L259">DESCRIPTION</A>
+<DD><A HREF="Exit.htm#M6" NAME="L260">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_Exit, Tcl_Finalize, Tcl_CreateExitHandler, Tcl_DeleteExitHandler, Tcl_ExitThread, Tcl_FinalizeThread, Tcl_CreateThreadExitHandler, Tcl_DeleteThreadExitHandler, Tcl_SetExitProc - end the application or thread (and invoke exit handlers)
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -14,7 +43,7 @@ Tcl_Exit, Tcl_Finalize, Tcl_CreateExitHandler, Tcl_DeleteExitHandler, Tcl_ExitTh
 Tcl_ExitProc *<BR>
 <B>Tcl_SetExitProc</B>(<I>proc</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>int <B>status</B> (in)<DD>
 Provides information about why the application or thread exited.
 Exact meaning may
@@ -117,7 +146,7 @@ cast to a ClientData value.
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#callback">callback</A>, <A href="../Keywords/C.htm#cleanup">cleanup</A>, <A href="../Keywords/D.htm#dynamic loading">dynamic loading</A>, <A href="../Keywords/E.htm#end application">end application</A>, <A href="../Keywords/E.htm#exit">exit</A>, <A href="../Keywords/U.htm#unloading">unloading</A>, <A href="../Keywords/T.htm#thread">thread</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1995-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

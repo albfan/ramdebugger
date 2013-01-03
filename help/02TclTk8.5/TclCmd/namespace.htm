@@ -1,61 +1,68 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - namespace manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>namespace manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> namespace</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="namespace.htm#M2" NAME="L951">NAME</A>
-<DL><DD>namespace - create and manipulate contexts for commands and variables</DL>
-<DD><A HREF="namespace.htm#M3" NAME="L952">SYNOPSIS</A>
+<DD><A HREF="namespace.htm#M2" NAME="L1028">NAME</A>
+<DL><DD>namespace - create and manipulate contexts for commands and variables</DD></DL>
+<DD><A HREF="namespace.htm#M3" NAME="L1029">SYNOPSIS</A>
 <DL>
-<DD><B>namespace </B>?<I>option</I>? ?<I>arg ...</I>?
 </DL>
-<DD><A HREF="namespace.htm#M4" NAME="L953">DESCRIPTION</A>
-<DL>
-<DD><A HREF="namespace.htm#M5" NAME="L954"><B>namespace children </B>?<I>namespace</I>? ?<I>pattern</I>?</A>
-<DD><A HREF="namespace.htm#M6" NAME="L955"><B>namespace code </B><I>script</I></A>
-<DD><A HREF="namespace.htm#M7" NAME="L956"><B>namespace current</B></A>
-<DD><A HREF="namespace.htm#M8" NAME="L957"><B>namespace delete </B>?<I>namespace namespace ...</I>?</A>
-<DD><A HREF="namespace.htm#M9" NAME="L958"><B>namespace ensemble</B> <I>option</I> ?<I>arg ...</I>?</A>
-<DD><A HREF="namespace.htm#M10" NAME="L959"><B>namespace eval</B> <I>namespace arg</I> ?<I>arg ...</I>?</A>
-<DD><A HREF="namespace.htm#M11" NAME="L960"><B>namespace exists</B> <I>namespace</I></A>
-<DD><A HREF="namespace.htm#M12" NAME="L961"><B>namespace export </B>?-<B>clear</B>? ?<I>pattern pattern ...</I>?</A>
-<DD><A HREF="namespace.htm#M13" NAME="L962"><B>namespace forget </B>?<I>pattern pattern ...</I>?</A>
-<DD><A HREF="namespace.htm#M14" NAME="L963"><B>namespace import </B>?<B>-force</B>? ?<I>pattern</I> <I>pattern ...</I>?</A>
-<DD><A HREF="namespace.htm#M15" NAME="L964"><B>namespace inscope</B> <I>namespace</I> <I>script</I> ?<I>arg ...</I>?</A>
-<DD><A HREF="namespace.htm#M16" NAME="L965"><B>namespace origin </B><I>command</I></A>
-<DD><A HREF="namespace.htm#M17" NAME="L966"><B>namespace parent</B> ?<I>namespace</I>?</A>
-<DD><A HREF="namespace.htm#M18" NAME="L967"><B>namespace path</B> ?<I>namespaceList</I>?</A>
-<DD><A HREF="namespace.htm#M19" NAME="L968"><B>namespace qualifiers</B> <I>string</I></A>
-<DD><A HREF="namespace.htm#M20" NAME="L969"><B>namespace tail</B> <I>string</I></A>
-<DD><A HREF="namespace.htm#M21" NAME="L970"><B>namespace which</B> ?-<B>command</B>? ?-<B>variable</B>? <I>name</I></A>
+<DD><A HREF="namespace.htm#M4" NAME="L1030">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="namespace.htm#M5" NAME="L1031"><B>namespace children </B>?<I>namespace</I>? ?<I>pattern</I>?</A>
+<DD><A HREF="namespace.htm#M6" NAME="L1032"><B>namespace code </B><I>script</I></A>
+<DD><A HREF="namespace.htm#M7" NAME="L1033"><B>namespace current</B></A>
+<DD><A HREF="namespace.htm#M8" NAME="L1034"><B>namespace delete </B>?<I>namespace namespace ...</I>?</A>
+<DD><A HREF="namespace.htm#M9" NAME="L1035"><B>namespace ensemble</B> <I>option</I> ?<I>arg ...</I>?</A>
+<DD><A HREF="namespace.htm#M10" NAME="L1036"><B>namespace eval</B> <I>namespace arg</I> ?<I>arg ...</I>?</A>
+<DD><A HREF="namespace.htm#M11" NAME="L1037"><B>namespace exists</B> <I>namespace</I></A>
+<DD><A HREF="namespace.htm#M12" NAME="L1038"><B>namespace export </B>?-<B>clear</B>? ?<I>pattern pattern ...</I>?</A>
+<DD><A HREF="namespace.htm#M13" NAME="L1039"><B>namespace forget </B>?<I>pattern pattern ...</I>?</A>
+<DD><A HREF="namespace.htm#M14" NAME="L1040"><B>namespace import </B>?<B>-force</B>? ?<I>pattern</I> <I>pattern ...</I>?</A>
+<DD><A HREF="namespace.htm#M15" NAME="L1041"><B>namespace inscope</B> <I>namespace</I> <I>script</I> ?<I>arg ...</I>?</A>
+<DD><A HREF="namespace.htm#M16" NAME="L1042"><B>namespace origin </B><I>command</I></A>
+<DD><A HREF="namespace.htm#M17" NAME="L1043"><B>namespace parent</B> ?<I>namespace</I>?</A>
+<DD><A HREF="namespace.htm#M18" NAME="L1044"><B>namespace path</B> ?<I>namespaceList</I>?</A>
+<DD><A HREF="namespace.htm#M19" NAME="L1045"><B>namespace qualifiers</B> <I>string</I></A>
+<DD><A HREF="namespace.htm#M20" NAME="L1046"><B>namespace tail</B> <I>string</I></A>
+<DD><A HREF="namespace.htm#M21" NAME="L1047"><B>namespace upvar</B> <I>namespace</I> <I>otherVar myVar </I>?<I>otherVar myVar </I>...</A>
+<DD><A HREF="namespace.htm#M22" NAME="L1048"><B>namespace unknown</B> ?<I>script</I>?</A>
+<DD><A HREF="namespace.htm#M23" NAME="L1049"><B>namespace which</B> ?-<B>command</B>? ?-<B>variable</B>? <I>name</I></A>
 </DL>
-<DD><A HREF="namespace.htm#M22" NAME="L971">WHAT IS A NAMESPACE?</A>
-<DD><A HREF="namespace.htm#M23" NAME="L972">QUALIFIED NAMES</A>
-<DD><A HREF="namespace.htm#M24" NAME="L973">NAME RESOLUTION</A>
-<DD><A HREF="namespace.htm#M25" NAME="L974">IMPORTING COMMANDS</A>
-<DD><A HREF="namespace.htm#M26" NAME="L975">EXPORTING COMMANDS</A>
-<DD><A HREF="namespace.htm#M27" NAME="L976">SCOPED SCRIPTS</A>
-<DD><A HREF="namespace.htm#M28" NAME="L977">ENSEMBLES</A>
-<DL>
-<DD><A HREF="namespace.htm#M29" NAME="L978"><B>namespace ensemble create</B> ?<I>option value ...</I>?</A>
-<DD><A HREF="namespace.htm#M30" NAME="L979"><B>namespace ensemble configure </B><I>command</I> ?<I>option</I>? ?<I>value ...</I>?</A>
-<DD><A HREF="namespace.htm#M31" NAME="L980"><B>namespace ensemble exists</B> <I>command</I></A>
+<DD><A HREF="namespace.htm#M24" NAME="L1050">WHAT IS A NAMESPACE?</A>
+<DD><A HREF="namespace.htm#M25" NAME="L1051">QUALIFIED NAMES</A>
+<DD><A HREF="namespace.htm#M26" NAME="L1052">NAME RESOLUTION</A>
+<DD><A HREF="namespace.htm#M27" NAME="L1053">IMPORTING COMMANDS</A>
+<DD><A HREF="namespace.htm#M28" NAME="L1054">EXPORTING COMMANDS</A>
+<DD><A HREF="namespace.htm#M29" NAME="L1055">SCOPED SCRIPTS</A>
+<DD><A HREF="namespace.htm#M30" NAME="L1056">ENSEMBLES</A>
+<DL class="ensembles">
+<DD><A HREF="namespace.htm#M31" NAME="L1057"><B>namespace ensemble create</B> ?<I>option value ...</I>?</A>
+<DD><A HREF="namespace.htm#M32" NAME="L1058"><B>namespace ensemble configure </B><I>command</I> ?<I>option</I>? ?<I>value ...</I>?</A>
+<DD><A HREF="namespace.htm#M33" NAME="L1059"><B>namespace ensemble exists</B> <I>command</I></A>
 </DL>
-<DD><A HREF="namespace.htm#M32" NAME="L981">ENSEMBLE OPTIONS</A>
-<DL>
-<DD><A HREF="namespace.htm#M33" NAME="L982"><B>-map</B></A>
-<DD><A HREF="namespace.htm#M34" NAME="L983"><B>-prefixes</B></A>
-<DD><A HREF="namespace.htm#M35" NAME="L984"><B>-subcommands</B></A>
-<DD><A HREF="namespace.htm#M36" NAME="L985"><B>-unknown</B></A>
+<DD><A HREF="namespace.htm#M34" NAME="L1060">ENSEMBLE OPTIONS</A>
+<DL class="ensemble options">
+<DD><A HREF="namespace.htm#M35" NAME="L1061"><B>-map</B></A>
+<DD><A HREF="namespace.htm#M36" NAME="L1062"><B>-prefixes</B></A>
+<DD><A HREF="namespace.htm#M37" NAME="L1063"><B>-subcommands</B></A>
+<DD><A HREF="namespace.htm#M38" NAME="L1064"><B>-unknown</B></A>
 </DL>
-<DL>
-<DD><A HREF="namespace.htm#M37" NAME="L986"><B>-command</B></A>
+<DL class="ensemble options">
+<DD><A HREF="namespace.htm#M39" NAME="L1065"><B>-command</B></A>
 </DL>
-<DL>
-<DD><A HREF="namespace.htm#M38" NAME="L987"><B>-namespace</B></A>
+<DL class="ensemble options">
+<DD><A HREF="namespace.htm#M40" NAME="L1066"><B>-namespace</B></A>
 </DL>
-<DD><A HREF="namespace.htm#M39" NAME="L988">UNKNOWN HANDLER BEHAVIOUR</A>
-<DD><A HREF="namespace.htm#M40" NAME="L989">EXAMPLES</A>
-<DD><A HREF="namespace.htm#M41" NAME="L990">SEE ALSO</A>
-<DD><A HREF="namespace.htm#M42" NAME="L991">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="namespace.htm#M41" NAME="L1067">UNKNOWN HANDLER BEHAVIOUR</A>
+<DD><A HREF="namespace.htm#M42" NAME="L1068">EXAMPLES</A>
+<DD><A HREF="namespace.htm#M43" NAME="L1069">SEE ALSO</A>
+<DD><A HREF="namespace.htm#M44" NAME="L1070">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 namespace - create and manipulate contexts for commands and variables
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -68,7 +75,7 @@ for a brief overview of namespaces.
 The legal values of <I>option</I> are listed below.
 Note that you can abbreviate the <I>option</I>s.
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>namespace children </B>?<I>namespace</I>? ?<I>pattern</I>?</A><DD>
 Returns a list of all child namespaces that belong to the
 namespace <I>namespace</I>.
@@ -97,7 +104,7 @@ and they will be passed to <I>script</I> as additional arguments.
 For example, suppose the command
 <B>set script [namespace code {foo bar}]</B>
 is invoked in namespace <B>::a::b</B>.
-Then <B>eval &quot;$script x y&quot;</B>
+Then <B>eval $script [list x y]</B>
 can be executed in any namespace (assuming the value of
 <B>script</B> has been passed in properly)
 and will have the same effect as the command
@@ -111,7 +118,8 @@ See the section <B>SCOPED SCRIPTS</B> for some examples
 of how this is used to create callback scripts.
 <P><DT><A NAME="M7"><B>namespace current</B></A><DD>
 Returns the fully-qualified name for the current namespace.
-The actual name of the global namespace is ``''
+The actual name of the global namespace is
+&#8220;&#8221;
 (i.e., an empty string),
 but this command returns <B>::</B> for the global namespace
 as a convenience to programmers.
@@ -123,7 +131,7 @@ If a procedure is currently executing inside the namespace,
 the namespace will be kept alive until the procedure returns;
 however, the namespace is marked to prevent other code from
 looking it up by name.
-If a namespace doesn't exist, this command returns an error.
+If a namespace does not exist, this command returns an error.
 If no namespace names are given, this command does nothing.
 <P><DT><A NAME="M9"><B>namespace ensemble</B> <I>option</I> ?<I>arg ...</I>?</A><DD>
 Creates and manipulates a command that is formed out of an ensemble of
@@ -137,7 +145,6 @@ If more than one <I>arg</I> argument is specified,
 the arguments are concatenated together with a space between each one
 in the same fashion as the <B><A HREF="../TclCmd/eval.htm">eval</A></B> command,
 and the result is evaluated.
-<BR>
 <P>
 If <I>namespace</I> has leading namespace qualifiers
 and any leading namespaces do not exist,
@@ -159,10 +166,10 @@ but it may not include any namespace qualifiers.
 That is, the pattern can only specify commands
 in the current (exporting) namespace.
 Each <I>pattern</I> is appended onto the namespace's list of export patterns.
-If the -<B>clear</B> flag is given,
+If the <B>-clear</B> flag is given,
 the namespace's export pattern list is reset to empty before any
 <I>pattern</I> arguments are appended.
-If no <I>pattern</I>s are given and the -<B>clear</B> flag isn't given,
+If no <I>pattern</I>s are given and the <B>-clear</B> flag is not given,
 this command returns the namespace's current export list.
 <P><DT><A NAME="M13"><B>namespace forget </B>?<I>pattern pattern ...</I>?</A><DD>
 Removes previously imported commands from a namespace.
@@ -185,8 +192,16 @@ were previously imported by the current namespace.
 If so, this command deletes the corresponding imported commands. 
 In effect, this un-does the action of a <B>namespace import</B> command.
 <P><DT><A NAME="M14"><B>namespace import </B>?<B>-force</B>? ?<I>pattern</I> <I>pattern ...</I>?</A><DD>
-Imports commands into a namespace.
-Each <I>pattern</I> is a qualified name like
+Imports commands into a namespace, or queries the set of imported
+commands in a namespace.  When no arguments are present,
+<B>namespace import</B> returns the list of commands in
+the current namespace that have been imported from other
+namespaces.  The commands in the returned list are in
+the format of simple names, with no namespace qualifiers at all.
+This format is suitable for composition with <B>namespace forget</B>
+(see <B>EXAMPLES</B> below).
+When <I>pattern</I> arguments are present,
+each <I>pattern</I> is a qualified name like
 <B>foo::x</B> or <B>a::p*</B>.
 That is, it includes the name of an exporting namespace
 and may have glob-style special characters in the command name
@@ -219,10 +234,10 @@ The <B>namespace inscope</B> command is much like the <B>namespace eval</B>
 command except that the <I>namespace</I> must already exist,
 and <B>namespace inscope</B> appends additional <I>arg</I>s
 as proper list elements.
-<BR>
-<B>namespace inscope ::foo $script $x $y $z</B>
+<P>
+<PRE><B>namespace inscope ::foo $script $x $y $z</B></PRE>
 is equivalent to
-<B>namespace eval ::foo [concat $script [list $x $y $z]]</B>
+<PRE><B>namespace eval ::foo [concat $script [list $x $y $z]]</B></PRE>
 thus additional arguments will not undergo a second round of substitution,
 as is the case with <B>namespace eval</B>.
 <P><DT><A NAME="M16"><B>namespace origin </B><I>command</I></A><DD>
@@ -269,7 +284,26 @@ and for <B>::</B> it returns an empty string.
 This command is the complement of the <B>namespace qualifiers</B> command.
 It does not check whether the namespace names are, in fact,
 the names of currently defined namespaces.
-<P><DT><A NAME="M21"><B>namespace which</B> ?-<B>command</B>? ?-<B>variable</B>? <I>name</I></A><DD>
+<P><DT><A NAME="M21"><B>namespace upvar</B> <I>namespace</I> <I>otherVar myVar </I>?<I>otherVar myVar </I>...</A><DD>
+This command arranges for one or more local variables in the current
+procedure to refer to variables in <I>namespace</I>. The namespace name is
+resolved as described in section <B>NAME RESOLUTION</B>.
+The command 
+<B>namespace upvar $ns a b</B> has the same behaviour as
+<B>upvar 0 $ns::a b</B>, with the sole exception of the resolution rules
+used for qualified namespace or variable names. 
+<B>namespace upvar</B> returns an empty string.
+<P><DT><A NAME="M22"><B>namespace unknown</B> ?<I>script</I>?</A><DD>
+Sets or returns the unknown command handler for the current namespace.
+The handler is invoked when a command called from within the namespace
+cannot be found (in either the current namespace or the global namespace). 
+The <I>script</I> argument, if given, should be a well
+formed list representing a command name and optional arguments. When
+the handler is invoked, the full invocation line will be appended to the
+script and the result evaluated in the context of the namespace. The 
+default handler for all namespaces is <B>::unknown</B>. If no argument
+is given, it returns the handler for the current namespace.
+<P><DT><A NAME="M23"><B>namespace which</B> ?-<B>command</B>? ?-<B>variable</B>? <I>name</I></A><DD>
 Looks up <I>name</I> as either a command or variable
 and returns its fully-qualified name.
 For example, if <I>name</I> does not exist in the current namespace
@@ -284,10 +318,10 @@ If no flag is given, <I>name</I> is treated as a command name.
 See the section <B>NAME RESOLUTION</B> below for an explanation of
 the rules regarding name resolution.
 <P></DL>
-<H3><A NAME="M22">WHAT IS A NAMESPACE?</A></H3>
+<H3><A NAME="M24">WHAT IS A NAMESPACE?</A></H3>
 A namespace is a collection of commands and variables.
 It encapsulates the commands and variables to ensure that they
-won't interfere with the commands and variables of other namespaces.
+will not interfere with the commands and variables of other namespaces.
 Tcl has always had one such collection,
 which we refer to as the <I>global namespace</I>.
 The global namespace holds all global variables and commands.
@@ -343,7 +377,7 @@ Namespaces can have other namespaces within them,
 so they nest hierarchically.
 A nested namespace is encapsulated inside its parent namespace
 and can not interfere with other namespaces.
-<H3><A NAME="M23">QUALIFIED NAMES</A></H3>
+<H3><A NAME="M25">QUALIFIED NAMES</A></H3>
 Each namespace has a textual name such as
 <B><A HREF="../TclCmd/history.htm">history</A></B> or <B>::safe::interp</B>.
 Since namespaces may nest,
@@ -353,8 +387,9 @@ Qualified names are similar to the hierarchical path names for
 Unix files or Tk widgets,
 except that <B>::</B> is used as the separator
 instead of <B>/</B> or <B>.</B>.
-The topmost or global namespace has the name ``'' (i.e., an empty string),
-although <B>::</B> is a synonym.
+The topmost or global namespace has the name
+&#8220;&#8221;
+(i.e., an empty string), although <B>::</B> is a synonym.
 As an example, the name <B>::safe::interp::create</B>
 refers to the command <B>create</B> in the namespace <B><A HREF="../TclCmd/interp.htm">interp</A></B>
 that is a child of namespace <B>::safe</B>,
@@ -393,7 +428,7 @@ i.e. two or more colons are treated as a namespace separator.
 A trailing <B>::</B> in a qualified variable or command name
 refers to the variable or command named {}.
 However, a trailing <B>::</B> in a qualified namespace name is ignored.
-<H3><A NAME="M24">NAME RESOLUTION</A></H3>
+<H3><A NAME="M26">NAME RESOLUTION</A></H3>
 In general, all Tcl commands that take variable and command names
 support qualified names.
 This means you can give qualified names to such commands as
@@ -477,7 +512,7 @@ to variables in the global namespace.
 It is not necessary to use a <B><A HREF="../TclCmd/variable.htm">variable</A></B> command
 if you always refer to the namespace variable using an
 appropriate qualified name.
-<H3><A NAME="M25">IMPORTING COMMANDS</A></H3>
+<H3><A NAME="M27">IMPORTING COMMANDS</A></H3>
 Namespaces are often used to represent libraries.
 Some library commands are used so frequently
 that it is a nuisance to type their qualified names.
@@ -500,7 +535,7 @@ from a namespace that that namespace exported
 with a <B>namespace export</B> command.
 <P>
 Importing <I>every</I> command from a namespace is generally
-a bad idea since you don't know what you will get.
+a bad idea since you do not know what you will get.
 It is better to import just the specific commands you need.
 For example, the command
 <PRE><B>namespace import</B> Blt::graph Blt::table</PRE>
@@ -526,7 +561,7 @@ prefix.
 When you delete a command from the exporting namespace like this:
 <PRE>rename Blt::graph &quot;&quot;</PRE>
 the command is automatically removed from all namespaces that import it.
-<H3><A NAME="M26">EXPORTING COMMANDS</A></H3>
+<H3><A NAME="M28">EXPORTING COMMANDS</A></H3>
 You can export commands from a namespace like this:
 <PRE><B>namespace eval</B> Counter {
    <B>namespace export</B> bump reset
@@ -564,7 +599,7 @@ The <B>namespace export</B> command specifies what commands
 may be imported by other namespaces.
 If a <B>namespace import</B> command specifies a command
 that is not exported, the command is not imported.
-<H3><A NAME="M27">SCOPED SCRIPTS</A></H3>
+<H3><A NAME="M29">SCOPED SCRIPTS</A></H3>
 The <B>namespace code</B> command is the means by which a script may be
 packaged for evaluation in a namespace other than the one in which it
 was created.  It is used most often to create event handlers, Tk bindings,
@@ -583,7 +618,7 @@ namespace:
 set a::b c</PRE>
 When executed, it prints the message:
 <PRE>the value of a::b has changed to c</PRE>
-<H3><A NAME="M28">ENSEMBLES</A></H3>
+<H3><A NAME="M30">ENSEMBLES</A></H3>
 The <B>namespace ensemble</B> is used to create and manipulate ensemble
 commands, which are commands formed by grouping subcommands together.
 The commands typically come from the current namespace when the
@@ -596,8 +631,8 @@ namespace is maintained however the ensemble is renamed.
 <P>
 Three subcommands of the <B>namespace ensemble</B> command are defined:
 <P>
-<DL>
-<DT><A NAME="M29"><B>namespace ensemble create</B> ?<I>option value ...</I>?</A><DD>
+<DL class="ensembles">
+<DT><A NAME="M31"><B>namespace ensemble create</B> ?<I>option value ...</I>?</A><DD>
 Creates a new ensemble command linked to the current namespace,
 returning the fully qualified name of the command created.  The
 arguments to <B>namespace ensemble create</B> allow the configuration
@@ -606,12 +641,12 @@ command.  If not overridden with the <B>-command</B> option, this
 command creates an ensemble with exactly the same name as the linked
 namespace.  See the section <B>ENSEMBLE OPTIONS</B> below for a full
 list of options supported and their effects.
-<P><DT><A NAME="M30"><B>namespace ensemble configure </B><I>command</I> ?<I>option</I>? ?<I>value ...</I>?</A><DD>
+<P><DT><A NAME="M32"><B>namespace ensemble configure </B><I>command</I> ?<I>option</I>? ?<I>value ...</I>?</A><DD>
 Retrieves the value of an option associated with the ensemble command
 named <I>command</I>, or updates some options associated with that
 ensemble command.  See the section <B>ENSEMBLE OPTIONS</B> below for a
 full list of options supported and their effects.
-<P><DT><A NAME="M31"><B>namespace ensemble exists</B> <I>command</I></A><DD>
+<P><DT><A NAME="M33"><B>namespace ensemble exists</B> <I>command</I></A><DD>
 Returns a boolean value that describes whether the command
 <I>command</I> exists and is an ensemble command.  This command only
 ever returns an error if the number of arguments to the command is
@@ -628,13 +663,13 @@ the result of the command.  Note that it is legal to make the target
 of an ensemble rewrite be another (or even the same) ensemble
 command.  The ensemble command will not be visible through the use of
 the <B><A HREF="../TclCmd/uplevel.htm">uplevel</A></B> or <B><A HREF="../TclCmd/info.htm">info level</A></B> commands.
-<H4><A NAME="M32">ENSEMBLE OPTIONS</A></H4>
+<H4><A NAME="M34">ENSEMBLE OPTIONS</A></H4>
 The following options, supported by the <B>namespace ensemble
 create</B> and <B>namespace ensemble configure</B> commands, control how
 an ensemble command behaves:
 <P>
-<DL>
-<DT><A NAME="M33"><B>-map</B></A><DD>
+<DL class="ensemble options">
+<DT><A NAME="M35"><B>-map</B></A><DD>
 When non-empty, this option supplies a dictionary that provides a
 mapping from subcommand names to a list of prefix words to substitute
 in place of the ensemble command and subcommand words (in a manner
@@ -644,21 +679,21 @@ will be from the local name of the subcommand to its fully-qualified
 name.  Note that when this option is non-empty and the
 <B>-subcommands</B> option is empty, the ensemble subcommand names
 will be exactly those words that have mappings in the dictionary.
-<P><DT><A NAME="M34"><B>-prefixes</B></A><DD>
+<P><DT><A NAME="M36"><B>-prefixes</B></A><DD>
 This option (which is enabled by default) controls whether the
 ensemble command recognizes unambiguous prefixes of its subcommands.
 When turned off, the ensemble command requires exact matching of
 subcommand names.
-<P><DT><A NAME="M35"><B>-subcommands</B></A><DD>
+<P><DT><A NAME="M37"><B>-subcommands</B></A><DD>
 When non-empty, this option lists exactly what subcommands are in the
-ensemble.  The mapping for each of those commands will either whatever
+ensemble.  The mapping for each of those commands will be either whatever
 is defined in the <B>-map</B> option, or to the command with the same
 name in the namespace linked to the ensemble.  If this option is
 empty, the subcommands of the namespace will either be the keys of the
 dictionary listed in the <B>-map</B> option or the exported commands
 of the linked namespace at the time of the invocation of the ensemble
 command.
-<P><DT><A NAME="M36"><B>-unknown</B></A><DD>
+<P><DT><A NAME="M38"><B>-unknown</B></A><DD>
 When non-empty, this option provides a partial command (to which all
 the words that are arguments to the ensemble command, including the
 fully-qualified name of the ensemble, are appended) to handle the case
@@ -672,8 +707,8 @@ unable to determine how to implement a particular subcommand.  See
 The following extra option is allowed by <B>namespace ensemble
 create</B>:
 <P>
-<DL>
-<DT><A NAME="M37"><B>-command</B></A><DD>
+<DL class="ensemble options">
+<DT><A NAME="M39"><B>-command</B></A><DD>
 This write-only option allows the name of the ensemble created by
 <B>namespace ensemble create</B> to be anything in any existing
 namespace.  The default value for this option is the fully-qualified
@@ -684,12 +719,12 @@ command is invoked.
 The following extra option is allowed by <B>namespace ensemble
 configure</B>:
 <P>
-<DL>
-<DT><A NAME="M38"><B>-namespace</B></A><DD>
+<DL class="ensemble options">
+<DT><A NAME="M40"><B>-namespace</B></A><DD>
 This read-only option allows the retrieval of the fully-qualified name
 of the namespace which the ensemble was created within.
 <P></DL>
-<H4><A NAME="M39">UNKNOWN HANDLER BEHAVIOUR</A></H4>
+<H4><A NAME="M41">UNKNOWN HANDLER BEHAVIOUR</A></H4>
 If an unknown handler is specified for an ensemble, that handler is
 called when the ensemble command would otherwise return an error due
 to it being unable to decide which subcommand to invoke. The exact
@@ -725,7 +760,7 @@ supply all namespace qualifiers if the implementing subcommand is not
 in the namespace of the caller of the ensemble command. Also note that
 when ensemble commands are chained (e.g. if you make one of the
 commands that implement an ensemble subcommand into an ensemble, in a
-manner similar to the text widget's tag and mark subcommands) then the
+manner similar to the <B><A HREF="../TkCmd/text.htm">text</A></B> widget's tag and mark subcommands) then the
 rewrite happens in the context of the caller of the outermost
 ensemble. That is to say that ensembles do not in themselves place any
 namespace contexts on the Tcl call stack.
@@ -737,7 +772,7 @@ error message from <B><A HREF="../TclLib/GetIndex.htm">Tcl_GetIndexFromObj</A></
 will be thrown when the subcommand is still not recognized during
 reparsing. It is also an error for an <B>-unknown</B> handler to
 delete its namespace.
-<H3><A NAME="M40">EXAMPLES</A></H3>
+<H3><A NAME="M42">EXAMPLES</A></H3>
 Create a namespace containing a variable and an exported command:
 <PRE><B>namespace eval</B> foo {
    variable bar 0
@@ -773,14 +808,17 @@ foobar grill</PRE>
 <P>
 Look up where the command imported in the previous example came from:
 <PRE>puts &quot;grill came from [<B>namespace origin</B> grill]&quot;</PRE>
-<H3><A NAME="M41">SEE ALSO</A></H3>
-<B><A HREF="../TclCmd/interp.htm">interp</A></B>, <B><A HREF="../TclCmd/variable.htm">variable</A></B>
-<H3><A NAME="M42">KEYWORDS</A></H3>
+<P>
+Remove all imported commands from the current namespace:
+<PRE>namespace forget {*}[namespace import]</PRE>
+<H3><A NAME="M43">SEE ALSO</A></H3>
+<B><A HREF="../TclCmd/interp.htm">interp</A></B>, <B><A HREF="../TclCmd/upvar.htm">upvar</A></B>, <B><A HREF="../TclCmd/variable.htm">variable</A></B>
+<H3><A NAME="M44">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#command">command</A>, <A href="../Keywords/E.htm#ensemble">ensemble</A>, <A href="../Keywords/E.htm#exported">exported</A>, <A href="../Keywords/I.htm#internal">internal</A>, <A href="../Keywords/V.htm#variable">variable</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1993-1997 Bell Labs Innovations for Lucent Technologies
-<A HREF="../copyright.htm">Copyright</A> &#169; 1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 2000 Scriptics Corporation.
-<A HREF="../copyright.htm">Copyright</A> &#169; 2004-2005 Donal K. Fellows.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1993-1997 Bell Labs Innovations for Lucent Technologies
+Copyright &copy; 1997 Sun Microsystems, Inc.
+Copyright &copy; 2000 Scriptics Corporation.
+Copyright &copy; 2004-2005 Donal K. Fellows.
+</div>
 </BODY></HTML>

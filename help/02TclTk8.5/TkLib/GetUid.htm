@@ -1,4 +1,10 @@
-<HTML><HEAD><TITLE>Library Procedures - Tk_GetUid manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetUid manual page - Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> GetUid</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_GetUid, Tk_Uid - convert from string to unique identifier
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -6,7 +12,7 @@ Tk_GetUid, Tk_Uid - convert from string to unique identifier
 Tk_Uid<BR>
 <B>Tk_GetUid</B>(<I>string</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>char <B>*string</B> (in)<DD>
 String for which the corresponding unique identifier is
 desired.
@@ -17,7 +23,8 @@ to <I>string</I>.
 Unique identifiers are similar to atoms in Lisp, and are used
 in Tk to speed up comparisons and
 searches.  A unique identifier (type Tk_Uid) is a string pointer
-and may be used anywhere that a variable of type ``char *''
+and may be used anywhere that a variable of type
+&#8220;char *&#8221;
 could be used.  However, there is guaranteed to be exactly
 one unique identifier for any given string value.  If <B>Tk_GetUid</B>
 is called twice, once with string <I>a</I> and once with string
@@ -32,8 +39,8 @@ same string value as its argument (strcmp(Tk_GetUid(a), a) == 0).
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#atom">atom</A>, <A href="../Keywords/U.htm#unique identifier">unique identifier</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

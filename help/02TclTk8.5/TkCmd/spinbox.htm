@@ -1,12 +1,17 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - spinbox manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>spinbox manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> spinbox</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="spinbox.htm#M2" NAME="L1219">NAME</A>
-<DL><DD>spinbox - Create and manipulate spinbox widgets</DL>
-<DD><A HREF="spinbox.htm#M3" NAME="L1220">SYNOPSIS</A>
+<DD><A HREF="spinbox.htm#M2" NAME="L1297">NAME</A>
+<DL><DD>spinbox - Create and manipulate spinbox widgets</DD></DL>
+<DD><A HREF="spinbox.htm#M3" NAME="L1298">SYNOPSIS</A>
 <DL>
-<DD><B>spinbox</B> <I>pathName </I>?<I>options</I>?
 </DL>
-<DD><A HREF="spinbox.htm#M4" NAME="L1221">STANDARD OPTIONS</A>
+<DD><A HREF="spinbox.htm#M4" NAME="L1299">STANDARD OPTIONS</A>
 <DL>
 <DD><A HREF="options.htm#M-activebackground">-activebackground, activeBackground, Foreground</A>
 <DD><A HREF="options.htm#M-background">-background or -bg, background, Background</A>
@@ -34,99 +39,101 @@
 <DD><A HREF="options.htm#M-textvariable">-textvariable, textVariable, Variable</A>
 <DD><A HREF="options.htm#M-xscrollcommand">-xscrollcommand, xScrollCommand, ScrollCommand</A>
 </DL>
-<DD><A HREF="spinbox.htm#M5" NAME="L1222">WIDGET-SPECIFIC OPTIONS</A>
+<DD><A HREF="spinbox.htm#M5" NAME="L1300">WIDGET-SPECIFIC OPTIONS</A>
 <DL>
-<DD><A HREF="spinbox.htm#M6" NAME="L1223">-buttonbackground, buttonBackground, Background</A>
-<DD><A HREF="spinbox.htm#M7" NAME="L1224">-buttoncursor, buttonCursor, Cursor</A>
-<DD><A HREF="spinbox.htm#M8" NAME="L1225">-buttondownrelief, buttonDownRelief, Relief</A>
-<DD><A HREF="spinbox.htm#M9" NAME="L1226">-buttonuprelief, buttonUpRelief, Relief</A>
-<DD><A HREF="spinbox.htm#M10" NAME="L1227">-command, command, Command</A>
-<DD><A HREF="spinbox.htm#M11" NAME="L1228">-disabledbackground, disabledBackground, DisabledBackground</A>
-<DD><A HREF="spinbox.htm#M12" NAME="L1229">-disabledforeground, disabledForeground, DisabledForeground</A>
-<DD><A HREF="spinbox.htm#M13" NAME="L1230">-format, format, Format</A>
-<DD><A HREF="spinbox.htm#M14" NAME="L1231">-from, from, From</A>
-<DD><A HREF="spinbox.htm#M15" NAME="L1232">-invalidcommand or -invcmd, invalidCommand, InvalidCommand</A>
-<DD><A HREF="spinbox.htm#M16" NAME="L1233">-increment, increment, Increment</A>
-<DD><A HREF="spinbox.htm#M17" NAME="L1234">-readonlybackground, readonlyBackground, ReadonlyBackground</A>
-<DD><A HREF="spinbox.htm#M18" NAME="L1235">-state, state, State</A>
-<DD><A HREF="spinbox.htm#M19" NAME="L1236">-to, to, To</A>
-<DD><A HREF="spinbox.htm#M20" NAME="L1237">-validate, validate, Validate</A>
-<DD><A HREF="spinbox.htm#M21" NAME="L1238">-validatecommand or -vcmd, validateCommand, ValidateCommand</A>
-<DD><A HREF="spinbox.htm#M22" NAME="L1239">-values, values, Values</A>
-<DD><A HREF="spinbox.htm#M23" NAME="L1240">-width, width, Width</A>
-<DD><A HREF="spinbox.htm#M24" NAME="L1241">-wrap, wrap, wrap</A>
+<DD><A HREF="spinbox.htm#M6" NAME="L1301">-buttonbackground, buttonBackground, Background</A>
+<DD><A HREF="spinbox.htm#M7" NAME="L1302">-buttoncursor, buttonCursor, Cursor</A>
+<DD><A HREF="spinbox.htm#M8" NAME="L1303">-buttondownrelief, buttonDownRelief, Relief</A>
+<DD><A HREF="spinbox.htm#M9" NAME="L1304">-buttonuprelief, buttonUpRelief, Relief</A>
+<DD><A HREF="spinbox.htm#M10" NAME="L1305">-command, command, Command</A>
+<DD><A HREF="spinbox.htm#M11" NAME="L1306">-disabledbackground, disabledBackground, DisabledBackground</A>
+<DD><A HREF="spinbox.htm#M12" NAME="L1307">-disabledforeground, disabledForeground, DisabledForeground</A>
+<DD><A HREF="spinbox.htm#M13" NAME="L1308">-format, format, Format</A>
+<DD><A HREF="spinbox.htm#M14" NAME="L1309">-from, from, From</A>
+<DD><A HREF="spinbox.htm#M15" NAME="L1310">-invalidcommand or -invcmd, invalidCommand, InvalidCommand</A>
+<DD><A HREF="spinbox.htm#M16" NAME="L1311">-increment, increment, Increment</A>
+<DD><A HREF="spinbox.htm#M17" NAME="L1312">-readonlybackground, readonlyBackground, ReadonlyBackground</A>
+<DD><A HREF="spinbox.htm#M18" NAME="L1313">-state, state, State</A>
+<DD><A HREF="spinbox.htm#M19" NAME="L1314">-to, to, To</A>
+<DD><A HREF="spinbox.htm#M20" NAME="L1315">-validate, validate, Validate</A>
+<DD><A HREF="spinbox.htm#M21" NAME="L1316">-validatecommand or -vcmd, validateCommand, ValidateCommand</A>
+<DD><A HREF="spinbox.htm#M22" NAME="L1317">-values, values, Values</A>
+<DD><A HREF="spinbox.htm#M23" NAME="L1318">-width, width, Width</A>
+<DD><A HREF="spinbox.htm#M24" NAME="L1319">-wrap, wrap, wrap</A>
 </DL>
-<DD><A HREF="spinbox.htm#M25" NAME="L1242">DESCRIPTION</A>
-<DD><A HREF="spinbox.htm#M26" NAME="L1243">VALIDATION</A>
-<DL>
-<DD><A HREF="spinbox.htm#M27" NAME="L1244"><B>none</B></A>
-<DD><A HREF="spinbox.htm#M28" NAME="L1245"><B>focus</B></A>
-<DD><A HREF="spinbox.htm#M29" NAME="L1246"><B>focusin</B></A>
-<DD><A HREF="spinbox.htm#M30" NAME="L1247"><B>focusout</B></A>
-<DD><A HREF="spinbox.htm#M31" NAME="L1248"><B>key</B></A>
-<DD><A HREF="spinbox.htm#M32" NAME="L1249"><B>all</B></A>
+<DD><A HREF="spinbox.htm#M25" NAME="L1320">DESCRIPTION</A>
+<DD><A HREF="spinbox.htm#M26" NAME="L1321">VALIDATION</A>
+<DL class="validation">
+<DD><A HREF="spinbox.htm#M27" NAME="L1322"><B>none</B></A>
+<DD><A HREF="spinbox.htm#M28" NAME="L1323"><B>focus</B></A>
+<DD><A HREF="spinbox.htm#M29" NAME="L1324"><B>focusin</B></A>
+<DD><A HREF="spinbox.htm#M30" NAME="L1325"><B>focusout</B></A>
+<DD><A HREF="spinbox.htm#M31" NAME="L1326"><B>key</B></A>
+<DD><A HREF="spinbox.htm#M32" NAME="L1327"><B>all</B></A>
 </DL>
-<DL>
-<DD><A HREF="spinbox.htm#M33" NAME="L1250"><B>%d</B></A>
-<DD><A HREF="spinbox.htm#M34" NAME="L1251"><B>%i</B></A>
-<DD><A HREF="spinbox.htm#M35" NAME="L1252"><B>%P</B></A>
-<DD><A HREF="spinbox.htm#M36" NAME="L1253"><B>%s</B></A>
-<DD><A HREF="spinbox.htm#M37" NAME="L1254"><B>%S</B></A>
-<DD><A HREF="spinbox.htm#M38" NAME="L1255"><B>%v</B></A>
-<DD><A HREF="spinbox.htm#M39" NAME="L1256"><B>%V</B></A>
-<DD><A HREF="spinbox.htm#M40" NAME="L1257"><B>%W</B></A>
+<DL class="validation">
+<DD><A HREF="spinbox.htm#M33" NAME="L1328"><B>%d</B></A>
+<DD><A HREF="spinbox.htm#M34" NAME="L1329"><B>%i</B></A>
+<DD><A HREF="spinbox.htm#M35" NAME="L1330"><B>%P</B></A>
+<DD><A HREF="spinbox.htm#M36" NAME="L1331"><B>%s</B></A>
+<DD><A HREF="spinbox.htm#M37" NAME="L1332"><B>%S</B></A>
+<DD><A HREF="spinbox.htm#M38" NAME="L1333"><B>%v</B></A>
+<DD><A HREF="spinbox.htm#M39" NAME="L1334"><B>%V</B></A>
+<DD><A HREF="spinbox.htm#M40" NAME="L1335"><B>%W</B></A>
 </DL>
-<DD><A HREF="spinbox.htm#M41" NAME="L1258">WIDGET COMMAND</A>
-<DL>
-<DD><A HREF="spinbox.htm#M42" NAME="L1259"><I>number</I></A>
-<DD><A HREF="spinbox.htm#M43" NAME="L1260"><B>anchor</B></A>
-<DD><A HREF="spinbox.htm#M44" NAME="L1261"><B>end</B></A>
-<DD><A HREF="spinbox.htm#M45" NAME="L1262"><B>insert</B></A>
-<DD><A HREF="spinbox.htm#M46" NAME="L1263"><B>sel.first</B></A>
-<DD><A HREF="spinbox.htm#M47" NAME="L1264"><B>sel.last</B></A>
-<DD><A HREF="spinbox.htm#M48" NAME="L1265"><B>@</B><I>number</I></A>
+<DD><A HREF="spinbox.htm#M41" NAME="L1336">WIDGET COMMAND</A>
+<DD><A HREF="spinbox.htm#M42" NAME="L1337">INDICES</A>
+<DL class="indices">
+<DD><A HREF="spinbox.htm#M43" NAME="L1338"><I>number</I></A>
+<DD><A HREF="spinbox.htm#M44" NAME="L1339"><B>anchor</B></A>
+<DD><A HREF="spinbox.htm#M45" NAME="L1340"><B>end</B></A>
+<DD><A HREF="spinbox.htm#M46" NAME="L1341"><B>insert</B></A>
+<DD><A HREF="spinbox.htm#M47" NAME="L1342"><B>sel.first</B></A>
+<DD><A HREF="spinbox.htm#M48" NAME="L1343"><B>sel.last</B></A>
+<DD><A HREF="spinbox.htm#M49" NAME="L1344"><B>@</B><I>number</I></A>
 </DL>
-<DL>
-<DD><A HREF="spinbox.htm#M49" NAME="L1266"><I>pathName </I><B>bbox </B><I>index</I></A>
-<DD><A HREF="spinbox.htm#M50" NAME="L1267"><I>pathName </I><B>cget</B> <I>option</I></A>
-<DD><A HREF="spinbox.htm#M51" NAME="L1268"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
-<DD><A HREF="spinbox.htm#M52" NAME="L1269"><I>pathName </I><B>delete </B><I>first </I>?<I>last</I>?</A>
-<DD><A HREF="spinbox.htm#M53" NAME="L1270"><I>pathName </I><B>get</B></A>
-<DD><A HREF="spinbox.htm#M54" NAME="L1271"><I>pathName </I><B>icursor </B><I>index</I></A>
-<DD><A HREF="spinbox.htm#M55" NAME="L1272"><I>pathName </I><B>identify</B><I> x y</I></A>
-<DD><A HREF="spinbox.htm#M56" NAME="L1273"><I>pathName </I><B>index</B><I> index</I></A>
-<DD><A HREF="spinbox.htm#M57" NAME="L1274"><I>pathName </I><B>insert </B><I>index string</I></A>
-<DD><A HREF="spinbox.htm#M58" NAME="L1275"><I>pathName </I><B>invoke</B><I> element</I></A>
-<DD><A HREF="spinbox.htm#M59" NAME="L1276"><I>pathName </I><B>scan</B> <I>option args</I></A>
-<DL>
-<DD><A HREF="spinbox.htm#M60" NAME="L1277"><I>pathName </I><B>scan mark </B><I>x</I></A>
-<DD><A HREF="spinbox.htm#M61" NAME="L1278"><I>pathName </I><B>scan dragto </B><I>x</I></A>
+<DD><A HREF="spinbox.htm#M50" NAME="L1345">SUBCOMMANDS</A>
+<DL class="subcommands">
+<DD><A HREF="spinbox.htm#M51" NAME="L1346"><I>pathName </I><B>bbox </B><I>index</I></A>
+<DD><A HREF="spinbox.htm#M52" NAME="L1347"><I>pathName </I><B>cget</B> <I>option</I></A>
+<DD><A HREF="spinbox.htm#M53" NAME="L1348"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
+<DD><A HREF="spinbox.htm#M54" NAME="L1349"><I>pathName </I><B>delete </B><I>first </I>?<I>last</I>?</A>
+<DD><A HREF="spinbox.htm#M55" NAME="L1350"><I>pathName </I><B>get</B></A>
+<DD><A HREF="spinbox.htm#M56" NAME="L1351"><I>pathName </I><B>icursor </B><I>index</I></A>
+<DD><A HREF="spinbox.htm#M57" NAME="L1352"><I>pathName </I><B>identify</B><I> x y</I></A>
+<DD><A HREF="spinbox.htm#M58" NAME="L1353"><I>pathName </I><B>index</B><I> index</I></A>
+<DD><A HREF="spinbox.htm#M59" NAME="L1354"><I>pathName </I><B>insert </B><I>index string</I></A>
+<DD><A HREF="spinbox.htm#M60" NAME="L1355"><I>pathName </I><B>invoke</B><I> element</I></A>
+<DD><A HREF="spinbox.htm#M61" NAME="L1356"><I>pathName </I><B>scan</B> <I>option args</I></A>
+<DL class="subcommands">
+<DD><A HREF="spinbox.htm#M62" NAME="L1357"><I>pathName </I><B>scan mark </B><I>x</I></A>
+<DD><A HREF="spinbox.htm#M63" NAME="L1358"><I>pathName </I><B>scan dragto </B><I>x</I></A>
 </DL>
-<DD><A HREF="spinbox.htm#M62" NAME="L1279"><I>pathName </I><B>selection </B><I>option arg</I></A>
-<DL>
-<DD><A HREF="spinbox.htm#M63" NAME="L1280"><I>pathName </I><B>selection adjust </B><I>index</I></A>
-<DD><A HREF="spinbox.htm#M64" NAME="L1281"><I>pathName </I><B>selection clear</B></A>
-<DD><A HREF="spinbox.htm#M65" NAME="L1282"><I>pathName </I><B>selection element</B> ?<I>element</I>?</A>
-<DD><A HREF="spinbox.htm#M66" NAME="L1283"><I>pathName </I><B>selection from </B><I>index</I></A>
-<DD><A HREF="spinbox.htm#M67" NAME="L1284"><I>pathName </I><B>selection present</B></A>
-<DD><A HREF="spinbox.htm#M68" NAME="L1285"><I>pathName </I><B>selection range </B><I>start</I> <I>end</I></A>
-<DD><A HREF="spinbox.htm#M69" NAME="L1286"><I>pathName </I><B>selection to </B><I>index</I></A>
+<DD><A HREF="spinbox.htm#M64" NAME="L1359"><I>pathName </I><B>selection </B><I>option arg</I></A>
+<DL class="subcommands">
+<DD><A HREF="spinbox.htm#M65" NAME="L1360"><I>pathName </I><B>selection adjust </B><I>index</I></A>
+<DD><A HREF="spinbox.htm#M66" NAME="L1361"><I>pathName </I><B>selection clear</B></A>
+<DD><A HREF="spinbox.htm#M67" NAME="L1362"><I>pathName </I><B>selection element</B> ?<I>element</I>?</A>
+<DD><A HREF="spinbox.htm#M68" NAME="L1363"><I>pathName </I><B>selection from </B><I>index</I></A>
+<DD><A HREF="spinbox.htm#M69" NAME="L1364"><I>pathName </I><B>selection present</B></A>
+<DD><A HREF="spinbox.htm#M70" NAME="L1365"><I>pathName </I><B>selection range </B><I>start</I> <I>end</I></A>
+<DD><A HREF="spinbox.htm#M71" NAME="L1366"><I>pathName </I><B>selection to </B><I>index</I></A>
 </DL>
-<DD><A HREF="spinbox.htm#M70" NAME="L1287"><I>pathName </I><B>set</B> ?<I>string</I>?</A>
-<DD><A HREF="spinbox.htm#M71" NAME="L1288"><I>pathName </I><B>validate</B></A>
-<DD><A HREF="spinbox.htm#M72" NAME="L1289"><I>pathName </I><B>xview </B><I>args</I></A>
-<DL>
-<DD><A HREF="spinbox.htm#M73" NAME="L1290"><I>pathName </I><B>xview</B></A>
-<DD><A HREF="spinbox.htm#M74" NAME="L1291"><I>pathName </I><B>xview</B> <I>index</I></A>
-<DD><A HREF="spinbox.htm#M75" NAME="L1292"><I>pathName </I><B>xview moveto</B><I> fraction</I></A>
-<DD><A HREF="spinbox.htm#M76" NAME="L1293"><I>pathName </I><B>xview scroll </B><I>number what</I></A>
+<DD><A HREF="spinbox.htm#M72" NAME="L1367"><I>pathName </I><B>set</B> ?<I>string</I>?</A>
+<DD><A HREF="spinbox.htm#M73" NAME="L1368"><I>pathName </I><B>validate</B></A>
+<DD><A HREF="spinbox.htm#M74" NAME="L1369"><I>pathName </I><B>xview </B><I>args</I></A>
+<DL class="subcommands">
+<DD><A HREF="spinbox.htm#M75" NAME="L1370"><I>pathName </I><B>xview</B></A>
+<DD><A HREF="spinbox.htm#M76" NAME="L1371"><I>pathName </I><B>xview</B> <I>index</I></A>
+<DD><A HREF="spinbox.htm#M77" NAME="L1372"><I>pathName </I><B>xview moveto</B><I> fraction</I></A>
+<DD><A HREF="spinbox.htm#M78" NAME="L1373"><I>pathName </I><B>xview scroll </B><I>number what</I></A>
 </DL>
 </DL>
-<DD><A HREF="spinbox.htm#M77" NAME="L1294">DEFAULT BINDINGS</A>
-<DL>
+<DD><A HREF="spinbox.htm#M79" NAME="L1374">DEFAULT BINDINGS</A>
+<DL class="default bindings">
 </DL>
-<DD><A HREF="spinbox.htm#M78" NAME="L1295">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="spinbox.htm#M80" NAME="L1375">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 spinbox - Create and manipulate spinbox widgets
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -317,14 +324,13 @@ may be used to change the view in the window.  Spinboxes use
 the standard <B>xScrollCommand</B> mechanism for interacting with
 scrollbars (see the description of the <B>xScrollCommand</B> option
 for details).  They also support scanning, as described below.
-
 <H3><A NAME="M26">VALIDATION</A></H3>
 Validation works by setting the <B>validateCommand</B>
 option to a script which will be evaluated according to the <B>validate</B>
 option as follows:
 <P>
 <P>
-<DL>
+<DL class="validation">
 <DT><A NAME="M27"><B>none</B></A><DD>
 Default.  This means no validation will occur.
 <P><DT><A NAME="M28"><B>focus</B></A><DD>
@@ -345,7 +351,7 @@ and <B>invalidCommand</B>, just as you would in a <B><A HREF="../TkCmd/bind.htm"
 following substitutions are recognized:
 <P>
 <P>
-<DL>
+<DL class="validation">
 <DT><A NAME="M33"><B>%d</B></A><DD>
 Type of action: 1 for <B>insert</B>, 0 for <B>delete</B>,
 or -1 for focus, forced or textvariable validation.
@@ -393,7 +399,6 @@ in the <B>validateCommand</B> or <B>invalidCommand</B> (whichever one you
 were editing the spinbox widget from).  It is also recommended to not set an
 associated <B>textVariable</B> during validation, as that can cause the
 spinbox widget to become out of sync with the <B>textVariable</B>.
-
 <H3><A NAME="M41">WIDGET COMMAND</A></H3>
 The <B>spinbox</B> command creates a new Tcl command whose
 name is <I>pathName</I>.  This command may be used to invoke various
@@ -401,47 +406,51 @@ operations on the widget.  It has the following general form:
 <PRE><I>pathName option </I>?<I>arg arg ...</I>?</PRE>
 <I>Option</I> and the <I>arg</I>s
 determine the exact behavior of the command.
-<P>
+<H4><A NAME="M42">INDICES</A></H4>
 Many of the widget commands for spinboxes take one or more indices as
 arguments.  An index specifies a particular character in the spinbox's
 string, in any of the following ways:
 <P>
-<DL>
-<DT><A NAME="M42"><I>number</I></A><DD>
+<DL class="indices">
+<DT><A NAME="M43"><I>number</I></A><DD>
 Specifies the character as a numerical index, where 0 corresponds
 to the first character in the string.
-<P><DT><A NAME="M43"><B>anchor</B></A><DD>
+<P><DT><A NAME="M44"><B>anchor</B></A><DD>
 Indicates the anchor point for the selection, which is set with the
 <B>select from</B> and <B>select adjust</B> widget commands.
-<P><DT><A NAME="M44"><B>end</B></A><DD>
+<P><DT><A NAME="M45"><B>end</B></A><DD>
 Indicates the character just after the last one in the spinbox's string.
 This is equivalent to specifying a numerical index equal to the length
 of the spinbox's string.
-<P><DT><A NAME="M45"><B>insert</B></A><DD>
+<P><DT><A NAME="M46"><B>insert</B></A><DD>
 Indicates the character adjacent to and immediately following the
 insertion cursor.
-<P><DT><A NAME="M46"><B>sel.first</B></A><DD>
+<P><DT><A NAME="M47"><B>sel.first</B></A><DD>
 Indicates the first character in the selection.  It is an error to
-use this form if the selection isn't in the spinbox window.
-<P><DT><A NAME="M47"><B>sel.last</B></A><DD>
+use this form if the selection is not in the spinbox window.
+<P><DT><A NAME="M48"><B>sel.last</B></A><DD>
 Indicates the character just after the last one in the selection.
-It is an error to use this form if the selection isn't in the
+It is an error to use this form if the selection is not in the
 spinbox window.
-<P><DT><A NAME="M48"><B>@</B><I>number</I></A><DD>
+<P><DT><A NAME="M49"><B>@</B><I>number</I></A><DD>
 In this form, <I>number</I> is treated as an x-coordinate in the
 spinbox's window;  the character spanning that x-coordinate is used.
-For example, ``<B>@0</B>'' indicates the left-most character in the
-window.
+For example,
+&#8220;<B>@0</B>&#8221;
+indicates the left-most character in the window.
 <P></DL>
 <P>
-Abbreviations may be used for any of the forms above, e.g. ``<B>e</B>''
-or ``<B>sel.f</B>''.  In general, out-of-range indices are automatically
-rounded to the nearest legal value.
-<P>
+Abbreviations may be used for any of the forms above, e.g.
+&#8220;<B>e</B>&#8221;
+or
+&#8220;<B>sel.f</B>&#8221;.
+In general, out-of-range indices are automatically rounded to the
+nearest legal value.
+<H4><A NAME="M50">SUBCOMMANDS</A></H4>
 The following commands are possible for spinbox widgets:
 <P>
-<DL>
-<DT><A NAME="M49"><I>pathName </I><B>bbox </B><I>index</I></A><DD>
+<DL class="subcommands">
+<DT><A NAME="M51"><I>pathName </I><B>bbox </B><I>index</I></A><DD>
 Returns a list of four numbers describing the bounding box of the
 character given by <I>index</I>.
 The first two elements of the list give the x and y coordinates of
@@ -450,12 +459,12 @@ the upper-left corner of the screen area covered by the character
 the width and height of the character, in pixels.
 The bounding box may refer to a region outside the visible area
 of the window.
-<P><DT><A NAME="M50"><I>pathName </I><B>cget</B> <I>option</I></A><DD>
+<P><DT><A NAME="M52"><I>pathName </I><B>cget</B> <I>option</I></A><DD>
 Returns the current value of the configuration option given
 by <I>option</I>.
 <I>Option</I> may have any of the values accepted by the <B>spinbox</B>
 command.
-<P><DT><A NAME="M51"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A><DD>
+<P><DT><A NAME="M53"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A><DD>
 Query or modify the configuration options of the widget.
 If no <I>option</I> is specified, returns a list describing all of
 the available options for <I>pathName</I> (see <B><A HREF="../TkLib/ConfigWidg.htm">Tk_ConfigureInfo</A></B> for
@@ -468,42 +477,42 @@ modifies the given widget option(s) to have the given value(s);  in
 this case the command returns an empty string.
 <I>Option</I> may have any of the values accepted by the <B>spinbox</B>
 command.
-<P><DT><A NAME="M52"><I>pathName </I><B>delete </B><I>first </I>?<I>last</I>?</A><DD>
+<P><DT><A NAME="M54"><I>pathName </I><B>delete </B><I>first </I>?<I>last</I>?</A><DD>
 Delete one or more elements of the spinbox.
 <I>First</I> is the index of the first character to delete, and
 <I>last</I> is the index of the character just after the last
 one to delete.
-If <I>last</I> isn't specified it defaults to <I>first</I>+1,
+If <I>last</I> is not specified it defaults to <I>first</I>+1,
 i.e. a single character is deleted.
 This command returns an empty string.
-<P><DT><A NAME="M53"><I>pathName </I><B>get</B></A><DD>
+<P><DT><A NAME="M55"><I>pathName </I><B>get</B></A><DD>
 Returns the spinbox's string.
-<P><DT><A NAME="M54"><I>pathName </I><B>icursor </B><I>index</I></A><DD>
+<P><DT><A NAME="M56"><I>pathName </I><B>icursor </B><I>index</I></A><DD>
 Arrange for the insertion cursor to be displayed just before the character
 given by <I>index</I>.  Returns an empty string.
-<P><DT><A NAME="M55"><I>pathName </I><B>identify</B><I> x y</I></A><DD>
+<P><DT><A NAME="M57"><I>pathName </I><B>identify</B><I> x y</I></A><DD>
 Returns the name of the window element corresponding to coordinates
 <I>x</I> and <I>y</I> in the spinbox.  Return value is one of:
 <B>none</B>, <B>buttondown</B>, <B>buttonup</B>, <B><A HREF="../TkCmd/entry.htm">entry</A></B>.
-<P><DT><A NAME="M56"><I>pathName </I><B>index</B><I> index</I></A><DD>
+<P><DT><A NAME="M58"><I>pathName </I><B>index</B><I> index</I></A><DD>
 Returns the numerical index corresponding to <I>index</I>.
-<P><DT><A NAME="M57"><I>pathName </I><B>insert </B><I>index string</I></A><DD>
+<P><DT><A NAME="M59"><I>pathName </I><B>insert </B><I>index string</I></A><DD>
 Insert the characters of <I>string</I> just before the character
 indicated by <I>index</I>.  Returns an empty string.
-<P><DT><A NAME="M58"><I>pathName </I><B>invoke</B><I> element</I></A><DD>
+<P><DT><A NAME="M60"><I>pathName </I><B>invoke</B><I> element</I></A><DD>
 Causes the specified element, either <B>buttondown</B> or <B>buttonup</B>,
 to be invoked, triggering the action associated with it.
-<P><DT><A NAME="M59"><I>pathName </I><B>scan</B> <I>option args</I></A><DD>
+<P><DT><A NAME="M61"><I>pathName </I><B>scan</B> <I>option args</I></A><DD>
 This command is used to implement scanning on spinboxes.  It has
 two forms, depending on <I>option</I>:
 <P>
-<DL>
-<DT><A NAME="M60"><I>pathName </I><B>scan mark </B><I>x</I></A><DD>
+<DL class="subcommands">
+<DT><A NAME="M62"><I>pathName </I><B>scan mark </B><I>x</I></A><DD>
 Records <I>x</I> and the current view in the spinbox window;  used in
 conjunction with later <B>scan dragto</B> commands.  Typically this
 command is associated with a mouse button press in the widget.  It
 returns an empty string.
-<P><DT><A NAME="M61"><I>pathName </I><B>scan dragto </B><I>x</I></A><DD>
+<P><DT><A NAME="M63"><I>pathName </I><B>scan dragto </B><I>x</I></A><DD>
 This command computes the difference between its <I>x</I> argument
 and the <I>x</I> argument to the last <B>scan mark</B> command for
 the widget.  It then adjusts the view left or right by 10 times the
@@ -512,42 +521,42 @@ with mouse motion events in the widget, to produce the effect of
 dragging the spinbox at high speed through the window.  The return
 value is an empty string.
 <P></DL>
-<P><DT><A NAME="M62"><I>pathName </I><B>selection </B><I>option arg</I></A><DD>
+<P><DT><A NAME="M64"><I>pathName </I><B>selection </B><I>option arg</I></A><DD>
 This command is used to adjust the selection within a spinbox.  It
 has several forms, depending on <I>option</I>:
 <P>
-<DL>
-<DT><A NAME="M63"><I>pathName </I><B>selection adjust </B><I>index</I></A><DD>
+<DL class="subcommands">
+<DT><A NAME="M65"><I>pathName </I><B>selection adjust </B><I>index</I></A><DD>
 Locate the end of the selection nearest to the character given by
 <I>index</I>, and adjust that end of the selection to be at <I>index</I>
 (i.e. including but not going beyond <I>index</I>).  The other
 end of the selection is made the anchor point for future
 <B>select to</B> commands.  If the selection
-isn't currently in the spinbox, then a new selection is created to
+is not currently in the spinbox, then a new selection is created to
 include the characters between <I>index</I> and the most recent
 selection anchor point, inclusive.
 Returns an empty string.
-<P><DT><A NAME="M64"><I>pathName </I><B>selection clear</B></A><DD>
+<P><DT><A NAME="M66"><I>pathName </I><B>selection clear</B></A><DD>
 Clear the selection if it is currently in this widget.  If the
-selection isn't in this widget then the command has no effect.
+selection is not in this widget then the command has no effect.
 Returns an empty string.
-<P><DT><A NAME="M65"><I>pathName </I><B>selection element</B> ?<I>element</I>?</A><DD>
+<P><DT><A NAME="M67"><I>pathName </I><B>selection element</B> ?<I>element</I>?</A><DD>
 Sets or gets the currently selected element.  If a spinbutton element
 is specified, it will be displayed depressed.
-<P><DT><A NAME="M66"><I>pathName </I><B>selection from </B><I>index</I></A><DD>
+<P><DT><A NAME="M68"><I>pathName </I><B>selection from </B><I>index</I></A><DD>
 Set the selection anchor point to just before the character
-given by <I>index</I>.  Doesn't change the selection.
+given by <I>index</I>.  Does not change the selection.
 Returns an empty string.
-<P><DT><A NAME="M67"><I>pathName </I><B>selection present</B></A><DD>
+<P><DT><A NAME="M69"><I>pathName </I><B>selection present</B></A><DD>
 Returns 1 if there is are characters selected in the spinbox,
 0 if nothing is selected.
-<P><DT><A NAME="M68"><I>pathName </I><B>selection range </B><I>start</I> <I>end</I></A><DD>
+<P><DT><A NAME="M70"><I>pathName </I><B>selection range </B><I>start</I> <I>end</I></A><DD>
 Sets the selection to include the characters starting with
 the one indexed by <I>start</I> and ending with the one just
 before <I>end</I>.
 If <I>end</I> refers to the same character as <I>start</I> or an
 earlier one, then the spinbox's selection is cleared.
-<P><DT><A NAME="M69"><I>pathName </I><B>selection to </B><I>index</I></A><DD>
+<P><DT><A NAME="M71"><I>pathName </I><B>selection to </B><I>index</I></A><DD>
 If <I>index</I> is before the anchor point, set the selection
 to the characters from <I>index</I> up to but not including
 the anchor point.
@@ -557,26 +566,26 @@ to the characters from the anchor point up to but not including
 <I>index</I>.
 The anchor point is determined by the most recent <B>select from</B>
 or <B>select adjust</B> command in this widget.
-If the selection isn't in this widget then a new selection is
+If the selection is not in this widget then a new selection is
 created using the most recent anchor point specified for the widget.
 Returns an empty string.
 <P></DL>
-<P><DT><A NAME="M70"><I>pathName </I><B>set</B> ?<I>string</I>?</A><DD>
+<P><DT><A NAME="M72"><I>pathName </I><B>set</B> ?<I>string</I>?</A><DD>
 If <I>string</I> is specified, the spinbox will try and set it to this
 value, otherwise it just returns the spinbox's string.
 If validation is on, it will occur when setting the string.
-<P><DT><A NAME="M71"><I>pathName </I><B>validate</B></A><DD>
+<P><DT><A NAME="M73"><I>pathName </I><B>validate</B></A><DD>
 This command is used to force an evaluation of the <B>validateCommand</B>
 independent of the conditions specified by the <B>validate</B> option.
 This is done by temporarily setting the <B>validate</B> option to <B>all</B>.
 It returns 0 or 1.
-<P><DT><A NAME="M72"><I>pathName </I><B>xview </B><I>args</I></A><DD>
+<P><DT><A NAME="M74"><I>pathName </I><B>xview </B><I>args</I></A><DD>
 This command is used to query and change the horizontal position of the
 text in the widget's window.  It can take any of the following
 forms:
 <P>
-<DL>
-<DT><A NAME="M73"><I>pathName </I><B>xview</B></A><DD>
+<DL class="subcommands">
+<DT><A NAME="M75"><I>pathName </I><B>xview</B></A><DD>
 Returns a list containing two elements.
 Each element is a real fraction between 0 and 1;  together they describe
 the horizontal span that is visible in the window.
@@ -585,14 +594,14 @@ For example, if the first element is .2 and the second element is .6,
 in the window, and 40% of the text is off-screen to the right.
 These are the same values passed to scrollbars via the <B>-xscrollcommand</B>
 option.
-<P><DT><A NAME="M74"><I>pathName </I><B>xview</B> <I>index</I></A><DD>
+<P><DT><A NAME="M76"><I>pathName </I><B>xview</B> <I>index</I></A><DD>
 Adjusts the view in the window so that the character given by <I>index</I>
 is displayed at the left edge of the window.
-<P><DT><A NAME="M75"><I>pathName </I><B>xview moveto</B><I> fraction</I></A><DD>
+<P><DT><A NAME="M77"><I>pathName </I><B>xview moveto</B><I> fraction</I></A><DD>
 Adjusts the view in the window so that the character <I>fraction</I> of the
 way through the text appears at the left edge of the window.
 <I>Fraction</I> must be a fraction between 0 and 1.
-<P><DT><A NAME="M76"><I>pathName </I><B>xview scroll </B><I>number what</I></A><DD>
+<P><DT><A NAME="M78"><I>pathName </I><B>xview scroll </B><I>number what</I></A><DD>
 This command shifts the view in the window left or right according to
 <I>number</I> and <I>what</I>.
 <I>Number</I> must be an integer.
@@ -606,14 +615,16 @@ become visible;  if it is positive then characters farther to the right
 become visible.
 <P></DL>
 <P></DL>
-<H3><A NAME="M77">DEFAULT BINDINGS</A></H3>
+<H3><A NAME="M79">DEFAULT BINDINGS</A></H3>
 Tk automatically creates class bindings for spinboxes that give them
 the following default behavior.
-In the descriptions below, ``word'' refers to a contiguous group
-of letters, digits, or ``_'' characters, or any single character
-other than these.
+In the descriptions below,
+&#8220;word&#8221;
+refers to a contiguous group of letters, digits, or
+&#8220;_&#8221;
+characters, or any single character other than these.
 <P>
-<DL>
+<DL class="default bindings">
 <DT>[1]<DD>
 Clicking mouse button 1 positions the insertion cursor
 just before the character underneath the mouse cursor, sets the
@@ -674,7 +685,7 @@ Shift-End moves the cursor to the end and extends the selection
 to that point.
 <P><DT>[12]<DD>
 The Select key and Control-Space set the selection anchor to the position
-of the insertion cursor.  They don't affect the current selection.
+of the insertion cursor.  They do not affect the current selection.
 Shift-Select and Control-Shift-Space adjust the selection to the
 current position of the insertion cursor, selecting from the anchor
 to the insertion cursor if there was not any selection previously.
@@ -723,10 +734,10 @@ take place.
 The behavior of spinboxes can be changed by defining new bindings for
 individual widgets or by redefining the class bindings.
 
-<H3><A NAME="M78">KEYWORDS</A></H3>
+<H3><A NAME="M80">KEYWORDS</A></H3>
 <A href="../Keywords/S.htm#spinbox">spinbox</A>, <A href="../Keywords/E.htm#entry">entry</A>, <A href="../Keywords/W.htm#widget">widget</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 2000 Jeffrey Hobbs.
-<A HREF="../copyright.htm">Copyright</A> &#169; 2000 Ajuba Solutions.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 2000 Jeffrey Hobbs.
+Copyright &copy; 2000 Ajuba Solutions.
+</div>
 </BODY></HTML>

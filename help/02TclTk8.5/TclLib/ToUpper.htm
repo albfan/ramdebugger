@@ -1,4 +1,36 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_UtfToUpper manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_UtfToUpper manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> ToUpper</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="ToUpper.htm#M2" NAME="L751">NAME</A>
+<DL><DD>Tcl_UniCharToUpper, Tcl_UniCharToLower, Tcl_UniCharToTitle, Tcl_UtfToUpper, Tcl_UtfToLower, Tcl_UtfToTitle - routines for manipulating the case of Unicode characters and UTF-8 strings</DD></DL>
+<DD><A HREF="ToUpper.htm#M3" NAME="L752">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>Tcl_UniChar
+<DD><B>Tcl_UniCharToUpper</B>(<I>ch</I>)
+<DD>Tcl_UniChar
+<DD><B>Tcl_UniCharToLower</B>(<I>ch</I>)
+<DD>Tcl_UniChar
+<DD><B>Tcl_UniCharToTitle</B>(<I>ch</I>)
+<DD>int
+<DD><B>Tcl_UtfToUpper</B>(<I>str</I>)
+<DD>int
+<DD><B>Tcl_UtfToLower</B>(<I>str</I>)
+<DD>int
+<DD><B>Tcl_UtfToTitle</B>(<I>str</I>)
+</DL>
+<DD><A HREF="ToUpper.htm#M4" NAME="L753">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="ToUpper.htm#M5" NAME="L754">DESCRIPTION</A>
+<DD><A HREF="ToUpper.htm#M6" NAME="L755">BUGS</A>
+<DD><A HREF="ToUpper.htm#M7" NAME="L756">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_UniCharToUpper, Tcl_UniCharToLower, Tcl_UniCharToTitle, Tcl_UtfToUpper, Tcl_UtfToLower, Tcl_UtfToTitle - routines for manipulating the case of Unicode characters and UTF-8 strings
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -16,7 +48,7 @@ int<BR>
 int<BR>
 <B>Tcl_UtfToTitle</B>(<I>str</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>int <B>ch</B> (in)<DD>
 The <A HREF="../TclLib/Utf.htm">Tcl_UniChar</A> to be converted.
 <P><DT>char <B>*str</B> (in/out)<DD>
@@ -68,7 +100,7 @@ routines.
 
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/U.htm#utf">utf</A>, <A href="../Keywords/U.htm#unicode">unicode</A>, <A href="../Keywords/T.htm#toupper">toupper</A>, <A href="../Keywords/T.htm#tolower">tolower</A>, <A href="../Keywords/T.htm#totitle">totitle</A>, <A href="../Keywords/C.htm#case">case</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1997 by Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1997 by Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

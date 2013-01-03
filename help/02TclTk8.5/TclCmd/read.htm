@@ -1,22 +1,10 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - read manual page</TITLE></HEAD><BODY>
-<DL>
-<DD><A HREF="read.htm#M2" NAME="L1203">NAME</A>
-<DL><DD>read - Read from a channel</DL>
-<DD><A HREF="read.htm#M3" NAME="L1204">SYNOPSIS</A>
-<DL>
-<DD><B>read </B>?<B>-nonewline</B>? <I>channelId</I>
-<DD><B>read </B><I>channelId numChars</I>
-</DL>
-<DD><A HREF="read.htm#M4" NAME="L1205">DESCRIPTION</A>
-<DD><A HREF="read.htm#M5" NAME="L1206">USE WITH SERIAL PORTS</A>
-<DL>
-<DD><A HREF="read.htm#M6" NAME="L1207"><B>read </B><I>channelId numChars</I></A>
-<DD><A HREF="read.htm#M7" NAME="L1208"><B>read </B><I>channelId</I></A>
-</DL>
-<DD><A HREF="read.htm#M8" NAME="L1209">EXAMPLE</A>
-<DD><A HREF="read.htm#M9" NAME="L1210">SEE ALSO</A>
-<DD><A HREF="read.htm#M10" NAME="L1211">KEYWORDS</A>
-</DL><HR>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>read manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> read</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 read - Read from a channel
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -62,7 +50,7 @@ configured to be nonblocking: <B>fconfigure </B><I>channelId </I><B>-blocking
 </B><I>0</I>.  Then <B>read</B> behaves much like described above.  Care
 must be taken when using <B>read</B> on blocking serial ports:
 <P>
-<DL>
+<DL class="use with serial ports">
 <DT><A NAME="M6"><B>read </B><I>channelId numChars</I></A><DD>
 In this form <B>read</B> blocks until <I>numChars</I> have been received
 from the serial port.
@@ -83,8 +71,8 @@ set lines [split $data &#92;n]</PRE>
 <B><A HREF="../TclCmd/file.htm">file</A></B>, <B><A HREF="../TclCmd/eof.htm">eof</A></B>, <B><A HREF="../TclCmd/fblocked.htm">fblocked</A></B>, <B><A HREF="../TclCmd/fconfigure.htm">fconfigure</A></B>, <B><A HREF="../TclLib/StdChannels.htm">Tcl_StandardChannels</A></B>
 <H3><A NAME="M10">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#blocking">blocking</A>, <A href="../Keywords/C.htm#channel">channel</A>, <A href="../Keywords/E.htm#end of line">end of line</A>, <A href="../Keywords/E.htm#end of file">end of file</A>, <A href="../Keywords/N.htm#nonblocking">nonblocking</A>, <A href="../Keywords/R.htm#read">read</A>, <A href="../Keywords/T.htm#translation">translation</A>, <A href="../Keywords/E.htm#encoding">encoding</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

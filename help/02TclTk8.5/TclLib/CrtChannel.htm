@@ -1,12 +1,87 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_CreateChannel manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_CreateChannel manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> CrtChannel</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
 <DD><A HREF="CrtChannel.htm#M2" NAME="L84">NAME</A>
-<DL><DD>Tcl_CreateChannel, Tcl_GetChannelInstanceData, Tcl_GetChannelType, Tcl_GetChannelName, Tcl_GetChannelHandle, Tcl_GetChannelMode, Tcl_GetChannelBufferSize, Tcl_SetChannelBufferSize, Tcl_NotifyChannel, Tcl_BadChannelOption, Tcl_ChannelName, Tcl_ChannelVersion, Tcl_ChannelBlockModeProc, Tcl_ChannelCloseProc, Tcl_ChannelClose2Proc, Tcl_ChannelInputProc, Tcl_ChannelOutputProc, Tcl_ChannelSeekProc, Tcl_ChannelWideSeekProc, Tcl_ChannelSetOptionProc, Tcl_ChannelGetOptionProc, Tcl_ChannelWatchProc, Tcl_ChannelGetHandleProc, Tcl_ChannelFlushProc, Tcl_ChannelHandlerProc, Tcl_ChannelThreadActionProc, Tcl_IsChannelShared, Tcl_IsChannelRegistered, Tcl_CutChannel, Tcl_SpliceChannel, Tcl_IsChannelExisting, Tcl_ClearChannelHandlers, Tcl_GetChannelThread, Tcl_ChannelBuffered - procedures for creating and manipulating channels</DL>
+<DL><DD>Tcl_CreateChannel, Tcl_GetChannelInstanceData, Tcl_GetChannelType, Tcl_GetChannelName, Tcl_GetChannelHandle, Tcl_GetChannelMode, Tcl_GetChannelBufferSize, Tcl_SetChannelBufferSize, Tcl_NotifyChannel, Tcl_BadChannelOption, Tcl_ChannelName, Tcl_ChannelVersion, Tcl_ChannelBlockModeProc, Tcl_ChannelCloseProc, Tcl_ChannelClose2Proc, Tcl_ChannelInputProc, Tcl_ChannelOutputProc, Tcl_ChannelSeekProc, Tcl_ChannelWideSeekProc, Tcl_ChannelTruncateProc, Tcl_ChannelSetOptionProc, Tcl_ChannelGetOptionProc, Tcl_ChannelWatchProc, Tcl_ChannelGetHandleProc, Tcl_ChannelFlushProc, Tcl_ChannelHandlerProc, Tcl_ChannelThreadActionProc, Tcl_IsChannelShared, Tcl_IsChannelRegistered, Tcl_CutChannel, Tcl_SpliceChannel, Tcl_IsChannelExisting, Tcl_ClearChannelHandlers, Tcl_GetChannelThread, Tcl_ChannelBuffered - procedures for creating and manipulating channels</DD></DL>
 <DD><A HREF="CrtChannel.htm#M3" NAME="L85">SYNOPSIS</A>
 <DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>Tcl_Channel
+<DD><B>Tcl_CreateChannel</B>(<I>typePtr, channelName, instanceData, mask</I>)
+<DD>ClientData
+<DD><B>Tcl_GetChannelInstanceData</B>(<I>channel</I>)
+<DD>Tcl_ChannelType *
+<DD><B>Tcl_GetChannelType</B>(<I>channel</I>)
+<DD>const char *
+<DD><B>Tcl_GetChannelName</B>(<I>channel</I>)
+<DD>int
+<DD><B>Tcl_GetChannelHandle</B>(<I>channel, direction, handlePtr</I>)
+<DD>Tcl_ThreadId
+<DD><B>Tcl_GetChannelThread</B>(<I>channel</I>)
+<DD>int
+<DD><B>Tcl_GetChannelMode</B>(<I>channel</I>)
+<DD>int
+<DD><B>Tcl_GetChannelBufferSize</B>(<I>channel</I>)
+<DD><B>Tcl_SetChannelBufferSize</B>(<I>channel, size</I>)
+<DD><B>Tcl_NotifyChannel</B>(<I>channel, mask</I>)
+<DD>int
+<DD><B>Tcl_BadChannelOption</B>(<I>interp, optionName, optionList</I>)
+<DD>int
+<DD><B>Tcl_IsChannelShared</B>(<I>channel</I>)
+<DD>int
+<DD><B>Tcl_IsChannelRegistered</B>(<I>interp, channel</I>)
+<DD>int
+<DD><B>Tcl_IsChannelExisting</B>(<I>channelName</I>)
+<DD>void
+<DD><B>Tcl_CutChannel</B>(<I>channel</I>)
+<DD>void
+<DD><B>Tcl_SpliceChannel</B>(<I>channel</I>)
+<DD>void
+<DD><B>Tcl_ClearChannelHandlers</B>(<I>channel</I>)
+<DD>int
+<DD><B>Tcl_ChannelBuffered</B>(<I>channel</I>)
+<DD>const char *
+<DD><B>Tcl_ChannelName</B>(<I>typePtr</I>)
+<DD>Tcl_ChannelTypeVersion
+<DD><B>Tcl_ChannelVersion</B>(<I>typePtr</I>)
+<DD>Tcl_DriverBlockModeProc *
+<DD><B>Tcl_ChannelBlockModeProc</B>(<I>typePtr</I>)
+<DD>Tcl_DriverCloseProc *
+<DD><B>Tcl_ChannelCloseProc</B>(<I>typePtr</I>)
+<DD>Tcl_DriverClose2Proc *
+<DD><B>Tcl_ChannelClose2Proc</B>(<I>typePtr</I>)
+<DD>Tcl_DriverInputProc *
+<DD><B>Tcl_ChannelInputProc</B>(<I>typePtr</I>)
+<DD>Tcl_DriverOutputProc *
+<DD><B>Tcl_ChannelOutputProc</B>(<I>typePtr</I>)
+<DD>Tcl_DriverSeekProc *
+<DD><B>Tcl_ChannelSeekProc</B>(<I>typePtr</I>)
+<DD>Tcl_DriverWideSeekProc *
+<DD><B>Tcl_ChannelWideSeekProc</B>(<I>typePtr</I>)
+<DD>Tcl_DriverThreadActionProc *
+<DD><B>Tcl_ChannelThreadActionProc</B>(<I>typePtr</I>)
+<DD>Tcl_DriverTruncateProc *
+<DD><B>Tcl_ChannelTruncateProc</B>(<I>typePtr</I>)
+<DD>Tcl_DriverSetOptionProc *
+<DD><B>Tcl_ChannelSetOptionProc</B>(<I>typePtr</I>)
+<DD>Tcl_DriverGetOptionProc *
+<DD><B>Tcl_ChannelGetOptionProc</B>(<I>typePtr</I>)
+<DD>Tcl_DriverWatchProc *
+<DD><B>Tcl_ChannelWatchProc</B>(<I>typePtr</I>)
+<DD>Tcl_DriverGetHandleProc *
+<DD><B>Tcl_ChannelGetHandleProc</B>(<I>typePtr</I>)
+<DD>Tcl_DriverFlushProc *
+<DD><B>Tcl_ChannelFlushProc</B>(<I>typePtr</I>)
+<DD>Tcl_DriverHandlerProc *
+<DD><B>Tcl_ChannelHandlerProc</B>(<I>typePtr</I>)
 </DL>
 <DD><A HREF="CrtChannel.htm#M4" NAME="L86">ARGUMENTS</A>
-<DL>
+<DL class="arguments">
 </DL>
 <DD><A HREF="CrtChannel.htm#M5" NAME="L87">DESCRIPTION</A>
 <DD><A HREF="CrtChannel.htm#M6" NAME="L88">TCL_CHANNELTYPE</A>
@@ -24,13 +99,14 @@
 <DD><A HREF="CrtChannel.htm#M18" NAME="L100">FLUSHPROC</A>
 <DD><A HREF="CrtChannel.htm#M19" NAME="L101">HANDLERPROC</A>
 <DD><A HREF="CrtChannel.htm#M20" NAME="L102">THREADACTIONPROC</A>
-<DD><A HREF="CrtChannel.htm#M21" NAME="L103">TCL_BADCHANNELOPTION</A>
-<DD><A HREF="CrtChannel.htm#M22" NAME="L104">OLD CHANNEL TYPES</A>
-<DD><A HREF="CrtChannel.htm#M23" NAME="L105">SEE ALSO</A>
-<DD><A HREF="CrtChannel.htm#M24" NAME="L106">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="CrtChannel.htm#M21" NAME="L103">TRUNCATEPROC</A>
+<DD><A HREF="CrtChannel.htm#M22" NAME="L104">TCL_BADCHANNELOPTION</A>
+<DD><A HREF="CrtChannel.htm#M23" NAME="L105">OLD CHANNEL TYPES</A>
+<DD><A HREF="CrtChannel.htm#M24" NAME="L106">SEE ALSO</A>
+<DD><A HREF="CrtChannel.htm#M25" NAME="L107">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
-Tcl_CreateChannel, Tcl_GetChannelInstanceData, Tcl_GetChannelType, Tcl_GetChannelName, Tcl_GetChannelHandle, Tcl_GetChannelMode, Tcl_GetChannelBufferSize, Tcl_SetChannelBufferSize, Tcl_NotifyChannel, Tcl_BadChannelOption, Tcl_ChannelName, Tcl_ChannelVersion, Tcl_ChannelBlockModeProc, Tcl_ChannelCloseProc, Tcl_ChannelClose2Proc, Tcl_ChannelInputProc, Tcl_ChannelOutputProc, Tcl_ChannelSeekProc, Tcl_ChannelWideSeekProc, Tcl_ChannelSetOptionProc, Tcl_ChannelGetOptionProc, Tcl_ChannelWatchProc, Tcl_ChannelGetHandleProc, Tcl_ChannelFlushProc, Tcl_ChannelHandlerProc, Tcl_ChannelThreadActionProc, Tcl_IsChannelShared, Tcl_IsChannelRegistered, Tcl_CutChannel, Tcl_SpliceChannel, Tcl_IsChannelExisting, Tcl_ClearChannelHandlers, Tcl_GetChannelThread, Tcl_ChannelBuffered - procedures for creating and manipulating channels
+Tcl_CreateChannel, Tcl_GetChannelInstanceData, Tcl_GetChannelType, Tcl_GetChannelName, Tcl_GetChannelHandle, Tcl_GetChannelMode, Tcl_GetChannelBufferSize, Tcl_SetChannelBufferSize, Tcl_NotifyChannel, Tcl_BadChannelOption, Tcl_ChannelName, Tcl_ChannelVersion, Tcl_ChannelBlockModeProc, Tcl_ChannelCloseProc, Tcl_ChannelClose2Proc, Tcl_ChannelInputProc, Tcl_ChannelOutputProc, Tcl_ChannelSeekProc, Tcl_ChannelWideSeekProc, Tcl_ChannelTruncateProc, Tcl_ChannelSetOptionProc, Tcl_ChannelGetOptionProc, Tcl_ChannelWatchProc, Tcl_ChannelGetHandleProc, Tcl_ChannelFlushProc, Tcl_ChannelHandlerProc, Tcl_ChannelThreadActionProc, Tcl_IsChannelShared, Tcl_IsChannelRegistered, Tcl_CutChannel, Tcl_SpliceChannel, Tcl_IsChannelExisting, Tcl_ClearChannelHandlers, Tcl_GetChannelThread, Tcl_ChannelBuffered - procedures for creating and manipulating channels
 <H3><A NAME="M3">SYNOPSIS</A></H3>
 <B>#include &lt;tcl.h&gt;</B><BR>
 Tcl_Channel<BR>
@@ -87,6 +163,8 @@ Tcl_DriverWideSeekProc *<BR>
 <B>Tcl_ChannelWideSeekProc</B>(<I>typePtr</I>)<BR>
 Tcl_DriverThreadActionProc *<BR>
 <B>Tcl_ChannelThreadActionProc</B>(<I>typePtr</I>)<BR>
+Tcl_DriverTruncateProc *<BR>
+<B>Tcl_ChannelTruncateProc</B>(<I>typePtr</I>)<BR>
 Tcl_DriverSetOptionProc *<BR>
 <B>Tcl_ChannelSetOptionProc</B>(<I>typePtr</I>)<BR>
 Tcl_DriverGetOptionProc *<BR>
@@ -100,8 +178,8 @@ Tcl_DriverFlushProc *<BR>
 Tcl_DriverHandlerProc *<BR>
 <B>Tcl_ChannelHandlerProc</B>(<I>typePtr</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
-<DT>Tcl_ChannelType <B>*typePtr</B> (in)<DD>
+<DL class="arguments">
+<DT>const Tcl_ChannelType <B>*typePtr</B> (in)<DD>
 Points to a structure containing the addresses of procedures that
 can be called to perform I/O and other functions on the channel.
 <P><DT>const char <B>*channelName</B> (in)<DD>
@@ -133,7 +211,8 @@ Current interpreter. (can be NULL)
 <P><DT>const char <B>*optionName</B> (in)<DD>
 Name of the invalid option.
 <P><DT>const char <B>*optionList</B> (in)<DD>
-Specific options list (space separated words, without &quot;-&quot;) 
+Specific options list (space separated words, without
+&#8220;-&#8221;)
 to append to the standard generic options list.
 Can be NULL for generic options error message only.
 
@@ -289,31 +368,34 @@ details about the old structure.
 <P>
 The <B>Tcl_ChannelType</B> structure contains the following fields:
 <PRE>typedef struct Tcl_ChannelType {
-	char *<I>typeName</I>;
-	Tcl_ChannelTypeVersion <I>version</I>;
-	Tcl_DriverCloseProc *<I>closeProc</I>;
-	Tcl_DriverInputProc *<I>inputProc</I>;
-	Tcl_DriverOutputProc *<I>outputProc</I>;
-	Tcl_DriverSeekProc *<I>seekProc</I>;
-	Tcl_DriverSetOptionProc *<I>setOptionProc</I>;
-	Tcl_DriverGetOptionProc *<I>getOptionProc</I>;
-	Tcl_DriverWatchProc *<I>watchProc</I>;
-	Tcl_DriverGetHandleProc *<I>getHandleProc</I>;
-	Tcl_DriverClose2Proc *<I>close2Proc</I>;
-	Tcl_DriverBlockModeProc *<I>blockModeProc</I>;
-	Tcl_DriverFlushProc *<I>flushProc</I>;
-	Tcl_DriverHandlerProc *<I>handlerProc</I>;
-	Tcl_DriverWideSeekProc *<I>wideSeekProc</I>;
-	Tcl_DriverThreadActionProc *<I>threadActionProc</I>;
+        char *<I>typeName</I>;
+        Tcl_ChannelTypeVersion <I>version</I>;
+        Tcl_DriverCloseProc *<I>closeProc</I>;
+        Tcl_DriverInputProc *<I>inputProc</I>;
+        Tcl_DriverOutputProc *<I>outputProc</I>;
+        Tcl_DriverSeekProc *<I>seekProc</I>;
+        Tcl_DriverSetOptionProc *<I>setOptionProc</I>;
+        Tcl_DriverGetOptionProc *<I>getOptionProc</I>;
+        Tcl_DriverWatchProc *<I>watchProc</I>;
+        Tcl_DriverGetHandleProc *<I>getHandleProc</I>;
+        Tcl_DriverClose2Proc *<I>close2Proc</I>;
+        Tcl_DriverBlockModeProc *<I>blockModeProc</I>;
+        Tcl_DriverFlushProc *<I>flushProc</I>;
+        Tcl_DriverHandlerProc *<I>handlerProc</I>;
+        Tcl_DriverWideSeekProc *<I>wideSeekProc</I>;
+        Tcl_DriverThreadActionProc *<I>threadActionProc</I>;
+        Tcl_DriverTruncateProc *<I>truncateProc</I>;
 } Tcl_ChannelType;</PRE>
 <P>
-The driver must provide implementations for all functions except
-<I>blockModeProc</I>, <I>seekProc</I>, <I>setOptionProc</I>,
-<I>getOptionProc</I>, and <I>close2Proc</I>, which may be specified as
-NULL.  Other functions that can not be implemented for this type of
-device should return <B>EINVAL</B> when invoked to indicate that they
-are not implemented, except in the case of <I>flushProc</I> and
-<I>handlerProc</I>, which should specified as NULL if not otherwise defined.
+It is not necessary to provide implementations for all channel
+operations.  Those which are not necessary may be set to NULL in the
+struct: <I>blockModeProc</I>, <I>seekProc</I>, <I>setOptionProc</I>,
+<I>getOptionProc</I>, and <I>close2Proc</I>, in addition to
+<I>flushProc</I>, <I>handlerProc</I>, <I>threadActionProc</I>, and
+<I>truncateProc</I>.  Other functions that cannot be implemented in a
+meaningful way should return <B>EINVAL</B> when called, to indicate
+that the operations they represent are not available. Also note that
+<I>wideSeekProc</I> can be NULL if <I>seekProc</I> is.
 <P>
 The user should only use the above structure for <B>Tcl_ChannelType</B>
 instantiation.  When referencing fields in a <B>Tcl_ChannelType</B>
@@ -323,6 +405,7 @@ structure, the following functions should be used to obtain the values:
 <B>Tcl_ChannelClose2Proc</B>, <B>Tcl_ChannelInputProc</B>,
 <B>Tcl_ChannelOutputProc</B>, <B>Tcl_ChannelSeekProc</B>,
 <B>Tcl_ChannelWideSeekProc</B>, <B>Tcl_ChannelThreadActionProc</B>,
+<B>Tcl_ChannelTruncateProc</B>,
 <B>Tcl_ChannelSetOptionProc</B>, <B>Tcl_ChannelGetOptionProc</B>,
 <B>Tcl_ChannelWatchProc</B>, <B>Tcl_ChannelGetHandleProc</B>,
 <B>Tcl_ChannelFlushProc</B>, or <B>Tcl_ChannelHandlerProc</B>.
@@ -342,8 +425,11 @@ a pointer to the string.
 The <I>version</I> field should be set to the version of the structure
 that you require. <B>TCL_CHANNEL_VERSION_2</B> is the minimum recommended.
 <B>TCL_CHANNEL_VERSION_3</B> must be set to specifiy the <I>wideSeekProc</I> member.
-<B>TCL_CHANNEL_VERSION_4</B> must be set to specifiy the
-<I>threadActionProc</I> member (includes <I>wideSeekProc</I>).
+<B>TCL_CHANNEL_VERSION_4</B> must be set to specifiy the <I>threadActionProc</I> member
+(includes <I>wideSeekProc</I>).
+<B>TCL_CHANNEL_VERSION_5</B> must be set to specifiy the
+<I>truncateProc</I> members (includes
+<I>wideSeekProc</I> and <I>threadActionProc</I>).
 If it is not set to any of these, then this
 <B>Tcl_ChannelType</B> is assumed to have the original structure.  See
 <B>OLD CHANNEL TYPES</B> for more details.  While Tcl will recognize
@@ -351,7 +437,10 @@ and function with either structures, stacked channels must be of at
 least <B>TCL_CHANNEL_VERSION_2</B> to function correctly.
 <P>
 This value can be retrieved with <B>Tcl_ChannelVersion</B>, which returns
-one of <B>TCL_CHANNEL_VERSION_4</B>, <B>TCL_CHANNEL_VERSION_3</B>,
+one of
+<B>TCL_CHANNEL_VERSION_5</B>,
+<B>TCL_CHANNEL_VERSION_4</B>,
+<B>TCL_CHANNEL_VERSION_3</B>,
 <B>TCL_CHANNEL_VERSION_2</B> or <B>TCL_CHANNEL_VERSION_1</B>.
 <H4><A NAME="M9">BLOCKMODEPROC</A></H4>
 The <I>blockModeProc</I> field contains the address of a function called by
@@ -728,17 +817,35 @@ might be maintaining using the calling thread as the associate. See
 <B>Tcl_CutChannel</B> and <B>Tcl_SpliceChannel</B> for more detail.
 <P>
 <PRE>typedef void Tcl_DriverThreadActionProc(
-	ClientData <I>instanceData</I>,
-      int        <I>action</I>);</PRE>
+        ClientData <I>instanceData</I>,
+        int        <I>action</I>);</PRE>
 <P>
 <I>InstanceData</I> is the same as the value passed to
 <B>Tcl_CreateChannel</B> when this channel was created.
 <P>
 These values can be retrieved with <B>Tcl_ChannelThreadActionProc</B>,
 which returns a pointer to the function.
-
-<H3><A NAME="M21">TCL_BADCHANNELOPTION</A></H3>
-This procedure generates a &quot;bad option&quot; error message in an
+<H4><A NAME="M21">TRUNCATEPROC</A></H4>
+The <I>truncateProc</I> field contains the address of the function
+called by the generic layer when a channel is truncated to some
+length. It can be NULL.
+<P>
+<PRE>typedef int Tcl_DriverTruncateProc(
+        ClientData <I>instanceData</I>,
+        Tcl_WideInt <I>length</I>);</PRE>
+<P>
+<I>InstanceData</I> is the same as the value passed to
+<B>Tcl_CreateChannel</B> when this channel was created, and
+<I>length</I> is the new length of the underlying file, which should
+not be negative. The result should be 0 on success or an errno code
+(suitable for use with <B><A HREF="../TclLib/SetErrno.htm">Tcl_SetErrno</A></B>) on failure.
+<P>
+These values can be retrieved with <B>Tcl_ChannelTruncateProc</B>,
+which returns a pointer to the function.
+<H3><A NAME="M22">TCL_BADCHANNELOPTION</A></H3>
+This procedure generates a
+&#8220;bad option&#8221;
+error message in an
 (optional) interpreter.  It is used by channel drivers when 
 an invalid Set/Get option is requested. Its purpose is to concatenate
 the generic options list to the specific ones and factorize
@@ -755,13 +862,18 @@ so you get for instance:
 <PRE>bad option &quot;-blah&quot;: should be one of -blocking,
     -buffering, -buffersize, -eofchar, -translation,
     -peername, or -sockname</PRE>
-when called with <I>optionList</I>=&quot;peername sockname&quot;
+when called with <I>optionList</I> equal to
+&#8220;peername sockname&#8221;
 <P>
-``blah'' is the <I>optionName</I> argument and ``&lt;specific options&gt;''
+&#8220;blah&#8221;
+is the <I>optionName</I> argument and
+&#8220;&lt;specific options&gt;&#8221;
 is a space separated list of specific option words.
 The function takes good care of inserting minus signs before
-each option, commas after, and an ``or'' before the last option.
-<H3><A NAME="M22">OLD CHANNEL TYPES</A></H3>
+each option, commas after, and an
+&#8220;or&#8221;
+before the last option.
+<H3><A NAME="M23">OLD CHANNEL TYPES</A></H3>
 The original (8.3.1 and below) <B>Tcl_ChannelType</B> structure contains
 the following fields:
 <P>
@@ -804,17 +916,18 @@ contained the following fields:
         Tcl_DriverBlockModeProc *<I>blockModeProc</I>;
         Tcl_DriverFlushProc *<I>flushProc</I>;
         Tcl_DriverHandlerProc *<I>handlerProc</I>;
+        Tcl_DriverTruncateProc *<I>truncateProc</I>;
 } Tcl_ChannelType;</PRE>
 <P>
 When the above structure is registered as a channel type, the
 <I>version</I> field should always be <B>TCL_CHANNEL_VERSION_2</B>.
 
-<H3><A NAME="M23">SEE ALSO</A></H3>
+<H3><A NAME="M24">SEE ALSO</A></H3>
 <B><A HREF="../TclLib/OpenFileChnl.htm">Tcl_Close</A></B>, <B><A HREF="../TclLib/OpenFileChnl.htm">Tcl_OpenFileChannel</A></B>, <B><A HREF="../TclLib/SetErrno.htm">Tcl_SetErrno</A></B>, <B><A HREF="../TclLib/Notifier.htm">Tcl_QueueEvent</A></B>, <B><A HREF="../TclLib/ChnlStack.htm">Tcl_StackChannel</A></B>, <B><A HREF="../TclLib/GetStdChan.htm">Tcl_GetStdChannel</A></B>
-<H3><A NAME="M24">KEYWORDS</A></H3>
+<H3><A NAME="M25">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#blocking">blocking</A>, <A href="../Keywords/C.htm#channel driver">channel driver</A>, <A href="../Keywords/C.htm#channel registration">channel registration</A>, <A href="../Keywords/C.htm#channel type">channel type</A>, <A href="../Keywords/N.htm#nonblocking">nonblocking</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1996-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1997-2000 Ajuba Solutions.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1996-1997 Sun Microsystems, Inc.
+Copyright &copy; 1997-2000 Ajuba Solutions.
+</div>
 </BODY></HTML>

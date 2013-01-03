@@ -122,6 +122,7 @@ proc RamDebugger::CVS::_ManageAutoSaveDo {} {
 	    ManageAutoSave
 	}
     }
+    indicator_update
 }
 
 proc RamDebugger::CVS::SaveRevision { { raiseerror 0 } } {
@@ -130,11 +131,14 @@ proc RamDebugger::CVS::SaveRevision { { raiseerror 0 } } {
 
     RamDebugger::WaitState 1
 
-    if { [regexp {^\*.*\*$} $RamDebugger::currentfile] } {
-	set file [string trim $RamDebugger::currentfile *]
+    set map [list > "" < ""]
+    set file [string map $map $RamDebugger::currentfile]
+    
+    if { [regexp {^\*.*\*$} $file] } {
+	set file [string trim $file *]
 	set lfile $file.[sha1::sha1 $file]
     } else {
-	set file [file normalize $RamDebugger::currentfile]
+	set file [file normalize $file]
 	set lfile [file tail $file].[sha1::sha1 $file]
     }
     RamDebugger::SetMessage "Saving revision for file '$file'..."
@@ -176,20 +180,18 @@ proc RamDebugger::CVS::OpenRevisions { { file "" } } {
     variable cvsworkdir
 
     RamDebugger::WaitState 1
-    if { $file eq "" } {
-	if { [regexp {^\*.*\*$} $RamDebugger::currentfile] } {
-	    set file $RamDebugger::currentfile
-	} else {
-	    set file [file normalize $RamDebugger::currentfile]
-	}
-    }
+    
+    if { $file eq "" } { set file $RamDebugger::currentfile }
+    set map [list > "" < ""]
+    set file [string map $map $file]
+    
     if { [regexp {^\*.*\*$} $file] } {
 	set file [string trim $file *]
 	set lfile $file.[sha1::sha1 $file]
     } else {
+	set file [file normalize $file]
 	set lfile [file tail $file].[sha1::sha1 $file]
     }
-
     set err [catch { Init } errstring]
     if { $err } {
 	RamDebugger::WaitState 0
@@ -280,12 +282,17 @@ proc RamDebugger::CVS::OpenRevisions { { file "" } } {
 	    set deletefiles ""
 	    if { [llength $selecteditems] == 1 } {
 		set revision [lindex $selecteditems 0 0]
-		if { [regexp {^\*.*\*$} $RamDebugger::currentfile] } {
-		    set currentfile [string trim $RamDebugger::currentfile *]
+		
+		set currentfileL $RamDebugger::currentfile
+		set map [list > "" < ""]
+		set currentfileL [string map $map $currentfileL]
+    
+		if { [regexp {^\*.*\*$} $currentfileL] } {
+		    set currentfileL [string trim $currentfileL *]
 		} else {
-		    set currentfile [file normalize $RamDebugger::currentfile]
+		    set currentfileL [file normalize $currentfileL]
 		}
-		if { $file eq $currentfile } {
+		if { $file eq $currentfileL } {
 		    set map [list "\n[string repeat { } 16]" "\n\t\t" "\n[string repeat { } 8]" "\n\t"]
 		    set data [string map $map [$RamDebugger::text get 1.0 end-1c]]
 		    set file1 [file tail $file]
@@ -322,7 +329,7 @@ proc RamDebugger::CVS::OpenRevisions { { file "" } } {
 	    $interp eval [list set argc 2]
 	    $interp eval [list set argv [list [file join $cvsworkdir $file1] \
 		        [file join $cvsworkdir $file2]]]
-	    $interp eval [list source [file join $RamDebugger::MainDir addons tkdiff.tcl]]
+	    $interp eval [list source [file join $RamDebugger::MainDir addons tkcvs bin tkdiff.tcl]]
 	    cd $pwd
 	}
 	set action [$w waitforwindow]
@@ -517,4 +524,382 @@ proc RamDebugger::CVS::ShowAllFiles {} {
 	set action [$w waitforwindow]
     }
 }
+
+################################################################################
+#    CVS indicator
+################################################################################
+
+proc RamDebugger::CVS::indicator_init { f } {
+    variable cvs_indicator_frame
+
+    if { [auto_execok cvs] eq "" } { return }
+
+    set cvs_indicator_frame $f
+    ttk::label $f.l1 -text CVS:
+    ttk::label $f.l2 -width 3
+    ttk::label $f.l3 -width 3
+    
+    foreach i [list 1 2 3] {
+	#bind $f.l$i <1> [list RamDebugger::OpenProgram tkcvs]
+	bind $f.l$i <1> [list RamDebugger::CVS::update_recursive $cvs_indicator_frame]
+    }
+    grid $f.l1 $f.l2 $f.l3 -sticky w
+}
+
+proc RamDebugger::CVS::indicator_update {} {
+    variable cvs_indicator_fileid
+    variable cvs_indicator_data
+    variable cvs_indicator_frame
+    
+    set currentfile $RamDebugger::currentfile
+    
+    if { [auto_execok cvs] eq "" } { return }
+    if { [info exists cvs_indicator_fileid] } {
+	catch { close $cvs_indicator_fileid }
+	unset cvs_indicator_fileid
+    }
+    set f $cvs_indicator_frame
+    foreach i [list 1 2 3] {
+	raise $f.l$i
+    }
+    set pwd [pwd]
+    cd [file dirname $currentfile]
+    set cvs_indicator_data ""
+    set cvs_indicator_fileid [open "|cvs -n update" r]
+    fconfigure $cvs_indicator_fileid -blocking 0
+    fileevent $cvs_indicator_fileid readable [list RamDebugger::CVS::indicator_update_do]
+    cd $pwd
+}
+
+proc RamDebugger::CVS::indicator_update_do {} {
+    variable cvs_indicator_fileid
+    variable cvs_indicator_data
+    variable cvs_indicator_frame
+    
+    set f $cvs_indicator_frame
+    set currentfile $RamDebugger::currentfile
+    set cfile [file tail $currentfile]
+    set cdir [file tail [file dirname $currentfile]]
+    
+    if { ![info exists cvs_indicator_fileid] } { return }
+    append cvs_indicator_data "[gets $cvs_indicator_fileid]\n"
+    
+    if { ![eof $cvs_indicator_fileid] } { return }
+    catch { close $cvs_indicator_fileid }
+    unset cvs_indicator_fileid
+    
+    set files ""
+    set currentfile_mode ""
+    foreach line [split $cvs_indicator_data \n] {
+	if { ![regexp {^\s*(\w)\s+(\S.*)} $line {} mode file] } { continue }
+	lappend files $line
+	if { $file eq $cfile } {
+	    set currentfile_mode $mode
+	}
+    }
+    switch -- $currentfile_mode {
+	"" {
+	    $f.l2 configure -image ""
+	    tooltip::tooltip $f.l2 [_ "CVS up to date for current file '%s'" $cfile]
+	}
+	M {
+	    $f.l2 configure -image up-16
+	    tooltip::tooltip $f.l2 [_ "It is necessary to COMMIT current file '%s'" $cfile]
+	}
+	default {
+	    $f.l2 configure -image down-16
+	    tooltip::tooltip $f.l2 [_ "CVS is NOT up to date for current file '%s'" $cfile]
+	}
+    }
+    if { [llength $files] > 10 } {
+	set files [lrange $files 0 9]
+    }
+    if { [llength $files] > 0 } {
+	$f.l3 configure -image reload-16
+	tooltip::tooltip $f.l3 [join $files \n]
+    } else {
+	$f.l3 configure -image ""
+	tooltip::tooltip $f.l3 [_ "CVS up to date for current directory '%s'" $cdir]
+    }
+}
+
+################################################################################
+#    proc CVS update recursive
+################################################################################
+
+proc RamDebugger::CVS::update_recursive { wp } {
+    
+    if { 0 && [file isdirectory [file dirname $RamDebugger::currentfile]] } {
+	set directory [file dirname $RamDebugger::currentfile]
+    } else {
+	set directory ""
+    }
+    set script ""
+    foreach cmd [list update_recursive_do0 select_directory update_recursive_do1 \
+	    update_recursive_accept update_recursive_cmd] {
+	set full_cmd RamDebugger::CVS::$cmd
+	append script "[list proc $cmd [info_fullargs $full_cmd] [info body $full_cmd]]\n"
+    }
+    append script "[list namespace eval RamDebugger ""]\n"
+    append script "[list set RamDebugger::MainDir $RamDebugger::MainDir]\n"
+    append script "[list lappend ::auto_path {*}$::auto_path]\n"
+    append script "[list update_recursive_do0 $directory]\n"
+    
+    if { 0&&$::tcl_platform(threaded) } {
+	package require Thread
+	thread::create $script
+    } else {
+	if { ![interp exists update_recursive_intp] } {
+	    interp create update_recursive_intp
+	}
+	update_recursive_intp eval $script
+    }
+}
+
+proc RamDebugger::CVS::update_recursive_do0 { directory } {
+
+    package require dialogwin
+    #package require compass_utils
+
+    wm withdraw .
+    
+    destroy ._ask
+    set w [dialogwin_snit ._ask -title [_ "CVS update recursive"] -entrytext \
+	    [_ "Select origin directory for CVS update recursive:"] \
+	    -okname [_ View] -morebuttons [list [_ "Update CVS"]] \
+	    -cancelname [_ Close] -grab 0 -callback [list update_recursive_do1]]
+    set f [$w giveframe]
+    
+    set dict [cu::get_program_preferences -valueName cvs_update_recursive RamDebugger]
+    $w set_uservar_value directories [dict_getd $dict directories ""]
+    $w set_uservar_value messages [dict_getd $dict messages ""]
+    
+    ttk::label $f.l1 -text [_ "Directory"]:
+    cu::combobox $f.e1 -textvariable [$w give_uservar dir ""] -valuesvariable \
+	[$w give_uservar directories] -width 60
+    ttk::button $f.b1 -text F -command [namespace code [list select_directory $w]] \
+	-style Toolbutton
+
+    package require fulltktree
+    set columns [list [list 100 [_ "line"] left item 0]]
+    fulltktree $f.toctree -height 350 \
+	-columns $columns -expand 0 \
+	-selectmode extended -showheader 1 -showlines 0  \
+	-indent 0 -sensitive_cols all \
+	-contextualhandler_menu [list "update_recursive_cmd" $w contextual]
+    $w set_uservar_value tree $f.toctree
+    
+    ttk::label $f.l2 -text [_ "Commit messages"]:
+    cu::combobox $f.e2 -textvariable [$w give_uservar message ""] -valuesvariable \
+	[$w give_uservar messages] -width 60
+
+    grid $f.l1 $f.e1 $f.b1 -sticky w -padx 2 -pady 2
+    grid $f.toctree - - -sticky nsew
+    grid $f.l2 $f.e2 - -sticky w -padx 2 -pady 2
+    grid configure $f.e1 $f.e2 -sticky ew
+    grid columnconfigure $f 1 -weight 1
+    grid rowconfigure $f 2 -weight 1
+   
+    if { $directory ne "" } {
+	$w set_uservar_value dir $directory
+    } else {
+	$w set_uservar_value dir [lindex [$w give_uservar_value directories] 0]
+    }
+    $w set_uservar_value message ""
+    
+    tk::TabToWindow $f.e1
+    bind [winfo toplevel $f] <Return> [list $w invokeok]
+    $w createwindow
+}
+
+proc RamDebugger::CVS::select_directory { w } {
+    set dir [tk_chooseDirectory -initialdir [$w give_uservar_value dir] \
+	    -mustexist 1 -parent $w -title [_ "Select origin directory"]]
+    if { $dir eq "" } { return }
+    $w set_uservar_value dir $dir
+}
+
+proc RamDebugger::CVS::update_recursive_do1 { w } {
+
+    set action [$w giveaction]
+
+    if { $action < 1 } {
+	destroy $w
+	return
+    } elseif { $action == 1 } {
+	set what view
+    } else {
+	set what update
+    }
+    set dir [$w give_uservar_value dir]
+    $w set_uservar_value directories [linsert0 [$w give_uservar_value directories] $dir]
+    set dict [cu::get_program_preferences -valueName cvs_update_recursive RamDebugger]
+    dict set dict directories [$w give_uservar_value directories]
+    cu::store_program_preferences -valueName cvs_update_recursive RamDebugger $dict
+    set tree [$w give_uservar_value tree]
+    $tree item delete all
+    update_recursive_accept $what $dir $tree 0
+}
+
+proc RamDebugger::CVS::update_recursive_accept { what dir tree itemP { item "" } } {
+    
+    if { $item ne "" } {
+	foreach i [$tree item children $item] { $tree item delete $i }
+    }
+    if { [file exists [file join $dir CVS]] } {
+	set olddir [pwd]
+	cd $dir
+	if { $what eq "view" } {
+	    set err [catch { exec cvs -n -q update 2>@1 } ret]
+	} else {
+	    set err [catch { exec cvs -q update 2>@1 } ret]
+	}
+	cd $olddir
+	foreach line [split $ret \n] {
+	    if { $line eq "cvs server: WARNING: global `-l' option ignored." } { continue }
+	    if { $item eq "" } {
+		set item [$tree insert end [list $dir] $itemP]
+	    }
+	    set i [$tree insert end [list "$line"] $item]
+	    if { ![regexp {^[A-Z]\s|^cvs} $line] } {
+		$tree item configure $i -visible 0
+	    }
+	    update
+	}
+    } else {
+	if { $item ne "" } { set itemP $item }
+	foreach d [glob -nocomplain -dir $dir -type d *] {
+	    update_recursive_accept $what $d $tree $itemP
+	}
+    }
+    if { $item ne "" } {
+	set num 0
+	foreach i [$tree item children $item] {
+	    if { [$tree item cget $i -visible] } { incr num }
+	}
+	if { !$num } {
+	    $tree item configure $item -visible 0
+	}
+    }
+}
+
+proc RamDebugger::CVS::update_recursive_cmd { w what args } {
+    
+    switch $what {
+	contextual {
+	    lassign $args tree menu id sel_ids
+	    $menu add command -label [_ "Commit"] -command \
+		[list "update_recursive_cmd" $w commit $tree $sel_ids]
+	    $menu add command -label [_ "Update view"] -command \
+		[list "update_recursive_cmd" $w update view $tree $sel_ids]
+	    $menu add command -label [_ "Update CVS"] -command \
+		[list "update_recursive_cmd" $w update update $tree $sel_ids]
+	    $menu add separator
+	    $menu add command -label [_ "View diff"] -command \
+		[list "update_recursive_cmd" $w open_program tkdiff $tree $sel_ids]
+	    $menu add command -label [_ "Open tkcvs"] -command \
+		[list "update_recursive_cmd" $w open_program tkcvs $tree $sel_ids]
+	    $menu add separator
+	    foreach i [list all normal modified] t [list [_ All] [_ Normal] [_ Modified]] {
+		$menu add command -label [_ "View %s" $t] -command \
+		    [list "update_recursive_cmd" $w view $tree 0 $i]
+	    }
+	}
+	commit {
+	    lassign $args tree sel_ids
+	    set message [$w give_uservar_value message]
+	    foreach item $sel_ids {
+		if { ![regexp {^M\s(\S+)} [$tree item text $item 0] {} file] } { continue }
+		set dir [$tree item text [$tree item parent $item] 0]
+		set pwd [pwd]
+		cd $dir
+		set err [catch { exec cvs commit -m $message $file 2>@1 } ret]
+		$tree item element configure $item 0 e_text_sel -fill blue -text $ret
+		cd $pwd
+	    }
+	    $w set_uservar_value messages [linsert0 [$w give_uservar_value messages] $message]
+	    set dict [cu::get_program_preferences -valueName cvs_update_recursive RamDebugger]
+	    dict set dict messages [$w give_uservar_value messages]
+	    cu::store_program_preferences -valueName cvs_update_recursive RamDebugger $dict
+	}
+	update {
+	    lassign $args what_in tree sel_ids
+	    set ids ""
+	    foreach item $sel_ids {
+		if { [$tree item children $item] ne "" } {
+		    lappend ids $item
+		} else {
+		    lappend ids [$tree item parent $item]
+		}
+	    }
+	    foreach item [lsort -unique $ids] {
+		set dir [$tree item text $item 0]
+		update_recursive_accept $what_in $dir $tree [$tree item parent $item] $item
+	    }
+	}
+	view {
+	    lassign $args tree item view_style
+	    set visible 0
+	    foreach i [$tree item children $item] {
+		update_recursive_cmd $w view $tree $i $view_style
+		if { [$tree item cget $i -visible] } { set visible 1 }
+	    }
+	    if { $item == 0 } { return }
+	    switch $view_style {
+		all { set visible 1 }
+		normal {
+		    if { [regexp {^[A-Z]\s|^cvs} [$tree item text $item 0]] } {
+		        set visible 1
+		    }
+		}
+		modified {
+		    if { [regexp {^M\s} [$tree item text $item 0]] } {
+		        set visible 1
+		    }
+		}
+	    }
+	    $tree item configure $item -visible $visible
+	}
+	open_program {
+	    lassign $args what_in tree sel_ids
+	    foreach item $sel_ids {
+		if { ![regexp {^[A-Z]\s(\S+)} [$tree item text $item 0] {} file] } { continue }
+		set dir [$tree item text [$tree item parent $item] 0]
+		set file [file join $dir $file]
+		if { [file exists $file] } {
+		    switch $what_in {
+		        tkdiff {
+		            set pwd [pwd]
+		            cd [file dirname $file]
+		            set file [file tail $file]
+		            RamDebugger::OpenProgram tkdiff -r $file
+		            cd $pwd
+		        }
+		        tkcvs {
+		            if { [file isdirectory $file] } {
+		                RamDebugger::OpenProgram tkcvs -dir $file
+		            } else {
+		                RamDebugger::OpenProgram tkcvs -dir [file dirname $file]
+		            }
+		        }
+		    }
+		    return
+		}
+	    }
+	}
+	default {
+	    error "error in update_recursive_cmd"
+	}
+    } 
+}
+
+
+
+
+
+
+
+
+
+
 

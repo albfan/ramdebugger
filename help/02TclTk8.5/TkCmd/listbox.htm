@@ -1,14 +1,18 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - listbox manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>listbox manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> listbox</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="listbox.htm#M2" NAME="L722">NAME</A>
-<DL><DD>listbox - Create and manipulate listbox widgets</DL>
-<DD><A HREF="listbox.htm#M3" NAME="L723">SYNOPSIS</A>
+<DD><A HREF="listbox.htm#M2" NAME="L799">NAME</A>
+<DL><DD>listbox - Create and manipulate listbox widgets</DD></DL>
+<DD><A HREF="listbox.htm#M3" NAME="L800">SYNOPSIS</A>
 <DL>
-<DD><B>listbox</B> <I>pathName </I>?<I>options</I>?
 </DL>
-<DD><A HREF="listbox.htm#M4" NAME="L724">STANDARD OPTIONS</A>
+<DD><A HREF="listbox.htm#M4" NAME="L801">STANDARD OPTIONS</A>
 <DL>
-<DD><A HREF="options.htm#M-activestyle">-activestyle</A>
 <DD><A HREF="options.htm#M-background">-background or -bg, background, Background</A>
 <DD><A HREF="options.htm#M-borderwidth">-borderwidth or -bd, borderWidth, BorderWidth</A>
 <DD><A HREF="options.htm#M-cursor">-cursor, cursor, Cursor</A>
@@ -16,7 +20,6 @@
 <DD><A HREF="options.htm#M-exportselection">-exportselection, exportSelection, ExportSelection</A>
 <DD><A HREF="options.htm#M-font">-font, font, Font</A>
 <DD><A HREF="options.htm#M-foreground">-foreground or -fg, foreground, Foreground</A>
-<DD><A HREF="options.htm#M-height">-height</A>
 <DD><A HREF="options.htm#M-highlightbackground">-highlightbackground, highlightBackground, HighlightBackground</A>
 <DD><A HREF="options.htm#M-highlightcolor">-highlightcolor, highlightColor, HighlightColor</A>
 <DD><A HREF="options.htm#M-highlightthickness">-highlightthickness, highlightThickness, HighlightThickness</A>
@@ -25,91 +28,89 @@
 <DD><A HREF="options.htm#M-selectborderwidth">-selectborderwidth, selectBorderWidth, BorderWidth</A>
 <DD><A HREF="options.htm#M-selectforeground">-selectforeground, selectForeground, Background</A>
 <DD><A HREF="options.htm#M-setgrid">-setgrid, setGrid, SetGrid</A>
-<DD><A HREF="options.htm#M-state">-state</A>
 <DD><A HREF="options.htm#M-takefocus">-takefocus, takeFocus, TakeFocus</A>
-<DD><A HREF="options.htm#M-width">-width</A>
 <DD><A HREF="options.htm#M-xscrollcommand">-xscrollcommand, xScrollCommand, ScrollCommand</A>
 <DD><A HREF="options.htm#M-yscrollcommand">-yscrollcommand, yScrollCommand, ScrollCommand</A>
 </DL>
-<DD><A HREF="listbox.htm#M9" NAME="L729">WIDGET-SPECIFIC OPTIONS</A>
+<DD><A HREF="listbox.htm#M5" NAME="L802">WIDGET-SPECIFIC OPTIONS</A>
 <DL>
-<DD><A HREF="listbox.htm#M10" NAME="L730">-activestyle, activeStyle, ActiveStyle</A>
-<DD><A HREF="listbox.htm#M11" NAME="L731">-height, height, Height</A>
-<DD><A HREF="listbox.htm#M12" NAME="L732">-listvariable, listVariable, Variable</A>
-<DD><A HREF="listbox.htm#M13" NAME="L733">-selectmode, selectMode, SelectMode</A>
-<DD><A HREF="listbox.htm#M14" NAME="L734">-state, state, State</A>
-<DD><A HREF="listbox.htm#M15" NAME="L735">-width, width, Width</A>
+<DD><A HREF="listbox.htm#M6" NAME="L803">-activestyle, activeStyle, ActiveStyle</A>
+<DD><A HREF="listbox.htm#M7" NAME="L804">-height, height, Height</A>
+<DD><A HREF="listbox.htm#M8" NAME="L805">-listvariable, listVariable, Variable</A>
+<DD><A HREF="listbox.htm#M9" NAME="L806">-selectmode, selectMode, SelectMode</A>
+<DD><A HREF="listbox.htm#M10" NAME="L807">-state, state, State</A>
+<DD><A HREF="listbox.htm#M11" NAME="L808">-width, width, Width</A>
 </DL>
-<DD><A HREF="listbox.htm#M16" NAME="L736">DESCRIPTION</A>
-<DD><A HREF="listbox.htm#M17" NAME="L737">INDICES</A>
-<DL>
-<DD><A HREF="listbox.htm#M18" NAME="L738"><I>number</I></A>
-<DD><A HREF="listbox.htm#M19" NAME="L739"><B>active</B></A>
-<DD><A HREF="listbox.htm#M20" NAME="L740"><B>anchor</B></A>
-<DD><A HREF="listbox.htm#M21" NAME="L741"><B>end</B></A>
-<DD><A HREF="listbox.htm#M22" NAME="L742"><B>@</B><I>x</I><B>,</B><I>y</I></A>
+<DD><A HREF="listbox.htm#M12" NAME="L809">DESCRIPTION</A>
+<DD><A HREF="listbox.htm#M13" NAME="L810">INDICES</A>
+<DL class="indices">
+<DD><A HREF="listbox.htm#M14" NAME="L811"><I>number</I></A>
+<DD><A HREF="listbox.htm#M15" NAME="L812"><B>active</B></A>
+<DD><A HREF="listbox.htm#M16" NAME="L813"><B>anchor</B></A>
+<DD><A HREF="listbox.htm#M17" NAME="L814"><B>end</B></A>
+<DD><A HREF="listbox.htm#M18" NAME="L815"><B>@</B><I>x</I><B>,</B><I>y</I></A>
 </DL>
-<DD><A HREF="listbox.htm#M23" NAME="L743">WIDGET COMMAND</A>
-<DL>
-<DD><A HREF="listbox.htm#M24" NAME="L744"><I>pathName </I><B>activate</B> <I>index</I></A>
-<DD><A HREF="listbox.htm#M25" NAME="L745"><I>pathName </I><B>bbox</B> <I>index</I></A>
-<DD><A HREF="listbox.htm#M26" NAME="L746"><I>pathName </I><B>cget</B> <I>option</I></A>
-<DD><A HREF="listbox.htm#M27" NAME="L747"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
-<DD><A HREF="listbox.htm#M28" NAME="L748"><I>pathName </I><B>curselection</B></A>
-<DD><A HREF="listbox.htm#M29" NAME="L749"><I>pathName </I><B>delete </B><I>first </I>?<I>last</I>?</A>
-<DD><A HREF="listbox.htm#M30" NAME="L750"><I>pathName </I><B>get </B><I>first</I> ?<I>last</I>?</A>
-<DD><A HREF="listbox.htm#M31" NAME="L751"><I>pathName </I><B>index </B><I>index</I></A>
-<DD><A HREF="listbox.htm#M32" NAME="L752"><I>pathName </I><B>insert </B><I>index </I>?<I>element element ...</I>?</A>
-<DD><A HREF="listbox.htm#M33" NAME="L753"><I>pathName </I><B>itemcget </B><I>index option</I></A>
-<DD><A HREF="listbox.htm#M34" NAME="L754"><I>pathName </I><B>itemconfigure </B><I>index</I> ?<I>option</I>? ?<I>value</I>? ?<I>option value ...</I>?</A>
-<DL>
-<DD><A HREF="listbox.htm#M35" NAME="L755"><B>-background </B><I>color</I></A>
-<DD><A HREF="listbox.htm#M36" NAME="L756"><B>-foreground </B><I>color</I></A>
-<DD><A HREF="listbox.htm#M37" NAME="L757"><B>-selectbackground </B><I>color</I></A>
-<DD><A HREF="listbox.htm#M38" NAME="L758"><B>-selectforeground </B><I>color</I></A>
+<DD><A HREF="listbox.htm#M19" NAME="L816">WIDGET COMMAND</A>
+<DL class="widget command">
+<DD><A HREF="listbox.htm#M20" NAME="L817"><I>pathName </I><B>activate</B> <I>index</I></A>
+<DD><A HREF="listbox.htm#M21" NAME="L818"><I>pathName </I><B>bbox</B> <I>index</I></A>
+<DD><A HREF="listbox.htm#M22" NAME="L819"><I>pathName </I><B>cget</B> <I>option</I></A>
+<DD><A HREF="listbox.htm#M23" NAME="L820"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
+<DD><A HREF="listbox.htm#M24" NAME="L821"><I>pathName </I><B>curselection</B></A>
+<DD><A HREF="listbox.htm#M25" NAME="L822"><I>pathName </I><B>delete </B><I>first </I>?<I>last</I>?</A>
+<DD><A HREF="listbox.htm#M26" NAME="L823"><I>pathName </I><B>get </B><I>first</I> ?<I>last</I>?</A>
+<DD><A HREF="listbox.htm#M27" NAME="L824"><I>pathName </I><B>index </B><I>index</I></A>
+<DD><A HREF="listbox.htm#M28" NAME="L825"><I>pathName </I><B>insert </B><I>index </I>?<I>element element ...</I>?</A>
+<DD><A HREF="listbox.htm#M29" NAME="L826"><I>pathName </I><B>itemcget </B><I>index option</I></A>
+<DD><A HREF="listbox.htm#M30" NAME="L827"><I>pathName </I><B>itemconfigure </B><I>index</I> ?<I>option</I>? ?<I>value</I>? ?<I>option value ...</I>?</A>
+<DL class="widget command">
+<DD><A HREF="listbox.htm#M31" NAME="L828"><B>-background </B><I>color</I></A>
+<DD><A HREF="listbox.htm#M32" NAME="L829"><B>-foreground </B><I>color</I></A>
+<DD><A HREF="listbox.htm#M33" NAME="L830"><B>-selectbackground </B><I>color</I></A>
+<DD><A HREF="listbox.htm#M34" NAME="L831"><B>-selectforeground </B><I>color</I></A>
 </DL>
-<DD><A HREF="listbox.htm#M39" NAME="L759"><I>pathName </I><B>nearest </B><I>y</I></A>
-<DD><A HREF="listbox.htm#M40" NAME="L760"><I>pathName </I><B>scan</B> <I>option args</I></A>
-<DL>
-<DD><A HREF="listbox.htm#M41" NAME="L761"><I>pathName </I><B>scan mark </B><I>x y</I></A>
-<DD><A HREF="listbox.htm#M42" NAME="L762"><I>pathName </I><B>scan dragto </B><I>x y</I>.</A>
+<DD><A HREF="listbox.htm#M35" NAME="L832"><I>pathName </I><B>nearest </B><I>y</I></A>
+<DD><A HREF="listbox.htm#M36" NAME="L833"><I>pathName </I><B>scan</B> <I>option args</I></A>
+<DL class="widget command">
+<DD><A HREF="listbox.htm#M37" NAME="L834"><I>pathName </I><B>scan mark </B><I>x y</I></A>
+<DD><A HREF="listbox.htm#M38" NAME="L835"><I>pathName </I><B>scan dragto </B><I>x y</I>.</A>
 </DL>
-<DD><A HREF="listbox.htm#M43" NAME="L763"><I>pathName </I><B>see </B><I>index</I></A>
-<DD><A HREF="listbox.htm#M44" NAME="L764"><I>pathName </I><B>selection </B><I>option arg</I></A>
-<DL>
-<DD><A HREF="listbox.htm#M45" NAME="L765"><I>pathName </I><B>selection anchor </B><I>index</I></A>
-<DD><A HREF="listbox.htm#M46" NAME="L766"><I>pathName </I><B>selection clear </B><I>first </I>?<I>last</I>?</A>
-<DD><A HREF="listbox.htm#M47" NAME="L767"><I>pathName </I><B>selection includes </B><I>index</I></A>
-<DD><A HREF="listbox.htm#M48" NAME="L768"><I>pathName </I><B>selection set </B><I>first </I>?<I>last</I>?</A>
+<DD><A HREF="listbox.htm#M39" NAME="L836"><I>pathName </I><B>see </B><I>index</I></A>
+<DD><A HREF="listbox.htm#M40" NAME="L837"><I>pathName </I><B>selection </B><I>option arg</I></A>
+<DL class="widget command">
+<DD><A HREF="listbox.htm#M41" NAME="L838"><I>pathName </I><B>selection anchor </B><I>index</I></A>
+<DD><A HREF="listbox.htm#M42" NAME="L839"><I>pathName </I><B>selection clear </B><I>first </I>?<I>last</I>?</A>
+<DD><A HREF="listbox.htm#M43" NAME="L840"><I>pathName </I><B>selection includes </B><I>index</I></A>
+<DD><A HREF="listbox.htm#M44" NAME="L841"><I>pathName </I><B>selection set </B><I>first </I>?<I>last</I>?</A>
 </DL>
-<DD><A HREF="listbox.htm#M49" NAME="L769"><I>pathName </I><B>size</B></A>
-<DD><A HREF="listbox.htm#M50" NAME="L770"><I>pathName </I><B>xview </B><I>args</I></A>
-<DL>
-<DD><A HREF="listbox.htm#M51" NAME="L771"><I>pathName </I><B>xview</B></A>
-<DD><A HREF="listbox.htm#M52" NAME="L772"><I>pathName </I><B>xview</B> <I>index</I></A>
-<DD><A HREF="listbox.htm#M53" NAME="L773"><I>pathName </I><B>xview moveto</B><I> fraction</I></A>
-<DD><A HREF="listbox.htm#M54" NAME="L774"><I>pathName </I><B>xview scroll </B><I>number what</I></A>
+<DD><A HREF="listbox.htm#M45" NAME="L842"><I>pathName </I><B>size</B></A>
+<DD><A HREF="listbox.htm#M46" NAME="L843"><I>pathName </I><B>xview </B><I>args</I></A>
+<DL class="widget command">
+<DD><A HREF="listbox.htm#M47" NAME="L844"><I>pathName </I><B>xview</B></A>
+<DD><A HREF="listbox.htm#M48" NAME="L845"><I>pathName </I><B>xview</B> <I>index</I></A>
+<DD><A HREF="listbox.htm#M49" NAME="L846"><I>pathName </I><B>xview moveto</B><I> fraction</I></A>
+<DD><A HREF="listbox.htm#M50" NAME="L847"><I>pathName </I><B>xview scroll </B><I>number what</I></A>
 </DL>
-<DD><A HREF="listbox.htm#M55" NAME="L775"><I>pathName </I><B>yview </B><I>?args</I>?</A>
-<DL>
-<DD><A HREF="listbox.htm#M56" NAME="L776"><I>pathName </I><B>yview</B></A>
-<DD><A HREF="listbox.htm#M57" NAME="L777"><I>pathName </I><B>yview</B> <I>index</I></A>
-<DD><A HREF="listbox.htm#M58" NAME="L778"><I>pathName </I><B>yview moveto</B><I> fraction</I></A>
-<DD><A HREF="listbox.htm#M59" NAME="L779"><I>pathName </I><B>yview scroll </B><I>number what</I></A>
+<DD><A HREF="listbox.htm#M51" NAME="L848"><I>pathName </I><B>yview </B><I>?args</I>?</A>
+<DL class="widget command">
+<DD><A HREF="listbox.htm#M52" NAME="L849"><I>pathName </I><B>yview</B></A>
+<DD><A HREF="listbox.htm#M53" NAME="L850"><I>pathName </I><B>yview</B> <I>index</I></A>
+<DD><A HREF="listbox.htm#M54" NAME="L851"><I>pathName </I><B>yview moveto</B><I> fraction</I></A>
+<DD><A HREF="listbox.htm#M55" NAME="L852"><I>pathName </I><B>yview scroll </B><I>number what</I></A>
 </DL>
 </DL>
-<DD><A HREF="listbox.htm#M60" NAME="L780">DEFAULT BINDINGS</A>
-<DL>
+<DD><A HREF="listbox.htm#M56" NAME="L853">DEFAULT BINDINGS</A>
+<DL class="default bindings">
 </DL>
-<DD><A HREF="listbox.htm#M61" NAME="L781">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="listbox.htm#M57" NAME="L854">SEE ALSO</A>
+<DD><A HREF="listbox.htm#M58" NAME="L855">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 listbox - Create and manipulate listbox widgets
 <H3><A NAME="M3">SYNOPSIS</A></H3>
 <B>listbox</B> <I>pathName </I>?<I>options</I>?<BR>
 <H3><A NAME="M4">STANDARD OPTIONS</A></H3>
 <DL>
-<DT><B><A HREF="options.htm#M-activestyle">-activestyle</A></B>
 <DT><B><A HREF="options.htm#M-background">-background or -bg, background, Background</A></B>
 <DT><B><A HREF="options.htm#M-borderwidth">-borderwidth or -bd, borderWidth, BorderWidth</A></B>
 <DT><B><A HREF="options.htm#M-cursor">-cursor, cursor, Cursor</A></B>
@@ -117,7 +118,6 @@ listbox - Create and manipulate listbox widgets
 <DT><B><A HREF="options.htm#M-exportselection">-exportselection, exportSelection, ExportSelection</A></B>
 <DT><B><A HREF="options.htm#M-font">-font, font, Font</A></B>
 <DT><B><A HREF="options.htm#M-foreground">-foreground or -fg, foreground, Foreground</A></B>
-<DT><B><A HREF="options.htm#M-height">-height</A></B>
 <DT><B><A HREF="options.htm#M-highlightbackground">-highlightbackground, highlightBackground, HighlightBackground</A></B>
 <DT><B><A HREF="options.htm#M-highlightcolor">-highlightcolor, highlightColor, HighlightColor</A></B>
 <DT><B><A HREF="options.htm#M-highlightthickness">-highlightthickness, highlightThickness, HighlightThickness</A></B>
@@ -126,15 +126,13 @@ listbox - Create and manipulate listbox widgets
 <DT><B><A HREF="options.htm#M-selectborderwidth">-selectborderwidth, selectBorderWidth, BorderWidth</A></B>
 <DT><B><A HREF="options.htm#M-selectforeground">-selectforeground, selectForeground, Background</A></B>
 <DT><B><A HREF="options.htm#M-setgrid">-setgrid, setGrid, SetGrid</A></B>
-<DT><B><A HREF="options.htm#M-state">-state</A></B>
 <DT><B><A HREF="options.htm#M-takefocus">-takefocus, takeFocus, TakeFocus</A></B>
-<DT><B><A HREF="options.htm#M-width">-width</A></B>
 <DT><B><A HREF="options.htm#M-xscrollcommand">-xscrollcommand, xScrollCommand, ScrollCommand</A></B>
 <DT><B><A HREF="options.htm#M-yscrollcommand">-yscrollcommand, yScrollCommand, ScrollCommand</A></B>
 </DL>
-<H3><A NAME="M9">WIDGET-SPECIFIC OPTIONS</A></H3>
+<H3><A NAME="M5">WIDGET-SPECIFIC OPTIONS</A></H3>
 <DL>
-<DT>Command-Line Name: <B><A NAME="M10">-activestyle</A></B>
+<DT>Command-Line Name: <B><A NAME="M6">-activestyle</A></B>
 <DT>Database Name: <B>activeStyle</B>
 <DT>Database Class: <B>ActiveStyle</B>
 <DD>Specifies the style in which to draw the active element.  This must be
@@ -142,13 +140,13 @@ one of <B>dotbox</B> (show a focus ring around the active element),
 <B>none</B> (no special indication of active element) or
 <B>underline</B> (underline the active element).
 The default is <B>underline</B>.
-<P><DT>Command-Line Name: <B><A NAME="M11">-height</A></B>
+<P><DT>Command-Line Name: <B><A NAME="M7">-height</A></B>
 <DT>Database Name: <B>height</B>
 <DT>Database Class: <B>Height</B>
 <DD>Specifies the desired height for the window, in lines.
 If zero or less, then the desired height for the window is made just
 large enough to hold all the elements in the listbox.
-<P><DT>Command-Line Name: <B><A NAME="M12">-listvariable</A></B>
+<P><DT>Command-Line Name: <B><A NAME="M8">-listvariable</A></B>
 <DT>Database Name: <B>listVariable</B>
 <DT>Database Class: <B><A HREF="../TclCmd/variable.htm">Variable</A></B>
 <DD>Specifies the name of a variable.  The value of the variable is a list to
@@ -157,31 +155,31 @@ widget will automatically update itself to reflect the new value.  Attempts
 to assign a variable with an invalid list value to <B>-listvariable</B>
 will cause an error.  Attempts to unset a variable in use as a
 <B>-listvariable</B> will fail but will not generate an error.
-<P><DT>Command-Line Name: <B><A NAME="M13">-selectmode</A></B>
+<P><DT>Command-Line Name: <B><A NAME="M9">-selectmode</A></B>
 <DT>Database Name: <B>selectMode</B>
 <DT>Database Class: <B>SelectMode</B>
 <DD>Specifies one of several styles for manipulating the selection.
 The value of the option may be arbitrary, but the default bindings
 expect it to be either <B>single</B>, <B>browse</B>, <B>multiple</B>,
 or <B>extended</B>;  the default value is <B>browse</B>.
-<P><DT>Command-Line Name: <B><A NAME="M14">-state</A></B>
+<P><DT>Command-Line Name: <B><A NAME="M10">-state</A></B>
 <DT>Database Name: <B>state</B>
 <DT>Database Class: <B>State</B>
 <DD>Specifies one of two states for the listbox:  <B>normal</B> or <B>disabled</B>.
 If the listbox is disabled then items may not be inserted or deleted,
 items are drawn in the <B>-disabledforeground</B> color, and selection
 cannot be modified and is not shown (though selection information is retained).
-<P><DT>Command-Line Name: <B><A NAME="M15">-width</A></B>
+<P><DT>Command-Line Name: <B><A NAME="M11">-width</A></B>
 <DT>Database Name: <B>width</B>
 <DT>Database Class: <B>Width</B>
 <DD>Specifies the desired width for the window in characters.
-If the font doesn't have a uniform width then the width of the
-character ``0'' is used in translating from character units to
-screen units.
+If the font does not have a uniform width then the width of the character
+&#8220;0&#8221;
+is used in translating from character units to screen units.
 If zero or less, then the desired width for the window is made just
 large enough to hold all the elements in the listbox.
 </DL>
-<H3><A NAME="M16">DESCRIPTION</A></H3>
+<H3><A NAME="M12">DESCRIPTION</A></H3>
 The <B>listbox</B> command creates a new window (given by the
 <I>pathName</I> argument) and makes it into a listbox widget.
 Additional
@@ -211,31 +209,30 @@ may be used to change the view in the window.  Listboxes allow
 scrolling in both directions using the standard <B>xScrollCommand</B>
 and <B>yScrollCommand</B> options.
 They also support scanning, as described below.
-
-<H3><A NAME="M17">INDICES</A></H3>
+<H3><A NAME="M13">INDICES</A></H3>
 Many of the widget commands for listboxes take one or more indices
 as arguments.
 An index specifies a particular element of the listbox, in any of
 the following ways:
 <P>
-<DL>
-<DT><A NAME="M18"><I>number</I></A><DD>
+<DL class="indices">
+<DT><A NAME="M14"><I>number</I></A><DD>
 Specifies the element as a numerical index, where 0 corresponds
 to the first element in the listbox.
-<P><DT><A NAME="M19"><B>active</B></A><DD>
+<P><DT><A NAME="M15"><B>active</B></A><DD>
 Indicates the element that has the location cursor.  This element
 will be displayed as specified by <B>-activestyle</B> when the listbox
 has the keyboard focus, and it is specified with the <B>activate</B>
 widget command.
-<P><DT><A NAME="M20"><B>anchor</B></A><DD>
+<P><DT><A NAME="M16"><B>anchor</B></A><DD>
 Indicates the anchor point for the selection, which is set with the
 <B><A HREF="../TkCmd/selection.htm">selection anchor</A></B> widget command.
-<P><DT><A NAME="M21"><B>end</B></A><DD>
+<P><DT><A NAME="M17"><B>end</B></A><DD>
 Indicates the end of the listbox.
 For most commands this refers to the last element in the listbox,
 but for a few commands such as <B>index</B> and <B>insert</B>
 it refers to the element just after the last one.
-<P><DT><A NAME="M22"><B>@</B><I>x</I><B>,</B><I>y</I></A><DD>
+<P><DT><A NAME="M18"><B>@</B><I>x</I><B>,</B><I>y</I></A><DD>
 Indicates the element that covers the point in the listbox window
 specified by <I>x</I> and <I>y</I> (in pixel coordinates).  If no
 element covers that point, then the closest element to that
@@ -245,8 +242,7 @@ point is used.
 In the widget command descriptions below, arguments named <I>index</I>,
 <I>first</I>, and <I>last</I> always contain text indices in one of
 the above forms.
-
-<H3><A NAME="M23">WIDGET COMMAND</A></H3>
+<H3><A NAME="M19">WIDGET COMMAND</A></H3>
 The <B>listbox</B> command creates a new Tcl command whose
 name is <I>pathName</I>.  This
 command may be used to invoke various
@@ -256,15 +252,15 @@ operations on the widget.  It has the following general form:
 determine the exact behavior of the command.  The following
 commands are possible for listbox widgets:
 <P>
-<DL>
-<DT><A NAME="M24"><I>pathName </I><B>activate</B> <I>index</I></A><DD>
+<DL class="widget command">
+<DT><A NAME="M20"><I>pathName </I><B>activate</B> <I>index</I></A><DD>
 Sets the active element to the one indicated by <I>index</I>.
 If <I>index</I> is outside the range of elements in the listbox
 then the closest element is activated.
 The active element is drawn as specified by <B>-activestyle</B> when the
 widget has the input focus, and its index may be retrieved with the
 index <B>active</B>.
-<P><DT><A NAME="M25"><I>pathName </I><B>bbox</B> <I>index</I></A><DD>
+<P><DT><A NAME="M21"><I>pathName </I><B>bbox</B> <I>index</I></A><DD>
 Returns a list of four numbers describing the bounding box of
 the text in the element given by <I>index</I>.
 The first two elements of the list give the x and y coordinates
@@ -277,12 +273,12 @@ or if <I>index</I> refers to a non-existent element,
 then the result is an empty string;  if the element is
 partially visible, the result gives the full area of the element,
 including any parts that are not visible.
-<P><DT><A NAME="M26"><I>pathName </I><B>cget</B> <I>option</I></A><DD>
+<P><DT><A NAME="M22"><I>pathName </I><B>cget</B> <I>option</I></A><DD>
 Returns the current value of the configuration option given
 by <I>option</I>.
 <I>Option</I> may have any of the values accepted by the <B>listbox</B>
 command.
-<P><DT><A NAME="M27"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A><DD>
+<P><DT><A NAME="M23"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A><DD>
 Query or modify the configuration options of the widget.
 If no <I>option</I> is specified, returns a list describing all of
 the available options for <I>pathName</I> (see <B><A HREF="../TkLib/ConfigWidg.htm">Tk_ConfigureInfo</A></B> for
@@ -295,17 +291,17 @@ modifies the given widget option(s) to have the given value(s);  in
 this case the command returns an empty string.
 <I>Option</I> may have any of the values accepted by the <B>listbox</B>
 command.
-<P><DT><A NAME="M28"><I>pathName </I><B>curselection</B></A><DD>
+<P><DT><A NAME="M24"><I>pathName </I><B>curselection</B></A><DD>
 Returns a list containing the numerical indices of
 all of the elements in the listbox that are currently selected.
 If there are no elements selected in the listbox then an empty
 string is returned.
-<P><DT><A NAME="M29"><I>pathName </I><B>delete </B><I>first </I>?<I>last</I>?</A><DD>
+<P><DT><A NAME="M25"><I>pathName </I><B>delete </B><I>first </I>?<I>last</I>?</A><DD>
 Deletes one or more elements of the listbox.  <I>First</I> and <I>last</I>
 are indices specifying the first and last elements in the range
-to delete.  If <I>last</I> isn't specified it defaults to
+to delete.  If <I>last</I> is not specified it defaults to
 <I>first</I>, i.e. a single element is deleted.
-<P><DT><A NAME="M30"><I>pathName </I><B>get </B><I>first</I> ?<I>last</I>?</A><DD>
+<P><DT><A NAME="M26"><I>pathName </I><B>get </B><I>first</I> ?<I>last</I>?</A><DD>
 If <I>last</I> is omitted, returns the contents of the listbox
 element indicated by <I>first</I>,
 or an empty string if <I>first</I> refers to a non-existent element.
@@ -314,20 +310,20 @@ are all of the listbox elements between <I>first</I> and <I>last</I>,
 inclusive.
 Both <I>first</I> and <I>last</I> may have any of the standard
 forms for indices.
-<P><DT><A NAME="M31"><I>pathName </I><B>index </B><I>index</I></A><DD>
+<P><DT><A NAME="M27"><I>pathName </I><B>index </B><I>index</I></A><DD>
 Returns the integer index value that corresponds to <I>index</I>.
 If <I>index</I> is <B>end</B> the return value is a count of the number
 of elements in the listbox (not the index of the last element).
-<P><DT><A NAME="M32"><I>pathName </I><B>insert </B><I>index </I>?<I>element element ...</I>?</A><DD>
+<P><DT><A NAME="M28"><I>pathName </I><B>insert </B><I>index </I>?<I>element element ...</I>?</A><DD>
 Inserts zero or more new elements in the list just before the
 element given by <I>index</I>.  If <I>index</I> is specified as
 <B>end</B> then the new elements are added to the end of the
 list.  Returns an empty string.
-<P><DT><A NAME="M33"><I>pathName </I><B>itemcget </B><I>index option</I></A><DD>
+<P><DT><A NAME="M29"><I>pathName </I><B>itemcget </B><I>index option</I></A><DD>
 Returns the current value of the item configuration option given
 by <I>option</I>. <I>Option</I> may have any of the values accepted 
 by the <B>listbox itemconfigure</B> command.
-<P><DT><A NAME="M34"><I>pathName </I><B>itemconfigure </B><I>index</I> ?<I>option</I>? ?<I>value</I>? ?<I>option value ...</I>?</A><DD>
+<P><DT><A NAME="M30"><I>pathName </I><B>itemconfigure </B><I>index</I> ?<I>option</I>? ?<I>value</I>? ?<I>option value ...</I>?</A><DD>
 Query or modify the configuration options of an item in the listbox.
 If no <I>option</I> is specified, returns a list describing all of
 the available options for the item (see <B><A HREF="../TkLib/ConfigWidg.htm">Tk_ConfigureInfo</A></B> for
@@ -340,36 +336,36 @@ modifies the given widget option(s) to have the given value(s);  in
 this case the command returns an empty string. The following options
 are currently supported for items:
 <P>
-<DL>
-<DT><A NAME="M35"><B>-background </B><I>color</I></A><DD>
+<DL class="widget command">
+<DT><A NAME="M31"><B>-background </B><I>color</I></A><DD>
 <I>Color</I> specifies the background color to use when displaying the 
 item. It may have any of the forms accepted by <B><A HREF="../TkLib/GetColor.htm">Tk_GetColor</A></B>.
-<P><DT><A NAME="M36"><B>-foreground </B><I>color</I></A><DD>
+<P><DT><A NAME="M32"><B>-foreground </B><I>color</I></A><DD>
 <I>Color</I> specifies the foreground color to use when displaying the
 item. It may have any of the forms accepted by <B><A HREF="../TkLib/GetColor.htm">Tk_GetColor</A></B>.
-<P><DT><A NAME="M37"><B>-selectbackground </B><I>color</I></A><DD>
+<P><DT><A NAME="M33"><B>-selectbackground </B><I>color</I></A><DD>
 <I>color</I> specifies the background color to use when displaying the
 item while it is selected. It may have any of the forms accepted by
 <B><A HREF="../TkLib/GetColor.htm">Tk_GetColor</A></B>.
-<P><DT><A NAME="M38"><B>-selectforeground </B><I>color</I></A><DD>
+<P><DT><A NAME="M34"><B>-selectforeground </B><I>color</I></A><DD>
 <I>color</I> specifies the foreground color to use when displaying the
 item while it is selected. It may have any of the forms accepted by
 <B><A HREF="../TkLib/GetColor.htm">Tk_GetColor</A></B>.
 <P></DL>
-<P><DT><A NAME="M39"><I>pathName </I><B>nearest </B><I>y</I></A><DD>
+<P><DT><A NAME="M35"><I>pathName </I><B>nearest </B><I>y</I></A><DD>
 Given a y-coordinate within the listbox window, this command returns
 the index of the (visible) listbox element nearest to that y-coordinate.
-<P><DT><A NAME="M40"><I>pathName </I><B>scan</B> <I>option args</I></A><DD>
+<P><DT><A NAME="M36"><I>pathName </I><B>scan</B> <I>option args</I></A><DD>
 This command is used to implement scanning on listboxes.  It has
 two forms, depending on <I>option</I>:
 <P>
-<DL>
-<DT><A NAME="M41"><I>pathName </I><B>scan mark </B><I>x y</I></A><DD>
+<DL class="widget command">
+<DT><A NAME="M37"><I>pathName </I><B>scan mark </B><I>x y</I></A><DD>
 Records <I>x</I> and <I>y</I> and the current view in the listbox
 window;  used in conjunction with later <B>scan dragto</B> commands.
 Typically this command is associated with a mouse button press in
 the widget.  It returns an empty string.
-<P><DT><A NAME="M42"><I>pathName </I><B>scan dragto </B><I>x y</I>.</A><DD>
+<P><DT><A NAME="M38"><I>pathName </I><B>scan dragto </B><I>x y</I>.</A><DD>
 This command computes the difference between its <I>x</I> and <I>y</I>
 arguments and the <I>x</I> and <I>y</I> arguments to the last
 <B>scan mark</B> command for the widget.
@@ -379,19 +375,19 @@ with mouse motion events in the widget, to produce the effect of
 dragging the list at high speed through the window.  The return
 value is an empty string.
 <P></DL>
-<P><DT><A NAME="M43"><I>pathName </I><B>see </B><I>index</I></A><DD>
+<P><DT><A NAME="M39"><I>pathName </I><B>see </B><I>index</I></A><DD>
 Adjust the view in the listbox so that the element given by <I>index</I>
 is visible.
 If the element is already visible then the command has no effect;
 if the element is near one edge of the window then the listbox
 scrolls to bring the element into view at the edge;  otherwise
 the listbox scrolls to center the element.
-<P><DT><A NAME="M44"><I>pathName </I><B>selection </B><I>option arg</I></A><DD>
+<P><DT><A NAME="M40"><I>pathName </I><B>selection </B><I>option arg</I></A><DD>
 This command is used to adjust the selection within a listbox.  It
 has several forms, depending on <I>option</I>:
 <P>
-<DL>
-<DT><A NAME="M45"><I>pathName </I><B>selection anchor </B><I>index</I></A><DD>
+<DL class="widget command">
+<DT><A NAME="M41"><I>pathName </I><B>selection anchor </B><I>index</I></A><DD>
 Sets the selection anchor to the element given by <I>index</I>.
 If <I>index</I> refers to a non-existent element, then the closest
 element is used.
@@ -399,29 +395,29 @@ The selection anchor is the end of the selection that is fixed
 while dragging out a selection with the mouse.
 The index <B>anchor</B> may be used to refer to the anchor
 element.
-<P><DT><A NAME="M46"><I>pathName </I><B>selection clear </B><I>first </I>?<I>last</I>?</A><DD>
+<P><DT><A NAME="M42"><I>pathName </I><B>selection clear </B><I>first </I>?<I>last</I>?</A><DD>
 If any of the elements between <I>first</I> and <I>last</I>
 (inclusive) are selected, they are deselected.
 The selection state is not changed for elements outside
 this range.
-<P><DT><A NAME="M47"><I>pathName </I><B>selection includes </B><I>index</I></A><DD>
+<P><DT><A NAME="M43"><I>pathName </I><B>selection includes </B><I>index</I></A><DD>
 Returns 1 if the element indicated by <I>index</I> is currently
-selected, 0 if it isn't.
-<P><DT><A NAME="M48"><I>pathName </I><B>selection set </B><I>first </I>?<I>last</I>?</A><DD>
+selected, 0 if it is not.
+<P><DT><A NAME="M44"><I>pathName </I><B>selection set </B><I>first </I>?<I>last</I>?</A><DD>
 Selects all of the elements in the range between
 <I>first</I> and <I>last</I>, inclusive, without affecting
 the selection state of elements outside that range.
 <P></DL>
-<P><DT><A NAME="M49"><I>pathName </I><B>size</B></A><DD>
+<P><DT><A NAME="M45"><I>pathName </I><B>size</B></A><DD>
 Returns a decimal string indicating the total number of elements
 in the listbox.
-<P><DT><A NAME="M50"><I>pathName </I><B>xview </B><I>args</I></A><DD>
+<P><DT><A NAME="M46"><I>pathName </I><B>xview </B><I>args</I></A><DD>
 This command is used to query and change the horizontal position of the
 information in the widget's window.  It can take any of the following
 forms:
 <P>
-<DL>
-<DT><A NAME="M51"><I>pathName </I><B>xview</B></A><DD>
+<DL class="widget command">
+<DT><A NAME="M47"><I>pathName </I><B>xview</B></A><DD>
 Returns a list containing two elements.
 Each element is a real fraction between 0 and 1;  together they describe
 the horizontal span that is visible in the window.
@@ -430,15 +426,15 @@ For example, if the first element is .2 and the second element is .6,
 in the window, and 40% of the text is off-screen to the right.
 These are the same values passed to scrollbars via the <B>-xscrollcommand</B>
 option.
-<P><DT><A NAME="M52"><I>pathName </I><B>xview</B> <I>index</I></A><DD>
+<P><DT><A NAME="M48"><I>pathName </I><B>xview</B> <I>index</I></A><DD>
 Adjusts the view in the window so that the character position given by
 <I>index</I> is displayed at the left edge of the window.
 Character positions are defined by the width of the character <B>0</B>.
-<P><DT><A NAME="M53"><I>pathName </I><B>xview moveto</B><I> fraction</I></A><DD>
+<P><DT><A NAME="M49"><I>pathName </I><B>xview moveto</B><I> fraction</I></A><DD>
 Adjusts the view in the window so that <I>fraction</I> of the
 total width of the listbox text is off-screen to the left.
 <I>fraction</I> must be a fraction between 0 and 1.
-<P><DT><A NAME="M54"><I>pathName </I><B>xview scroll </B><I>number what</I></A><DD>
+<P><DT><A NAME="M50"><I>pathName </I><B>xview scroll </B><I>number what</I></A><DD>
 This command shifts the view in the window left or right according to
 <I>number</I> and <I>what</I>.
 <I>Number</I> must be an integer.
@@ -452,13 +448,13 @@ If <I>number</I> is negative then characters farther to the left
 become visible;  if it is positive then characters farther to the right
 become visible.
 <P></DL>
-<P><DT><A NAME="M55"><I>pathName </I><B>yview </B><I>?args</I>?</A><DD>
+<P><DT><A NAME="M51"><I>pathName </I><B>yview </B><I>?args</I>?</A><DD>
 This command is used to query and change the vertical position of the
 text in the widget's window.
 It can take any of the following forms:
 <P>
-<DL>
-<DT><A NAME="M56"><I>pathName </I><B>yview</B></A><DD>
+<DL class="widget command">
+<DT><A NAME="M52"><I>pathName </I><B>yview</B></A><DD>
 Returns a list containing two elements, both of which are real fractions
 between 0 and 1.
 The first element gives the position of the listbox element at the
@@ -468,16 +464,16 @@ The second element gives the position of the listbox element just after
 the last one in the window, relative to the listbox as a whole.
 These are the same values passed to scrollbars via the <B>-yscrollcommand</B>
 option.
-<P><DT><A NAME="M57"><I>pathName </I><B>yview</B> <I>index</I></A><DD>
+<P><DT><A NAME="M53"><I>pathName </I><B>yview</B> <I>index</I></A><DD>
 Adjusts the view in the window so that the element given by
 <I>index</I> is displayed at the top of the window.
-<P><DT><A NAME="M58"><I>pathName </I><B>yview moveto</B><I> fraction</I></A><DD>
+<P><DT><A NAME="M54"><I>pathName </I><B>yview moveto</B><I> fraction</I></A><DD>
 Adjusts the view in the window so that the element given by <I>fraction</I>
 appears at the top of the window.
 <I>Fraction</I> is a fraction between 0 and 1;  0 indicates the first
 element in the listbox, 0.33 indicates the element one-third the
 way through the listbox, and so on.
-<P><DT><A NAME="M59"><I>pathName </I><B>yview scroll </B><I>number what</I></A><DD>
+<P><DT><A NAME="M55"><I>pathName </I><B>yview scroll </B><I>number what</I></A><DD>
 This command adjusts the view in the window up or down according to
 <I>number</I> and <I>what</I>.
 <I>Number</I> must be an integer.
@@ -490,7 +486,7 @@ become visible;  if it is positive then later elements
 become visible.
 <P></DL>
 <P></DL>
-<H3><A NAME="M60">DEFAULT BINDINGS</A></H3>
+<H3><A NAME="M56">DEFAULT BINDINGS</A></H3>
 Tk automatically creates class bindings for listboxes that give them
 Motif-like behavior.  Much of the behavior of a listbox is determined
 by its <B>selectMode</B> option, which selects one of four ways
@@ -502,6 +498,8 @@ In both modes, clicking button 1 on an element selects
 it and deselects any other selected item.
 In <B>browse</B> mode it is also possible to drag the selection
 with button 1.
+On button 1, the listbox will also take focus if it has a <B>normal</B>
+state and <B>-takefocus</B> is true.
 <P>
 If the selection mode is <B>multiple</B> or <B>extended</B>,
 any number of elements may be selected at once, including discontiguous
@@ -524,7 +522,7 @@ to this event to be made aware of any changes to listbox selection.
 In addition to the above behavior, the following additional behavior
 is defined by the default bindings:
 <P>
-<DL>
+<DL class="default bindings">
 <DT>[1]<DD>
 In <B>extended</B> mode, the selected range can be adjusted by pressing
 button 1 with the Shift key down:  this modifies the selection to
@@ -536,7 +534,7 @@ the button down.
 In <B>extended</B> mode, pressing button 1 with the Control key down
 starts a toggle operation: the anchor is set to the element under
 the mouse, and its selection state is reversed.  The selection state
-of other elements isn't changed.
+of other elements is not changed.
 If the mouse is dragged with button 1 down, then the selection state
 of all elements between the anchor and the element under the mouse
 is set to match that of the anchor element;  the selection state of
@@ -617,16 +615,16 @@ Control-backslash deselects everything in the widget, except in
 The F16 key (labelled Copy on many Sun workstations) or Meta-w
 copies the selection in the widget to the clipboard, if there is
 a selection.
-
 <P></DL>
 <P>
 The behavior of listboxes can be changed by defining new bindings for
 individual widgets or by redefining the class bindings.
-
-<H3><A NAME="M61">KEYWORDS</A></H3>
+<H3><A NAME="M57">SEE ALSO</A></H3>
+<B>ttk_listbox</B>
+<H3><A NAME="M58">KEYWORDS</A></H3>
 <A href="../Keywords/L.htm#listbox">listbox</A>, <A href="../Keywords/W.htm#widget">widget</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

@@ -1,79 +1,85 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - panedwindow manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>panedwindow manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> panedwindow</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="panedwindow.htm#M2" NAME="L970">NAME</A>
-<DL><DD>panedwindow - Create and manipulate panedwindow widgets</DL>
-<DD><A HREF="panedwindow.htm#M3" NAME="L971">SYNOPSIS</A>
+<DD><A HREF="panedwindow.htm#M2" NAME="L1046">NAME</A>
+<DL><DD>panedwindow - Create and manipulate panedwindow widgets</DD></DL>
+<DD><A HREF="panedwindow.htm#M3" NAME="L1047">SYNOPSIS</A>
 <DL>
-<DD><B>panedwindow</B> <I>pathName </I>?<I>options</I>?
 </DL>
-<DD><A HREF="panedwindow.htm#M4" NAME="L972">STANDARD OPTIONS</A>
+<DD><A HREF="panedwindow.htm#M4" NAME="L1048">STANDARD OPTIONS</A>
 <DL>
 <DD><A HREF="options.htm#M-background">-background or -bg, background, Background</A>
 <DD><A HREF="options.htm#M-borderwidth">-borderwidth or -bd, borderWidth, BorderWidth</A>
 <DD><A HREF="options.htm#M-cursor">-cursor, cursor, Cursor</A>
-<DD><A HREF="options.htm#M-height">-height</A>
 <DD><A HREF="options.htm#M-orient">-orient, orient, Orient</A>
 <DD><A HREF="options.htm#M-relief">-relief, relief, Relief</A>
-<DD><A HREF="options.htm#M-width">-width</A>
 </DL>
-<DD><A HREF="panedwindow.htm#M7" NAME="L975">WIDGET-SPECIFIC OPTIONS</A>
+<DD><A HREF="panedwindow.htm#M5" NAME="L1049">WIDGET-SPECIFIC OPTIONS</A>
 <DL>
-<DD><A HREF="panedwindow.htm#M8" NAME="L976">-handlepad, handlePad, HandlePad</A>
-<DD><A HREF="panedwindow.htm#M9" NAME="L977">-handlesize, handleSize, HandleSize</A>
-<DD><A HREF="panedwindow.htm#M10" NAME="L978">-opaqueresize, opaqueResize, OpaqueResize</A>
-<DD><A HREF="panedwindow.htm#M11" NAME="L979">-sashcursor, sashCursor, SashCursor</A>
-<DD><A HREF="panedwindow.htm#M12" NAME="L980">-sashpad, sashPad, SashPad</A>
-<DD><A HREF="panedwindow.htm#M13" NAME="L981">-sashrelief, sashRelief, SashRelief</A>
-<DD><A HREF="panedwindow.htm#M14" NAME="L982">-sashwidth, sashWidth, SashWidth</A>
-<DD><A HREF="panedwindow.htm#M15" NAME="L983">-showhandle, showHandle, ShowHandle</A>
+<DD><A HREF="panedwindow.htm#M6" NAME="L1050">-handlepad, handlePad, HandlePad</A>
+<DD><A HREF="panedwindow.htm#M7" NAME="L1051">-handlesize, handleSize, HandleSize</A>
+<DD><A HREF="panedwindow.htm#M8" NAME="L1052">-height, height, Height</A>
+<DD><A HREF="panedwindow.htm#M9" NAME="L1053">-opaqueresize, opaqueResize, OpaqueResize</A>
+<DD><A HREF="panedwindow.htm#M10" NAME="L1054">-sashcursor, sashCursor, SashCursor</A>
+<DD><A HREF="panedwindow.htm#M11" NAME="L1055">-sashpad, sashPad, SashPad</A>
+<DD><A HREF="panedwindow.htm#M12" NAME="L1056">-sashrelief, sashRelief, SashRelief</A>
+<DD><A HREF="panedwindow.htm#M13" NAME="L1057">-sashwidth, sashWidth, SashWidth</A>
+<DD><A HREF="panedwindow.htm#M14" NAME="L1058">-showhandle, showHandle, ShowHandle</A>
+<DD><A HREF="panedwindow.htm#M15" NAME="L1059">-width, width, Width</A>
 </DL>
-<DD><A HREF="panedwindow.htm#M16" NAME="L984">DESCRIPTION</A>
-<DD><A HREF="panedwindow.htm#M17" NAME="L985">WIDGET COMMAND</A>
-<DL>
-<DD><A HREF="panedwindow.htm#M18" NAME="L986"><I>pathName </I><B>add </B><I>window ?window ...? ?option value ...?</I></A>
-<DD><A HREF="panedwindow.htm#M19" NAME="L987"><I>pathName </I><B>cget </B><I>option</I></A>
-<DD><A HREF="panedwindow.htm#M20" NAME="L988"><I>pathName </I><B>configure </B><I>?option? ?value option value ...?</I></A>
-<DD><A HREF="panedwindow.htm#M21" NAME="L989"><I>pathName </I><B>forget </B><I>window ?window ...?</I></A>
-<DD><A HREF="panedwindow.htm#M22" NAME="L990"><I>pathName </I><B>identify </B><I>x y</I></A>
-<DD><A HREF="panedwindow.htm#M23" NAME="L991"><I>pathName </I><B>proxy </B><I>?args?</I></A>
-<DL>
-<DD><A HREF="panedwindow.htm#M24" NAME="L992"><I>pathName </I><B>proxy coord</B></A>
-<DD><A HREF="panedwindow.htm#M25" NAME="L993"><I>pathName </I><B>proxy forget</B></A>
-<DD><A HREF="panedwindow.htm#M26" NAME="L994"><I>pathName </I><B>proxy place </B><I>x y</I></A>
+<DD><A HREF="panedwindow.htm#M16" NAME="L1060">DESCRIPTION</A>
+<DD><A HREF="panedwindow.htm#M17" NAME="L1061">WIDGET COMMAND</A>
+<DL class="widget command">
+<DD><A HREF="panedwindow.htm#M18" NAME="L1062"><I>pathName </I><B>add </B><I>window ?window ...? ?option value ...?</I></A>
+<DD><A HREF="panedwindow.htm#M19" NAME="L1063"><I>pathName </I><B>cget </B><I>option</I></A>
+<DD><A HREF="panedwindow.htm#M20" NAME="L1064"><I>pathName </I><B>configure </B><I>?option? ?value option value ...?</I></A>
+<DD><A HREF="panedwindow.htm#M21" NAME="L1065"><I>pathName </I><B>forget </B><I>window ?window ...?</I></A>
+<DD><A HREF="panedwindow.htm#M22" NAME="L1066"><I>pathName </I><B>identify </B><I>x y</I></A>
+<DD><A HREF="panedwindow.htm#M23" NAME="L1067"><I>pathName </I><B>proxy </B><I>?args?</I></A>
+<DL class="widget command">
+<DD><A HREF="panedwindow.htm#M24" NAME="L1068"><I>pathName </I><B>proxy coord</B></A>
+<DD><A HREF="panedwindow.htm#M25" NAME="L1069"><I>pathName </I><B>proxy forget</B></A>
+<DD><A HREF="panedwindow.htm#M26" NAME="L1070"><I>pathName </I><B>proxy place </B><I>x y</I></A>
 </DL>
-<DD><A HREF="panedwindow.htm#M27" NAME="L995"><I>pathName </I><B>sash </B><I>?args?</I></A>
-<DL>
-<DD><A HREF="panedwindow.htm#M28" NAME="L996"><I>pathName </I><B>sash coord </B><I>index</I></A>
-<DD><A HREF="panedwindow.htm#M29" NAME="L997"><I>pathName </I><B>sash dragto </B><I>index x y</I></A>
-<DD><A HREF="panedwindow.htm#M30" NAME="L998"><I>pathName </I><B>sash mark </B><I>index x y</I></A>
-<DD><A HREF="panedwindow.htm#M31" NAME="L999"><I>pathName </I><B>sash place </B><I>index x y</I></A>
+<DD><A HREF="panedwindow.htm#M27" NAME="L1071"><I>pathName </I><B>sash </B><I>?args?</I></A>
+<DL class="widget command">
+<DD><A HREF="panedwindow.htm#M28" NAME="L1072"><I>pathName </I><B>sash coord </B><I>index</I></A>
+<DD><A HREF="panedwindow.htm#M29" NAME="L1073"><I>pathName </I><B>sash dragto </B><I>index x y</I></A>
+<DD><A HREF="panedwindow.htm#M30" NAME="L1074"><I>pathName </I><B>sash mark </B><I>index x y</I></A>
+<DD><A HREF="panedwindow.htm#M31" NAME="L1075"><I>pathName </I><B>sash place </B><I>index x y</I></A>
 </DL>
-<DD><A HREF="panedwindow.htm#M32" NAME="L1000"><I>pathName </I><B>panecget </B><I>window option</I></A>
-<DD><A HREF="panedwindow.htm#M33" NAME="L1001"><I>pathName </I><B>paneconfigure </B><I>window ?option? ?value option value ...?</I></A>
-<DL>
-<DD><A HREF="panedwindow.htm#M34" NAME="L1002"><B>-after </B><I>window</I></A>
-<DD><A HREF="panedwindow.htm#M35" NAME="L1003"><B>-before </B><I>window</I></A>
-<DD><A HREF="panedwindow.htm#M36" NAME="L1004"><B>-height </B><I>size</I></A>
-<DD><A HREF="panedwindow.htm#M37" NAME="L1005"><B>-hide </B><I>boolean</I></A>
-<DD><A HREF="panedwindow.htm#M38" NAME="L1006"><B>-minsize </B><I>n</I></A>
-<DD><A HREF="panedwindow.htm#M39" NAME="L1007"><B>-padx </B><I>n</I></A>
-<DD><A HREF="panedwindow.htm#M40" NAME="L1008"><B>-pady </B><I>n</I></A>
-<DD><A HREF="panedwindow.htm#M41" NAME="L1009"><B>-sticky </B><I>style</I></A>
-<DD><A HREF="panedwindow.htm#M42" NAME="L1010"><B>-stretch </B><I>when</I></A>
-<DL>
-<DD><A HREF="panedwindow.htm#M43" NAME="L1011"><B>always</B></A>
-<DD><A HREF="panedwindow.htm#M44" NAME="L1012"><B>first</B></A>
-<DD><A HREF="panedwindow.htm#M45" NAME="L1013"><B>last</B></A>
-<DD><A HREF="panedwindow.htm#M46" NAME="L1014"><B>middle</B></A>
-<DD><A HREF="panedwindow.htm#M47" NAME="L1015"><B>never</B></A>
+<DD><A HREF="panedwindow.htm#M32" NAME="L1076"><I>pathName </I><B>panecget </B><I>window option</I></A>
+<DD><A HREF="panedwindow.htm#M33" NAME="L1077"><I>pathName </I><B>paneconfigure </B><I>window ?option? ?value option value ...?</I></A>
+<DL class="widget command">
+<DD><A HREF="panedwindow.htm#M34" NAME="L1078"><B>-after </B><I>window</I></A>
+<DD><A HREF="panedwindow.htm#M35" NAME="L1079"><B>-before </B><I>window</I></A>
+<DD><A HREF="panedwindow.htm#M36" NAME="L1080"><B>-height </B><I>size</I></A>
+<DD><A HREF="panedwindow.htm#M37" NAME="L1081"><B>-hide </B><I>boolean</I></A>
+<DD><A HREF="panedwindow.htm#M38" NAME="L1082"><B>-minsize </B><I>n</I></A>
+<DD><A HREF="panedwindow.htm#M39" NAME="L1083"><B>-padx </B><I>n</I></A>
+<DD><A HREF="panedwindow.htm#M40" NAME="L1084"><B>-pady </B><I>n</I></A>
+<DD><A HREF="panedwindow.htm#M41" NAME="L1085"><B>-sticky </B><I>style</I></A>
+<DD><A HREF="panedwindow.htm#M42" NAME="L1086"><B>-stretch </B><I>when</I></A>
+<DL class="widget command">
+<DD><A HREF="panedwindow.htm#M43" NAME="L1087"><B>always</B></A>
+<DD><A HREF="panedwindow.htm#M44" NAME="L1088"><B>first</B></A>
+<DD><A HREF="panedwindow.htm#M45" NAME="L1089"><B>last</B></A>
+<DD><A HREF="panedwindow.htm#M46" NAME="L1090"><B>middle</B></A>
+<DD><A HREF="panedwindow.htm#M47" NAME="L1091"><B>never</B></A>
 </DL>
-<DD><A HREF="panedwindow.htm#M48" NAME="L1016"><B>-width </B><I>size</I></A>
+<DD><A HREF="panedwindow.htm#M48" NAME="L1092"><B>-width </B><I>size</I></A>
 </DL>
-<DD><A HREF="panedwindow.htm#M49" NAME="L1017"><I>pathName </I><B>panes</B></A>
+<DD><A HREF="panedwindow.htm#M49" NAME="L1093"><I>pathName </I><B>panes</B></A>
 </DL>
-<DD><A HREF="panedwindow.htm#M50" NAME="L1018">RESIZING PANES</A>
-<DD><A HREF="panedwindow.htm#M51" NAME="L1019">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="panedwindow.htm#M50" NAME="L1094">RESIZING PANES</A>
+<DD><A HREF="panedwindow.htm#M51" NAME="L1095">SEE ALSO</A>
+<DD><A HREF="panedwindow.htm#M52" NAME="L1096">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 panedwindow - Create and manipulate panedwindow widgets
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -83,55 +89,65 @@ panedwindow - Create and manipulate panedwindow widgets
 <DT><B><A HREF="options.htm#M-background">-background or -bg, background, Background</A></B>
 <DT><B><A HREF="options.htm#M-borderwidth">-borderwidth or -bd, borderWidth, BorderWidth</A></B>
 <DT><B><A HREF="options.htm#M-cursor">-cursor, cursor, Cursor</A></B>
-<DT><B><A HREF="options.htm#M-height">-height</A></B>
 <DT><B><A HREF="options.htm#M-orient">-orient, orient, Orient</A></B>
 <DT><B><A HREF="options.htm#M-relief">-relief, relief, Relief</A></B>
-<DT><B><A HREF="options.htm#M-width">-width</A></B>
 </DL>
-<H3><A NAME="M7">WIDGET-SPECIFIC OPTIONS</A></H3>
+<H3><A NAME="M5">WIDGET-SPECIFIC OPTIONS</A></H3>
 <DL>
-<DT>Command-Line Name: <B><A NAME="M8">-handlepad</A></B>
+<DT>Command-Line Name: <B><A NAME="M6">-handlepad</A></B>
 <DT>Database Name: <B>handlePad</B>
 <DT>Database Class: <B>HandlePad</B>
 <DD>When sash handles are drawn, specifies the distance from the top or
 left end of the sash (depending on the orientation of the widget) at
 which to draw the handle.  May be any value accepted by <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>.
-<P><DT>Command-Line Name: <B><A NAME="M9">-handlesize</A></B>
+<P><DT>Command-Line Name: <B><A NAME="M7">-handlesize</A></B>
 <DT>Database Name: <B>handleSize</B>
 <DT>Database Class: <B>HandleSize</B>
 <DD>Specifies the side length of a sash handle.  Handles are always
 drawn as squares.  May be any value accepted by <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>.
-<P><DT>Command-Line Name: <B><A NAME="M10">-opaqueresize</A></B>
+<P><DT>Command-Line Name: <B><A NAME="M8">-height</A></B>
+<DT>Database Name: <B>height</B>
+<DT>Database Class: <B>Height</B>
+<DD>Specifies a desired height for the overall panedwindow widget. May be any
+value accepted by <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>. If an empty string, the widget will be
+made high enough to allow all contained widgets to have their natural height.
+<P><DT>Command-Line Name: <B><A NAME="M9">-opaqueresize</A></B>
 <DT>Database Name: <B>opaqueResize</B>
 <DT>Database Class: <B>OpaqueResize</B>
 <DD>Specifies whether panes should be resized as a sash is moved (true),
 or if resizing should be deferred until the sash is placed (false).
-<P><DT>Command-Line Name: <B><A NAME="M11">-sashcursor</A></B>
+<P><DT>Command-Line Name: <B><A NAME="M10">-sashcursor</A></B>
 <DT>Database Name: <B>sashCursor</B>
 <DT>Database Class: <B>SashCursor</B>
 <DD>Mouse cursor to use when over a sash.  If null,
 <B>sb_h_double_arrow</B> will be used for horizontal panedwindows, and
 <B>sb_v_double_arrow</B> will be used for vertical panedwindows.
-<P><DT>Command-Line Name: <B><A NAME="M12">-sashpad</A></B>
+<P><DT>Command-Line Name: <B><A NAME="M11">-sashpad</A></B>
 <DT>Database Name: <B>sashPad</B>
 <DT>Database Class: <B>SashPad</B>
 <DD>Specifies the amount of padding to leave of each side of a sash.  May
 be any value accepted by <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>.
-<P><DT>Command-Line Name: <B><A NAME="M13">-sashrelief</A></B>
+<P><DT>Command-Line Name: <B><A NAME="M12">-sashrelief</A></B>
 <DT>Database Name: <B>sashRelief</B>
 <DT>Database Class: <B>SashRelief</B>
 <DD>Relief to use when drawing a sash.  May be any of the standard Tk
 relief values.
-<P><DT>Command-Line Name: <B><A NAME="M14">-sashwidth</A></B>
+<P><DT>Command-Line Name: <B><A NAME="M13">-sashwidth</A></B>
 <DT>Database Name: <B>sashWidth</B>
 <DT>Database Class: <B>SashWidth</B>
 <DD>Specifies the width of each sash.  May be any value accepted by
 <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>.
-<P><DT>Command-Line Name: <B><A NAME="M15">-showhandle</A></B>
+<P><DT>Command-Line Name: <B><A NAME="M14">-showhandle</A></B>
 <DT>Database Name: <B>showHandle</B>
 <DT>Database Class: <B>ShowHandle</B>
 <DD>Specifies whether sash handles should be shown.  May be any valid Tcl
 boolean value.
+<P><DT>Command-Line Name: <B><A NAME="M15">-width</A></B>
+<DT>Database Name: <B>width</B>
+<DT>Database Class: <B>Width</B>
+<DD>Specifies a desired width for the overall panedwindow widget. May be any
+value accepted by <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>. If an empty string, the widget will be
+made wide enough to allow all contained widgets to have their natural width.
 </DL>
 <H3><A NAME="M16">DESCRIPTION</A></H3>
 The <B>panedwindow</B> command creates a new window (given by the
@@ -157,7 +173,7 @@ the panedwindow widget's path name.  <I>Option</I> and the <I>arg</I>s
 determine the exact behavior of the command.  The following
 commands are possible for panedwindow widgets:
 <P>
-<DL>
+<DL class="widget command">
 <DT><A NAME="M18"><I>pathName </I><B>add </B><I>window ?window ...? ?option value ...?</I></A><DD>
 Add one or more windows to the panedwindow, each in a separate pane.
 The arguments consist of the names of one or more windows
@@ -195,7 +211,7 @@ This command is used to query and change the position of the sash
 proxy, used for rubberband-style pane resizing. It can take any of
 the following forms:
 <P>
-<DL>
+<DL class="widget command">
 <DT><A NAME="M24"><I>pathName </I><B>proxy coord</B></A><DD>
 Return a list containing the x and y coordinates of the most recent
 proxy location.
@@ -208,7 +224,7 @@ Place the proxy at the given <I>x</I> and <I>y</I> coordinates.
 This command is used to query and change the position of sashes in the
 panedwindow.  It can take any of the following forms:
 <P>
-<DL>
+<DL class="widget command">
 <DT><A NAME="M28"><I>pathName </I><B>sash coord </B><I>index</I></A><DD>
 Return the current x and y coordinate pair for the sash given by
 <I>index</I>.  <I>Index</I> must be an integer between 0 and 1 less than
@@ -241,7 +257,7 @@ modifies the given widget option(s) to have the given value(s);  in
 this case the command returns an empty string.  The following options
 are supported:
 <P>
-<DL>
+<DL class="widget command">
 <DT><A NAME="M34"><B>-after </B><I>window</I></A><DD>
 Insert the window after the window specified.  <I>window</I> should be the
 name of a window already managed by <I>pathName</I>.
@@ -262,7 +278,7 @@ it will still be maintained in the list of panes.
 <P><DT><A NAME="M38"><B>-minsize </B><I>n</I></A><DD>
 Specifies that the size of the window cannot be made less than
 <I>n</I>.  This constraint only affects the size of the widget in the
-paned dimension -- the x dimension for horizontal panedwindows, the y
+paned dimension &#8212; the x dimension for horizontal panedwindows, the y
 dimension for vertical panedwindows.  May be any value accepted by
 <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>.
 <P><DT><A NAME="M39"><B>-padx </B><I>n</I></A><DD>
@@ -280,7 +296,9 @@ within its pane.  <I>Style</I>  is a string that contains zero or more
 of the characters <B>n</B>, <B>s</B>, <B>e</B> or <B>w</B>.  The string
 can optionally contains spaces or commas, but they are ignored.  Each
 letter refers to a side (north, south, east, or west) that the window
-will &quot;stick&quot; to.  If both <B>n</B> and <B>s</B> (or <B>e</B> and <B>w</B>)
+will
+&#8220;stick&#8221;
+to.  If both <B>n</B> and <B>s</B> (or <B>e</B> and <B>w</B>)
 are specified, the window will be stretched to fill the entire height
 (or width) of its cavity.
 <P><DT><A NAME="M42"><B>-stretch </B><I>when</I></A><DD>
@@ -293,7 +311,7 @@ for stretching. The space will be distributed based on each panes
 current ratio of the whole.  The <I>when</I> values have the following
 definition:
 <P>
-<DL>
+<DL class="widget command">
 <DT><A NAME="M43"><B>always</B></A><DD>
 This pane will always stretch.
 <P><DT><A NAME="M44"><B>first</B></A><DD>
@@ -328,11 +346,12 @@ adjusted.
 When a pane is resized from outside (e.g. it is packed to expand and
 fill, and the containing toplevel is resized), space is added to the final
 (rightmost or bottommost) pane in the window.
-
-<H3><A NAME="M51">KEYWORDS</A></H3>
+<H3><A NAME="M51">SEE ALSO</A></H3>
+<B><A HREF="../TkCmd/ttk_panedwindow.htm">ttk::panedwindow</A></B>
+<H3><A NAME="M52">KEYWORDS</A></H3>
 <A href="../Keywords/P.htm#panedwindow">panedwindow</A>, <A href="../Keywords/W.htm#widget">widget</A>, <A href="../Keywords/G.htm#geometry management">geometry management</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1992 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1992 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

@@ -1,4 +1,35 @@
-<HTML><HEAD><TITLE>Tk Library Procedures - Tk_CreateBindingTable manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_CreateBindingTable manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> BindTable</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="BindTable.htm#M2" NAME="L16">NAME</A>
+<DL><DD>Tk_CreateBindingTable, Tk_DeleteBindingTable, Tk_CreateBinding, Tk_DeleteBinding, Tk_GetBinding, Tk_GetAllBindings, Tk_DeleteAllBindings, Tk_BindEvent - invoke scripts in response to X events</DD></DL>
+<DD><A HREF="BindTable.htm#M3" NAME="L17">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>Tk_BindingTable
+<DD><B>Tk_CreateBindingTable(</B><I>interp</I><B>)</B>
+<DD><B>Tk_DeleteBindingTable(</B><I>bindingTable</I><B>)</B>
+<DD>unsigned long
+<DD><B>Tk_CreateBinding(</B><I>interp, bindingTable, object, eventString, script, append</I><B>)</B>
+<DD>int
+<DD><B>Tk_DeleteBinding(</B><I>interp, bindingTable, object, eventString</I><B>)</B>
+<DD>const char *
+<DD><B>Tk_GetBinding(</B><I>interp, bindingTable, object, eventString</I><B>)</B>
+<DD><B>Tk_GetAllBindings(</B><I>interp, bindingTable, object</I><B>)</B>
+<DD><B>Tk_DeleteAllBindings(</B><I>bindingTable, object</I><B>)</B>
+<DD><B>Tk_BindEvent(</B><I>bindingTable, eventPtr, tkwin, numObjects, objectPtr</I><B>)</B>
+</DL>
+<DD><A HREF="BindTable.htm#M4" NAME="L18">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="BindTable.htm#M5" NAME="L19">DESCRIPTION</A>
+<DD><A HREF="BindTable.htm#M6" NAME="L20">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_CreateBindingTable, Tk_DeleteBindingTable, Tk_CreateBinding, Tk_DeleteBinding, Tk_GetBinding, Tk_GetAllBindings, Tk_DeleteAllBindings, Tk_BindEvent - invoke scripts in response to X events
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -10,13 +41,13 @@ unsigned long<BR>
 <B>Tk_CreateBinding(</B><I>interp, bindingTable, object, eventString, script, append</I><B>)</B><BR>
 int<BR>
 <B>Tk_DeleteBinding(</B><I>interp, bindingTable, object, eventString</I><B>)</B><BR>
-CONST char *<BR>
+const char *<BR>
 <B>Tk_GetBinding(</B><I>interp, bindingTable, object, eventString</I><B>)</B><BR>
 <B>Tk_GetAllBindings(</B><I>interp, bindingTable, object</I><B>)</B><BR>
 <B>Tk_DeleteAllBindings(</B><I>bindingTable, object</I><B>)</B><BR>
 <B>Tk_BindEvent(</B><I>bindingTable, eventPtr, tkwin, numObjects, objectPtr</I><B>)</B><BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter to use when invoking bindings in binding table.  Also
 used for returning results and errors from binding procedures.
@@ -25,7 +56,7 @@ Token for binding table;  must have been returned by some previous
 call to <B>Tk_CreateBindingTable</B>.
 <P><DT>ClientData <B>object</B> (in)<DD>
 Identifies object with which binding is associated.
-<P><DT>CONST char <B>*eventString</B> (in)<DD>
+<P><DT>const char <B>*eventString</B> (in)<DD>
 String describing event sequence.
 <P><DT>char <B>*script</B> (in)<DD>
 Tcl script to invoke when binding triggers.
@@ -133,8 +164,8 @@ described in the documentation for <B><A HREF="../TkCmd/bind.htm">bind</A></B>.
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#binding">binding</A>, <A href="../Keywords/E.htm#event">event</A>, <A href="../Keywords/O.htm#object">object</A>, <A href="../Keywords/S.htm#script">script</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

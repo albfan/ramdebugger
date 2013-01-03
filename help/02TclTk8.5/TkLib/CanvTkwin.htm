@@ -1,4 +1,33 @@
-<HTML><HEAD><TITLE>Tk Library Procedures - Tk_CanvasTkwin manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_CanvasTkwin manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> CanvTkwin</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="CanvTkwin.htm#M2" NAME="L26">NAME</A>
+<DL><DD>Tk_CanvasTkwin, Tk_CanvasGetCoord, Tk_CanvasDrawableCoords, Tk_CanvasSetStippleOrigin, Tk_CanvasWindowCoords, Tk_CanvasEventuallyRedraw, Tk_CanvasTagsOption - utility procedures for canvas type managers</DD></DL>
+<DD><A HREF="CanvTkwin.htm#M3" NAME="L27">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>Tk_Window
+<DD><B>Tk_CanvasTkwin</B>(<I>canvas</I>)
+<DD>int
+<DD><B>Tk_CanvasGetCoord</B>(<I>interp, canvas, string, doublePtr</I>)
+<DD><B>Tk_CanvasDrawableCoords</B>(<I>canvas, x, y, drawableXPtr, drawableYPtr</I>)
+<DD><B>Tk_CanvasSetStippleOrigin</B>(<I>canvas, gc</I>)
+<DD><B>Tk_CanvasWindowCoords</B>(<I>canvas, x, y, screenXPtr, screenYPtr</I>)
+<DD><B>Tk_CanvasEventuallyRedraw</B>(<I>canvas, x1, y1, x2, y2</I>)
+<DD>Tk_OptionParseProc *<B>Tk_CanvasTagsParseProc</B>;
+<DD>Tk_OptionPrintProc *<B>Tk_CanvasTagsPrintProc</B>;
+</DL>
+<DD><A HREF="CanvTkwin.htm#M4" NAME="L28">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="CanvTkwin.htm#M5" NAME="L29">DESCRIPTION</A>
+<DD><A HREF="CanvTkwin.htm#M6" NAME="L30">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_CanvasTkwin, Tk_CanvasGetCoord, Tk_CanvasDrawableCoords, Tk_CanvasSetStippleOrigin, Tk_CanvasWindowCoords, Tk_CanvasEventuallyRedraw, Tk_CanvasTagsOption - utility procedures for canvas type managers
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -14,12 +43,12 @@ int<BR>
 Tk_OptionParseProc *<B>Tk_CanvasTagsParseProc</B>;<BR>
 Tk_OptionPrintProc *<B>Tk_CanvasTagsPrintProc</B>;<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Tk_Canvas <B><A HREF="../TkCmd/canvas.htm">canvas</A></B> (in)<DD>
 A token that identifies a canvas widget.
 <P><DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in/out)<DD>
 Interpreter to use for error reporting.
-<P><DT>CONST char <B>*string</B> (in)<DD>
+<P><DT>const char <B>*string</B> (in)<DD>
 Textual description of a canvas coordinate.
 <P><DT>double <B>*doublePtr</B> (out)<DD>
 Points to place to store a converted coordinate.
@@ -119,7 +148,7 @@ modified using image commands.
 <P>
 <B>Tk_CanvasTagsParseProc</B> and <B>Tk_CanvasTagsPrintProc</B> are
 procedures that handle the <B>-tags</B> option for canvas items.
-The code of a canvas type manager won't call these procedures
+The code of a canvas type manager will not call these procedures
 directly, but will use their addresses to create a <B>Tk_CustomOption</B>
 structure for the <B>-tags</B> option.   The code typically looks
 like this:
@@ -135,7 +164,7 @@ static Tk_ConfigSpec configSpecs[] = {
 };</PRE>
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#canvas">canvas</A>, <A href="../Keywords/F.htm#focus">focus</A>, <A href="../Keywords/I.htm#item type">item type</A>, <A href="../Keywords/R.htm#redisplay">redisplay</A>, <A href="../Keywords/S.htm#selection">selection</A>, <A href="../Keywords/T.htm#type manager">type manager</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

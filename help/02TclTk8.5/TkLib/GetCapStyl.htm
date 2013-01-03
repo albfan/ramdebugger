@@ -1,19 +1,45 @@
-<HTML><HEAD><TITLE>Library Procedures - Tk_GetCapStyle manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetCapStyle manual page - Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> GetCapStyl</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="GetCapStyl.htm#M2" NAME="L261">NAME</A>
+<DL><DD>Tk_GetCapStyle, Tk_NameOfCapStyle - translate between strings and cap styles</DD></DL>
+<DD><A HREF="GetCapStyl.htm#M3" NAME="L262">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>int
+<DD><B>Tk_GetCapStyle(</B><I>interp, string, capPtr</I><B>)</B>
+<DD>const char *
+<DD><B>Tk_NameOfCapStyle(</B><I>cap</I><B>)</B>
+</DL>
+<DD><A HREF="GetCapStyl.htm#M4" NAME="L263">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="GetCapStyl.htm#M5" NAME="L264">DESCRIPTION</A>
+<DD><A HREF="GetCapStyl.htm#M6" NAME="L265">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_GetCapStyle, Tk_NameOfCapStyle - translate between strings and cap styles
 <H3><A NAME="M3">SYNOPSIS</A></H3>
 <B>#include &lt;tk.h&gt;</B><BR>
 int<BR>
 <B>Tk_GetCapStyle(</B><I>interp, string, capPtr</I><B>)</B><BR>
-CONST char *<BR>
+const char *<BR>
 <B>Tk_NameOfCapStyle(</B><I>cap</I><B>)</B><BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter to use for error reporting.
-<P><DT>CONST char <B>*string</B> (in)<DD>
-String containing name of cap style: one of ```butt'', ``projecting'',
-or ``round''.
+<P><DT>const char <B>*string</B> (in)<DD>
+String containing name of cap style: one of
+&#8220;butt&#8221;,
+&#8220;projecting&#8221;,
+or
+&#8220;round&#8221;.
 <P><DT>int <B>*capPtr</B> (out)<DD>
 Pointer to location in which to store X cap style corresponding to
 <I>string</I>.
@@ -32,7 +58,7 @@ implies.
 <P>
 Under normal circumstances the return value is <B>TCL_OK</B> and
 <I>interp</I> is unused.
-If <I>string</I> doesn't contain a valid cap style
+If <I>string</I> does not contain a valid cap style
 or an abbreviation of one of these names, then an error message is
 stored in <I>interp-&gt;result</I>, <B>TCL_ERROR</B> is returned, and
 <I>*capPtr</I> is unmodified.
@@ -40,13 +66,14 @@ stored in <I>interp-&gt;result</I>, <B>TCL_ERROR</B> is returned, and
 <B>Tk_NameOfCapStyle</B> is the logical inverse of <B>Tk_GetCapStyle</B>.
 Given a cap style such as <B>CapButt</B> it returns a
 statically-allocated string corresponding to <I>cap</I>.
-If <I>cap</I> isn't a legal cap style, then
-``unknown cap style'' is returned.
+If <I>cap</I> is not a legal cap style, then
+&#8220;unknown cap style&#8221;
+is returned.
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#butt">butt</A>, <A href="../Keywords/C.htm#cap style">cap style</A>, <A href="../Keywords/P.htm#projecting">projecting</A>, <A href="../Keywords/R.htm#round">round</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

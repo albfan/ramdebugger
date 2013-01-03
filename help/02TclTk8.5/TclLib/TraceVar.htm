@@ -1,37 +1,54 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_TraceVar manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_TraceVar manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> TraceVar</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="TraceVar.htm#M2" NAME="L718">NAME</A>
-<DL><DD>Tcl_TraceVar, Tcl_TraceVar2, Tcl_UntraceVar, Tcl_UntraceVar2, Tcl_VarTraceInfo, Tcl_VarTraceInfo2 - monitor accesses to a variable</DL>
-<DD><A HREF="TraceVar.htm#M3" NAME="L719">SYNOPSIS</A>
+<DD><A HREF="TraceVar.htm#M2" NAME="L769">NAME</A>
+<DL><DD>Tcl_TraceVar, Tcl_TraceVar2, Tcl_UntraceVar, Tcl_UntraceVar2, Tcl_VarTraceInfo, Tcl_VarTraceInfo2 - monitor accesses to a variable</DD></DL>
+<DD><A HREF="TraceVar.htm#M3" NAME="L770">SYNOPSIS</A>
 <DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>int
+<DD><B>Tcl_TraceVar(</B><I>interp, varName, flags, proc, clientData</I><B>)</B>
+<DD>int
+<DD><B>Tcl_TraceVar2(</B><I>interp, name1, name2, flags, proc, clientData</I><B>)</B>
+<DD><B>Tcl_UntraceVar(</B><I>interp, varName, flags, proc, clientData</I><B>)</B>
+<DD><B>Tcl_UntraceVar2(</B><I>interp, name1, name2, flags, proc, clientData</I><B>)</B>
+<DD>ClientData
+<DD><B>Tcl_VarTraceInfo(</B><I>interp, varName, flags, proc, prevClientData</I><B>)</B>
+<DD>ClientData
+<DD><B>Tcl_VarTraceInfo2(</B><I>interp, name1, name2, flags, proc, prevClientData</I><B>)</B>
 </DL>
-<DD><A HREF="TraceVar.htm#M4" NAME="L720">ARGUMENTS</A>
-<DL>
+<DD><A HREF="TraceVar.htm#M4" NAME="L771">ARGUMENTS</A>
+<DL class="arguments">
 </DL>
-<DD><A HREF="TraceVar.htm#M5" NAME="L721">DESCRIPTION</A>
-<DL>
-<DD><A HREF="TraceVar.htm#M6" NAME="L722"><B>TCL_GLOBAL_ONLY</B></A>
-<DD><A HREF="TraceVar.htm#M7" NAME="L723"><B>TCL_NAMESPACE_ONLY</B></A>
-<DD><A HREF="TraceVar.htm#M8" NAME="L724"><B>TCL_TRACE_READS</B></A>
-<DD><A HREF="TraceVar.htm#M9" NAME="L725"><B>TCL_TRACE_WRITES</B></A>
-<DD><A HREF="TraceVar.htm#M10" NAME="L726"><B>TCL_TRACE_UNSETS</B></A>
-<DD><A HREF="TraceVar.htm#M11" NAME="L727"><B>TCL_TRACE_ARRAY</B></A>
-<DD><A HREF="TraceVar.htm#M12" NAME="L728"><B>TCL_TRACE_RESULT_DYNAMIC</B></A>
-<DD><A HREF="TraceVar.htm#M13" NAME="L729"><B>TCL_TRACE_RESULT_OBJECT</B></A>
+<DD><A HREF="TraceVar.htm#M5" NAME="L772">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="TraceVar.htm#M6" NAME="L773"><B>TCL_GLOBAL_ONLY</B></A>
+<DD><A HREF="TraceVar.htm#M7" NAME="L774"><B>TCL_NAMESPACE_ONLY</B></A>
+<DD><A HREF="TraceVar.htm#M8" NAME="L775"><B>TCL_TRACE_READS</B></A>
+<DD><A HREF="TraceVar.htm#M9" NAME="L776"><B>TCL_TRACE_WRITES</B></A>
+<DD><A HREF="TraceVar.htm#M10" NAME="L777"><B>TCL_TRACE_UNSETS</B></A>
+<DD><A HREF="TraceVar.htm#M11" NAME="L778"><B>TCL_TRACE_ARRAY</B></A>
+<DD><A HREF="TraceVar.htm#M12" NAME="L779"><B>TCL_TRACE_RESULT_DYNAMIC</B></A>
+<DD><A HREF="TraceVar.htm#M13" NAME="L780"><B>TCL_TRACE_RESULT_OBJECT</B></A>
 </DL>
-<DD><A HREF="TraceVar.htm#M14" NAME="L730">TWO-PART NAMES</A>
-<DD><A HREF="TraceVar.htm#M15" NAME="L731">ACCESSING VARIABLES DURING TRACES</A>
-<DD><A HREF="TraceVar.htm#M16" NAME="L732">CALLBACK TIMING</A>
-<DD><A HREF="TraceVar.htm#M17" NAME="L733">WHOLE-ARRAY TRACES</A>
-<DD><A HREF="TraceVar.htm#M18" NAME="L734">MULTIPLE TRACES</A>
-<DD><A HREF="TraceVar.htm#M19" NAME="L735">ERROR RETURNS</A>
-<DD><A HREF="TraceVar.htm#M20" NAME="L736">RESTRICTIONS</A>
-<DD><A HREF="TraceVar.htm#M21" NAME="L737">UNDEFINED VARIABLES</A>
-<DD><A HREF="TraceVar.htm#M22" NAME="L738">TCL_TRACE_DESTROYED FLAG</A>
-<DD><A HREF="TraceVar.htm#M23" NAME="L739">TCL_INTERP_DESTROYED</A>
-<DD><A HREF="TraceVar.htm#M24" NAME="L740">BUGS</A>
-<DD><A HREF="TraceVar.htm#M25" NAME="L741">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="TraceVar.htm#M14" NAME="L781">TWO-PART NAMES</A>
+<DD><A HREF="TraceVar.htm#M15" NAME="L782">ACCESSING VARIABLES DURING TRACES</A>
+<DD><A HREF="TraceVar.htm#M16" NAME="L783">CALLBACK TIMING</A>
+<DD><A HREF="TraceVar.htm#M17" NAME="L784">WHOLE-ARRAY TRACES</A>
+<DD><A HREF="TraceVar.htm#M18" NAME="L785">MULTIPLE TRACES</A>
+<DD><A HREF="TraceVar.htm#M19" NAME="L786">ERROR RETURNS</A>
+<DD><A HREF="TraceVar.htm#M20" NAME="L787">RESTRICTIONS</A>
+<DD><A HREF="TraceVar.htm#M21" NAME="L788">UNDEFINED VARIABLES</A>
+<DD><A HREF="TraceVar.htm#M22" NAME="L789">TCL_TRACE_DESTROYED FLAG</A>
+<DD><A HREF="TraceVar.htm#M23" NAME="L790">TCL_INTERP_DESTROYED</A>
+<DD><A HREF="TraceVar.htm#M24" NAME="L791">BUGS</A>
+<DD><A HREF="TraceVar.htm#M25" NAME="L792">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_TraceVar, Tcl_TraceVar2, Tcl_UntraceVar, Tcl_UntraceVar2, Tcl_VarTraceInfo, Tcl_VarTraceInfo2 - monitor accesses to a variable
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -47,7 +64,7 @@ ClientData<BR>
 ClientData<BR>
 <B>Tcl_VarTraceInfo2(</B><I>interp, name1, name2, flags, proc, prevClientData</I><B>)</B><BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter containing variable.
 <P><DT>const char <B>*varName</B> (in)<DD>
@@ -83,7 +100,7 @@ access to a Tcl variable, so that the C procedure is invoked
 whenever the variable is read or written or unset.
 If the trace is created successfully then <B>Tcl_TraceVar</B> returns
 <B>TCL_OK</B>.  If an error occurred (e.g. <I>varName</I> specifies an element
-of an array, but the actual variable isn't an array) then <B>TCL_ERROR</B>
+of an array, but the actual variable is not an array) then <B>TCL_ERROR</B>
 is returned and an error message is left in the interpreter's result.
 <P>
 The <I>flags</I> argument to <B>Tcl_TraceVar</B> indicates when the
@@ -91,7 +108,7 @@ trace procedure is to be invoked and provides information
 for setting up the trace.  It consists of an OR-ed combination
 of any of the following values:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M6"><B>TCL_GLOBAL_ONLY</B></A><DD>
 Normally, the variable will be looked up at the current level of
 procedure call;  if this bit is set then the variable will be looked
@@ -194,7 +211,7 @@ argument.
 If the <I>prevClientData</I> argument is NULL then the return
 value corresponds to the first (most recently created) matching
 trace, or NULL if there are no matching traces.
-If the <I>prevClientData</I> argument isn't NULL, then it should
+If the <I>prevClientData</I> argument is not NULL, then it should
 be the return value from a previous call to <B>Tcl_VarTraceInfo</B>.
 In this case, the new return value will correspond to the next
 matching trace after the one whose <I>clientData</I> matches
@@ -202,7 +219,6 @@ matching trace after the one whose <I>clientData</I> matches
 or if there are no more matching traces after it.
 This mechanism makes it possible to step through all of the
 traces for a given variable that have the same <I>proc</I>.
-
 <H3><A NAME="M14">TWO-PART NAMES</A></H3>
 The procedures <B>Tcl_TraceVar2</B>, <B>Tcl_UntraceVar2</B>, and
 <B>Tcl_VarTraceInfo2</B> are identical to <B>Tcl_TraceVar</B>,
@@ -218,13 +234,10 @@ treated as an element name (which can have any string value) and
 the characters before the first open
 parenthesis are treated as the name of an array variable.
 If <I>name2</I> is NULL and <I>name1</I> does not refer
-to an array element 
-it means that either the variable is
+to an array element it means that either the variable is
 a scalar or the trace is to be set on the entire array rather
 than an individual element (see WHOLE-ARRAY TRACES below for
 more information). 
-
-
 <H3><A NAME="M15">ACCESSING VARIABLES DURING TRACES</A></H3>
 During read, write, and array traces, the
 trace procedure can read, write, or unset the traced
@@ -249,7 +262,6 @@ from the variable before any trace procedures are invoked.
 If new traces are set by unset trace procedures, these traces
 will be invoked on accesses to the variable by the trace
 procedures.
-
 <H3><A NAME="M16">CALLBACK TIMING</A></H3>
 When read tracing has been specified for a variable, the trace
 procedure will be invoked whenever the variable's value is
@@ -288,7 +300,6 @@ When unset tracing has been specified, the trace procedure
 will be invoked whenever the variable is destroyed.
 The traces will be called after the variable has been
 completely unset.
-
 <H3><A NAME="M17">WHOLE-ARRAY TRACES</A></H3>
 If a call to <B>Tcl_TraceVar</B> or <B>Tcl_TraceVar2</B> specifies
 the name of an array variable without an index into the array,
@@ -300,7 +311,6 @@ When an array is unset, a whole-array trace will be invoked
 just once, with <I>name1</I> equal to the name of the array
 and <I>name2</I> NULL;  it will not be invoked once for each
 element.
-
 <H3><A NAME="M18">MULTIPLE TRACES</A></H3>
 It is possible for multiple traces to exist on the same variable.
 When this happens, all of the trace procedures will be invoked on each
@@ -311,7 +321,6 @@ before the individual-element traces.
 If a read or write trace unsets the variable then all of the unset
 traces will be invoked but the remainder of the read and write traces
 will be skipped.
-
 <H3><A NAME="M19">ERROR RETURNS</A></H3>
 Under normal conditions trace procedures should return NULL, indicating
 successful completion.
@@ -337,7 +346,6 @@ The return value from <I>proc</I> is only used during read and
 write tracing.
 During unset traces, the return value is ignored and all relevant
 trace procedures will always be invoked.
-
 <H3><A NAME="M20">RESTRICTIONS</A></H3>
 A trace procedure can be called at any time, even when there
 is a partially formed result in the interpreter's result area.  If
@@ -345,24 +353,22 @@ the trace procedure does anything that could damage this result (such
 as calling <B><A HREF="../TclLib/Eval.htm">Tcl_Eval</A></B>) then it must save the original values of
 the interpreter's <B>result</B> and <B>freeProc</B> fields and restore
 them before it returns.
-
 <H3><A NAME="M21">UNDEFINED VARIABLES</A></H3>
 It is legal to set a trace on an undefined variable.
 The variable will still appear to be undefined until the
 first time its value is set.
 If an undefined variable is traced and then unset, the unset will fail
-with an error (``no such variable''), but the trace
-procedure will still be invoked.
-
+with an error
+(&#8220;no such variable&#8221;),
+but the trace procedure will still be invoked.
 <H3><A NAME="M22">TCL_TRACE_DESTROYED FLAG</A></H3>
 In an unset callback to <I>proc</I>, the <B>TCL_TRACE_DESTROYED</B> bit
 is set in <I>flags</I> if the trace is being removed as part
 of the deletion.
 Traces on a variable are always removed whenever the variable
-is deleted;  the only time <B>TCL_TRACE_DESTROYED</B> isn't set is for
+is deleted;  the only time <B>TCL_TRACE_DESTROYED</B> is not set is for
 a whole-array trace invoked when only a single element of an
 array is unset.
-
 <H3><A NAME="M23">TCL_INTERP_DESTROYED</A></H3>
 When an interpreter is destroyed, unset traces are called for
 all of its variables.
@@ -374,19 +380,17 @@ It is not safe for the procedures to invoke any Tcl procedures
 on the interpreter, since its state is partially deleted.
 All that trace procedures should do under these circumstances is
 to clean up and free their own internal data structures.
-
 <H3><A NAME="M24">BUGS</A></H3>
-Tcl doesn't do any error checking to prevent trace procedures
+Tcl does not do any error checking to prevent trace procedures
 from misusing the interpreter during traces with <B>TCL_INTERP_DESTROYED</B>
 set.
 <P>
-Array traces are not yet integrated with the Tcl &quot;info exists&quot; command,
+Array traces are not yet integrated with the Tcl <B><A HREF="../TclCmd/info.htm">info exists</A></B> command,
 nor is there Tcl-level access to array traces.
-
 <H3><A NAME="M25">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#clientData">clientData</A>, <A href="../Keywords/T.htm#trace">trace</A>, <A href="../Keywords/V.htm#variable">variable</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1989-1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1989-1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

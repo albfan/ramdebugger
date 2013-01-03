@@ -1,4 +1,29 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_BooleanObj manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_BooleanObj manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> BoolObj</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="BoolObj.htm#M2" NAME="L50">NAME</A>
+<DL><DD>Tcl_NewBooleanObj, Tcl_SetBooleanObj, Tcl_GetBooleanFromObj - store/retrieve boolean value in a Tcl_Obj</DD></DL>
+<DD><A HREF="BoolObj.htm#M3" NAME="L51">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>Tcl_Obj *
+<DD><B>Tcl_NewBooleanObj</B>(<I>boolValue</I>)
+<DD><B>Tcl_SetBooleanObj</B>(<I>objPtr, boolValue</I>)
+<DD>int
+<DD><B>Tcl_GetBooleanFromObj</B>(<I>interp, objPtr, boolPtr</I>)
+</DL>
+<DD><A HREF="BoolObj.htm#M4" NAME="L52">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="BoolObj.htm#M5" NAME="L53">DESCRIPTION</A>
+<DD><A HREF="BoolObj.htm#M6" NAME="L54">SEE ALSO</A>
+<DD><A HREF="BoolObj.htm#M7" NAME="L55">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_NewBooleanObj, Tcl_SetBooleanObj, Tcl_GetBooleanFromObj - store/retrieve boolean value in a Tcl_Obj
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -9,7 +34,7 @@ Tcl_Obj *<BR>
 int<BR>
 <B>Tcl_GetBooleanFromObj</B>(<I>interp, objPtr, boolPtr</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>int <B>boolValue</B> (in)<DD>
 Integer value to be stored as a boolean value in a Tcl_Obj.
 <P><DT>Tcl_Obj <B>*objPtr</B> (in/out)<DD>
@@ -66,7 +91,9 @@ Note that the routines <B>Tcl_GetBooleanFromObj</B> and
 The set of values for which <B>Tcl_GetBooleanFromObj</B>
 will return <B>TCL_OK</B> is strictly larger than
 the set of values for which <B><A HREF="../TclLib/GetInt.htm">Tcl_GetBoolean</A></B> will do the same.
-For example, the value &quot;5&quot; passed to <B>Tcl_GetBooleanFromObj</B>
+For example, the value
+&#8220;5&#8221;
+passed to <B>Tcl_GetBooleanFromObj</B>
 will lead to a <B>TCL_OK</B> return (and the boolean value 1),
 while the same value passed to <B><A HREF="../TclLib/GetInt.htm">Tcl_GetBoolean</A></B> will lead to
 a <B>TCL_ERROR</B> return.
@@ -75,7 +102,7 @@ a <B>TCL_ERROR</B> return.
 <B><A HREF="../TclLib/Object.htm">Tcl_NewObj</A></B>, <B><A HREF="../TclLib/Object.htm">Tcl_IsShared</A></B>, <B><A HREF="../TclLib/GetInt.htm">Tcl_GetBoolean</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#boolean">boolean</A>, <A href="../Keywords/O.htm#object">object</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1996-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1996-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

@@ -1,25 +1,29 @@
-<HTML><HEAD><TITLE>Built-In Commands - grab manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>grab manual page - Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> grab</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="grab.htm#M2" NAME="L619">NAME</A>
-<DL><DD>grab - Confine pointer and keyboard events to a window sub-tree</DL>
-<DD><A HREF="grab.htm#M3" NAME="L620">SYNOPSIS</A>
+<DD><A HREF="grab.htm#M2" NAME="L693">NAME</A>
+<DL><DD>grab - Confine pointer and keyboard events to a window sub-tree</DD></DL>
+<DD><A HREF="grab.htm#M3" NAME="L694">SYNOPSIS</A>
 <DL>
-<DD><B>grab </B>?<B>-global</B>? <I>window</I>
-<DD><B>grab </B><I>option </I>?<I>arg arg </I>...?
 </DL>
-<DD><A HREF="grab.htm#M4" NAME="L621">DESCRIPTION</A>
-<DL>
-<DD><A HREF="grab.htm#M5" NAME="L622"><B>grab </B>?<B>-global</B>? <I>window</I></A>
-<DD><A HREF="grab.htm#M6" NAME="L623"><B>grab current </B>?<I>window</I>?</A>
-<DD><A HREF="grab.htm#M7" NAME="L624"><B>grab release </B><I>window</I></A>
-<DD><A HREF="grab.htm#M8" NAME="L625"><B>grab set </B>?<B>-global</B>? <I>window</I></A>
-<DD><A HREF="grab.htm#M9" NAME="L626"><B>grab status </B><I>window</I></A>
+<DD><A HREF="grab.htm#M4" NAME="L695">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="grab.htm#M5" NAME="L696"><B>grab </B>?<B>-global</B>? <I>window</I></A>
+<DD><A HREF="grab.htm#M6" NAME="L697"><B>grab current </B>?<I>window</I>?</A>
+<DD><A HREF="grab.htm#M7" NAME="L698"><B>grab release </B><I>window</I></A>
+<DD><A HREF="grab.htm#M8" NAME="L699"><B>grab set </B>?<B>-global</B>? <I>window</I></A>
+<DD><A HREF="grab.htm#M9" NAME="L700"><B>grab status </B><I>window</I></A>
 </DL>
-<DD><A HREF="grab.htm#M10" NAME="L627">WARNING</A>
-<DD><A HREF="grab.htm#M11" NAME="L628">BUGS</A>
-<DD><A HREF="grab.htm#M12" NAME="L629">EXAMPLE</A>
-<DD><A HREF="grab.htm#M13" NAME="L630">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="grab.htm#M10" NAME="L701">WARNING</A>
+<DD><A HREF="grab.htm#M11" NAME="L702">BUGS</A>
+<DD><A HREF="grab.htm#M12" NAME="L703">EXAMPLE</A>
+<DD><A HREF="grab.htm#M13" NAME="L704">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 grab - Confine pointer and keyboard events to a window sub-tree
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -37,8 +41,9 @@ and all events will be reported in the normal fashion.
 When the pointer is outside <I>window</I>'s tree, button presses and
 releases and
 mouse motion events are reported to <I>window</I>, and window entry
-and window exit events are ignored.
-The grab subtree ``owns'' the pointer:
+and window exit events are ignored. The grab subtree
+&#8220;owns&#8221;
+the pointer:
 windows outside the grab subtree will be visible on the screen
 but they will be insensitive until the grab is released.
 The tree of windows underneath the grab window can include top-level
@@ -79,7 +84,7 @@ grab on a given display at once.
 <P>
 The <B>grab</B> command can take any of the following forms:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>grab </B>?<B>-global</B>? <I>window</I></A><DD>
 Same as <B>grab set</B>, described below.
 <P><DT><A NAME="M6"><B>grab current </B>?<I>window</I>?</A><DD>
@@ -113,7 +118,7 @@ events and not providing any mechanism for releasing the grab).  Take
 <H3><A NAME="M11">BUGS</A></H3>
 It took an incredibly complex and gross implementation to produce
 the simple grab effect described above.
-Given the current implementation, it isn't safe for applications
+Given the current implementation, it is not safe for applications
 to use the Xlib grab facilities at all except through the Tk grab
 procedures.
 If applications try to manipulate X's grab mechanisms directly,
@@ -122,7 +127,7 @@ things will probably break.
 If a single process is managing several different Tk applications,
 only one of those applications can have a local grab for a given
 display at any given time.  If the applications are in different
-processes, this restriction doesn't exist.
+processes, this restriction does not exist.
 <H3><A NAME="M12">EXAMPLE</A></H3>
 Set a grab so that only one button may be clicked out of a group.  The
 other buttons are unresponsive to the mouse until the middle button is
@@ -133,8 +138,8 @@ pack [button .b3 -text &quot;Click me! #3&quot; -command {destroy .b3}]
 <B>grab</B> .b2</PRE>
 <H3><A NAME="M13">KEYWORDS</A></H3>
 <A href="../Keywords/G.htm#grab">grab</A>, <A href="../Keywords/K.htm#keyboard events">keyboard events</A>, <A href="../Keywords/P.htm#pointer events">pointer events</A>, <A href="../Keywords/W.htm#window">window</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1992 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1992 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

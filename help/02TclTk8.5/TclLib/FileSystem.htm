@@ -1,58 +1,150 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Filesystem manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Filesystem manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> FileSystem</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="FileSystem.htm#M2" NAME="L272">NAME</A>
-<DL><DD>Tcl_FSRegister, Tcl_FSUnregister, Tcl_FSData, Tcl_FSMountsChanged, Tcl_FSGetFileSystemForPath, Tcl_FSGetPathType, Tcl_FSCopyFile, Tcl_FSCopyDirectory, Tcl_FSCreateDirectory, Tcl_FSDeleteFile, Tcl_FSRemoveDirectory, Tcl_FSRenameFile, Tcl_FSListVolumes, Tcl_FSEvalFile, Tcl_FSLoadFile, Tcl_FSMatchInDirectory, Tcl_FSLink, Tcl_FSLstat, Tcl_FSUtime, Tcl_FSFileAttrsGet, Tcl_FSFileAttrsSet, Tcl_FSFileAttrStrings, Tcl_FSStat, Tcl_FSAccess, Tcl_FSOpenFileChannel, Tcl_FSGetCwd, Tcl_FSChdir, Tcl_FSPathSeparator, Tcl_FSJoinPath, Tcl_FSSplitPath, Tcl_FSEqualPaths, Tcl_FSGetNormalizedPath, Tcl_FSJoinToPath, Tcl_FSConvertToPathType, Tcl_FSGetInternalRep, Tcl_FSGetTranslatedPath, Tcl_FSGetTranslatedStringPath, Tcl_FSNewNativePath, Tcl_FSGetNativePath, Tcl_FSFileSystemInfo, Tcl_AllocStatBuf - procedures to interact with any filesystem</DL>
-<DD><A HREF="FileSystem.htm#M3" NAME="L273">SYNOPSIS</A>
+<DD><A HREF="FileSystem.htm#M2" NAME="L273">NAME</A>
+<DL><DD>Tcl_FSRegister, Tcl_FSUnregister, Tcl_FSData, Tcl_FSMountsChanged, Tcl_FSGetFileSystemForPath, Tcl_FSGetPathType, Tcl_FSCopyFile, Tcl_FSCopyDirectory, Tcl_FSCreateDirectory, Tcl_FSDeleteFile, Tcl_FSRemoveDirectory, Tcl_FSRenameFile, Tcl_FSListVolumes, Tcl_FSEvalFile, Tcl_FSEvalFileEx, Tcl_FSLoadFile, Tcl_FSMatchInDirectory, Tcl_FSLink, Tcl_FSLstat, Tcl_FSUtime, Tcl_FSFileAttrsGet, Tcl_FSFileAttrsSet, Tcl_FSFileAttrStrings, Tcl_FSStat, Tcl_FSAccess, Tcl_FSOpenFileChannel, Tcl_FSGetCwd, Tcl_FSChdir, Tcl_FSPathSeparator, Tcl_FSJoinPath, Tcl_FSSplitPath, Tcl_FSEqualPaths, Tcl_FSGetNormalizedPath, Tcl_FSJoinToPath, Tcl_FSConvertToPathType, Tcl_FSGetInternalRep, Tcl_FSGetTranslatedPath, Tcl_FSGetTranslatedStringPath, Tcl_FSNewNativePath, Tcl_FSGetNativePath, Tcl_FSFileSystemInfo, Tcl_AllocStatBuf - procedures to interact with any filesystem</DD></DL>
+<DD><A HREF="FileSystem.htm#M3" NAME="L274">SYNOPSIS</A>
 <DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>int
+<DD><B>Tcl_FSRegister</B>(<I>clientData, fsPtr</I>)
+<DD>int
+<DD><B>Tcl_FSUnregister</B>(<I>fsPtr</I>)
+<DD>ClientData
+<DD><B>Tcl_FSData</B>(<I>fsPtr</I>)
+<DD>void
+<DD><B>Tcl_FSMountsChanged</B>(<I>fsPtr</I>)
+<DD>Tcl_Filesystem*
+<DD><B>Tcl_FSGetFileSystemForPath</B>(<I>pathPtr</I>)
+<DD>Tcl_PathType
+<DD><B>Tcl_FSGetPathType</B>(<I>pathPtr</I>)
+<DD>int
+<DD><B>Tcl_FSCopyFile</B>(<I>srcPathPtr, destPathPtr</I>)
+<DD>int
+<DD><B>Tcl_FSCopyDirectory</B>(<I>srcPathPtr, destPathPtr, errorPtr</I>)
+<DD>int
+<DD><B>Tcl_FSCreateDirectory</B>(<I>pathPtr</I>)
+<DD>int
+<DD><B>Tcl_FSDeleteFile</B>(<I>pathPtr</I>)
+<DD>int
+<DD><B>Tcl_FSRemoveDirectory</B>(<I>pathPtr, int recursive, errorPtr</I>)
+<DD>int
+<DD><B>Tcl_FSRenameFile</B>(<I>srcPathPtr, destPathPtr</I>)
+<DD>Tcl_Obj*
+<DD><B>Tcl_FSListVolumes</B>(<I>void</I>)
+<DD>int
+<DD><B>Tcl_FSEvalFileEx</B>(<I>interp, pathPtr, encodingName</I>)
+<DD>int
+<DD><B>Tcl_FSEvalFile</B>(<I>interp, pathPtr</I>)
+<DD>int
+<DD><B>Tcl_FSLoadFile</B>(<I>interp, pathPtr, sym1, sym2, proc1Ptr, proc2Ptr,
+<DD>               handlePtr, unloadProcPtr</I>)
+<DD>int
+<DD><B>Tcl_FSMatchInDirectory</B>(<I>interp, resultPtr, pathPtr, pattern, types</I>)
+<DD>Tcl_Obj*
+<DD><B>Tcl_FSLink</B>(<I>linkNamePtr, toPtr, linkAction</I>)
+<DD>int
+<DD><B>Tcl_FSLstat</B>(<I>pathPtr, statPtr</I>)
+<DD>int
+<DD><B>Tcl_FSUtime</B>(<I>pathPtr, tval</I>)
+<DD>int
+<DD><B>Tcl_FSFileAttrsGet</B>(<I>interp, int index, pathPtr, objPtrRef</I>)
+<DD>int
+<DD><B>Tcl_FSFileAttrsSet</B>(<I>interp, int index, pathPtr, Tcl_Obj *objPtr</I>)
+<DD>const char**
+<DD><B>Tcl_FSFileAttrStrings</B>(<I>pathPtr, objPtrRef</I>)
+<DD>int
+<DD><B>Tcl_FSStat</B>(<I>pathPtr, statPtr</I>)
+<DD>int
+<DD><B>Tcl_FSAccess</B>(<I>pathPtr, mode</I>)
+<DD>Tcl_Channel
+<DD><B>Tcl_FSOpenFileChannel</B>(<I>interp, pathPtr, modeString, permissions</I>)
+<DD>Tcl_Obj*
+<DD><B>Tcl_FSGetCwd</B>(<I>interp</I>)
+<DD>int
+<DD><B>Tcl_FSChdir</B>(<I>pathPtr</I>)
+<DD>Tcl_Obj*
+<DD><B>Tcl_FSPathSeparator</B>(<I>pathPtr</I>)
+<DD>Tcl_Obj*
+<DD><B>Tcl_FSJoinPath</B>(<I>listObj, elements</I>)
+<DD>Tcl_Obj*
+<DD><B>Tcl_FSSplitPath</B>(<I>pathPtr, lenPtr</I>)
+<DD>int
+<DD><B>Tcl_FSEqualPaths</B>(<I>firstPtr, secondPtr</I>)
+<DD>Tcl_Obj*
+<DD><B>Tcl_FSGetNormalizedPath</B>(<I>interp, pathPtr</I>)
+<DD>Tcl_Obj*
+<DD><B>Tcl_FSJoinToPath</B>(<I>basePtr, objc, objv</I>)
+<DD>int
+<DD><B>Tcl_FSConvertToPathType</B>(<I>interp, pathPtr</I>)
+<DD>ClientData
+<DD><B>Tcl_FSGetInternalRep</B>(<I>pathPtr, fsPtr</I>)
+<DD>Tcl_Obj *
+<DD><B>Tcl_FSGetTranslatedPath</B>(<I>interp, pathPtr</I>)
+<DD>const char *
+<DD><B>Tcl_FSGetTranslatedStringPath</B>(<I>interp, pathPtr</I>)
+<DD>Tcl_Obj*
+<DD><B>Tcl_FSNewNativePath</B>(<I>fsPtr, clientData</I>)
+<DD>const char *
+<DD><B>Tcl_FSGetNativePath</B>(<I>pathPtr</I>)
+<DD>Tcl_Obj*
+<DD><B>Tcl_FSFileSystemInfo</B>(<I>pathPtr</I>)
+<DD>Tcl_StatBuf*
+<DD><B>Tcl_AllocStatBuf</B>()
 </DL>
-<DD><A HREF="FileSystem.htm#M4" NAME="L274">ARGUMENTS</A>
-<DL>
+<DD><A HREF="FileSystem.htm#M4" NAME="L275">ARGUMENTS</A>
+<DL class="arguments">
 </DL>
-<DD><A HREF="FileSystem.htm#M5" NAME="L275">DESCRIPTION</A>
-<DD><A HREF="FileSystem.htm#M6" NAME="L276">FS API FUNCTIONS</A>
-<DD><A HREF="FileSystem.htm#M7" NAME="L277">THE VIRTUAL FILESYSTEM API</A>
-<DD><A HREF="FileSystem.htm#M8" NAME="L278">THE TCL_FILESYSTEM STRUCTURE</A>
-<DD><A HREF="FileSystem.htm#M9" NAME="L279">EXAMPLE FILESYSTEM DEFINITION</A>
-<DD><A HREF="FileSystem.htm#M10" NAME="L280">FILESYSTEM INFRASTRUCTURE</A>
-<DD><A HREF="FileSystem.htm#M11" NAME="L281">TYPENAME</A>
-<DD><A HREF="FileSystem.htm#M12" NAME="L282">STRUCTURE LENGTH</A>
-<DD><A HREF="FileSystem.htm#M13" NAME="L283">VERSION</A>
-<DD><A HREF="FileSystem.htm#M14" NAME="L284">PATHINFILESYSTEMPROC</A>
-<DD><A HREF="FileSystem.htm#M15" NAME="L285">DUPINTERNALREPPROC</A>
-<DD><A HREF="FileSystem.htm#M16" NAME="L286">FREEINTERNALREPPROC</A>
-<DD><A HREF="FileSystem.htm#M17" NAME="L287">INTERNALTONORMALIZEDPROC</A>
-<DD><A HREF="FileSystem.htm#M18" NAME="L288">CREATEINTERNALREPPROC</A>
-<DD><A HREF="FileSystem.htm#M19" NAME="L289">NORMALIZEPATHPROC</A>
-<DD><A HREF="FileSystem.htm#M20" NAME="L290">FILESYSTEM OPERATIONS</A>
-<DD><A HREF="FileSystem.htm#M21" NAME="L291">FILESYSTEMPATHTYPEPROC</A>
-<DD><A HREF="FileSystem.htm#M22" NAME="L292">FILESYSTEMSEPARATORPROC</A>
-<DD><A HREF="FileSystem.htm#M23" NAME="L293">STATPROC</A>
-<DD><A HREF="FileSystem.htm#M24" NAME="L294">ACCESSPROC</A>
-<DD><A HREF="FileSystem.htm#M25" NAME="L295">OPENFILECHANNELPROC</A>
-<DD><A HREF="FileSystem.htm#M26" NAME="L296">MATCHINDIRECTORYPROC</A>
-<DD><A HREF="FileSystem.htm#M27" NAME="L297">UTIMEPROC</A>
-<DD><A HREF="FileSystem.htm#M28" NAME="L298">LINKPROC</A>
-<DD><A HREF="FileSystem.htm#M29" NAME="L299">LISTVOLUMESPROC</A>
-<DD><A HREF="FileSystem.htm#M30" NAME="L300">FILEATTRSTRINGSPROC</A>
-<DD><A HREF="FileSystem.htm#M31" NAME="L301">FILEATTRSGETPROC</A>
-<DD><A HREF="FileSystem.htm#M32" NAME="L302">FILEATTRSSETPROC</A>
-<DD><A HREF="FileSystem.htm#M33" NAME="L303">CREATEDIRECTORYPROC</A>
-<DD><A HREF="FileSystem.htm#M34" NAME="L304">REMOVEDIRECTORYPROC</A>
-<DD><A HREF="FileSystem.htm#M35" NAME="L305">DELETEFILEPROC</A>
-<DD><A HREF="FileSystem.htm#M36" NAME="L306">FILESYSTEM EFFICIENCY</A>
-<DD><A HREF="FileSystem.htm#M37" NAME="L307">LSTATPROC</A>
-<DD><A HREF="FileSystem.htm#M38" NAME="L308">COPYFILEPROC</A>
-<DD><A HREF="FileSystem.htm#M39" NAME="L309">RENAMEFILEPROC</A>
-<DD><A HREF="FileSystem.htm#M40" NAME="L310">COPYDIRECTORYPROC</A>
-<DD><A HREF="FileSystem.htm#M41" NAME="L311">LOADFILEPROC</A>
-<DD><A HREF="FileSystem.htm#M42" NAME="L312">UNLOADFILEPROC</A>
-<DD><A HREF="FileSystem.htm#M43" NAME="L313">GETCWDPROC</A>
-<DD><A HREF="FileSystem.htm#M44" NAME="L314">CHDIRPROC</A>
-<DD><A HREF="FileSystem.htm#M45" NAME="L315">KEYWORDS</A>
-<DD><A HREF="FileSystem.htm#M46" NAME="L316">SEE ALSO</A>
-</DL><HR>
+<DD><A HREF="FileSystem.htm#M5" NAME="L276">DESCRIPTION</A>
+<DD><A HREF="FileSystem.htm#M6" NAME="L277">FS API FUNCTIONS</A>
+<DD><A HREF="FileSystem.htm#M7" NAME="L278">THE VIRTUAL FILESYSTEM API</A>
+<DD><A HREF="FileSystem.htm#M8" NAME="L279">THE TCL_FILESYSTEM STRUCTURE</A>
+<DD><A HREF="FileSystem.htm#M9" NAME="L280">EXAMPLE FILESYSTEM DEFINITION</A>
+<DD><A HREF="FileSystem.htm#M10" NAME="L281">FILESYSTEM INFRASTRUCTURE</A>
+<DD><A HREF="FileSystem.htm#M11" NAME="L282">TYPENAME</A>
+<DD><A HREF="FileSystem.htm#M12" NAME="L283">STRUCTURE LENGTH</A>
+<DD><A HREF="FileSystem.htm#M13" NAME="L284">VERSION</A>
+<DD><A HREF="FileSystem.htm#M14" NAME="L285">PATHINFILESYSTEMPROC</A>
+<DD><A HREF="FileSystem.htm#M15" NAME="L286">DUPINTERNALREPPROC</A>
+<DD><A HREF="FileSystem.htm#M16" NAME="L287">FREEINTERNALREPPROC</A>
+<DD><A HREF="FileSystem.htm#M17" NAME="L288">INTERNALTONORMALIZEDPROC</A>
+<DD><A HREF="FileSystem.htm#M18" NAME="L289">CREATEINTERNALREPPROC</A>
+<DD><A HREF="FileSystem.htm#M19" NAME="L290">NORMALIZEPATHPROC</A>
+<DD><A HREF="FileSystem.htm#M20" NAME="L291">FILESYSTEM OPERATIONS</A>
+<DD><A HREF="FileSystem.htm#M21" NAME="L292">FILESYSTEMPATHTYPEPROC</A>
+<DD><A HREF="FileSystem.htm#M22" NAME="L293">FILESYSTEMSEPARATORPROC</A>
+<DD><A HREF="FileSystem.htm#M23" NAME="L294">STATPROC</A>
+<DD><A HREF="FileSystem.htm#M24" NAME="L295">ACCESSPROC</A>
+<DD><A HREF="FileSystem.htm#M25" NAME="L296">OPENFILECHANNELPROC</A>
+<DD><A HREF="FileSystem.htm#M26" NAME="L297">MATCHINDIRECTORYPROC</A>
+<DD><A HREF="FileSystem.htm#M27" NAME="L298">UTIMEPROC</A>
+<DD><A HREF="FileSystem.htm#M28" NAME="L299">LINKPROC</A>
+<DD><A HREF="FileSystem.htm#M29" NAME="L300">LISTVOLUMESPROC</A>
+<DD><A HREF="FileSystem.htm#M30" NAME="L301">FILEATTRSTRINGSPROC</A>
+<DD><A HREF="FileSystem.htm#M31" NAME="L302">FILEATTRSGETPROC</A>
+<DD><A HREF="FileSystem.htm#M32" NAME="L303">FILEATTRSSETPROC</A>
+<DD><A HREF="FileSystem.htm#M33" NAME="L304">CREATEDIRECTORYPROC</A>
+<DD><A HREF="FileSystem.htm#M34" NAME="L305">REMOVEDIRECTORYPROC</A>
+<DD><A HREF="FileSystem.htm#M35" NAME="L306">DELETEFILEPROC</A>
+<DD><A HREF="FileSystem.htm#M36" NAME="L307">FILESYSTEM EFFICIENCY</A>
+<DD><A HREF="FileSystem.htm#M37" NAME="L308">LSTATPROC</A>
+<DD><A HREF="FileSystem.htm#M38" NAME="L309">COPYFILEPROC</A>
+<DD><A HREF="FileSystem.htm#M39" NAME="L310">RENAMEFILEPROC</A>
+<DD><A HREF="FileSystem.htm#M40" NAME="L311">COPYDIRECTORYPROC</A>
+<DD><A HREF="FileSystem.htm#M41" NAME="L312">LOADFILEPROC</A>
+<DD><A HREF="FileSystem.htm#M42" NAME="L313">UNLOADFILEPROC</A>
+<DD><A HREF="FileSystem.htm#M43" NAME="L314">GETCWDPROC</A>
+<DD><A HREF="FileSystem.htm#M44" NAME="L315">CHDIRPROC</A>
+<DD><A HREF="FileSystem.htm#M45" NAME="L316">SEE ALSO</A>
+<DD><A HREF="FileSystem.htm#M46" NAME="L317">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
-Tcl_FSRegister, Tcl_FSUnregister, Tcl_FSData, Tcl_FSMountsChanged, Tcl_FSGetFileSystemForPath, Tcl_FSGetPathType, Tcl_FSCopyFile, Tcl_FSCopyDirectory, Tcl_FSCreateDirectory, Tcl_FSDeleteFile, Tcl_FSRemoveDirectory, Tcl_FSRenameFile, Tcl_FSListVolumes, Tcl_FSEvalFile, Tcl_FSLoadFile, Tcl_FSMatchInDirectory, Tcl_FSLink, Tcl_FSLstat, Tcl_FSUtime, Tcl_FSFileAttrsGet, Tcl_FSFileAttrsSet, Tcl_FSFileAttrStrings, Tcl_FSStat, Tcl_FSAccess, Tcl_FSOpenFileChannel, Tcl_FSGetCwd, Tcl_FSChdir, Tcl_FSPathSeparator, Tcl_FSJoinPath, Tcl_FSSplitPath, Tcl_FSEqualPaths, Tcl_FSGetNormalizedPath, Tcl_FSJoinToPath, Tcl_FSConvertToPathType, Tcl_FSGetInternalRep, Tcl_FSGetTranslatedPath, Tcl_FSGetTranslatedStringPath, Tcl_FSNewNativePath, Tcl_FSGetNativePath, Tcl_FSFileSystemInfo, Tcl_AllocStatBuf - procedures to interact with any filesystem
+Tcl_FSRegister, Tcl_FSUnregister, Tcl_FSData, Tcl_FSMountsChanged, Tcl_FSGetFileSystemForPath, Tcl_FSGetPathType, Tcl_FSCopyFile, Tcl_FSCopyDirectory, Tcl_FSCreateDirectory, Tcl_FSDeleteFile, Tcl_FSRemoveDirectory, Tcl_FSRenameFile, Tcl_FSListVolumes, Tcl_FSEvalFile, Tcl_FSEvalFileEx, Tcl_FSLoadFile, Tcl_FSMatchInDirectory, Tcl_FSLink, Tcl_FSLstat, Tcl_FSUtime, Tcl_FSFileAttrsGet, Tcl_FSFileAttrsSet, Tcl_FSFileAttrStrings, Tcl_FSStat, Tcl_FSAccess, Tcl_FSOpenFileChannel, Tcl_FSGetCwd, Tcl_FSChdir, Tcl_FSPathSeparator, Tcl_FSJoinPath, Tcl_FSSplitPath, Tcl_FSEqualPaths, Tcl_FSGetNormalizedPath, Tcl_FSJoinToPath, Tcl_FSConvertToPathType, Tcl_FSGetInternalRep, Tcl_FSGetTranslatedPath, Tcl_FSGetTranslatedStringPath, Tcl_FSNewNativePath, Tcl_FSGetNativePath, Tcl_FSFileSystemInfo, Tcl_AllocStatBuf - procedures to interact with any filesystem
 <H3><A NAME="M3">SYNOPSIS</A></H3>
 <B>#include &lt;tcl.h&gt;</B><BR>
 int<BR>
@@ -141,7 +233,7 @@ Tcl_Obj*<BR>
 Tcl_StatBuf*<BR>
 <B>Tcl_AllocStatBuf</B>()<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Tcl_Filesystem <B>*fsPtr</B> (in)<DD>
 Points to a structure containing the addresses of procedures that
 can be called to perform the various filesystem operations.
@@ -247,27 +339,38 @@ rather than calling system level functions like <B>access</B> and
 extension which calls them should work unmodified on Unix and
 Windows.  Second, the Windows implementation of some of these functions
 fixes some bugs in the system level calls.  Third, these function calls
-deal with any 'Utf to platform-native' path conversions which may be
+deal with any
+&#8220;Utf to platform-native&#8221;
+path conversions which may be
 required (and may cache the results of such conversions for greater
 efficiency on subsequent calls).  Fourth, and perhaps most importantly,
-all of these functions are 'virtual filesystem aware'.  Any virtual
-filesystem (VFS for short) which has been registered (through
+all of these functions are
+&#8220;virtual filesystem aware&#8221;.
+Any virtual filesystem (VFS for short) which has been registered (through
 <B>Tcl_FSRegister</B>) may reroute file access to alternative
 media or access methods.  This means that all of these functions (and
 therefore the corresponding <B><A HREF="../TclCmd/file.htm">file</A></B>, <B><A HREF="../TclCmd/glob.htm">glob</A></B>, <B><A HREF="../TclCmd/pwd.htm">pwd</A></B>, <B><A HREF="../TclCmd/cd.htm">cd</A></B>,
-<B><A HREF="../TclCmd/open.htm">open</A></B>, etc.  Tcl commands) may be operate on 'files' which are not
+<B><A HREF="../TclCmd/open.htm">open</A></B>, etc.  Tcl commands) may be operate on
+&#8220;files&#8221;
+which are not
 native files in the native filesystem.  This also means that any Tcl
 extension which accesses the filesystem (FS for short) through this API is
-automatically 'virtual filesystem aware'.  Of course, if an extension
+automatically
+&#8220;virtual filesystem aware&#8221;.
+Of course, if an extension
 accesses the native filesystem directly (through platform-specific
 APIs, for example), then Tcl cannot intercept such calls.
 <P>
-If appropriate VFSes have been registered, the 'files' may, to give two
+If appropriate VFSes have been registered, the
+&#8220;files&#8221;
+may, to give two
 examples, be remote (e.g. situated on a remote ftp server) or archived
 (e.g. lying inside a .zip archive).  Such registered filesystems provide
 a lookup table of functions to implement all or some of the functionality
 listed here.  Finally, the <B>Tcl_FSStat</B> and <B>Tcl_FSLstat</B> calls
-abstract away from what the 'struct stat' buffer is actually
+abstract away from what the
+&#8220;struct stat&#8221;
+buffer is actually
 declared to be, allowing the same code to be used both on systems with
 and systems without support for files larger than 2GB in size.
 <P>
@@ -297,41 +400,56 @@ function with such an object will result in no action being taken.
 <B>Tcl_FSCopyFile</B> attempts to copy the file given by <I>srcPathPtr</I> to the
 path name given by <I>destPathPtr</I>.  If the two paths given lie in the same
 filesystem (according to <B>Tcl_FSGetFileSystemForPath</B>) then that
-filesystem's 'copy file' function is called (if it is non-NULL).
+filesystem's
+&#8220;copy file&#8221;
+function is called (if it is non-NULL).
 Otherwise the function returns -1 and sets the <B>errno</B> global C
-variable to the 'EXDEV'
-POSIX error code (which signifies a 'cross-domain link').
+variable to the
+&#8220;EXDEV&#8221;
+POSIX error code (which signifies a
+&#8220;cross-domain link&#8221;).
 <P>
 <B>Tcl_FSCopyDirectory</B> attempts to copy the directory given by <I>srcPathPtr</I> to the
 path name given by <I>destPathPtr</I>.  If the two paths given lie in the same
 filesystem (according to <B>Tcl_FSGetFileSystemForPath</B>) then that
-filesystem's 'copy file' function is called (if it is non-NULL).
+filesystem's
+&#8220;copy file&#8221;
+function is called (if it is non-NULL).
 Otherwise the function returns -1 and sets the <B>errno</B> global C
-variable to the 'EXDEV'
-POSIX error code (which signifies a 'cross-domain link').
+variable to the
+&#8220;EXDEV&#8221;
+POSIX error code (which signifies a
+&#8220;cross-domain link&#8221;).
 <P>
 <B>Tcl_FSCreateDirectory</B> attempts to create the directory given by
-<I>pathPtr</I> by calling the owning filesystem's 'create directory'
+<I>pathPtr</I> by calling the owning filesystem's
+&#8220;create directory&#8221;
 function.
 <P>
 <B>Tcl_FSDeleteFile</B> attempts to delete the file given by
-<I>pathPtr</I> by calling the owning filesystem's 'delete file'
+<I>pathPtr</I> by calling the owning filesystem's
+&#8220;delete file&#8221;
 function.
 <P>
 <B>Tcl_FSRemoveDirectory</B> attempts to remove the directory given by
-<I>pathPtr</I> by calling the owning filesystem's 'remove directory'
+<I>pathPtr</I> by calling the owning filesystem's
+&#8220;remove directory&#8221;
 function.
 <P>
 <B>Tcl_FSRenameFile</B> attempts to rename the file or directory given by
 <I>srcPathPtr</I> to the path name given by <I>destPathPtr</I>.  If the two paths
 given lie in the same filesystem (according to
-<B>Tcl_FSGetFileSystemForPath</B>) then that filesystem's 'rename file'
+<B>Tcl_FSGetFileSystemForPath</B>) then that filesystem's
+&#8220;rename file&#8221;
 function is called (if it is non-NULL).  Otherwise the function returns -1
-and sets the <B>errno</B> global C variable to the 'EXDEV' POSIX error
-code (which signifies a 'cross-domain link').
+and sets the <B>errno</B> global C variable to the
+&#8220;EXDEV&#8221;
+POSIX error code (which signifies a
+&#8220;cross-domain link&#8221;).
 <P>
-<B>Tcl_FSListVolumes</B> calls each filesystem which has a non-NULL 'list
-volumes' function and asks them to return their list of root volumes.  It
+<B>Tcl_FSListVolumes</B> calls each filesystem which has a non-NULL
+&#8220;list volumes&#8221;
+function and asks them to return their list of root volumes.  It
 accumulates the return values in a list which is returned to the
 caller (with a reference count of 0).
 <P>
@@ -341,12 +459,19 @@ its contents as a Tcl script.  It returns the same information as
 <B><A HREF="../TclLib/Eval.htm">Tcl_EvalObjEx</A></B>.
 If <I>encodingName</I> is NULL, the system encoding is used for
 reading the file contents.
-If the file couldn't be read then a Tcl error is returned to describe
-why the file couldn't be read.
-The eofchar for files is '&#92;32' (^Z) for all platforms.
-If you require a ``^Z'' in code for string comparison, you can use
-``&#92;032'' or ``&#92;u001a'', which will be safely substituted by the Tcl
-interpreter into ``^Z''.
+If the file could not be read then a Tcl error is returned to describe
+why the file could not be read.
+The eofchar for files is
+&#8220;&#92;32&#8221;
+(^Z) for all platforms.
+If you require a
+&#8220;^Z&#8221;
+in code for string comparison, you can use
+&#8220;&#92;032&#8221;
+or
+&#8220;&#92;u001a&#8221;,
+which will be safely substituted by the Tcl interpreter into
+&#8220;^Z&#8221;.
 <B>Tcl_FSEvalFile</B> is a simpler version of
 <B>Tcl_FSEvalFileEx</B> that always uses the system encoding
 when reading the file.
@@ -367,20 +492,24 @@ directory for all files which match a given pattern.  The appropriate
 function for the filesystem to which <I>pathPtr</I> belongs will be called.
 <P>
 The return value is a standard Tcl result indicating whether an error
-occurred in globbing.  Error messages are placed in interp, but good
-results are placed in the resultPtr given.
+occurred in globbing.  Error messages are placed in interp (unless 
+interp is NULL, which is allowed), but good results are placed in the 
+resultPtr given.
 <P>
 Note that the <B><A HREF="../TclCmd/glob.htm">glob</A></B> code implements recursive patterns internally, so
 this function will only ever be passed simple patterns, which can be
 matched using the logic of <B><A HREF="../TclCmd/string.htm">string match</A></B>.  To handle recursion, Tcl
 will call this function frequently asking only for directories to be
-returned.
+returned.  A special case of being called with a NULL pattern indicates
+that the path needs to be checked only for the correct type.
 <P>
 <B>Tcl_FSLink</B> replaces the library version of <B>readlink</B>, and
 extends it to support the creation of links.  The appropriate function
 for the filesystem to which <I>linkNamePtr</I> belongs will be called.
 <P>
-If the <I>toPtr</I> is NULL, a 'read link' action is performed.  The result
+If the <I>toPtr</I> is NULL, a
+&#8220;read link&#8221;
+action is performed.  The result
 is a Tcl_Obj specifying the contents of the symbolic link given by
 <I>linkNamePtr</I>, or NULL if the link could not be read.  The result is owned
 by the caller, which should call <A HREF="../TclLib/Object.htm">Tcl_DecrRefCount</A> when the result is no
@@ -410,7 +539,11 @@ given.
 <P>
 This returns 0 on success and -1 on error (as per the <B>utime</B>
 documentation).  If successful, the function
-will update the 'atime' and 'mtime' values of the file given.
+will update the
+&#8220;atime&#8221;
+and
+&#8220;mtime&#8221;
+values of the file given.
 <P>
 <B>Tcl_FSFileAttrsGet</B> implements read access for the hookable <B>file
 attributes</B> subcommand.  The appropriate function for the filesystem to
@@ -573,8 +706,11 @@ of zero, they will be freed when this function returns.
 <B>Tcl_FSConvertToPathType</B> tries to convert the given Tcl_Obj to a valid
 Tcl path type, taking account of the fact that the cwd may have changed
 even if this object is already supposedly of the correct type.
-The filename may begin with &quot;~&quot; (to indicate current user's home
-directory) or &quot;~&lt;user&gt;&quot; (to indicate any user's home directory).
+The filename may begin with
+&#8220;~&#8221;
+(to indicate current user's home directory) or
+&#8220;~&lt;user&gt;&#8221;
+(to indicate any user's home directory).
 <P>
 If the conversion succeeds (i.e. the object is a valid path in one of
 the current filesystems), then <B>TCL_OK</B> is returned.  Otherwise
@@ -596,8 +732,13 @@ from the given Tcl_Obj.
 <P>
 If the translation succeeds (i.e. the object is a valid path), then it is
 returned.  Otherwise NULL will be returned, and an error message may be
-left in the interpreter.  A &quot;translated&quot; path is one which contains no
-&quot;~&quot; or &quot;~user&quot; sequences (these have been expanded to their current
+left in the interpreter.  A
+&#8220;translated&#8221;
+path is one which contains no
+&#8220;~&#8221;
+or
+&#8220;~user&#8221;
+sequences (these have been expanded to their current
 representation in the filesystem).  The object returned is owned by the
 caller, which must store it or call <A HREF="../TclLib/Object.htm">Tcl_DecrRefCount</A> to ensure memory is
 freed.  This function is of little practical use, and
@@ -617,8 +758,10 @@ in native form (from, e.g. <B>readlink</B> or a native dialog), and that path
 is to be used at the Tcl level, then calling this function is an
 efficient way of creating the appropriate path object type.
 <P>
-The resulting object is a pure 'path' object, which will only receive
-a Utf-8 string representation if that is required by some Tcl code.
+The resulting object is a pure
+&#8220;path&#8221;
+object, which will only receive
+a UTF-8 string representation if that is required by some Tcl code.
 <P>
 <B>Tcl_FSGetNativePath</B> is for use by the Win/Unix native
 filesystems, so that they can easily retrieve the native (char* or
@@ -645,8 +788,13 @@ passed in (unless that is a relative path, in which case the native
 representation may be freed any time the cwd changes).
 <P>
 <B>Tcl_FSFileSystemInfo</B> returns a list of two elements.  The first
-element is the name of the filesystem (e.g. &quot;native&quot; or &quot;vfs&quot; or &quot;zip&quot;
-or &quot;prowrap&quot;, perhaps), and the second is the particular type of the
+element is the name of the filesystem (e.g.
+&#8220;native&#8221;,
+&#8220;vfs&#8221;,
+&#8220;zip&#8221;,
+or
+&#8220;prowrap&#8221;,
+perhaps), and the second is the particular type of the
 given path within that filesystem (which is filesystem dependent).  The
 second element may be empty if the filesystem does not provide a
 further categorization of files.
@@ -765,8 +913,9 @@ those names in UTF-8 form.  The filesystem infrastructure API is
 designed to support efficient, cached conversion of these UTF-8 paths
 to other native representations.
 <H4><A NAME="M9">EXAMPLE FILESYSTEM DEFINITION</A></H4>
-Here is the filesystem lookup table used by the &quot;vfs&quot; extension which
-allows filesystem actions to be implemented in Tcl.
+Here is the filesystem lookup table used by the
+&#8220;vfs&#8221;
+extension which allows filesystem actions to be implemented in Tcl.
 <PRE>static Tcl_Filesystem vfsFilesystem = {
     &quot;tclvfs&quot;,
     sizeof(Tcl_Filesystem),
@@ -825,7 +974,10 @@ representations.
 <H4><A NAME="M11">TYPENAME</A></H4>
 The <I>typeName</I> field contains a null-terminated string that
 identifies the type of the filesystem implemented, e.g.
-``native'' or ``zip'' or ```vfs''.
+&#8220;native&#8221;,
+&#8220;zip&#8221;
+or
+&#8220;vfs&#8221;.
 <H4><A NAME="M12">STRUCTURE LENGTH</A></H4>
 The <I>structureLength</I> field is generally implemented as
 <I>sizeof(Tcl_Filesystem)</I>, and is there to allow easier
@@ -886,12 +1038,17 @@ immediately creates an internal representation for paths it accepts.
 <H4><A NAME="M19">NORMALIZEPATHPROC</A></H4>
 Function to normalize a path.  Should be implemented for all
 filesystems which can have multiple string representations for the same
-path object.  In Tcl, every 'path' must have a single unique 'normalized'
+path object.  In Tcl, every
+&#8220;path&#8221;
+must have a single unique
+&#8220;normalized&#8221;
 string representation.  Depending on the filesystem,
 there may be more than one unnormalized string representation which
 refers to that path (e.g. a relative path, a path with different
 character case if the filesystem is case insensitive, a path contain a
-reference to a home directory such as '~', a path containing symbolic
+reference to a home directory such as
+&#8220;~&#8221;,
+a path containing symbolic
 links, etc).  If the very last component in the path is a symbolic
 link, it should not be converted into the object it points to (but
 its case or other aspects should be made unique).  All other path
@@ -923,10 +1080,16 @@ etc.  The Tcl core expects filesystems to behave in this way).
 <H4><A NAME="M21">FILESYSTEMPATHTYPEPROC</A></H4>
 Function to determine the type of a path in this filesystem.  May be
 NULL, in which case no type information will be available to users of
-the filesystem.  The 'type' is used only for informational purposes,
+the filesystem.  The
+&#8220;type&#8221;
+is used only for informational purposes,
 and should be returned as the string representation of the Tcl_Obj
-which is returned.  A typical return value might be &quot;networked&quot;, &quot;zip&quot;
-or &quot;ftp&quot;.  The Tcl_Obj result is owned by the filesystem and so Tcl will
+which is returned.  A typical return value might be
+&#8220;networked&#8221;,
+&#8220;zip&#8221;
+or
+&#8220;ftp&#8221;.
+The Tcl_Obj result is owned by the filesystem and so Tcl will
 increment the refCount of that object if it wishes to retain a reference
 to it.
 <P>
@@ -935,7 +1098,9 @@ to it.
 <H4><A NAME="M22">FILESYSTEMSEPARATORPROC</A></H4>
 Function to return the separator character(s) for this filesystem.
 This need only be implemented if the filesystem wishes to use a
-different separator than the standard string &quot;/&quot;.  Amongst other
+different separator than the standard string
+&#8220;/&#8221;.
+Amongst other
 uses, it is returned by the <B><A HREF="../TclCmd/file.htm">file separator</A></B> command.  The
 return value should be an object with refCount of zero.
 <P>
@@ -1039,9 +1204,10 @@ not, so code should be flexible to both possibilities.
 <P>
 The return value is a standard Tcl result indicating whether an error
 occurred in the matching process.  Error messages are placed in
-<I>interp</I>; on a <B>TCL_OK</B> result, results should be added to the
-<I>resultPtr</I> object given (which can be assumed to be a valid
-unshared Tcl list).  The matches added
+<I>interp</I>, unless <I>interp</I> in NULL in which case no error
+message need be generated; on a <B>TCL_OK</B> result, results should be 
+added to the <I>resultPtr</I> object given (which can be assumed to be a 
+valid unshared Tcl list).  The matches added
 to <I>resultPtr</I> should include any path prefix given in <I>pathPtr</I>
 (this usually means they will be absolute path specifications).
 Note that if no matches are found, that simply leads to an empty
@@ -1120,7 +1286,9 @@ NULL (or an empty list) if no volumes are provided.  The result object
 is considered to be owned by the filesystem (not by Tcl's core), but
 should be given a refCount for Tcl.  Tcl will use the contents of the
 list and then decrement that refCount.  This allows filesystems to
-choose whether they actually want to retain a 'master list' of volumes
+choose whether they actually want to retain a
+&#8220;master list&#8221;
+of volumes
 or not (if not, they generate the list on the fly and pass it to Tcl
 with a refCount of 1 and then forget about the list, if yes, then
 they simply increment the refCount of their master list and pass it
@@ -1202,7 +1370,9 @@ occurred in the process.  If successful, the directory specified by
 <I>pathPtr</I> should have been removed from the filesystem.  If the
 <I>recursive</I> flag is given, then a non-empty directory should be
 deleted without error.  If this flag is not given, then and the
-directory is non-empty a POSIX 'EEXIST' error should be signalled.  If an
+directory is non-empty a POSIX
+&#8220;EEXIST&#8221;
+error should be signalled.  If an
 error does occur, the name of the file or directory which caused the
 error should be placed in <I>errorPtr</I>.
 <H4><A NAME="M35">DELETEFILEPROC</A></H4>
@@ -1362,12 +1532,11 @@ correct system <B>chdir</B> API).
 The <B>Tcl_FSChdirProc</B> changes the applications current working
 directory to the value specified in <I>pathPtr</I>. The function returns
 -1 on error or 0 on success.
-
-<H3><A NAME="M45">KEYWORDS</A></H3>
-<A href="../Keywords/S.htm#stat">stat</A>, <A href="../Keywords/A.htm#access">access</A>, <A href="../Keywords/F.htm#filesystem">filesystem</A>, <A href="../Keywords/V.htm#vfs">vfs</A>, <A href="../Keywords/V.htm#virtual">virtual</A>
-<H3><A NAME="M46">SEE ALSO</A></H3>
+<H3><A NAME="M45">SEE ALSO</A></H3>
 <B><A HREF="../TclCmd/cd.htm">cd</A></B>, <B><A HREF="../TclCmd/file.htm">file</A></B>, <B><A HREF="../TclCmd/load.htm">load</A></B>, <B><A HREF="../TclCmd/open.htm">open</A></B>, <B><A HREF="../TclCmd/pwd.htm">pwd</A></B>, <B><A HREF="../TclCmd/unload.htm">unload</A></B>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 2001 Vincent Darley
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<H3><A NAME="M46">KEYWORDS</A></H3>
+<A href="../Keywords/S.htm#stat">stat</A>, <A href="../Keywords/A.htm#access">access</A>, <A href="../Keywords/F.htm#filesystem">filesystem</A>, <A href="../Keywords/V.htm#vfs">vfs</A>, <A href="../Keywords/V.htm#virtual">virtual</A>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 2001 Vincent Darley
+</div>
 </BODY></HTML>

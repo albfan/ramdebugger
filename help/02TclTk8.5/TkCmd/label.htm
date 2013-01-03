@@ -1,12 +1,17 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - label manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>label manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> label</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="label.htm#M2" NAME="L689">NAME</A>
-<DL><DD>label - Create and manipulate label widgets</DL>
-<DD><A HREF="label.htm#M3" NAME="L690">SYNOPSIS</A>
+<DD><A HREF="label.htm#M2" NAME="L763">NAME</A>
+<DL><DD>label - Create and manipulate label widgets</DD></DL>
+<DD><A HREF="label.htm#M3" NAME="L764">SYNOPSIS</A>
 <DL>
-<DD><B>label</B> <I>pathName </I>?<I>options</I>?
 </DL>
-<DD><A HREF="label.htm#M4" NAME="L691">STANDARD OPTIONS</A>
+<DD><A HREF="label.htm#M4" NAME="L765">STANDARD OPTIONS</A>
 <DL>
 <DD><A HREF="options.htm#M-activebackground">-activebackground, activeBackground, Foreground</A>
 <DD><A HREF="options.htm#M-activeforeground">-activeforeground, activeForeground, Background</A>
@@ -33,21 +38,23 @@
 <DD><A HREF="options.htm#M-underline">-underline, underline, Underline</A>
 <DD><A HREF="options.htm#M-wraplength">-wraplength, wrapLength, WrapLength</A>
 </DL>
-<DD><A HREF="label.htm#M5" NAME="L692">WIDGET-SPECIFIC OPTIONS</A>
+<DD><A HREF="label.htm#M5" NAME="L766">WIDGET-SPECIFIC OPTIONS</A>
 <DL>
-<DD><A HREF="label.htm#M6" NAME="L693">-height, height, Height</A>
-<DD><A HREF="label.htm#M7" NAME="L694">-state, state, State</A>
-<DD><A HREF="label.htm#M8" NAME="L695">-width, width, Width</A>
+<DD><A HREF="label.htm#M6" NAME="L767">-height, height, Height</A>
+<DD><A HREF="label.htm#M7" NAME="L768">-state, state, State</A>
+<DD><A HREF="label.htm#M8" NAME="L769">-width, width, Width</A>
 </DL>
-<DD><A HREF="label.htm#M9" NAME="L696">DESCRIPTION</A>
-<DD><A HREF="label.htm#M10" NAME="L697">WIDGET COMMAND</A>
-<DL>
-<DD><A HREF="label.htm#M11" NAME="L698"><I>pathName </I><B>cget</B> <I>option</I></A>
-<DD><A HREF="label.htm#M12" NAME="L699"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
+<DD><A HREF="label.htm#M9" NAME="L770">DESCRIPTION</A>
+<DD><A HREF="label.htm#M10" NAME="L771">WIDGET COMMAND</A>
+<DL class="widget command">
+<DD><A HREF="label.htm#M11" NAME="L772"><I>pathName </I><B>cget</B> <I>option</I></A>
+<DD><A HREF="label.htm#M12" NAME="L773"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
 </DL>
-<DD><A HREF="label.htm#M13" NAME="L700">BINDINGS</A>
-<DD><A HREF="label.htm#M14" NAME="L701">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="label.htm#M13" NAME="L774">BINDINGS</A>
+<DD><A HREF="label.htm#M14" NAME="L775">EXAMPLE</A>
+<DD><A HREF="label.htm#M15" NAME="L776">SEE ALSO</A>
+<DD><A HREF="label.htm#M16" NAME="L777">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 label - Create and manipulate label widgets
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -88,7 +95,7 @@ label - Create and manipulate label widgets
 If an image or bitmap is being displayed in the label then the value is in
 screen units (i.e. any of the forms acceptable to <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>);
 for text it is in lines of text.
-If this option isn't specified, the label's desired height is computed
+If this option is not specified, the label's desired height is computed
 from the size of the image or bitmap or text being displayed in it.
 <P><DT>Command-Line Name: <B><A NAME="M7">-state</A></B>
 <DT>Database Name: <B>state</B>
@@ -107,7 +114,7 @@ the button is displayed.
 If an image or bitmap is being displayed in the label then the value is in
 screen units (i.e. any of the forms acceptable to <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>);
 for text it is in characters.
-If this option isn't specified, the label's desired width is computed
+If this option is not specified, the label's desired width is computed
 from the size of the image or bitmap or text being displayed in it.
 </DL>
 <H3><A NAME="M9">DESCRIPTION</A></H3>
@@ -130,7 +137,6 @@ one of the characters may optionally be underlined using the
 <B>underline</B> option.
 The label can be manipulated in a few simple ways, such as
 changing its relief or text, using the commands described below.
-
 <H3><A NAME="M10">WIDGET COMMAND</A></H3>
 The <B>label</B> command creates a new Tcl command whose
 name is <I>pathName</I>.  This
@@ -141,7 +147,7 @@ operations on the widget.  It has the following general form:
 determine the exact behavior of the command.  The following
 commands are possible for label widgets:
 <P>
-<DL>
+<DL class="widget command">
 <DT><A NAME="M11"><I>pathName </I><B>cget</B> <I>option</I></A><DD>
 Returns the current value of the configuration option given
 by <I>option</I>.
@@ -160,16 +166,30 @@ modifies the given widget option(s) to have the given value(s);  in
 this case the command returns an empty string.
 <I>Option</I> may have any of the values accepted by the <B>label</B>
 command.
-
 <P></DL>
 <H3><A NAME="M13">BINDINGS</A></H3>
 When a new label is created, it has no default event bindings:
 labels are not intended to be interactive.
-
-<H3><A NAME="M14">KEYWORDS</A></H3>
+<H3><A NAME="M14">EXAMPLE</A></H3>
+<PRE># Make the widgets
+<B>label</B> .t -text &quot;This widget is at the top&quot;    -bg red
+<B>label</B> .b -text &quot;This widget is at the bottom&quot; -bg green
+<B>label</B> .l -text &quot;Left&#92;nHand&#92;nSide&quot;
+<B>label</B> .r -text &quot;Right&#92;nHand&#92;nSide&quot;
+text .mid
+.mid insert end &quot;This layout is like Java's BorderLayout&quot;
+# Lay them out
+pack .t   -side top    -fill x
+pack .b   -side bottom -fill x
+pack .l   -side left   -fill y
+pack .r   -side right  -fill y
+pack .mid -expand 1    -fill both</PRE>
+<H3><A NAME="M15">SEE ALSO</A></H3>
+<B><A HREF="../TkCmd/labelframe.htm">labelframe</A></B>, <B><A HREF="../TkCmd/button.htm">button</A></B>, <B><A HREF="../TkCmd/ttk_label.htm">ttk::label</A></B>
+<H3><A NAME="M16">KEYWORDS</A></H3>
 <A href="../Keywords/L.htm#label">label</A>, <A href="../Keywords/W.htm#widget">widget</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

@@ -1,4 +1,27 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_Interp manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_Interp manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> Interp</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="Interp.htm#M2" NAME="L396">NAME</A>
+<DL><DD>Tcl_Interp - client-visible fields of interpreter structures</DD></DL>
+<DD><A HREF="Interp.htm#M3" NAME="L397">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>typedef struct {
+<DD>        char *<I>result</I>;
+<DD>        Tcl_FreeProc *<I>freeProc</I>;
+<DD>        int <I>errorLine</I>;
+<DD>} Tcl_Interp;
+<DD>
+<DD>typedef void Tcl_FreeProc(char *<I>blockPtr</I>);
+</DL>
+<DD><A HREF="Interp.htm#M4" NAME="L398">DESCRIPTION</A>
+<DD><A HREF="Interp.htm#M5" NAME="L399">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_Interp - client-visible fields of interpreter structures
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -18,8 +41,9 @@ on the interpreter.  Interpreter structures contain many fields
 that are used by Tcl, but only three that may be accessed by
 clients:  <I>result</I>, <I>freeProc</I>, and <I>errorLine</I>.
 <P>
-<B>Note that access to the </B><I>result</I><B> and </B><I>freeProc</I><B> fields is</B>
-<B>deprecated.</B>  Use <B><A HREF="../TclLib/SetResult.htm">Tcl_SetResult</A></B> and <B>Tcl_GetResult</B> instead.
+<B>Note that access to all three fields, </B><I>result</I><B>, </B><I>freeProc</I><B> and
+</B><I>errorLine</I><B> is deprecated.</B>  Use <B><A HREF="../TclLib/SetResult.htm">Tcl_SetResult</A></B>,
+<B>Tcl_GetResult</B>, and <B><A HREF="../TclLib/AddErrInfo.htm">Tcl_GetReturnOptions</A></B> instead.
 <P>
 The <I>result</I> and <I>freeProc</I> fields are used to return
 results or error messages from commands.
@@ -27,7 +51,7 @@ This information is returned by command procedures back to <B><A HREF="../TclLib
 and by <B><A HREF="../TclLib/Eval.htm">Tcl_Eval</A></B> back to its callers.
 The <I>result</I> field points to the string that represents the
 result or error message, and the <I>freeProc</I> field tells how
-to dispose of the storage for the string when it isn't needed anymore.
+to dispose of the storage for the string when it is not needed anymore.
 The easiest way for command procedures to manipulate these
 fields is to call procedures like <B><A HREF="../TclLib/SetResult.htm">Tcl_SetResult</A></B>
 or <B><A HREF="../TclLib/SetResult.htm">Tcl_AppendResult</A></B>;  they
@@ -107,8 +131,8 @@ occurred.
 
 <H3><A NAME="M5">KEYWORDS</A></H3>
 <A href="../Keywords/F.htm#free">free</A>, <A href="../Keywords/I.htm#initialized">initialized</A>, <A href="../Keywords/I.htm#interpreter">interpreter</A>, <A href="../Keywords/M.htm#malloc">malloc</A>, <A href="../Keywords/R.htm#result">result</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1989-1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1989-1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

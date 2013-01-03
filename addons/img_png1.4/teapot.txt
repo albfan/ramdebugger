@@ -1,0 +1,11 @@
+Package img::png 1.4
+Meta as::origin  http://sourceforge.net/projects/tkimg
+Meta category    Tk Image Format
+Meta description This s support for the png image format.
+Meta platform    win32-ix86
+Meta require     {img::base 1.4-2}
+Meta require     {Tcl 8.4-9}
+Meta require     {Tk 8.4-9}
+Meta require     pngtcl
+Meta subject     png
+Meta summary     png Image Support

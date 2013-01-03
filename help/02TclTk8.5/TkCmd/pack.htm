@@ -1,50 +1,55 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - pack manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>pack manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> pack</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="pack.htm#M2" NAME="L934">NAME</A>
-<DL><DD>pack - Geometry manager that packs around edges of cavity</DL>
-<DD><A HREF="pack.htm#M3" NAME="L935">SYNOPSIS</A>
-<DL>
-<DD><B>pack </B><I>option arg </I>?<I>arg ...</I>?
-</DL>
-<DD><A HREF="pack.htm#M4" NAME="L936">DESCRIPTION</A>
-<DL>
-<DD><A HREF="pack.htm#M5" NAME="L937"><B>pack </B><I>slave </I>?<I>slave ...</I>? ?<I>options</I>?</A>
-<DD><A HREF="pack.htm#M6" NAME="L938"><B>pack configure </B><I>slave </I>?<I>slave ...</I>? ?<I>options</I>?</A>
-<DL>
-<DD><A HREF="pack.htm#M7" NAME="L939"><B>-after </B><I>other</I></A>
-<DD><A HREF="pack.htm#M8" NAME="L940"><B>-anchor </B><I>anchor</I></A>
-<DD><A HREF="pack.htm#M9" NAME="L941"><B>-before </B><I>other</I></A>
-<DD><A HREF="pack.htm#M10" NAME="L942"><B>-expand </B><I>boolean</I></A>
-<DD><A HREF="pack.htm#M11" NAME="L943"><B>-fill </B><I>style</I></A>
-<DL>
-<DD><A HREF="pack.htm#M12" NAME="L944"><B>none</B></A>
-<DD><A HREF="pack.htm#M13" NAME="L945"><B>x</B></A>
-<DD><A HREF="pack.htm#M14" NAME="L946"><B>y</B></A>
-<DD><A HREF="pack.htm#M15" NAME="L947"><B>both</B></A>
-</DL>
-<DD><A HREF="pack.htm#M16" NAME="L948"><B>-in </B><I>other</I></A>
-<DD><A HREF="pack.htm#M17" NAME="L949"><B>-ipadx </B><I>amount</I></A>
-<DD><A HREF="pack.htm#M18" NAME="L950"><B>-ipady </B><I>amount</I></A>
-<DD><A HREF="pack.htm#M19" NAME="L951"><B>-padx </B><I>amount</I></A>
-<DD><A HREF="pack.htm#M20" NAME="L952"><B>-pady </B><I>amount</I></A>
-<DD><A HREF="pack.htm#M21" NAME="L953"><B>-side </B><I>side</I></A>
-</DL>
-<DD><A HREF="pack.htm#M22" NAME="L954"><B>pack forget </B><I>slave </I>?<I>slave ...</I>?</A>
-<DD><A HREF="pack.htm#M23" NAME="L955"><B>pack info </B><I>slave</I></A>
-<DD><A HREF="pack.htm#M24" NAME="L956"><B>pack propagate </B><I>master</I> ?<I>boolean</I>?</A>
-<DD><A HREF="pack.htm#M25" NAME="L957"><B>pack slaves </B><I>master</I></A>
-</DL>
-<DD><A HREF="pack.htm#M26" NAME="L958">THE PACKER ALGORITHM</A>
+<DD><A HREF="pack.htm#M2" NAME="L1010">NAME</A>
+<DL><DD>pack - Geometry manager that packs around edges of cavity</DD></DL>
+<DD><A HREF="pack.htm#M3" NAME="L1011">SYNOPSIS</A>
 <DL>
 </DL>
-<DD><A HREF="pack.htm#M27" NAME="L959">EXPANSION</A>
-<DD><A HREF="pack.htm#M28" NAME="L960">GEOMETRY PROPAGATION</A>
-<DD><A HREF="pack.htm#M29" NAME="L961">RESTRICTIONS ON MASTER WINDOWS</A>
-<DD><A HREF="pack.htm#M30" NAME="L962">PACKING ORDER</A>
-<DD><A HREF="pack.htm#M31" NAME="L963">EXAMPLE</A>
-<DD><A HREF="pack.htm#M32" NAME="L964">SEE ALSO</A>
-<DD><A HREF="pack.htm#M33" NAME="L965">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="pack.htm#M4" NAME="L1012">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="pack.htm#M5" NAME="L1013"><B>pack </B><I>slave </I>?<I>slave ...</I>? ?<I>options</I>?</A>
+<DD><A HREF="pack.htm#M6" NAME="L1014"><B>pack configure </B><I>slave </I>?<I>slave ...</I>? ?<I>options</I>?</A>
+<DL class="description">
+<DD><A HREF="pack.htm#M7" NAME="L1015"><B>-after </B><I>other</I></A>
+<DD><A HREF="pack.htm#M8" NAME="L1016"><B>-anchor </B><I>anchor</I></A>
+<DD><A HREF="pack.htm#M9" NAME="L1017"><B>-before </B><I>other</I></A>
+<DD><A HREF="pack.htm#M10" NAME="L1018"><B>-expand </B><I>boolean</I></A>
+<DD><A HREF="pack.htm#M11" NAME="L1019"><B>-fill </B><I>style</I></A>
+<DL class="description">
+<DD><A HREF="pack.htm#M12" NAME="L1020"><B>none</B></A>
+<DD><A HREF="pack.htm#M13" NAME="L1021"><B>x</B></A>
+<DD><A HREF="pack.htm#M14" NAME="L1022"><B>y</B></A>
+<DD><A HREF="pack.htm#M15" NAME="L1023"><B>both</B></A>
+</DL>
+<DD><A HREF="pack.htm#M16" NAME="L1024"><B>-in </B><I>other</I></A>
+<DD><A HREF="pack.htm#M17" NAME="L1025"><B>-ipadx </B><I>amount</I></A>
+<DD><A HREF="pack.htm#M18" NAME="L1026"><B>-ipady </B><I>amount</I></A>
+<DD><A HREF="pack.htm#M19" NAME="L1027"><B>-padx </B><I>amount</I></A>
+<DD><A HREF="pack.htm#M20" NAME="L1028"><B>-pady </B><I>amount</I></A>
+<DD><A HREF="pack.htm#M21" NAME="L1029"><B>-side </B><I>side</I></A>
+</DL>
+<DD><A HREF="pack.htm#M22" NAME="L1030"><B>pack forget </B><I>slave </I>?<I>slave ...</I>?</A>
+<DD><A HREF="pack.htm#M23" NAME="L1031"><B>pack info </B><I>slave</I></A>
+<DD><A HREF="pack.htm#M24" NAME="L1032"><B>pack propagate </B><I>master</I> ?<I>boolean</I>?</A>
+<DD><A HREF="pack.htm#M25" NAME="L1033"><B>pack slaves </B><I>master</I></A>
+</DL>
+<DD><A HREF="pack.htm#M26" NAME="L1034">THE PACKER ALGORITHM</A>
+<DL class="the packer algorithm">
+</DL>
+<DD><A HREF="pack.htm#M27" NAME="L1035">EXPANSION</A>
+<DD><A HREF="pack.htm#M28" NAME="L1036">GEOMETRY PROPAGATION</A>
+<DD><A HREF="pack.htm#M29" NAME="L1037">RESTRICTIONS ON MASTER WINDOWS</A>
+<DD><A HREF="pack.htm#M30" NAME="L1038">PACKING ORDER</A>
+<DD><A HREF="pack.htm#M31" NAME="L1039">EXAMPLE</A>
+<DD><A HREF="pack.htm#M32" NAME="L1040">SEE ALSO</A>
+<DD><A HREF="pack.htm#M33" NAME="L1041">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 pack - Geometry manager that packs around edges of cavity
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -56,20 +61,21 @@ packing them in order around the edges of the parent.
 The <B>pack</B> command can have any of several forms, depending
 on the <I>option</I> argument:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>pack </B><I>slave </I>?<I>slave ...</I>? ?<I>options</I>?</A><DD>
 If the first argument to <B>pack</B> is a window name (any value
-starting with ``.''), then the command is processed in the same
-way as <B>pack configure</B>.
+starting with
+&#8220;.&#8221;),
+then the command is processed in the same way as <B>pack configure</B>.
 <P><DT><A NAME="M6"><B>pack configure </B><I>slave </I>?<I>slave ...</I>? ?<I>options</I>?</A><DD>
 The arguments consist of the names of one or more slave windows
 followed by pairs of arguments that specify how
 to manage the slaves.
-See ``THE PACKER ALGORITHM'' below for details on how the options
+See <B>THE PACKER ALGORITHM</B> below for details on how the options
 are used by the packer.
 The following options are supported:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M7"><B>-after </B><I>other</I></A><DD>
 <I>Other</I> must the name of another window.
 Use its master as the master for the slaves, and insert
@@ -94,7 +100,7 @@ If a slave's parcel is larger than its requested dimensions, this
 option may be used to stretch the slave.
 <I>Style</I> must have one of the following values:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M12"><B>none</B></A><DD>
 Give the slave its requested dimensions plus any internal padding
 requested with <B>-ipadx</B> or <B>-ipady</B>.  This is the default.
@@ -151,12 +157,13 @@ The slaves will no longer be managed by the packer.
 Returns a list whose elements are the current configuration state of
 the slave given by <I>slave</I> in the same option-value form that
 might be specified to <B>pack configure</B>.
-The first two elements of the list are ``<B>-in </B><I>master</I>'' where
-<I>master</I> is the slave's master.
+The first two elements of the list are
+&#8220;<B>-in </B><I>master</I>&#8221;
+where <I>master</I> is the slave's master.
 <P><DT><A NAME="M24"><B>pack propagate </B><I>master</I> ?<I>boolean</I>?</A><DD>
 If <I>boolean</I> has a true boolean value such as <B>1</B> or <B>on</B>
 then propagation is enabled for <I>master</I>, which must be a window
-name (see ``GEOMETRY PROPAGATION'' below).
+name (see <B>GEOMETRY PROPAGATION</B> below).
 If <I>boolean</I> has a false boolean value then propagation is
 disabled for <I>master</I>.
 In either of these cases an empty string is returned.
@@ -188,7 +195,7 @@ is the entire area of the master.
 <P>
 For each slave the packer carries out the following steps:
 <P>
-<DL>
+<DL class="the packer algorithm">
 <DT>[1]<DD>
 The packer allocates a rectangular <I>parcel</I> for the slave
 along the side of the cavity given by the slave's <B>-side</B> option.
@@ -199,7 +206,7 @@ For the left or right side the height of the parcel is
 the height of the cavity and the width is the requested width
 of the slave plus the <B>-ipadx</B> and <B>-padx</B> options.
 The parcel may be enlarged further because of the <B>-expand</B>
-option (see ``EXPANSION'' below)
+option (see <B>EXPANSION</B> below)
 <P><DT>[2]<DD>
 The packer chooses the dimensions of the slave.
 The width will normally be the slave's requested width plus
@@ -224,7 +231,7 @@ slave and the edges of the parcel.
 Once a given slave has been packed, the area of its parcel
 is subtracted from the cavity, leaving a smaller rectangular
 cavity for the next slave.
-If a slave doesn't use all of its parcel, the unused space
+If a slave does not use all of its parcel, the unused space
 in the parcel will not be used by subsequent slaves.
 If the cavity should become too small to meet the needs of
 a slave then the slave will be given whatever space is
@@ -264,7 +271,7 @@ visible without danger of the slave being clipped by its parent.
 If the master for a slave is not its parent then you must make sure
 that the slave is higher in the stacking order than the master.
 Otherwise the master will obscure the slave and it will appear as
-if the slave hasn't been packed correctly.
+if the slave has not been packed correctly.
 The easiest way to make sure the slave is higher than the master is
 to create the master window first:  the most recently created window
 will be highest in the stacking order.
@@ -288,8 +295,8 @@ text .mid
 <B><A HREF="../TkCmd/grid.htm">grid</A></B>, <B><A HREF="../TkCmd/place.htm">place</A></B>
 <H3><A NAME="M33">KEYWORDS</A></H3>
 <A href="../Keywords/G.htm#geometry manager">geometry manager</A>, <A href="../Keywords/L.htm#location">location</A>, <A href="../Keywords/P.htm#packer">packer</A>, <A href="../Keywords/P.htm#parcel">parcel</A>, <A href="../Keywords/P.htm#propagation">propagation</A>, <A href="../Keywords/S.htm#size">size</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

@@ -1,12 +1,17 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - button manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>button manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> button</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="button.htm#M2" NAME="L131">NAME</A>
-<DL><DD>button - Create and manipulate button widgets</DL>
-<DD><A HREF="button.htm#M3" NAME="L132">SYNOPSIS</A>
+<DD><A HREF="button.htm#M2" NAME="L180">NAME</A>
+<DL><DD>button - Create and manipulate button widgets</DD></DL>
+<DD><A HREF="button.htm#M3" NAME="L181">SYNOPSIS</A>
 <DL>
-<DD><B>button</B> <I>pathName </I>?<I>options</I>?
 </DL>
-<DD><A HREF="button.htm#M4" NAME="L133">STANDARD OPTIONS</A>
+<DD><A HREF="button.htm#M4" NAME="L182">STANDARD OPTIONS</A>
 <DL>
 <DD><A HREF="options.htm#M-activebackground">-activebackground, activeBackground, Foreground</A>
 <DD><A HREF="options.htm#M-activeforeground">-activeforeground, activeForeground, Background</A>
@@ -35,28 +40,30 @@
 <DD><A HREF="options.htm#M-underline">-underline, underline, Underline</A>
 <DD><A HREF="options.htm#M-wraplength">-wraplength, wrapLength, WrapLength</A>
 </DL>
-<DD><A HREF="button.htm#M5" NAME="L134">WIDGET-SPECIFIC OPTIONS</A>
+<DD><A HREF="button.htm#M5" NAME="L183">WIDGET-SPECIFIC OPTIONS</A>
 <DL>
-<DD><A HREF="button.htm#M6" NAME="L135">-command, command, Command</A>
-<DD><A HREF="button.htm#M7" NAME="L136">-default, default, Default</A>
-<DD><A HREF="button.htm#M8" NAME="L137">-height, height, Height</A>
-<DD><A HREF="button.htm#M9" NAME="L138">-overrelief, overRelief, OverRelief</A>
-<DD><A HREF="button.htm#M10" NAME="L139">-state, state, State</A>
-<DD><A HREF="button.htm#M11" NAME="L140">-width, width, Width</A>
+<DD><A HREF="button.htm#M6" NAME="L184">-command, command, Command</A>
+<DD><A HREF="button.htm#M7" NAME="L185">-default, default, Default</A>
+<DD><A HREF="button.htm#M8" NAME="L186">-height, height, Height</A>
+<DD><A HREF="button.htm#M9" NAME="L187">-overrelief, overRelief, OverRelief</A>
+<DD><A HREF="button.htm#M10" NAME="L188">-state, state, State</A>
+<DD><A HREF="button.htm#M11" NAME="L189">-width, width, Width</A>
 </DL>
-<DD><A HREF="button.htm#M12" NAME="L141">DESCRIPTION</A>
-<DD><A HREF="button.htm#M13" NAME="L142">WIDGET COMMAND</A>
-<DL>
-<DD><A HREF="button.htm#M14" NAME="L143"><I>pathName </I><B>cget</B> <I>option</I></A>
-<DD><A HREF="button.htm#M15" NAME="L144"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
-<DD><A HREF="button.htm#M16" NAME="L145"><I>pathName </I><B>flash</B></A>
-<DD><A HREF="button.htm#M17" NAME="L146"><I>pathName </I><B>invoke</B></A>
+<DD><A HREF="button.htm#M12" NAME="L190">DESCRIPTION</A>
+<DD><A HREF="button.htm#M13" NAME="L191">WIDGET COMMAND</A>
+<DL class="widget command">
+<DD><A HREF="button.htm#M14" NAME="L192"><I>pathName </I><B>cget</B> <I>option</I></A>
+<DD><A HREF="button.htm#M15" NAME="L193"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
+<DD><A HREF="button.htm#M16" NAME="L194"><I>pathName </I><B>flash</B></A>
+<DD><A HREF="button.htm#M17" NAME="L195"><I>pathName </I><B>invoke</B></A>
 </DL>
-<DD><A HREF="button.htm#M18" NAME="L147">DEFAULT BINDINGS</A>
-<DL>
+<DD><A HREF="button.htm#M18" NAME="L196">DEFAULT BINDINGS</A>
+<DL class="default bindings">
 </DL>
-<DD><A HREF="button.htm#M19" NAME="L148">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="button.htm#M19" NAME="L197">EXAMPLES</A>
+<DD><A HREF="button.htm#M20" NAME="L198">SEE ALSO</A>
+<DD><A HREF="button.htm#M21" NAME="L199">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 button - Create and manipulate button widgets
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -118,7 +125,7 @@ the active state.
 If an image or bitmap is being displayed in the button then the value is in
 screen units (i.e. any of the forms acceptable to <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>);
 for text it is in lines of text.
-If this option isn't specified, the button's desired height is computed
+If this option is not specified, the button's desired height is computed
 from the size of the image or bitmap or text being displayed in it.
 <P><DT>Command-Line Name: <B><A NAME="M9">-overrelief</A></B>
 <DT>Database Name: <B>overRelief</B>
@@ -149,7 +156,7 @@ In this state the <B>disabledForeground</B> and
 If an image or bitmap is being displayed in the button then the value is in
 screen units (i.e. any of the forms acceptable to <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>);
 for text it is in characters.
-If this option isn't specified, the button's desired width is computed
+If this option is not specified, the button's desired width is computed
 from the size of the image or bitmap or text being displayed in it.
 </DL>
 <H3><A NAME="M12">DESCRIPTION</A></H3>
@@ -189,7 +196,7 @@ operations on the widget.  It has the following general form:
 determine the exact behavior of the command.  The following
 commands are possible for button widgets:
 <P>
-<DL>
+<DL class="widget command">
 <DT><A NAME="M14"><I>pathName </I><B>cget</B> <I>option</I></A><DD>
 Returns the current value of the configuration option given
 by <I>option</I>.
@@ -225,7 +232,7 @@ This command is ignored if the button's state is <B>disabled</B>.
 Tk automatically creates class bindings for buttons that give them
 default behavior:
 <P>
-<DL>
+<DL class="default bindings">
 <DT>[1]<DD>
 A button activates whenever the mouse passes over it and deactivates
 whenever the mouse leaves the button.
@@ -250,10 +257,27 @@ actions occur:  the button is completely non-responsive.
 The behavior of buttons can be changed by defining new bindings for
 individual widgets or by redefining the class bindings.
 
-<H3><A NAME="M19">KEYWORDS</A></H3>
+<H3><A NAME="M19">EXAMPLES</A></H3>
+This is the classic Tk
+&#8220;Hello, World!&#8221;
+demonstration:
+<P>
+<PRE><B>button</B> .b -text &quot;Hello, World!&quot; -command exit
+    pack .b</PRE>
+<P>
+This example demonstrates how to handle button accelerators:
+<P>
+<PRE><B>button</B> .b1 -text Hello -underline 0
+    <B>button</B> .b2 -text World -underline 0
+    bind . &lt;Key-h&gt; {.b1 flash; .b1 invoke}
+    bind . &lt;Key-w&gt; {.b2 flash; .b2 invoke}
+    pack .b1 .b2</PRE>
+<H3><A NAME="M20">SEE ALSO</A></H3>
+<B><A HREF="../TkCmd/ttk_button.htm">ttk::button</A></B>
+<H3><A NAME="M21">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#button">button</A>, <A href="../Keywords/W.htm#widget">widget</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

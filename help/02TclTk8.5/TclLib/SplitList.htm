@@ -1,4 +1,35 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_SplitList manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_SplitList manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> SplitList</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="SplitList.htm#M2" NAME="L681">NAME</A>
+<DL><DD>Tcl_SplitList, Tcl_Merge, Tcl_ScanElement, Tcl_ConvertElement, Tcl_ScanCountedElement, Tcl_ConvertCountedElement - manipulate Tcl lists</DD></DL>
+<DD><A HREF="SplitList.htm#M3" NAME="L682">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>int
+<DD><B>Tcl_SplitList</B>(<I>interp, list, argcPtr, argvPtr</I>)
+<DD>char *
+<DD><B>Tcl_Merge</B>(<I>argc, argv</I>)
+<DD>int
+<DD><B>Tcl_ScanElement</B>(<I>src, flagsPtr</I>)
+<DD>int
+<DD><B>Tcl_ScanCountedElement</B>(<I>src, length, flagsPtr</I>)
+<DD>int
+<DD><B>Tcl_ConvertElement</B>(<I>src, dst, flags</I>)
+<DD>int
+<DD><B>Tcl_ConvertCountedElement</B>(<I>src, length, dst, flags</I>)
+</DL>
+<DD><A HREF="SplitList.htm#M4" NAME="L683">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="SplitList.htm#M5" NAME="L684">DESCRIPTION</A>
+<DD><A HREF="SplitList.htm#M6" NAME="L685">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_SplitList, Tcl_Merge, Tcl_ScanElement, Tcl_ConvertElement, Tcl_ScanCountedElement, Tcl_ConvertCountedElement - manipulate Tcl lists
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -16,7 +47,7 @@ int<BR>
 int<BR>
 <B>Tcl_ConvertCountedElement</B>(<I>src, length, dst, flags</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (out)<DD>
 Interpreter to use for error reporting.  If NULL, then no error message
 is left.
@@ -129,7 +160,7 @@ include spaces between adjacent list elements.
 <B>Tcl_ConvertElement</B> uses one of two different approaches to
 handle the special characters in <I>src</I>.  Wherever possible, it
 handles special characters by surrounding the string with braces.
-This produces clean-looking output, but can't be used in some situations,
+This produces clean-looking output, but cannot be used in some situations,
 such as when <I>src</I> contains unmatched braces.
 In these situations, <B>Tcl_ConvertElement</B> handles special
 characters by generating backslash sequences for them.
@@ -144,7 +175,9 @@ the command not to be parsed correctly.
 <P>
 By default, <B>Tcl_ConvertElement</B> will use quoting in its output
 to be sure the first character of an element is not the hash
-character (``#'').  This is to be sure the first element of any list
+character
+(&#8220;#&#8221;.)
+This is to be sure the first element of any list
 passed to <B><A HREF="../TclCmd/eval.htm">eval</A></B> is not mis-parsed as the beginning of a comment.
 When a list element is not the first element of a list, this quoting
 is not necessary.  When the caller can be sure that the element is
@@ -159,8 +192,8 @@ argument, and the string may contain embedded nulls.
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#backslash">backslash</A>, <A href="../Keywords/C.htm#convert">convert</A>, <A href="../Keywords/E.htm#element">element</A>, <A href="../Keywords/L.htm#list">list</A>, <A href="../Keywords/M.htm#merge">merge</A>, <A href="../Keywords/S.htm#split">split</A>, <A href="../Keywords/S.htm#strings">strings</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1989-1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1989-1993 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

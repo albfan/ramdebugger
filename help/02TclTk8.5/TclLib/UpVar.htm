@@ -1,4 +1,27 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_UpVar manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_UpVar manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> UpVar</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="UpVar.htm#M2" NAME="L805">NAME</A>
+<DL><DD>Tcl_UpVar, Tcl_UpVar2 - link one variable to another</DD></DL>
+<DD><A HREF="UpVar.htm#M3" NAME="L806">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>int
+<DD><B>Tcl_UpVar(</B><I>interp, frameName, sourceName, destName, flags</I><B>)</B>
+<DD>int
+<DD><B>Tcl_UpVar2(</B><I>interp, frameName, name1, name2, destName, flags</I><B>)</B>
+</DL>
+<DD><A HREF="UpVar.htm#M4" NAME="L807">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="UpVar.htm#M5" NAME="L808">DESCRIPTION</A>
+<DD><A HREF="UpVar.htm#M6" NAME="L809">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_UpVar, Tcl_UpVar2 - link one variable to another
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -8,7 +31,7 @@ int<BR>
 int<BR>
 <B>Tcl_UpVar2(</B><I>interp, frameName, name1, name2, destName, flags</I><B>)</B><BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter containing variables;  also used for error reporting.
 <P><DT>const char <B>*frameName</B> (in)<DD>
@@ -25,9 +48,10 @@ variable so that references to <I>destName</I>
 refer to the other variable.  Must not currently exist except as
 an upvar-ed variable.
 <P><DT>int <B>flags</B> (in)<DD>
-Either <B>TCL_GLOBAL_ONLY</B> or 0;  if non-zero, then <I>destName</I> is
-a global variable;  otherwise it is a local to the current procedure
-(or global if no procedure is active).
+One of <B>TCL_GLOBAL_ONLY</B>, <B>TCL_NAMESPACE_ONLY</B> or 0;  if non-zero,
+then <I>destName</I> is a global or namespace variable;  otherwise it is
+local to the current procedure (or current namespace if no procedure is
+active). 
 <P><DT>const char <B>*name1</B> (in)<DD>
 First part of source variable's name (scalar name, or name of array
 without array index).
@@ -57,8 +81,8 @@ it must exist as a linked variable.
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/L.htm#linked variable">linked variable</A>, <A href="../Keywords/U.htm#upvar">upvar</A>, <A href="../Keywords/V.htm#variable">variable</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

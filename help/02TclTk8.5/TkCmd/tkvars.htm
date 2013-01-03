@@ -1,11 +1,17 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - tkvars manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>tkvars manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> tkvars</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 tkvars - Variables used or set by Tk
 <H3><A NAME="M3">DESCRIPTION</A></H3>
 The following Tcl variables are either set or used by Tk at various times
 in its execution:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M4"><B>tk_library</B></A><DD>
 This variable holds the file name for a directory containing a library
 of Tcl scripts related to Tk.  These scripts include an initialization
@@ -17,7 +23,7 @@ an interpreter;  this is done by searching several different directories
 until one is found that contains an appropriate Tk startup script.
 If the <B>TK_LIBRARY</B> environment variable exists, then
 the directory it names is checked first.
-If <B>TK_LIBRARY</B> isn't set or doesn't refer to an appropriate
+If <B>TK_LIBRARY</B> is not set or does not refer to an appropriate
 directory, then Tk checks several other directories based on a
 compiled-in default location, the location of the Tcl library directory,
 the location of the binary containing the application, and the current
@@ -59,8 +65,8 @@ major version number changes.
 <P></DL>
 <H3><A NAME="M11">KEYWORDS</A></H3>
 <A href="../Keywords/V.htm#variables">variables</A>, <A href="../Keywords/V.htm#version">version</A>, <A href="../Keywords/T.htm#text">text</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

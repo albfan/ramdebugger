@@ -1,0 +1,213 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>One-Step Query Execution Interface</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: "Verdana" "sans-serif";
+    padding: 8px 1%;
+}
+
+a { color: #45735f }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:240px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.toolbar {
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding:1px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #80a796; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* rounded corners */
+.se  { background: url(../images/se.png) 100% 100% no-repeat #80a796}
+.sw  { background: url(../images/sw.png) 0% 100% no-repeat }
+.ne  { background: url(../images/ne.png) 100% 0% no-repeat }
+.nw  { background: url(../images/nw.png) 0% 0% no-repeat }
+
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="../index.html">
+<img class="logo" src="../images/SQLite.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% style="clear:both"><tr><td>
+  <div class="se"><div class="sw"><div class="ne"><div class="nw">
+  <div class="toolbar">
+    <a href="../about.html">About</a>
+    <a href="../sitemap.html">Sitemap</a>
+    <a href="../docs.html">Documentation</a>
+    <a href="../download.html">Download</a>
+    <a href="../copyright.html">License</a>
+    <a href="../news.html">News</a>
+    <a href="http://www.sqlite.org/cvstrac/index">Developers</a>
+    <a href="../support.html">Support</a>
+  </div></div></div></div></div>
+</td></tr></table>
+  
+<a href="intro.html"><h2>SQLite C Interface</h2></a><h2>One-Step Query Execution Interface</h2><blockquote><pre>int sqlite3_exec(
+  sqlite3*,                                  /* An open database */
+  const char *sql,                           /* SQL to be evaluated */
+  int (*callback)(void*,int,char**,char**),  /* Callback function */
+  void *,                                    /* 1st argument to callback */
+  char **errmsg                              /* Error msg written here */
+);
+</pre></blockquote><p>
+The sqlite3_exec() interface is a convenient way of running one or more
+SQL statements without having to write a lot of C code.  The UTF-8 encoded
+SQL statements are passed in as the second parameter to sqlite3_exec().
+The statements are evaluated one by one until either an error or
+an interrupt is encountered, or until they are all done.  The 3rd parameter
+is an optional callback that is invoked once for each row of any query
+results produced by the SQL statements.  The 5th parameter tells where
+to write any error messages.</p>
+
+<p>The error message passed back through the 5th parameter is held
+in memory obtained from <a href="../c3ref/free.html">sqlite3_malloc()</a>.  To avoid a memory leak,
+the calling application should call <a href="../c3ref/free.html">sqlite3_free()</a> on any error
+message returned through the 5th parameter when it has finished using
+the error message.</p>
+
+<p>If the SQL statement in the 2nd parameter is NULL or an empty string
+or a string containing only whitespace and comments, then no SQL
+statements are evaluated and the database is not changed.</p>
+
+<p>The sqlite3_exec() interface is implemented in terms of
+<a href="../c3ref/prepare.html">sqlite3_prepare_v2()</a>, <a href="../c3ref/step.html">sqlite3_step()</a>, and <a href="../c3ref/finalize.html">sqlite3_finalize()</a>.
+The sqlite3_exec() routine does nothing to the database that cannot be done
+by <a href="../c3ref/prepare.html">sqlite3_prepare_v2()</a>, <a href="../c3ref/step.html">sqlite3_step()</a>, and <a href="../c3ref/finalize.html">sqlite3_finalize()</a>.</p>
+
+<p><h3>Invariants:</h3>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr><td valign="top">H12101</td> 
+<td valign="top">
+A successful invocation of <a href="../c3ref/exec.html">sqlite3_exec(D,S,C,A,E)</a>
+shall sequentially evaluate all of the UTF-8 encoded,
+semicolon-separated SQL statements in the zero-terminated
+string S within the context of the <a href="../c3ref/sqlite3.html">database connection</a> D.</td></tr>
+<tr><td valign="top">H12102</td> 
+<td valign="top">
+If the S parameter to <a href="../c3ref/exec.html">sqlite3_exec(D,S,C,A,E)</a> is NULL then
+the actions of the interface shall be the same as if the
+S parameter were an empty string.</td></tr>
+<tr><td valign="top">H12104</td> 
+<td valign="top">
+The return value of <a href="../c3ref/exec.html">sqlite3_exec()</a> shall be <a href="../c3ref/c_abort.html">SQLITE_OK</a> if all
+SQL statements run successfully and to completion.</td></tr>
+<tr><td valign="top">H12105</td> 
+<td valign="top">
+The return value of <a href="../c3ref/exec.html">sqlite3_exec()</a> shall be an appropriate
+non-zero <a href="../c3ref/c_abort.html">error code</a> if any SQL statement fails.</td></tr>
+<tr><td valign="top">H12107</td> 
+<td valign="top">
+If one or more of the SQL statements handed to <a href="../c3ref/exec.html">sqlite3_exec()</a>
+return results and the 3rd parameter is not NULL, then
+the callback function specified by the 3rd parameter shall be
+invoked once for each row of result.</td></tr>
+<tr><td valign="top">H12110</td> 
+<td valign="top">
+If the callback returns a non-zero value then <a href="../c3ref/exec.html">sqlite3_exec()</a>
+shall abort the SQL statement it is currently evaluating,
+skip all subsequent SQL statements, and return <a href="../c3ref/c_abort.html">SQLITE_ABORT</a>.</td></tr>
+<tr><td valign="top">H12113</td> 
+<td valign="top">
+The <a href="../c3ref/exec.html">sqlite3_exec()</a> routine shall pass its 4th parameter through
+as the 1st parameter of the callback.</td></tr>
+<tr><td valign="top">H12116</td> 
+<td valign="top">
+The <a href="../c3ref/exec.html">sqlite3_exec()</a> routine shall set the 2nd parameter of its
+callback to be the number of columns in the current row of
+result.</td></tr>
+<tr><td valign="top">H12119</td> 
+<td valign="top">
+The <a href="../c3ref/exec.html">sqlite3_exec()</a> routine shall set the 3rd parameter of its
+callback to be an array of pointers to strings holding the
+values for each column in the current result set row as
+obtained from <a href="../c3ref/column_blob.html">sqlite3_column_text()</a>.</td></tr>
+<tr><td valign="top">H12122</td> 
+<td valign="top">
+The <a href="../c3ref/exec.html">sqlite3_exec()</a> routine shall set the 4th parameter of its
+callback to be an array of pointers to strings holding the
+names of result columns as obtained from <a href="../c3ref/column_name.html">sqlite3_column_name()</a>.</td></tr>
+<tr><td valign="top">H12125</td> 
+<td valign="top">
+If the 3rd parameter to <a href="../c3ref/exec.html">sqlite3_exec()</a> is NULL then
+<a href="../c3ref/exec.html">sqlite3_exec()</a> shall silently discard query results.</td></tr>
+<tr><td valign="top">H12131</td> 
+<td valign="top">
+If an error occurs while parsing or evaluating any of the SQL
+statements in the S parameter of <a href="../c3ref/exec.html">sqlite3_exec(D,S,C,A,E)</a> and if
+the E parameter is not NULL, then <a href="../c3ref/exec.html">sqlite3_exec()</a> shall store
+in *E an appropriate error message written into memory obtained
+from <a href="../c3ref/free.html">sqlite3_malloc()</a>.</td></tr>
+<tr><td valign="top">H12134</td> 
+<td valign="top">
+The <a href="../c3ref/exec.html">sqlite3_exec(D,S,C,A,E)</a> routine shall set the value of
+*E to NULL if E is not NULL and there are no errors.</td></tr>
+<tr><td valign="top">H12137</td> 
+<td valign="top">
+The <a href="../c3ref/exec.html">sqlite3_exec(D,S,C,A,E)</a> function shall set the <a href="../c3ref/c_abort.html">error code</a>
+and message accessible via <a href="../c3ref/errcode.html">sqlite3_errcode()</a>,
+<a href="../c3ref/errcode.html">sqlite3_extended_errcode()</a>,
+<a href="../c3ref/errcode.html">sqlite3_errmsg()</a>, and <a href="../c3ref/errcode.html">sqlite3_errmsg16()</a>.</td></tr>
+<tr><td valign="top">H12138</td> 
+<td valign="top">
+If the S parameter to <a href="../c3ref/exec.html">sqlite3_exec(D,S,C,A,E)</a> is NULL or an
+empty string or contains nothing other than whitespace, comments,
+and/or semicolons, then results of <a href="../c3ref/errcode.html">sqlite3_errcode()</a>,
+<a href="../c3ref/errcode.html">sqlite3_extended_errcode()</a>,
+<a href="../c3ref/errcode.html">sqlite3_errmsg()</a>, and <a href="../c3ref/errcode.html">sqlite3_errmsg16()</a>
+shall reset to indicate no errors.</td></tr>
+</table></p>
+
+<p><h3>Assumptions:</h3>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr><td valign="top">A12141</td> 
+<td valign="top">
+The first parameter to <a href="../c3ref/exec.html">sqlite3_exec()</a> must be an valid and open
+<a href="../c3ref/sqlite3.html">database connection</a>.</td></tr>
+<tr><td valign="top">A12142</td> 
+<td valign="top">
+The database connection must not be closed while
+<a href="../c3ref/exec.html">sqlite3_exec()</a> is running.</td></tr>
+<tr><td valign="top">A12143</td> 
+<td valign="top">
+The calling function should use <a href="../c3ref/free.html">sqlite3_free()</a> to free
+the memory that *errmsg is left pointing at once the error
+message is no longer needed.</td></tr>
+<tr><td valign="top">A12145</td> 
+<td valign="top">
+The SQL statement text in the 2nd parameter to <a href="../c3ref/exec.html">sqlite3_exec()</a>
+must remain unchanged while <a href="../c3ref/exec.html">sqlite3_exec()</a> is running.</td></tr>
+</table>
+</p><p>See also lists of
+  <a href="objlist.html">Objects</a>,
+  <a href="constlist.html">Constants</a>, and
+  <a href="funclist.html">Functions</a>.</p><hr><small><i>
+This page last modified 2008/12/09 18:44:04 UTC
+</i></small></div></body></html>

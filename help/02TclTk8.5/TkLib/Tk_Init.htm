@@ -1,15 +1,26 @@
-<HTML><HEAD><TITLE>Tk Library Procedures - Tk_Init manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_Init manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> Tk_Init</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
 <DD><A HREF="Tk_Init.htm#M2" NAME="L601">NAME</A>
-<DL><DD>Tk_Init, Tk_SafeInit - add Tk to an interpreter and make a new Tk application.</DL>
+<DL><DD>Tk_Init, Tk_SafeInit - add Tk to an interpreter and make a new Tk application.</DD></DL>
 <DD><A HREF="Tk_Init.htm#M3" NAME="L602">SYNOPSIS</A>
 <DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>int
+<DD><B>Tk_Init</B>(<I>interp</I>)
+<DD>int
+<DD><B>Tk_SafeInit</B>(<I>interp</I>)
 </DL>
 <DD><A HREF="Tk_Init.htm#M4" NAME="L603">ARGUMENTS</A>
-<DL>
+<DL class="arguments">
 </DL>
 <DD><A HREF="Tk_Init.htm#M5" NAME="L604">DESCRIPTION</A>
-<DL>
+<DL class="description">
 <DD><A HREF="Tk_Init.htm#M6" NAME="L605"><B>bell</B></A>
 <DD><A HREF="Tk_Init.htm#M7" NAME="L606"><B>clipboard</B></A>
 <DD><A HREF="Tk_Init.htm#M8" NAME="L607"><B>grab</B></A>
@@ -22,7 +33,7 @@
 <DD><A HREF="Tk_Init.htm#M15" NAME="L614"><B>wm</B></A>
 </DL>
 <DD><A HREF="Tk_Init.htm#M16" NAME="L615">KEYWORDS</A>
-</DL><HR>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_Init, Tk_SafeInit - add Tk to an interpreter and make a new Tk application.
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -32,7 +43,7 @@ int<BR>
 int<BR>
 <B>Tk_SafeInit</B>(<I>interp</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter in which to load Tk.  Tk should not already be loaded
 in this interpreter.
@@ -59,13 +70,14 @@ its command-line arguments).
 all Tk commands that are considered unsafe.  Those commands and the
 reasons for their exclusion are:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M6"><B>bell</B></A><DD>
 Continuous ringing of the bell is a nuisance.
 <P><DT><A NAME="M7"><B>clipboard</B></A><DD>
 A malicious script could replace the contents of the clipboard with
-the string <B>&quot;rm -r *&quot;</B> and lead to surprises when the contents of
-the clipboard are pasted.
+the string
+&#8220;<B>rm -r *</B>&#8221;
+and lead to surprises when the contents of the clipboard are pasted.
 <P><DT><A NAME="M8"><B>grab</B></A><DD>
 Grab can be used to block the user from using any other applications.
 <P><DT><A NAME="M9"><B>menu</B></A><DD>
@@ -89,7 +101,7 @@ move windows around, etc.
 <P></DL>
 <H3><A NAME="M16">KEYWORDS</A></H3>
 <A href="../Keywords/S.htm#safe">safe</A>, <A href="../Keywords/A.htm#application">application</A>, <A href="../Keywords/I.htm#initialization">initialization</A>, <A href="../Keywords/L.htm#load">load</A>, <A href="../Keywords/M.htm#main window">main window</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1995-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

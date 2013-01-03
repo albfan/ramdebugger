@@ -1,33 +1,37 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - socket manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>socket manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> socket</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="socket.htm#M2" NAME="L1353">NAME</A>
-<DL><DD>socket - Open a TCP network connection</DL>
-<DD><A HREF="socket.htm#M3" NAME="L1354">SYNOPSIS</A>
+<DD><A HREF="socket.htm#M2" NAME="L1487">NAME</A>
+<DL><DD>socket - Open a TCP network connection</DD></DL>
+<DD><A HREF="socket.htm#M3" NAME="L1488">SYNOPSIS</A>
 <DL>
-<DD><B>socket </B>?<I>options</I>? <I>host port</I>
-<DD><B>socket</B> <B>-server </B><I>command</I> ?<I>options</I>? <I>port</I>
 </DL>
-<DD><A HREF="socket.htm#M4" NAME="L1355">DESCRIPTION</A>
-<DD><A HREF="socket.htm#M5" NAME="L1356">CLIENT SOCKETS</A>
-<DL>
-<DD><A HREF="socket.htm#M6" NAME="L1357"><B>-myaddr</B><I> addr</I></A>
-<DD><A HREF="socket.htm#M7" NAME="L1358"><B>-myport</B><I> port</I></A>
-<DD><A HREF="socket.htm#M8" NAME="L1359"><B>-async</B></A>
+<DD><A HREF="socket.htm#M4" NAME="L1489">DESCRIPTION</A>
+<DD><A HREF="socket.htm#M5" NAME="L1490">CLIENT SOCKETS</A>
+<DL class="client sockets">
+<DD><A HREF="socket.htm#M6" NAME="L1491"><B>-myaddr</B><I> addr</I></A>
+<DD><A HREF="socket.htm#M7" NAME="L1492"><B>-myport</B><I> port</I></A>
+<DD><A HREF="socket.htm#M8" NAME="L1493"><B>-async</B></A>
 </DL>
-<DD><A HREF="socket.htm#M9" NAME="L1360">SERVER SOCKETS</A>
-<DL>
-<DD><A HREF="socket.htm#M10" NAME="L1361"><B>-myaddr</B><I> addr</I></A>
+<DD><A HREF="socket.htm#M9" NAME="L1494">SERVER SOCKETS</A>
+<DL class="server sockets">
+<DD><A HREF="socket.htm#M10" NAME="L1495"><B>-myaddr</B><I> addr</I></A>
 </DL>
-<DD><A HREF="socket.htm#M11" NAME="L1362">CONFIGURATION OPTIONS</A>
-<DL>
-<DD><A HREF="socket.htm#M12" NAME="L1363"><B>-error</B></A>
-<DD><A HREF="socket.htm#M13" NAME="L1364"><B>-sockname</B></A>
-<DD><A HREF="socket.htm#M14" NAME="L1365"><B>-peername</B></A>
+<DD><A HREF="socket.htm#M11" NAME="L1496">CONFIGURATION OPTIONS</A>
+<DL class="configuration options">
+<DD><A HREF="socket.htm#M12" NAME="L1497"><B>-error</B></A>
+<DD><A HREF="socket.htm#M13" NAME="L1498"><B>-sockname</B></A>
+<DD><A HREF="socket.htm#M14" NAME="L1499"><B>-peername</B></A>
 </DL>
-<DD><A HREF="socket.htm#M15" NAME="L1366">EXAMPLES</A>
-<DD><A HREF="socket.htm#M16" NAME="L1367">SEE ALSO</A>
-<DD><A HREF="socket.htm#M17" NAME="L1368">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="socket.htm#M15" NAME="L1500">EXAMPLES</A>
+<DD><A HREF="socket.htm#M16" NAME="L1501">SEE ALSO</A>
+<DD><A HREF="socket.htm#M17" NAME="L1502">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 socket - Open a TCP network connection
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -65,7 +69,7 @@ Use <I>localhost</I> to refer to the host on which the command is invoked.
 The following options may also be present before <I>host</I>
 to specify additional information about the connection:
 <P>
-<DL>
+<DL class="client sockets">
 <DT><A NAME="M6"><B>-myaddr</B><I> addr</I></A><DD>
 <I>Addr</I> gives the domain-style name or numerical IP address of
 the client-side network interface to use for the connection.
@@ -87,7 +91,11 @@ connection attempt succeeds or fails, if the socket is in blocking mode, the
 operation will wait until the connection is completed or fails. If the
 socket is in nonblocking mode and a <B><A HREF="../TclCmd/gets.htm">gets</A></B> or <B><A HREF="../TclCmd/flush.htm">flush</A></B> is done on
 the socket before the connection attempt succeeds or fails, the operation
-returns immediately and <B><A HREF="../TclCmd/fblocked.htm">fblocked</A></B> on the socket returns 1.
+returns immediately and <B><A HREF="../TclCmd/fblocked.htm">fblocked</A></B> on the socket returns 1. Synchronous
+client sockets may be switched (after they have connected) to operating in
+asynchronous mode using:
+<PRE><B>fconfigure </B><I>chan </I><B>-blocking 0</B></PRE>
+<P>See the <B><A HREF="../TclCmd/fconfigure.htm">fconfigure</A></B> command for more details.
 <P></DL>
 <H3><A NAME="M9">SERVER SOCKETS</A></H3>
 If the <B>-server</B> option is specified then the new socket
@@ -105,7 +113,7 @@ the client's port number.
 <P>
 The following additional option may also be specified before <I>host</I>:
 <P>
-<DL>
+<DL class="server sockets">
 <DT><A NAME="M10"><B>-myaddr</B><I> addr</I></A><DD>
 <I>Addr</I> gives the domain-style name or numerical IP address of
 the server-side network interface to use for the connection.
@@ -122,7 +130,7 @@ channel shuts down the server so that no new connections will be
 accepted;  however, existing connections will be unaffected.
 <P>
 Server sockets depend on the Tcl event mechanism to find out when
-new connections are opened.  If the application doesn't enter the
+new connections are opened.  If the application does not enter the
 event loop, for example by invoking the <B><A HREF="../TclCmd/vwait.htm">vwait</A></B> command or
 calling the C procedure <B><A HREF="../TclLib/DoOneEvent.htm">Tcl_DoOneEvent</A></B>, then no connections
 will be accepted.
@@ -136,7 +144,7 @@ described below.
 The <B><A HREF="../TclCmd/fconfigure.htm">fconfigure</A></B> command can be used to query several readonly
 configuration options for socket channels:
 <P>
-<DL>
+<DL class="configuration options">
 <DT><A NAME="M12"><B>-error</B></A><DD>
 This option gets the current error status of the given socket.  This
 is useful when you need to determine if an asynchronous connect
@@ -176,8 +184,8 @@ puts &quot;The time on $server is $line&quot;</PRE>
 <B><A HREF="../TclCmd/fconfigure.htm">fconfigure</A></B>, <B><A HREF="../TclCmd/flush.htm">flush</A></B>, <B><A HREF="../TclCmd/open.htm">open</A></B>, <B><A HREF="../TclCmd/read.htm">read</A></B>
 <H3><A NAME="M17">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#bind">bind</A>, <A href="../Keywords/C.htm#channel">channel</A>, <A href="../Keywords/C.htm#connection">connection</A>, <A href="../Keywords/D.htm#domain name">domain name</A>, <A href="../Keywords/H.htm#host">host</A>, <A href="../Keywords/N.htm#network address">network address</A>, <A href="../Keywords/S.htm#socket">socket</A>, <A href="../Keywords/T.htm#tcp">tcp</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1998-1999 by Scriptics Corporation.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1996 Sun Microsystems, Inc.
+Copyright &copy; 1998-1999 by Scriptics Corporation.
+</div>
 </BODY></HTML>

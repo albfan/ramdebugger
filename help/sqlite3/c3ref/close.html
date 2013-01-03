@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>Closing A Database Connection</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: "Verdana" "sans-serif";
+    padding: 8px 1%;
+}
+
+a { color: #45735f }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:240px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.toolbar {
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding:1px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #80a796; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* rounded corners */
+.se  { background: url(../images/se.png) 100% 100% no-repeat #80a796}
+.sw  { background: url(../images/sw.png) 0% 100% no-repeat }
+.ne  { background: url(../images/ne.png) 100% 0% no-repeat }
+.nw  { background: url(../images/nw.png) 0% 0% no-repeat }
+
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="../index.html">
+<img class="logo" src="../images/SQLite.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% style="clear:both"><tr><td>
+  <div class="se"><div class="sw"><div class="ne"><div class="nw">
+  <div class="toolbar">
+    <a href="../about.html">About</a>
+    <a href="../sitemap.html">Sitemap</a>
+    <a href="../docs.html">Documentation</a>
+    <a href="../download.html">Download</a>
+    <a href="../copyright.html">License</a>
+    <a href="../news.html">News</a>
+    <a href="http://www.sqlite.org/cvstrac/index">Developers</a>
+    <a href="../support.html">Support</a>
+  </div></div></div></div></div>
+</td></tr></table>
+  
+<a href="intro.html"><h2>SQLite C Interface</h2></a><h2>Closing A Database Connection</h2><blockquote><pre>int sqlite3_close(sqlite3 *);
+</pre></blockquote><p>
+This routine is the destructor for the <a href="../c3ref/sqlite3.html">sqlite3</a> object.</p>
+
+<p>Applications should <a href="../c3ref/finalize.html">finalize</a> all <a href="../c3ref/stmt.html">prepared statements</a>
+and <a href="../c3ref/blob_close.html">close</a> all <a href="../c3ref/blob.html">BLOB handles</a> associated with
+the <a href="../c3ref/sqlite3.html">sqlite3</a> object prior to attempting to close the object.
+The <a href="../c3ref/next_stmt.html">sqlite3_next_stmt()</a> interface can be used to locate all
+<a href="../c3ref/stmt.html">prepared statements</a> associated with a <a href="../c3ref/sqlite3.html">database connection</a> if desired.
+Typical code might look like this:</p>
+
+<p><blockquote><pre>
+sqlite3_stmt *pStmt;
+while( (pStmt = sqlite3_next_stmt(db, 0))!=0 ){
+&nbsp;   sqlite3_finalize(pStmt);
+}
+</pre></blockquote></p>
+
+<p>If <a href="../c3ref/close.html">sqlite3_close()</a> is invoked while a transaction is open,
+the transaction is automatically rolled back.</p>
+
+<p><h3>Invariants:</h3>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr><td valign="top">H12011</td> 
+<td valign="top">
+A successful call to <a href="../c3ref/close.html">sqlite3_close(C)</a> shall destroy the
+<a href="../c3ref/sqlite3.html">database connection</a> object C.</td></tr>
+<tr><td valign="top">H12012</td> 
+<td valign="top">
+A successful call to <a href="../c3ref/close.html">sqlite3_close(C)</a> shall return SQLITE_OK.</td></tr>
+<tr><td valign="top">H12013</td> 
+<td valign="top">
+A successful call to <a href="../c3ref/close.html">sqlite3_close(C)</a> shall release all
+memory and system resources associated with <a href="../c3ref/sqlite3.html">database connection</a>
+C.</td></tr>
+<tr><td valign="top">H12014</td> 
+<td valign="top">
+A call to <a href="../c3ref/close.html">sqlite3_close(C)</a> on a <a href="../c3ref/sqlite3.html">database connection</a> C that
+has one or more open <a href="../c3ref/stmt.html">prepared statements</a> shall fail with
+an <a href="../c3ref/c_abort.html">SQLITE_BUSY</a> error code.</td></tr>
+<tr><td valign="top">H12015</td> 
+<td valign="top">
+A call to <a href="../c3ref/close.html">sqlite3_close(C)</a> where C is a NULL pointer shall
+be a harmless no-op returning SQLITE_OK.</td></tr>
+<tr><td valign="top">H12019</td> 
+<td valign="top">
+When <a href="../c3ref/close.html">sqlite3_close(C)</a> is invoked on a <a href="../c3ref/sqlite3.html">database connection</a> C
+that has a pending transaction, the transaction shall be
+rolled back.</td></tr>
+</table></p>
+
+<p><h3>Assumptions:</h3>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr><td valign="top">A12016</td> 
+<td valign="top">
+The C parameter to <a href="../c3ref/close.html">sqlite3_close(C)</a> must be either a NULL
+pointer or an <a href="../c3ref/sqlite3.html">sqlite3</a> object pointer obtained
+from <a href="../c3ref/open.html">sqlite3_open()</a>, <a href="../c3ref/open.html">sqlite3_open16()</a>, or
+<a href="../c3ref/open.html">sqlite3_open_v2()</a>, and not previously closed.</td></tr>
+</table>
+</p><p>See also lists of
+  <a href="objlist.html">Objects</a>,
+  <a href="constlist.html">Constants</a>, and
+  <a href="funclist.html">Functions</a>.</p><hr><small><i>
+This page last modified 2008/12/09 18:44:04 UTC
+</i></small></div></body></html>

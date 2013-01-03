@@ -158,7 +158,7 @@ proc ::TreeCtrl::FullTkTreeMotion1 {T x y} {
 	    if { $id eq "" || [lindex $id 0] ne "item" || [lindex $id 1] eq "" } {
 		return
 	    }
-	    set item [dict get $id item]
+	    set item [lindex $id 1]
 	    if { [$T item numchildren $item] && ![$T item state get $item open] } {
 		set Priv(after_open_dir,$T) [after 500 [list \
 		            ::TreeCtrl::FullTkTreeMotion1OpenDir $T $item]]
@@ -317,34 +317,38 @@ proc ::TreeCtrl::FullTkTreeMotion {T x y} {
 
 	    if { [package vcompare [package present treectrl] 2.1] >= 0 } {
 		foreach item $Priv(drop) {
-		    $T item element configure $item 0 e_selmarker_up -fill ""
-		    $T item element configure $item 0 e_selmarker_down -fill ""
-		    $T item element configure $item 0 e_rect -draw 1
-		    $T item element configure $item 0 e_text_sel -fill \
-		        [list $fulltktree::SystemHighlightText {selected focus}]
+		    for { set col 0 } { $col < [$T column count] } { incr col } {
+		        $T item element configure $item $col e_selmarker_up -fill ""
+		        $T item element configure $item $col e_selmarker_down -fill ""
+		        $T item element configure $item $col e_rect -draw 1
+		        $T item element configure $item $col e_text_sel -fill \
+		            [list $fulltktree::SystemHighlightText {selected focus}]
+		    }
 		}
 		foreach item $drop {
 		    foreach "- y1 - y2" [$T item bbox $item] break
-		    if { $y < [expr {.667*$y1+.333*$y2}] } {
-		        $T item element configure $item 0 e_selmarker_up -fill \
-		            [list black {selected focus} gray {selected !focus}]
-		        $T item element configure $item 0 e_selmarker_down -fill ""
-		        $T item element configure $item 0 e_rect -draw 0
-		        $T item element configure $item 0 e_text_sel -fill \
-		            [list "" {selected focus}]
-		    } elseif { $y < [expr {.333*$y1+.667*$y2}] } {
-		        $T item element configure $item 0 e_selmarker_up -fill ""
-		        $T item element configure $item 0 e_selmarker_down -fill ""
-		        $T item element configure $item 0 e_rect -draw 1
-		        $T item element configure $item 0 e_text_sel -fill \
-		            [list $fulltktree::SystemHighlightText {selected focus}]
-		    } else {
-		        $T item element configure $item 0 e_selmarker_up -fill ""
-		        $T item element configure $item 0 e_selmarker_down -fill \
-		            [list black {selected focus} gray {selected !focus}]
-		        $T item element configure $item 0 e_rect -draw 0
-		        $T item element configure $item 0 e_text_sel -fill \
-		            [list "" {selected focus}]
+		    for { set col 0 } { $col < [$T column count] } { incr col } {
+		        if { $y < [expr {.667*$y1+.333*$y2}] } {
+		            $T item element configure $item $col e_selmarker_up -fill \
+		                [list black {selected focus} gray {selected !focus}]
+		            $T item element configure $item $col e_selmarker_down -fill ""
+		            $T item element configure $item $col e_rect -draw 0
+		            $T item element configure $item $col e_text_sel -fill \
+		                [list "" {selected focus}]
+		        } elseif { $y < [expr {.333*$y1+.667*$y2}] } {
+		            $T item element configure $item $col e_selmarker_up -fill ""
+		            $T item element configure $item $col e_selmarker_down -fill ""
+		            $T item element configure $item $col e_rect -draw 1
+		            $T item element configure $item $col e_text_sel -fill \
+		                [list $fulltktree::SystemHighlightText {selected focus}]
+		        } else {
+		            $T item element configure $item $col e_selmarker_up -fill ""
+		            $T item element configure $item $col e_selmarker_down -fill \
+		                [list black {selected focus} gray {selected !focus}]
+		            $T item element configure $item $col e_rect -draw 0
+		            $T item element configure $item $col e_text_sel -fill \
+		                [list "" {selected focus}]
+		        }
 		    }
 		}
 	    }
@@ -393,15 +397,17 @@ proc ::TreeCtrl::FullTkTreeRelease1 {T x y} {
 		    $T selection modify {} $Priv(drop)
 		    if { [package vcompare [package present treectrl] 2.1] >= 0 } {
 		        foreach item $Priv(drop) {
-		            $T item element configure $item 0 e_selmarker_up -fill ""
-		            $T item element configure $item 0 e_selmarker_down -fill ""
-		            $T item element configure $item 0 e_rect -draw 1
-		            $T item element configure $item 0 e_text_sel -fill \
-		                [list $fulltktree::SystemHighlightText {selected focus}]
+		            for { set col 0 } { $col < [$T column count] } { incr col } {
+		                $T item element configure $item $col e_selmarker_up -fill ""
+		                $T item element configure $item $col e_selmarker_down -fill ""
+		                $T item element configure $item $col e_rect -draw 1
+		                $T item element configure $item $col e_text_sel -fill \
+		                    [list $fulltktree::SystemHighlightText {selected focus}]
+		            }
 		        }
 		    }
 		    TryEvent $T Drag receive \
-		        [list I $Priv(drop) l $Priv(selection) x $x y $y]
+		        [list W $T I $Priv(drop) l $Priv(selection) x $x y $y]
 		}
 		TryEvent $T Drag end {}
 	    } elseif {$Priv(selectMode) eq "toggle"} {
@@ -409,34 +415,34 @@ proc ::TreeCtrl::FullTkTreeRelease1 {T x y} {
 
 		# Clicked/released a selected item, but didn't drag
 	    } elseif {$Priv(drag,wasSel)} {
-		if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-		    set I [$T item id active]
-		} else {
-		    set I [$T index active]
-		}
-		set C $Priv(drag,C)
-		set E $Priv(drag,E)
-		set S [$T item style set $I $C]
-		set ok 0
-		foreach list $Priv(edit,$T) {
-		    set eC [lindex $list 0]
-		    set eS [lindex $list 1]
-		    set eEList [lrange $list 2 end]
-		    if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-		        if {[$T column compare $C != $eC]} continue
-		    } else {
-		        if { $C != $eC } continue
-		    }
-		    if {$S ne $eS} continue
-		    if {[lsearch -exact $eEList $E] == -1} continue
-		    set ok 1
-		    break
-		}
-		if {$ok} {
-		    FullTkTreeEditCancel $T
-		    set Priv(editId,$T) \
-		        [after $Priv(edit,delay) [list ::TreeCtrl::FullTkTreeEdit $T $I $C $E]]
-		}
+#                 if { [package vcompare [package present treectrl] 2.1] >= 0 } {
+#                     set I [$T item id active]
+#                 } else {
+#                     set I [$T index active]
+#                 }
+#                 set C $Priv(drag,C)
+#                 set E $Priv(drag,E)
+#                 set S [$T item style set $I $C]
+#                 set ok 0
+#                 foreach list $Priv(edit,$T) {
+#                     set eC [lindex $list 0]
+#                     set eS [lindex $list 1]
+#                     set eEList [lrange $list 2 end]
+#                     if { [package vcompare [package present treectrl] 2.1] >= 0 } {
+#                         if {[$T column compare $C != $eC]} continue
+#                     } else {
+#                         if { $C != $eC } continue
+#                     }
+#                     if {$S ne $eS} continue
+#                     if {[lsearch -exact $eEList $E] == -1} continue
+#                     set ok 1
+#                     break
+#                 }
+#                 if {$ok} {
+#                     FullTkTreeEditCancel $T
+#                     set Priv(editId,$T) \
+#                         [after $Priv(edit,delay) [list ::TreeCtrl::FullTkTreeEdit $T $I $C $E]]
+#                 }
 	    }
 	}
 	default {
@@ -504,8 +510,19 @@ proc ::TreeCtrl::FullTkTreeEditCancel {T} {
     return
 }
 
-proc ::TreeCtrl::SetDragImage {T listOfLists} {
+proc ::TreeCtrl::SetDragImage { T args } {
     variable Priv
+    
+    switch [llength $args] {
+	0 {
+	    return $Priv(dragimage,$T)
+	} 1 {
+	    set listOfLists [lindex $args 0]
+	}
+	default {
+	    error "error in TreeCtrl::SetDragImage"
+	}
+    }
     foreach list $listOfLists {
 	set column [lindex $list 0]
 	set style [lindex $list 1]
@@ -528,8 +545,19 @@ proc ::TreeCtrl::SetDragImage {T listOfLists} {
     return
 }
 
-proc ::TreeCtrl::SetEditable {T listOfLists} {
+proc ::TreeCtrl::SetEditable { T args } {
     variable Priv
+    
+    switch [llength $args] {
+	0 {
+	    return $Priv(edit,$T)
+	} 1 {
+	    set listOfLists [lindex $args 0]
+	}
+	default {
+	    error "error in TreeCtrl::SetEditable"
+	}
+    }
     foreach list $listOfLists {
 	set column [lindex $list 0]
 	set style [lindex $list 1]
@@ -555,8 +583,19 @@ proc ::TreeCtrl::SetEditable {T listOfLists} {
     return
 }
 
-proc ::TreeCtrl::SetSensitive {T listOfLists} {
+proc ::TreeCtrl::SetSensitive { T args } {
     variable Priv
+    
+    switch [llength $args] {
+	0 {
+	    return $Priv(sensitive,$T)
+	} 1 {
+	    set listOfLists [lindex $args 0]
+	}
+	default {
+	    error "error in TreeCtrl::SetSensitive"
+	}
+    }
     foreach list $listOfLists {
 	set column [lindex $list 0]
 	set style [lindex $list 1]
@@ -583,6 +622,7 @@ proc ::TreeCtrl::EntryOpen {T item column element} {
 
     variable Priv
 
+    set Priv(open_widget) entry
     set Priv(entry,$T,item) $item
     set Priv(entry,$T,column) $column
     set Priv(entry,$T,element) $element
@@ -687,13 +727,18 @@ proc ::TreeCtrl::EntryExpanderOpen {T item column element} {
 
     variable Priv
 
+    set Priv(open_widget) entry
     set Priv(entry,$T,item) $item
     set Priv(entry,$T,column) $column
     set Priv(entry,$T,element) $element
     set Priv(entry,$T,focus) [focus]
 
     # Get window coords of the Element
-    scan [$T item bbox $item $column $element] "%d %d" x y
+    scan [$T item bbox $item $column $element] "%d %d %d %d" x1 y1 x2 y2
+    if { $y1 == $y2 } {
+	scan [$T item bbox $item $column] "%d %d %d %d" - y1 - y2
+	incr y1 2
+    }
 
     # Get the font used by the Element
     if { [package vcompare [package present treectrl] 2.1] >= 0 } {
@@ -763,9 +808,7 @@ proc ::TreeCtrl::EntryExpanderOpen {T item column element} {
     $T.entry selection range 0 end
 
     set ebw [$T.entry cget -borderwidth]
-    set ex [expr {$x - $ebw - 1}]
-    place $T.entry -x $ex -y [expr {$y - $ebw - 1}] \
-	-bordermode outside
+    set ex [expr {$x1 - $ebw - 1}]
 
     # Make the Entry as wide as the text plus "W" but keep it within the
     # TreeCtrl borders
@@ -775,12 +818,24 @@ proc ::TreeCtrl::EntryExpanderOpen {T item column element} {
     if {$ex + $width > $right} {
 	set width [expr {$right - $ex}]
     }
-    place configure $T.entry -width $width
+    scan [$T item bbox $item $column] "%d %d %d %d" left top right bottom
+    if {$ex + $width > $right} {
+	set width [expr {$right - $ex}]
+    }
+    set justify [$T item element cget $item $column $element -justify]
+    if { $justify eq "right" } {
+	set width [expr {$right - $ex}]
+    } elseif { $justify eq "" } {
+	set justify left
+    }
+    $T.entry configure -justify $justify
+    place $T.entry -x $ex -y [expr {$y1 - $ebw - 1}] \
+	-bordermode outside -width $width
 
     focus $T.entry
     grab $T.entry
 
-    return
+    return $T.entry
 }
 
 proc ::TreeCtrl::EntryClose {T accept} {
@@ -804,6 +859,7 @@ proc ::TreeCtrl::EntryClose {T accept} {
 	[list W $T I $Priv(entry,$T,item) C $Priv(entry,$T,column) \
 	    E $Priv(entry,$T,element)]
 
+    set Priv(open_widget) ""
     return
 }
 
@@ -823,7 +879,6 @@ proc ::TreeCtrl::EntryExpanderKeypress {T} {
     if {$ex + $width > $right} {
 	set width [expr {$right - $ex}]
     }
-
     place configure $T.entry -width $width
 
     return
@@ -832,6 +887,7 @@ proc ::TreeCtrl::EntryExpanderKeypress {T} {
 proc ::TreeCtrl::TextOpen {T item column element {width 0} {height 0}} {
     variable Priv
 
+    set Priv(open_widget) text
     set Priv(text,$T,item) $item
     set Priv(text,$T,column) $column
     set Priv(text,$T,element) $element
@@ -894,8 +950,11 @@ proc ::TreeCtrl::TextOpen {T item column element {width 0} {height 0}} {
 	TreeCtrl::TextClose %T 0
 	focus $TreeCtrl::Priv(text,%T,focus)
     }
-
-    $T.text tag configure TAG -justify [$T element cget $element -justify]
+    set justify [$T element cget $element -justify]
+    elseif { $justify eq "" } {
+	set justify left
+    }
+    $T.text tag configure TAG -justify $justify
     $T.text configure -font $font
     $T.text insert end $text
     $T.text tag add sel 1.0 end
@@ -911,7 +970,7 @@ proc ::TreeCtrl::TextOpen {T item column element {width 0} {height 0}} {
     focus $T.text
     grab $T.text
 
-    return
+    return $T.text
 }
 
 # Like TextOpen, but Text widget expands/shrinks during typing
@@ -919,6 +978,7 @@ proc ::TreeCtrl::TextExpanderOpen {T item column element width} {
 
     variable Priv
 
+    set Priv(open_widget) text
     set Priv(text,$T,item) $item
     set Priv(text,$T,column) $column
     set Priv(text,$T,element) $element
@@ -927,7 +987,8 @@ proc ::TreeCtrl::TextExpanderOpen {T item column element width} {
     # Get window coords of the Element
     scan [$T item bbox $item $column $element] "%d %d %d %d" x1 y1 x2 y2
 
-    set Priv(text,$T,center) [expr {$x1 + ($x2 - $x1) / 2}]
+#     set Priv(text,$T,center) [expr {$x1 + ($x2 - $x1) / 2}]
+    set Priv(text,$T,x1) $x1
 
     # Get the font used by the Element
     if { [package vcompare [package present treectrl] 2.1] >= 0 } {
@@ -962,11 +1023,11 @@ proc ::TreeCtrl::TextExpanderOpen {T item column element width} {
 	}
 
 	# Accept edit on <Return>
-	bind $T.text <KeyPress-Return> {
-	    TreeCtrl::TextClose [winfo parent %W] 1
-	    focus $TreeCtrl::Priv(text,[winfo parent %W],focus)
-	    break
-	}
+#         bind $T.text <KeyPress-Return> {
+#             TreeCtrl::TextClose [winfo parent %W] 1
+#             focus $TreeCtrl::Priv(text,[winfo parent %W],focus)
+#             break
+#         }
 
 	# Cancel edit on <Escape>
 	bind $T.text <KeyPress-Escape> {
@@ -1000,6 +1061,17 @@ proc ::TreeCtrl::TextExpanderOpen {T item column element width} {
     $T.text insert end $text
     $T.text tag add sel 1.0 end
     $T.text tag add TAG 1.0 end
+    
+    set tbw [$T.text cget -borderwidth]
+    set tx [expr {$x1 - $tbw - 1}]
+    scan [$T contentbox] "%d %d %d %d" left top right bottom
+    if {$tx + $width > $right} {
+	set width [expr {$right - $tx}]
+    }
+    scan [$T item bbox $item $column] "%d %d %d %d" left top right bottom
+    if {$tx + $width > $right} {
+	set width [expr {$right - $tx}]
+    }
 
     set Priv(text,$T,font) $font
     set Priv(text,$T,justify) $justify
@@ -1010,7 +1082,7 @@ proc ::TreeCtrl::TextExpanderOpen {T item column element width} {
 
     set tbw [$T.text cget -borderwidth]
     incr tbw
-    place $T.text -x [expr {$x1 - $tbw}] -y [expr {$y1 - $tbw}] \
+    place $T.text -x $tx -y [expr {$y1 - $tbw-1}] \
 	-width [expr {$width + $tbw * 2}] \
 	-height [expr {$height + $tbw * 2}] \
 	-bordermode outside
@@ -1018,7 +1090,7 @@ proc ::TreeCtrl::TextExpanderOpen {T item column element width} {
     focus $T.text
     grab $T.text
 
-    return
+    return $T.text
 }
 
 proc ::TreeCtrl::TextClose {T accept} {
@@ -1041,7 +1113,7 @@ proc ::TreeCtrl::TextClose {T accept} {
     TryEvent $T Edit end \
 	[list W $T I $Priv(text,$T,item) C $Priv(text,$T,column) \
 		E $Priv(text,$T,element)]
-
+    set Priv(open_widget) ""
     return
 }
 
@@ -1052,7 +1124,7 @@ proc ::TreeCtrl::TextExpanderKeypress {T} {
     set font $Priv(text,$T,font)
     set justify $Priv(text,$T,justify)
     set width $Priv(text,$T,width)
-    set center $Priv(text,$T,center)
+    set x1 $Priv(text,$T,x1)
 
     set text [$T.text get 1.0 end-1c]
 
@@ -1062,7 +1134,7 @@ proc ::TreeCtrl::TextExpanderKeypress {T} {
     set tbw [$T.text cget -borderwidth]
     incr tbw
     place configure $T.text \
-	-x [expr {$center - ($width + $tbw * 2) / 2}] \
+	-x [expr {$x1 - $tbw - 1}] \
 	-width [expr {$width + $tbw * 2}] \
 	-height [expr {$height + $tbw * 2}]
 
@@ -1076,6 +1148,7 @@ proc ::TreeCtrl::ComboOpen {T item column element editable values { defvalue -NO
 
     variable Priv
 
+    set Priv(open_widget) combo
     set Priv(combo,$T,item) $item
     set Priv(combo,$T,column) $column
     set Priv(combo,$T,element) $element
@@ -1129,6 +1202,7 @@ proc ::TreeCtrl::ComboOpen {T item column element editable values { defvalue -NO
 		    TreeCtrl::ComboClose [winfo parent %W] 1
 		} else {
 		    set TreeCtrl::Priv(combo,%W,posting) 1
+		    after 200 [list unset -nocomplain TreeCtrl::Priv(combo,%W,posting)] 
 		}
 	    }
 	}
@@ -1155,6 +1229,8 @@ proc ::TreeCtrl::ComboOpen {T item column element editable values { defvalue -NO
 		focus $TreeCtrl::Priv(combo,[winfo parent %W],focus)
 		break
 	    }
+	    ttk::combobox::Press "" %W %x %y
+	    break
 	}
     }
 
@@ -1190,6 +1266,12 @@ proc ::TreeCtrl::ComboOpen {T item column element editable values { defvalue -NO
     # Make the Combo as wide as the text plus "W" but keep it within the
     # TreeCtrl borders
     set len [string length [$T item element cget $item $column $element -text]]
+    
+    foreach i $values {
+	if { [string length $i] > $len } {
+	    set len [string length $i]
+	}
+    }
     if { $len < 4 } { set len 4 }
     if { $len > 10 } {
 	set len [expr {int($len*.6)}]
@@ -1239,7 +1321,7 @@ proc ::TreeCtrl::ComboClose {T accept} {
     TryEvent $T Edit end \
 	[list W $T I $Priv(combo,$T,item) C $Priv(combo,$T,column) \
 		E $Priv(combo,$T,element)]
-
+    set Priv(open_widget) ""
     return
 }
 
@@ -1247,6 +1329,7 @@ proc ::TreeCtrl::EntryComboOpen {T item column element editable values defval1 d
 
     variable Priv
 
+    set Priv(open_widget) entrycombo
     set Priv(entrycombo,$T,item) $item
     set Priv(entrycombo,$T,column) $column
     set Priv(entrycombo,$T,element) $element
@@ -1426,7 +1509,7 @@ proc ::TreeCtrl::EntryComboClose {T accept} {
     TryEvent $T Edit end \
 	[list W $T I $Priv(entrycombo,$T,item) C $Priv(entrycombo,$T,column) \
 		E $Priv(entrycombo,$T,element)]
-
+    set Priv(open_widget) ""
     return
 }
 
@@ -1434,6 +1517,7 @@ proc ::TreeCtrl::ComboTreeOpen {T item column element editable values_tree { def
 
     variable Priv
 
+    set Priv(open_widget) combotree
     set Priv(combotree,$T,item) $item
     set Priv(combotree,$T,column) $column
     set Priv(combotree,$T,element) $element
@@ -1464,12 +1548,12 @@ proc ::TreeCtrl::ComboTreeOpen {T item column element editable values_tree { def
 
 	# Accept edit when we lose the focus
 	bind $T.combotree <FocusOut> {
-	    if { [info exists TreeCtrl::Priv(combotree,%W,posting)] } {
-		unset TreeCtrl::Priv(combotree,%W,posting)
-		focus %W
-		return
-	    }
 	    if {[winfo ismapped %W]} {
+		if { [info exists TreeCtrl::Priv(combotree,%W,posting)] } {
+		    unset TreeCtrl::Priv(combotree,%W,posting)
+		    focus %W
+		    return
+		}
 		set fw [focus]
 		set found 0
 		while { $fw ne "." && $fw ne "" } {
@@ -1483,6 +1567,7 @@ proc ::TreeCtrl::ComboTreeOpen {T item column element editable values_tree { def
 		    TreeCtrl::ComboTreeClose [winfo parent %W] 1
 		} else {
 		    set TreeCtrl::Priv(combotree,%W,posting) 1
+		    after 200 [list unset -nocomplain TreeCtrl::Priv(combotree,%W,posting)] 
 		}
 	    }
 	}
@@ -1525,15 +1610,17 @@ proc ::TreeCtrl::ComboTreeOpen {T item column element editable values_tree { def
     switch $editable 1 { set state !readonly } 0 { set state readonly }
     $T.combotree configure -state $state
     
-    set last_item(-1) root
-    foreach i $values_tree {
-	foreach "level name fname image selectable" $i break
-	set parent $last_item([expr {$level-1}])
-	set it [$T.combotree tree_insert -image $image \
-		-active $selectable end \
-		$name $fname $parent]
-	set last_item($level) $it
-    }
+    $T.combotree tree_insert_batch $values_tree
+#     set last_item(-1) root
+#     foreach i $values_tree {
+#         foreach "level name fname image selectable" $i break
+#         set parent $last_item([expr {$level-1}])
+#         set it [$T.combotree tree_insert -image $image \
+#                 -active $selectable end \
+#                 $name $fname $parent]
+#         set last_item($level) $it
+#     }
+
     #set ebw [$T.combotree cget -borderwidth]
     set ebw 1
     if 1 {
@@ -1599,7 +1686,154 @@ proc ::TreeCtrl::ComboTreeClose {T accept} {
     TryEvent $T Edit end \
 	[list W $T I $Priv(combotree,$T,item) C $Priv(combotree,$T,column) \
 		E $Priv(combotree,$T,element)]
+    set Priv(open_widget) ""
+    return
+}
 
+proc ::TreeCtrl::AnyWidgetOpen {T item column element widget } {
+
+    variable Priv
+
+    set Priv(open_widget) anywidget
+    set Priv(anywidget,widget) $widget
+    set Priv(anywidget,T) $T
+    set Priv(anywidget,$T,item) $item
+    set Priv(anywidget,$T,column) $column
+    set Priv(anywidget,$T,element) $element
+    set Priv(anywidget,$T,focus) [focus]
+
+    # Get window coords of the Element
+    scan [$T item bbox $item $column $element] "%d %d" x y
+    
+    set font [$T item element actual $item $column $element -font]
+    if { $font eq "" } { set font TkDefaultFont }
+    
+    # Accept edit when we lose the focus
+    
+    # Accept edit when we lose the focus
+    bind $widget <FocusOut> {
+	if {[winfo ismapped %W]} {
+	    if { [info exists TreeCtrl::Priv(anywidget,%W,posting)] } {
+		unset TreeCtrl::Priv(anywidget,%W,posting)
+		focus %W
+		return
+	    }
+	    set T $TreeCtrl::Priv(anywidget,T)
+	    set fw [focus]
+	    set found 0
+	    while { $fw ne "." && $fw ne "" } {
+		if { $fw eq $T } {
+		    set found 1
+		    break
+		}
+		set fw [winfo parent $fw]
+	    }
+	    if { !$found } {
+		TreeCtrl::AnyWidgetClose $T 1
+	    } else {
+		set TreeCtrl::Priv(anywidget,%W,posting) 1
+		after 200 [list unset -nocomplain TreeCtrl::Priv(anywidget,%W,posting)] 
+	    }
+	}
+    }
+    
+    # Accept edit on <Return>
+    bind $widget <KeyPress-Return> {
+	set T $TreeCtrl::Priv(anywidget,T)
+	TreeCtrl::AnyWidgetClose $T 1
+	focus $TreeCtrl::Priv(anywidget,$T,focus)
+	break
+    }
+    
+    # Cancel edit on <Escape>
+    bind $widget <KeyPress-Escape> {
+	set T $TreeCtrl::Priv(anywidget,T)
+	TreeCtrl::AnyWidgetClose $T 0
+	focus $TreeCtrl::Priv(anywidget,$T,focus)
+	break
+    }
+    bind $widget <1> {
+	set T $TreeCtrl::Priv(anywidget,T)
+	if { %x < 0 || %x > [winfo width $T] || 
+	    %y < 0 || %y > [winfo height %W] } {
+	    TreeCtrl::AnyWidgetClose $T 1
+	    focus $TreeCtrl::Priv(anywidget,$T,focus)
+	    break
+	} elseif { %x > [winfo width %W] } {
+	    set item $TreeCtrl::Priv(anywidget,$T,item)
+	    set column $TreeCtrl::Priv(anywidget,$T,column)
+	    set element $TreeCtrl::Priv(anywidget,$T,element)
+	    scan [$T item bbox $item $column] "%%d %%d %%d %%d" left top right bottom
+	    scan [$T item bbox $item $column $element] "%%d %%d" x y
+	    set ex [expr {$x - 2}]
+	    set width [expr {$right - $ex - 1}]
+	    place configure %W -width $width
+	}
+    }
+    
+    # Pesky MouseWheel
+    $T notify bind $widget <Scroll> {
+	TreeCtrl::AnyWidgetClose %T 0
+	focus $TreeCtrl::Priv(anywidget,%T,focus)
+    }
+
+    #set ebw [$T.combo cget -borderwidth]
+    set ebw 1
+    if 1 {
+	set ex [expr {$x - $ebw - 1}]
+	place $widget -x $ex -y [expr {$y - $ebw - 1}] \
+	    -bordermode outside
+    } else {
+	set hw [$T cget -highlightthickness]
+	set bw [$T cget -borderwidth]
+	set ex [expr {$x - $bw - $hw - $ebw - 1}]
+	place $widget -x $ex -y [expr {$y - $bw - $hw - $ebw - 1}]
+    }
+
+    set width [winfo width $widget]
+    set width2 [font measure $font [$T item element cget $item $column $element -text]]
+    if { $width2 > $width } { set width $width2 }
+
+    set width [expr {$width +16+ ($ebw + 1) * 2}]
+    scan [$T contentbox] "%d %d %d %d" left top right bottom
+    if {$ex + $width > $right} {
+	set width [expr {$right - $ex - 1 }]
+    }
+    scan [$T item bbox $item $column] "%d %d %d %d" left top right bottom
+    if {$ex + $width > $right} {
+	set width [expr {$right - $ex - 1}]
+    }
+    place configure $widget -width $width -height [expr {$bottom-$top+1}]
+    focus $widget
+    grab $widget
+
+    return $widget
+}
+
+proc ::TreeCtrl::AnyWidgetClose {T accept} {
+
+    variable Priv
+
+    set widget $Priv(anywidget,widget)
+    set text [$widget get_text]
+    destroy $widget
+    #place forget $widget
+    #grab release $widget
+    focus $T
+    update
+
+    if {$accept} {
+	TryEvent $T Edit accept \
+	    [list W $T I $Priv(anywidget,$T,item) C $Priv(anywidget,$T,column) \
+		E $Priv(anywidget,$T,element) t $text]
+    }
+
+    #$T notify bind $widget <Scroll> {}
+
+    TryEvent $T Edit end \
+	[list W $T I $Priv(anywidget,$T,item) C $Priv(anywidget,$T,column) \
+	    E $Priv(anywidget,$T,element)]
+    set Priv(open_widget) ""
     return
 }
 
@@ -1617,5 +1851,35 @@ if { [package vcompare [package present treectrl] 2.1] < 0 } {
 	return
     }
 }
+
+proc ::TreeCtrl::WidgetClose {T accept} {
+    variable Priv
+    
+    if { ![info exists Priv(open_widget)] } { return }
+    
+    switch $Priv(open_widget) {
+	entry { set cmd EntryClose }
+	text { set cmd TextClose }
+	combo { set cmd ComboClose }
+	entrycombo { set cmd EntryComboClose }
+	combotree { set cmd ComboTreeClose }
+	anywidget { set cmd AnyWidgetClose }
+	"" { return }
+    }
+    lappend cmd $T $accept
+    eval $cmd
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 

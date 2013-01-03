@@ -1,4 +1,37 @@
-<HTML><HEAD><TITLE>Tk Library Procedures - Tk_AllocFontFromObj manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_AllocFontFromObj manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> GetFont</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="GetFont.htm#M2" NAME="L296">NAME</A>
+<DL><DD>Tk_AllocFontFromObj, Tk_GetFont, Tk_GetFontFromObj, Tk_NameOfFont, Tk_FreeFontFromObj, Tk_FreeFont - maintain database of fonts</DD></DL>
+<DD><A HREF="GetFont.htm#M3" NAME="L297">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>Tk_Font 
+<DD><B>Tk_AllocFontFromObj(</B><I>interp, tkwin, objPtr</I><B>)</B>
+<DD>Tk_Font 
+<DD><B>Tk_GetFont(</B><I>interp, tkwin, string</I><B>)</B> 
+<DD>Tk_Font 
+<DD><B>Tk_GetFontFromObj(</B><I>tkwin, objPtr</I><B>)</B>
+<DD>const char *
+<DD><B>Tk_NameOfFont(</B><I>tkfont</I><B>)</B>
+<DD>Tk_Font 
+<DD><B>Tk_FreeFontFromObj(</B><I>tkwin, objPtr</I><B>)</B>
+<DD>void
+<DD><B>Tk_FreeFont(</B><I>tkfont</I><B>)</B>
+<DD>
+</DL>
+<DD><A HREF="GetFont.htm#M4" NAME="L298">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="GetFont.htm#M5" NAME="L299">DESCRIPTION</A>
+<DD><A HREF="GetFont.htm#M6" NAME="L300">SEE ALSO</A>
+<DD><A HREF="GetFont.htm#M7" NAME="L301">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_AllocFontFromObj, Tk_GetFont, Tk_GetFontFromObj, Tk_NameOfFont, Tk_FreeFontFromObj, Tk_FreeFont - maintain database of fonts
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -9,7 +42,7 @@ Tk_Font <BR>
 <B>Tk_GetFont(</B><I>interp, tkwin, string</I><B>)</B> <BR>
 Tk_Font <BR>
 <B>Tk_GetFontFromObj(</B><I>tkwin, objPtr</I><B>)</B><BR>
-CONST char *<BR>
+const char *<BR>
 <B>Tk_NameOfFont(</B><I>tkfont</I><B>)</B><BR>
 Tk_Font <BR>
 <B>Tk_FreeFontFromObj(</B><I>tkwin, objPtr</I><B>)</B><BR>
@@ -17,9 +50,9 @@ void<BR>
 <B>Tk_FreeFont(</B><I>tkfont</I><B>)</B><BR>
 <BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
-Interpreter to use for error reporting.  If NULL, then no error
+Interpreter to use for error reporting.  If <B>NULL</B>, then no error
 messages are left after errors.
 <P><DT>Tk_Window <B>tkwin</B> (in)<DD>
 Token for window in which font will be used.
@@ -29,7 +62,7 @@ for the <B><A HREF="../TkCmd/font.htm">font</A></B> command for details on accep
 Internal rep will be modified to cache corresponding Tk_Font.
 <P><DT>const char <B>*string</B> (in)<DD>
 Same as <I>objPtr</I> except description of font is passed as a string and
-resulting Tk_Font isn't cached.
+resulting Tk_Font is not cached.
 <P><DT>Tk_Font <B>tkfont</B> (in)<DD>
 Opaque font token.
 <P></DL>
@@ -45,7 +78,7 @@ the documentation for the <B><A HREF="../TkCmd/font.htm">font</A></B> command fo
 valid formats.  If <B>Tk_AllocFontFromObj</B> is unsuccessful (because,
 for example, <I>objPtr</I> did not contain a valid font specification) then it
 returns <B>NULL</B> and leaves an error message in <I>interp</I>'s result
-if <I>interp</I> isn't NULL.  <B>Tk_AllocFontFromObj</B> caches
+if <I>interp</I> is not <B>NULL</B>.  <B>Tk_AllocFontFromObj</B> caches
 information about the return
 value in <I>objPtr</I>, which speeds up future calls to procedures
 such as <B>Tk_AllocFontFromObj</B> and <B>Tk_GetFontFromObj</B>.
@@ -58,7 +91,7 @@ matching Tk_Font, so <B>Tk_GetFont</B> is less efficient than
 <P>
 <B>Tk_GetFontFromObj</B> returns the token for an existing font, given
 the window and description used to create the font.
-<B>Tk_GetFontFromObj</B> doesn't actually create the font; the font
+<B>Tk_GetFontFromObj</B> does not actually create the font; the font
 must already have been created with a previous call to
 <B>Tk_AllocFontFromObj</B> or <B>Tk_GetFont</B>.  The return
 value is cached in <I>objPtr</I>, which speeds up
@@ -93,8 +126,8 @@ for each call to <B>Tk_AllocFontFromObj</B> or <B>Tk_GetFont</B>.
 <B><A HREF="../TkLib/FontId.htm">Tk_FontId</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/F.htm#font">font</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1992 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1998 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1992 The Regents of the University of California.
+Copyright &copy; 1994-1998 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

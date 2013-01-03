@@ -1,66 +1,71 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - winfo manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>winfo manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> winfo</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="winfo.htm#M2" NAME="L1524">NAME</A>
-<DL><DD>winfo - Return window-related information</DL>
-<DD><A HREF="winfo.htm#M3" NAME="L1525">SYNOPSIS</A>
+<DD><A HREF="winfo.htm#M2" NAME="L2040">NAME</A>
+<DL><DD>winfo - Return window-related information</DD></DL>
+<DD><A HREF="winfo.htm#M3" NAME="L2041">SYNOPSIS</A>
 <DL>
-<DD><B>winfo</B> <I>option </I>?<I>arg arg ...</I>?
 </DL>
-<DD><A HREF="winfo.htm#M4" NAME="L1526">DESCRIPTION</A>
-<DL>
-<DD><A HREF="winfo.htm#M5" NAME="L1527"><B>winfo atom </B>?<B>-displayof </B><I>window</I>? <I>name</I></A>
-<DD><A HREF="winfo.htm#M6" NAME="L1528"><B>winfo atomname </B>?<B>-displayof </B><I>window</I>? <I>id</I></A>
-<DD><A HREF="winfo.htm#M7" NAME="L1529"><B>winfo cells </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M8" NAME="L1530"><B>winfo children </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M9" NAME="L1531"><B>winfo class </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M10" NAME="L1532"><B>winfo colormapfull </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M11" NAME="L1533"><B>winfo containing </B>?<B>-displayof </B><I>window</I>? <I>rootX rootY</I></A>
-<DD><A HREF="winfo.htm#M12" NAME="L1534"><B>winfo depth </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M13" NAME="L1535"><B>winfo exists </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M14" NAME="L1536"><B>winfo fpixels </B><I>window</I> <I>number</I></A>
-<DD><A HREF="winfo.htm#M15" NAME="L1537"><B>winfo geometry </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M16" NAME="L1538"><B>winfo height </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M17" NAME="L1539"><B>winfo id </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M18" NAME="L1540"><B>winfo interps </B>?<B>-displayof </B><I>window</I>?</A>
-<DD><A HREF="winfo.htm#M19" NAME="L1541"><B>winfo ismapped </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M20" NAME="L1542"><B>winfo manager </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M21" NAME="L1543"><B>winfo name </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M22" NAME="L1544"><B>winfo parent </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M23" NAME="L1545"><B>winfo pathname </B>?<B>-displayof </B><I>window</I>? <I>id</I></A>
-<DD><A HREF="winfo.htm#M24" NAME="L1546"><B>winfo pixels </B><I>window</I> <I>number</I></A>
-<DD><A HREF="winfo.htm#M25" NAME="L1547"><B>winfo pointerx </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M26" NAME="L1548"><B>winfo pointerxy </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M27" NAME="L1549"><B>winfo pointery </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M28" NAME="L1550"><B>winfo reqheight </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M29" NAME="L1551"><B>winfo reqwidth </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M30" NAME="L1552"><B>winfo rgb </B><I>window color</I></A>
-<DD><A HREF="winfo.htm#M31" NAME="L1553"><B>winfo rootx </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M32" NAME="L1554"><B>winfo rooty </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M33" NAME="L1555"><B>winfo screen </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M34" NAME="L1556"><B>winfo screencells </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M35" NAME="L1557"><B>winfo screendepth </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M36" NAME="L1558"><B>winfo screenheight </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M37" NAME="L1559"><B>winfo screenmmheight </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M38" NAME="L1560"><B>winfo screenmmwidth </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M39" NAME="L1561"><B>winfo screenvisual </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M40" NAME="L1562"><B>winfo screenwidth </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M41" NAME="L1563"><B>winfo server </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M42" NAME="L1564"><B>winfo toplevel </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M43" NAME="L1565"><B>winfo viewable </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M44" NAME="L1566"><B>winfo visual </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M45" NAME="L1567"><B>winfo visualid </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M46" NAME="L1568"><B>winfo visualsavailable </B><I>window</I> ?<B>includeids</B>?</A>
-<DD><A HREF="winfo.htm#M47" NAME="L1569"><B>winfo vrootheight </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M48" NAME="L1570"><B>winfo vrootwidth </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M49" NAME="L1571"><B>winfo vrootx </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M50" NAME="L1572"><B>winfo vrooty </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M51" NAME="L1573"><B>winfo width </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M52" NAME="L1574"><B>winfo x </B><I>window</I></A>
-<DD><A HREF="winfo.htm#M53" NAME="L1575"><B>winfo y </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M4" NAME="L2042">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="winfo.htm#M5" NAME="L2043"><B>winfo atom </B>?<B>-displayof </B><I>window</I>? <I>name</I></A>
+<DD><A HREF="winfo.htm#M6" NAME="L2044"><B>winfo atomname </B>?<B>-displayof </B><I>window</I>? <I>id</I></A>
+<DD><A HREF="winfo.htm#M7" NAME="L2045"><B>winfo cells </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M8" NAME="L2046"><B>winfo children </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M9" NAME="L2047"><B>winfo class </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M10" NAME="L2048"><B>winfo colormapfull </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M11" NAME="L2049"><B>winfo containing </B>?<B>-displayof </B><I>window</I>? <I>rootX rootY</I></A>
+<DD><A HREF="winfo.htm#M12" NAME="L2050"><B>winfo depth </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M13" NAME="L2051"><B>winfo exists </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M14" NAME="L2052"><B>winfo fpixels </B><I>window</I> <I>number</I></A>
+<DD><A HREF="winfo.htm#M15" NAME="L2053"><B>winfo geometry </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M16" NAME="L2054"><B>winfo height </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M17" NAME="L2055"><B>winfo id </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M18" NAME="L2056"><B>winfo interps </B>?<B>-displayof </B><I>window</I>?</A>
+<DD><A HREF="winfo.htm#M19" NAME="L2057"><B>winfo ismapped </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M20" NAME="L2058"><B>winfo manager </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M21" NAME="L2059"><B>winfo name </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M22" NAME="L2060"><B>winfo parent </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M23" NAME="L2061"><B>winfo pathname </B>?<B>-displayof </B><I>window</I>? <I>id</I></A>
+<DD><A HREF="winfo.htm#M24" NAME="L2062"><B>winfo pixels </B><I>window</I> <I>number</I></A>
+<DD><A HREF="winfo.htm#M25" NAME="L2063"><B>winfo pointerx </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M26" NAME="L2064"><B>winfo pointerxy </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M27" NAME="L2065"><B>winfo pointery </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M28" NAME="L2066"><B>winfo reqheight </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M29" NAME="L2067"><B>winfo reqwidth </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M30" NAME="L2068"><B>winfo rgb </B><I>window color</I></A>
+<DD><A HREF="winfo.htm#M31" NAME="L2069"><B>winfo rootx </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M32" NAME="L2070"><B>winfo rooty </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M33" NAME="L2071"><B>winfo screen </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M34" NAME="L2072"><B>winfo screencells </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M35" NAME="L2073"><B>winfo screendepth </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M36" NAME="L2074"><B>winfo screenheight </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M37" NAME="L2075"><B>winfo screenmmheight </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M38" NAME="L2076"><B>winfo screenmmwidth </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M39" NAME="L2077"><B>winfo screenvisual </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M40" NAME="L2078"><B>winfo screenwidth </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M41" NAME="L2079"><B>winfo server </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M42" NAME="L2080"><B>winfo toplevel </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M43" NAME="L2081"><B>winfo viewable </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M44" NAME="L2082"><B>winfo visual </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M45" NAME="L2083"><B>winfo visualid </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M46" NAME="L2084"><B>winfo visualsavailable </B><I>window</I> ?<B>includeids</B>?</A>
+<DD><A HREF="winfo.htm#M47" NAME="L2085"><B>winfo vrootheight </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M48" NAME="L2086"><B>winfo vrootwidth </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M49" NAME="L2087"><B>winfo vrootx </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M50" NAME="L2088"><B>winfo vrooty </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M51" NAME="L2089"><B>winfo width </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M52" NAME="L2090"><B>winfo x </B><I>window</I></A>
+<DD><A HREF="winfo.htm#M53" NAME="L2091"><B>winfo y </B><I>window</I></A>
 </DL>
-<DD><A HREF="winfo.htm#M54" NAME="L1576">EXAMPLE</A>
-<DD><A HREF="winfo.htm#M55" NAME="L1577">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="winfo.htm#M54" NAME="L2092">EXAMPLE</A>
+<DD><A HREF="winfo.htm#M55" NAME="L2093">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 winfo - Return window-related information
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -70,7 +75,7 @@ The <B>winfo</B> command is used to retrieve information about windows
 managed by Tk.  It can take any of a number of different forms,
 depending on the <I>option</I> argument.  The legal forms are:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>winfo atom </B>?<B>-displayof </B><I>window</I>? <I>name</I></A><DD>
 Returns a decimal string giving the integer identifier for the
 atom whose name is <I>name</I>.  If no atom exists with the name
@@ -100,9 +105,11 @@ command to query the stacking order of Top-level windows.
 Returns the class name for <I>window</I>.
 <P><DT><A NAME="M10"><B>winfo colormapfull </B><I>window</I></A><DD>
 Returns 1 if the colormap for <I>window</I> is known to be full, 0
-otherwise.  The colormap for a window is ``known'' to be full if the last
+otherwise.  The colormap for a window is
+&#8220;known&#8221;
+to be full if the last
 attempt to allocate a new color on that window failed and this
-application hasn't freed any colors in the colormap since the
+application has not freed any colors in the colormap since the
 failed allocation.
 <P><DT><A NAME="M11"><B>winfo containing </B>?<B>-displayof </B><I>window</I>? <I>rootX rootY</I></A><DD>
 Returns the path name for the window containing the point given
@@ -129,7 +136,10 @@ window exists.
 Returns a floating-point value giving the number of pixels
 in <I>window</I> corresponding to the distance given by <I>number</I>.
 <I>Number</I> may be specified in any of the forms acceptable
-to <B><A HREF="../TkLib/GetPixels.htm">Tk_GetScreenMM</A></B>, such as ``2.0c'' or ``1i''.
+to <B><A HREF="../TkLib/GetPixels.htm">Tk_GetScreenMM</A></B>, such as
+&#8220;2.0c&#8221;
+or
+&#8220;1i&#8221;.
 The return value may be fractional;  for an integer value, use
 <B>winfo pixels</B>.
 <P><DT><A NAME="M15"><B>winfo geometry </B><I>window</I></A><DD>
@@ -161,7 +171,7 @@ Returns <B>1</B> if <I>window</I> is currently mapped, <B>0</B> otherwise.
 <P><DT><A NAME="M20"><B>winfo manager </B><I>window</I></A><DD>
 Returns the name of the geometry manager currently
 responsible for <I>window</I>, or an empty string if <I>window</I>
-isn't managed by any geometry manager.
+is not managed by any geometry manager.
 The name is usually the name of the Tcl command for the geometry
 manager, such as <B><A HREF="../TkCmd/pack.htm">pack</A></B> or <B><A HREF="../TkCmd/place.htm">place</A></B>.
 If the geometry manager is a widget, such as canvases or text, the
@@ -184,7 +194,10 @@ the display of the application's main window.
 Returns the number of pixels in <I>window</I> corresponding
 to the distance given by <I>number</I>.
 <I>Number</I> may be specified in any of the forms acceptable
-to <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>, such as ``2.0c'' or ``1i''.
+to <B><A HREF="../TkLib/GetPixels.htm">Tk_GetPixels</A></B>, such as
+&#8220;2.0c&#8221;
+or
+&#8220;1i&#8221;.
 The result is rounded to the nearest integer value;  for a
 fractional result, use <B>winfo fpixels</B>.
 <P><DT><A NAME="M25"><B>winfo pointerx </B><I>window</I></A><DD>
@@ -192,7 +205,7 @@ If the mouse pointer is on the same screen as <I>window</I>, returns the
 pointer's x coordinate, measured in pixels in the screen's root window.
 If a virtual root window is in use on the screen, the position is
 measured in the virtual root.
-If the mouse pointer isn't on the same screen as <I>window</I> then
+If the mouse pointer is not on the same screen as <I>window</I> then
 -1 is returned.
 <P><DT><A NAME="M26"><B>winfo pointerxy </B><I>window</I></A><DD>
 If the mouse pointer is on the same screen as <I>window</I>, returns a list
@@ -200,14 +213,14 @@ with two elements, which are the pointer's x and y coordinates measured
 in pixels in the screen's root window.
 If a virtual root window is in use on the screen, the position
 is computed in the virtual root.
-If the mouse pointer isn't on the same screen as <I>window</I> then
+If the mouse pointer is not on the same screen as <I>window</I> then
 both of the returned coordinates are -1.
 <P><DT><A NAME="M27"><B>winfo pointery </B><I>window</I></A><DD>
 If the mouse pointer is on the same screen as <I>window</I>, returns the
 pointer's y coordinate, measured in pixels in the screen's root window.
 If a virtual root window is in use on the screen, the position
 is computed in the virtual root.
-If the mouse pointer isn't on the same screen as <I>window</I> then
+If the mouse pointer is not on the same screen as <I>window</I> then
 -1 is returned.
 <P><DT><A NAME="M28"><B>winfo reqheight </B><I>window</I></A><DD>
 Returns a decimal string giving <I>window</I>'s requested height,
@@ -264,7 +277,8 @@ in pixels.
 Returns a string containing information about the server for
 <I>window</I>'s display.  The exact format of this string may vary
 from platform to platform.  For X servers the string
-has the form ``<B>X</B><I>major</I><B>R</B><I>minor vendor vendorVersion</I>''
+has the form
+&#8220;<B>X</B><I>major</I><B>R</B><I>minor vendor vendorVersion</I>&#8221;
 where <I>major</I> and <I>minor</I> are the version and revision
 numbers provided by the server (e.g., <B>X11R5</B>), <I>vendor</I>
 is the name of the vendor for the server, and <I>vendorRelease</I>
@@ -340,8 +354,8 @@ if {$win eq &quot;&quot;} {
 }</PRE>
 <H3><A NAME="M55">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#atom">atom</A>, <A href="../Keywords/C.htm#children">children</A>, <A href="../Keywords/C.htm#class">class</A>, <A href="../Keywords/G.htm#geometry">geometry</A>, <A href="../Keywords/H.htm#height">height</A>, <A href="../Keywords/I.htm#identifier">identifier</A>, <A href="../Keywords/I.htm#information">information</A>, <A href="../Keywords/I.htm#interpreters">interpreters</A>, <A href="../Keywords/M.htm#mapped">mapped</A>, <A href="../Keywords/P.htm#parent">parent</A>, <A href="../Keywords/P.htm#path name">path name</A>, <A href="../Keywords/S.htm#screen">screen</A>, <A href="../Keywords/V.htm#virtual root">virtual root</A>, <A href="../Keywords/W.htm#width">width</A>, <A href="../Keywords/W.htm#window">window</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

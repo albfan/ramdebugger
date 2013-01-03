@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>Read Data From A BLOB Incrementally</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: "Verdana" "sans-serif";
+    padding: 8px 1%;
+}
+
+a { color: #45735f }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:240px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.toolbar {
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding:1px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #80a796; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* rounded corners */
+.se  { background: url(../images/se.png) 100% 100% no-repeat #80a796}
+.sw  { background: url(../images/sw.png) 0% 100% no-repeat }
+.ne  { background: url(../images/ne.png) 100% 0% no-repeat }
+.nw  { background: url(../images/nw.png) 0% 0% no-repeat }
+
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="../index.html">
+<img class="logo" src="../images/SQLite.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% style="clear:both"><tr><td>
+  <div class="se"><div class="sw"><div class="ne"><div class="nw">
+  <div class="toolbar">
+    <a href="../about.html">About</a>
+    <a href="../sitemap.html">Sitemap</a>
+    <a href="../docs.html">Documentation</a>
+    <a href="../download.html">Download</a>
+    <a href="../copyright.html">License</a>
+    <a href="../news.html">News</a>
+    <a href="http://www.sqlite.org/cvstrac/index">Developers</a>
+    <a href="../support.html">Support</a>
+  </div></div></div></div></div>
+</td></tr></table>
+  
+<a href="intro.html"><h2>SQLite C Interface</h2></a><h2>Read Data From A BLOB Incrementally</h2><blockquote><pre>int sqlite3_blob_read(sqlite3_blob *, void *Z, int N, int iOffset);
+</pre></blockquote><p>
+This function is used to read data from an open <a href="../c3ref/blob.html">BLOB handle</a> into a
+caller-supplied buffer. N bytes of data are copied into buffer Z
+from the open BLOB, starting at offset iOffset.</p>
+
+<p>If offset iOffset is less than N bytes from the end of the BLOB,
+<a href="../c3ref/c_abort.html">SQLITE_ERROR</a> is returned and no data is read.  If N or iOffset is
+less than zero, <a href="../c3ref/c_abort.html">SQLITE_ERROR</a> is returned and no data is read.</p>
+
+<p>An attempt to read from an expired <a href="../c3ref/blob.html">BLOB handle</a> fails with an
+error code of <a href="../c3ref/c_abort.html">SQLITE_ABORT</a>.</p>
+
+<p>On success, SQLITE_OK is returned.
+Otherwise, an <a href="../c3ref/c_abort.html">error code</a> or an <a href="../c3ref/c_ioerr_access.html">extended error code</a> is returned.</p>
+
+<p><h3>Invariants:</h3>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr><td valign="top">H17853</td> 
+<td valign="top">
+A successful invocation of <a href="../c3ref/blob_read.html">sqlite3_blob_read(P,Z,N,X)</a>
+shall reads N bytes of data out of the BLOB referenced by
+<a href="../c3ref/blob.html">BLOB handle</a> P beginning at offset X and store those bytes
+into buffer Z.</td></tr>
+<tr><td valign="top">H17856</td> 
+<td valign="top">
+In <a href="../c3ref/blob_read.html">sqlite3_blob_read(P,Z,N,X)</a> if the size of the BLOB
+is less than N+X bytes, then the function shall leave the
+Z buffer unchanged and return <a href="../c3ref/c_abort.html">SQLITE_ERROR</a>.</td></tr>
+<tr><td valign="top">H17859</td> 
+<td valign="top">
+In <a href="../c3ref/blob_read.html">sqlite3_blob_read(P,Z,N,X)</a> if X or N is less than zero
+then the function shall leave the Z buffer unchanged
+and return <a href="../c3ref/c_abort.html">SQLITE_ERROR</a>.</td></tr>
+<tr><td valign="top">H17862</td> 
+<td valign="top">
+The <a href="../c3ref/blob_read.html">sqlite3_blob_read(P,Z,N,X)</a> interface shall return <a href="../c3ref/c_abort.html">SQLITE_OK</a>
+if N bytes are successfully read into buffer Z.</td></tr>
+<tr><td valign="top">H17863</td> 
+<td valign="top">
+If the <a href="../c3ref/blob.html">BLOB handle</a> P is expired and X and N are within bounds
+then <a href="../c3ref/blob_read.html">sqlite3_blob_read(P,Z,N,X)</a> shall leave the Z buffer
+unchanged and return <a href="../c3ref/c_abort.html">SQLITE_ABORT</a>.</td></tr>
+<tr><td valign="top">H17865</td> 
+<td valign="top">
+If the requested read could not be completed,
+the <a href="../c3ref/blob_read.html">sqlite3_blob_read(P,Z,N,X)</a> interface shall return an
+appropriate <a href="../c3ref/c_abort.html">error code</a> or <a href="../c3ref/c_ioerr_access.html">extended error code</a>.</td></tr>
+<tr><td valign="top">H17868</td> 
+<td valign="top">
+If an error occurs during evaluation of <a href="../c3ref/blob_read.html">sqlite3_blob_read(P,...)</a>
+then subsequent calls to <a href="../c3ref/errcode.html">sqlite3_errcode(D)</a>,
+<a href="../c3ref/errcode.html">sqlite3_extended_errcode()</a>,
+<a href="../c3ref/errcode.html">sqlite3_errmsg(D)</a>, and <a href="../c3ref/errcode.html">sqlite3_errmsg16(D)</a> shall return
+information appropriate for that error, where D is the
+<a href="../c3ref/sqlite3.html">database connection</a> that was used to open the <a href="../c3ref/blob.html">BLOB handle</a> P.</td></tr>
+</table>
+</p><p>See also lists of
+  <a href="objlist.html">Objects</a>,
+  <a href="constlist.html">Constants</a>, and
+  <a href="funclist.html">Functions</a>.</p><hr><small><i>
+This page last modified 2008/12/09 18:44:04 UTC
+</i></small></div></body></html>

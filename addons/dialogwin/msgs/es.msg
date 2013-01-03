@@ -26,3 +26,11 @@
 ::msgcat::mcset es {New type:} {Nuevo tipo:}
 ::msgcat::mcset es {Yes to all} {Sí a todo}
 ::msgcat::mcset es {No to all} {No a todo}
+::msgcat::mcset es {Do not show again for this session} {No mostrar otra vez para esta sesión}
+::msgcat::mcset es {Repeat my answer} {Repetir mi contestación}
+::msgcat::mcset es {Choose action to perform} {Seleccione la acción a realizar}
+::msgcat::mcset es Password Contraseña
+::msgcat::mcset es {Enter password to encrypt} {Introduzca contraseña para encriptar }
+::msgcat::mcset es Previous Previo
+::msgcat::mcset es Next Siguiente
+::msgcat::mcset es Finish Finalizar

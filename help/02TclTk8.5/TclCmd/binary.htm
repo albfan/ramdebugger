@@ -1,74 +1,78 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - binary manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>binary manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> binary</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="binary.htm#M2" NAME="L73">NAME</A>
-<DL><DD>binary - Insert and extract fields from binary strings</DL>
-<DD><A HREF="binary.htm#M3" NAME="L74">SYNOPSIS</A>
+<DD><A HREF="binary.htm#M2" NAME="L49">NAME</A>
+<DL><DD>binary - Insert and extract fields from binary strings</DD></DL>
+<DD><A HREF="binary.htm#M3" NAME="L50">SYNOPSIS</A>
 <DL>
-<DD><B>binary format </B><I>formatString </I>?<I>arg arg ...</I>?
-<DD><B>binary scan </B><I>string formatString </I>?<I>varName varName ...</I>?
 </DL>
-<DD><A HREF="binary.htm#M4" NAME="L75">DESCRIPTION</A>
-<DD><A HREF="binary.htm#M5" NAME="L76">BINARY FORMAT</A>
-<DL>
-<DD><A HREF="binary.htm#M6" NAME="L77"><B>a</B></A>
-<DD><A HREF="binary.htm#M7" NAME="L78"><B>A</B></A>
-<DD><A HREF="binary.htm#M8" NAME="L79"><B>b</B></A>
-<DD><A HREF="binary.htm#M9" NAME="L80"><B>B</B></A>
-<DD><A HREF="binary.htm#M10" NAME="L81"><B>h</B></A>
-<DD><A HREF="binary.htm#M11" NAME="L82"><B>H</B></A>
-<DD><A HREF="binary.htm#M12" NAME="L83"><B>c</B></A>
-<DD><A HREF="binary.htm#M13" NAME="L84"><B>s</B></A>
-<DD><A HREF="binary.htm#M14" NAME="L85"><B>S</B></A>
-<DD><A HREF="binary.htm#M15" NAME="L86"><B>t</B></A>
-<DD><A HREF="binary.htm#M16" NAME="L87"><B>i</B></A>
-<DD><A HREF="binary.htm#M17" NAME="L88"><B>I</B></A>
-<DD><A HREF="binary.htm#M18" NAME="L89"><B>n</B></A>
-<DD><A HREF="binary.htm#M19" NAME="L90"><B>w</B></A>
-<DD><A HREF="binary.htm#M20" NAME="L91"><B>W</B></A>
-<DD><A HREF="binary.htm#M21" NAME="L92"><B>m</B></A>
-<DD><A HREF="binary.htm#M22" NAME="L93"><B>f</B></A>
-<DD><A HREF="binary.htm#M23" NAME="L94"><B>r</B></A>
-<DD><A HREF="binary.htm#M24" NAME="L95"><B>R</B></A>
-<DD><A HREF="binary.htm#M25" NAME="L96"><B>d</B></A>
-<DD><A HREF="binary.htm#M26" NAME="L97"><B>q</B></A>
-<DD><A HREF="binary.htm#M27" NAME="L98"><B>Q</B></A>
-<DD><A HREF="binary.htm#M28" NAME="L99"><B>x</B></A>
-<DD><A HREF="binary.htm#M29" NAME="L100"><B>X</B></A>
-<DD><A HREF="binary.htm#M30" NAME="L101"><B>@</B></A>
+<DD><A HREF="binary.htm#M4" NAME="L51">DESCRIPTION</A>
+<DD><A HREF="binary.htm#M5" NAME="L52">BINARY FORMAT</A>
+<DL class="binary format">
+<DD><A HREF="binary.htm#M6" NAME="L53"><B>a</B></A>
+<DD><A HREF="binary.htm#M7" NAME="L54"><B>A</B></A>
+<DD><A HREF="binary.htm#M8" NAME="L55"><B>b</B></A>
+<DD><A HREF="binary.htm#M9" NAME="L56"><B>B</B></A>
+<DD><A HREF="binary.htm#M10" NAME="L57"><B>H</B></A>
+<DD><A HREF="binary.htm#M11" NAME="L58"><B>h</B></A>
+<DD><A HREF="binary.htm#M12" NAME="L59"><B>c</B></A>
+<DD><A HREF="binary.htm#M13" NAME="L60"><B>s</B></A>
+<DD><A HREF="binary.htm#M14" NAME="L61"><B>S</B></A>
+<DD><A HREF="binary.htm#M15" NAME="L62"><B>t</B></A>
+<DD><A HREF="binary.htm#M16" NAME="L63"><B>i</B></A>
+<DD><A HREF="binary.htm#M17" NAME="L64"><B>I</B></A>
+<DD><A HREF="binary.htm#M18" NAME="L65"><B>n</B></A>
+<DD><A HREF="binary.htm#M19" NAME="L66"><B>w</B></A>
+<DD><A HREF="binary.htm#M20" NAME="L67"><B>W</B></A>
+<DD><A HREF="binary.htm#M21" NAME="L68"><B>m</B></A>
+<DD><A HREF="binary.htm#M22" NAME="L69"><B>f</B></A>
+<DD><A HREF="binary.htm#M23" NAME="L70"><B>r</B></A>
+<DD><A HREF="binary.htm#M24" NAME="L71"><B>R</B></A>
+<DD><A HREF="binary.htm#M25" NAME="L72"><B>d</B></A>
+<DD><A HREF="binary.htm#M26" NAME="L73"><B>q</B></A>
+<DD><A HREF="binary.htm#M27" NAME="L74"><B>Q</B></A>
+<DD><A HREF="binary.htm#M28" NAME="L75"><B>x</B></A>
+<DD><A HREF="binary.htm#M29" NAME="L76"><B>X</B></A>
+<DD><A HREF="binary.htm#M30" NAME="L77"><B>@</B></A>
 </DL>
-<DD><A HREF="binary.htm#M31" NAME="L102">BINARY SCAN</A>
-<DL>
-<DD><A HREF="binary.htm#M32" NAME="L103"><B>a</B></A>
-<DD><A HREF="binary.htm#M33" NAME="L104"><B>A</B></A>
-<DD><A HREF="binary.htm#M34" NAME="L105"><B>b</B></A>
-<DD><A HREF="binary.htm#M35" NAME="L106"><B>B</B></A>
-<DD><A HREF="binary.htm#M36" NAME="L107"><B>h</B></A>
-<DD><A HREF="binary.htm#M37" NAME="L108"><B>H</B></A>
-<DD><A HREF="binary.htm#M38" NAME="L109"><B>c</B></A>
-<DD><A HREF="binary.htm#M39" NAME="L110"><B>s</B></A>
-<DD><A HREF="binary.htm#M40" NAME="L111"><B>S</B></A>
-<DD><A HREF="binary.htm#M41" NAME="L112"><B>t</B></A>
-<DD><A HREF="binary.htm#M42" NAME="L113"><B>i</B></A>
-<DD><A HREF="binary.htm#M43" NAME="L114"><B>I</B></A>
-<DD><A HREF="binary.htm#M44" NAME="L115"><B>n</B></A>
-<DD><A HREF="binary.htm#M45" NAME="L116"><B>w</B></A>
-<DD><A HREF="binary.htm#M46" NAME="L117"><B>W</B></A>
-<DD><A HREF="binary.htm#M47" NAME="L118"><B>m</B></A>
-<DD><A HREF="binary.htm#M48" NAME="L119"><B>f</B></A>
-<DD><A HREF="binary.htm#M49" NAME="L120"><B>r</B></A>
-<DD><A HREF="binary.htm#M50" NAME="L121"><B>R</B></A>
-<DD><A HREF="binary.htm#M51" NAME="L122"><B>d</B></A>
-<DD><A HREF="binary.htm#M52" NAME="L123"><B>q</B></A>
-<DD><A HREF="binary.htm#M53" NAME="L124"><B>Q</B></A>
-<DD><A HREF="binary.htm#M54" NAME="L125"><B>x</B></A>
-<DD><A HREF="binary.htm#M55" NAME="L126"><B>X</B></A>
-<DD><A HREF="binary.htm#M56" NAME="L127"><B>@</B></A>
+<DD><A HREF="binary.htm#M31" NAME="L78">BINARY SCAN</A>
+<DL class="binary scan">
+<DD><A HREF="binary.htm#M32" NAME="L79"><B>a</B></A>
+<DD><A HREF="binary.htm#M33" NAME="L80"><B>A</B></A>
+<DD><A HREF="binary.htm#M34" NAME="L81"><B>b</B></A>
+<DD><A HREF="binary.htm#M35" NAME="L82"><B>B</B></A>
+<DD><A HREF="binary.htm#M36" NAME="L83"><B>H</B></A>
+<DD><A HREF="binary.htm#M37" NAME="L84"><B>h</B></A>
+<DD><A HREF="binary.htm#M38" NAME="L85"><B>c</B></A>
+<DD><A HREF="binary.htm#M39" NAME="L86"><B>s</B></A>
+<DD><A HREF="binary.htm#M40" NAME="L87"><B>S</B></A>
+<DD><A HREF="binary.htm#M41" NAME="L88"><B>t</B></A>
+<DD><A HREF="binary.htm#M42" NAME="L89"><B>i</B></A>
+<DD><A HREF="binary.htm#M43" NAME="L90"><B>I</B></A>
+<DD><A HREF="binary.htm#M44" NAME="L91"><B>n</B></A>
+<DD><A HREF="binary.htm#M45" NAME="L92"><B>w</B></A>
+<DD><A HREF="binary.htm#M46" NAME="L93"><B>W</B></A>
+<DD><A HREF="binary.htm#M47" NAME="L94"><B>m</B></A>
+<DD><A HREF="binary.htm#M48" NAME="L95"><B>f</B></A>
+<DD><A HREF="binary.htm#M49" NAME="L96"><B>r</B></A>
+<DD><A HREF="binary.htm#M50" NAME="L97"><B>R</B></A>
+<DD><A HREF="binary.htm#M51" NAME="L98"><B>d</B></A>
+<DD><A HREF="binary.htm#M52" NAME="L99"><B>q</B></A>
+<DD><A HREF="binary.htm#M53" NAME="L100"><B>Q</B></A>
+<DD><A HREF="binary.htm#M54" NAME="L101"><B>x</B></A>
+<DD><A HREF="binary.htm#M55" NAME="L102"><B>X</B></A>
+<DD><A HREF="binary.htm#M56" NAME="L103"><B>@</B></A>
 </DL>
-<DD><A HREF="binary.htm#M57" NAME="L128">PORTABILITY ISSUES</A>
-<DD><A HREF="binary.htm#M58" NAME="L129">EXAMPLES</A>
-<DD><A HREF="binary.htm#M59" NAME="L130">SEE ALSO</A>
-<DD><A HREF="binary.htm#M60" NAME="L131">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="binary.htm#M57" NAME="L104">PORTABILITY ISSUES</A>
+<DD><A HREF="binary.htm#M58" NAME="L105">EXAMPLES</A>
+<DD><A HREF="binary.htm#M59" NAME="L106">SEE ALSO</A>
+<DD><A HREF="binary.htm#M60" NAME="L107">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 binary - Insert and extract fields from binary strings
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -89,7 +93,8 @@ the additional arguments.  The resulting binary value is returned.
 <P>
 The <I>formatString</I> consists of a sequence of zero or more field
 specifiers separated by zero or more spaces.  Each field specifier is
-a single type character followed by an optional numeric <I>count</I>.
+a single type character followed by an optional flag character followed
+by an optional numeric <I>count</I>.
 Most field specifiers consume one argument to obtain the value to be
 formatted.  The type character specifies how the value is to be
 formatted.  The <I>count</I> typically indicates how many items of the
@@ -97,7 +102,8 @@ specified type are taken from the value.  If present, the <I>count</I>
 is a non-negative decimal integer or <B>*</B>, which normally indicates
 that all of the items in the value are to be used.  If the number of
 arguments does not match the number of fields in the format string
-that consume arguments, then an error is generated.
+that consume arguments, then an error is generated. The flag character
+is ignored for for <B>binary format</B>.
 <P>
 Here is a small example to clarify the relation between the field
 specifiers and the arguments:
@@ -115,14 +121,15 @@ to just after the last byte stored.  The cursor is initially at
 position 0 at the beginning of the data.  The type may be any one of
 the following characters:
 <P>
-<DL>
+<DL class="binary format">
 <DT><A NAME="M6"><B>a</B></A><DD>
 Stores a byte string of length <I>count</I> in the output string.
 Every character is taken as modulo 256 (i.e. the low byte of every
 character is used, and the high byte discarded) so when storing
 character strings not wholly expressible using the characters &#92;u0000-&#92;u00ff,
-the <B>encoding convertto</B> command should be used
-first if this truncation is not desired (i.e. if the characters are
+the <B>encoding convertto</B> command should be used first to change
+the string into an external representation
+if this truncation is not desired (i.e. if the characters are
 not part of the ISO 8859-1 character set.)
 If <I>arg</I> has fewer than <I>count</I> bytes, then additional zero
 bytes are used to pad out the field.  If <I>arg</I> is longer than the
@@ -131,10 +138,18 @@ specified length, the extra characters will be ignored.  If
 formatted.  If <I>count</I> is omitted, then one character will be
 formatted.  For example,
 <PRE><B>binary format</B> a7a*a alpha bravo charlie</PRE>
-will return a string equivalent to <B>alpha&#92;000&#92;000bravoc</B> and
+will return a string equivalent to <B>alpha&#92;000&#92;000bravoc</B>,
 <PRE><B>binary format</B> a* [encoding convertto utf-8 &#92;u20ac]</PRE>
 will return a string equivalent to <B>&#92;342&#92;202&#92;254</B> (which is the
-UTF-8 byte sequence for a Euro-currency character).
+UTF-8 byte sequence for a Euro-currency character) and
+<PRE><B>binary format</B> a* [encoding convertto iso8859-15 &#92;u20ac]</PRE>
+will return a string equivalent to <B>&#92;244</B> (which is the ISO
+8859-15 byte sequence for a Euro-currency character). Contrast these
+last two with:
+<PRE><B>binary format</B> a* &#92;u20ac</PRE>
+which returns a string equivalent to <B>&#92;254</B> (i.e. <B>&#92;xac</B>) by
+truncating the high-bits of the character, and which is probably not
+what is desired.
 <P><DT><A NAME="M7"><B>A</B></A><DD>
 This form is the same as <B>a</B> except that spaces are used for
 padding instead of nulls.  For example,
@@ -160,12 +175,13 @@ This form is the same as <B>b</B> except that the bits are stored in
 high-to-low order within each byte.  For example,
 <PRE><B>binary format</B> B5B* 11100 111000011010</PRE>
 will return a string equivalent to <B>&#92;xe0&#92;xe1&#92;xa0</B>.
-<P><DT><A NAME="M10"><B>h</B></A><DD>
-Stores a string of <I>count</I> hexadecimal digits in low-to-high
+<P><DT><A NAME="M10"><B>H</B></A><DD>
+Stores a string of <I>count</I> hexadecimal digits in high-to-low
 within each byte in the output string.  <I>Arg</I> must contain a
-sequence of characters in the set ``0123456789abcdefABCDEF''.  The
-resulting bytes are emitted in first to last order with the hex digits
-being formatted in low-to-high order within each byte.  If <I>arg</I>
+sequence of characters in the set
+&#8220;0123456789abcdefABCDEF&#8221;.
+The resulting bytes are emitted in first to last order with the hex digits
+being formatted in high-to-low order within each byte.  If <I>arg</I>
 has fewer than <I>count</I> digits, then zeros will be used for the
 remaining digits.  If <I>arg</I> has more than the specified number of
 digits, the extra digits will be ignored.  If <I>count</I> is
@@ -173,22 +189,21 @@ digits, the extra digits will be ignored.  If <I>count</I> is
 <I>count</I> is omitted, then one digit will be formatted.  If the
 number of digits formatted does not end at a byte boundary, the
 remaining bits of the last byte will be zeros.  For example,
-<PRE><B>binary format</B> h3h* AB def</PRE>
-will return a string equivalent to <B>&#92;xba&#92;x00&#92;xed&#92;x0f</B>.
-<P><DT><A NAME="M11"><B>H</B></A><DD>
-This form is the same as <B>h</B> except that the digits are stored in
-high-to-low order within each byte.  For example,
-<PRE><B>binary format</B> H3H* ab DEF</PRE>
-will return a string equivalent to <B>&#92;xab&#92;x00&#92;xde&#92;xf0</B>.
+<PRE><B>binary format</B> H3H*H2 ab DEF 987</PRE>
+will return a string equivalent to <B>&#92;xab&#92;x00&#92;xde&#92;xf0&#92;x98</B>.
+<P><DT><A NAME="M11"><B>h</B></A><DD>
+This form is the same as <B>H</B> except that the digits are stored in
+low-to-high order within each byte. This is seldom required. For example,
+<PRE><B>binary format</B> h3h*h2 AB def 987</PRE>
+will return a string equivalent to <B>&#92;xba&#92;x00&#92;xed&#92;x0f&#92;x89</B>.
 <P><DT><A NAME="M12"><B>c</B></A><DD>
 Stores one or more 8-bit integer values in the output string.  If no
 <I>count</I> is specified, then <I>arg</I> must consist of an integer
-value; otherwise <I>arg</I> must consist of a list containing at least
-<I>count</I> integer elements.  The low-order 8 bits of each integer
+value. If <I>count</I> is specified, <I>arg</I> must consist of a list
+containing at least that many integers. The low-order 8 bits of each integer
 are stored as a one-byte value at the cursor position.  If <I>count</I>
-is <B>*</B>, then all of the integers in the list are formatted.  If
-the number of elements in the list is fewer than <I>count</I>, then an
-error is generated.  If the number of elements in the list is greater
+is <B>*</B>, then all of the integers in the list are formatted. If the
+number of elements in the list is greater
 than <I>count</I>, then the extra elements are ignored.  For example,
 <PRE><B>binary format</B> c3cc* {3 -3 128 1} 260 {2 5}</PRE>
 will return a string equivalent to
@@ -334,7 +349,9 @@ will return <B>abfdeghi&#92;000&#92;000j</B>.
 <H3><A NAME="M31">BINARY SCAN</A></H3>
 The <B>binary scan</B> command parses fields from a binary string,
 returning the number of conversions performed.  <I>String</I> gives the
-input to be parsed and <I>formatString</I> indicates how to parse it.
+input bytes to be parsed (one byte per character, and characters not
+representable as a byte have their high bits chopped)
+and <I>formatString</I> indicates how to parse it.
 Each <I>varName</I> gives the name of a variable; when a field is
 scanned from <I>string</I> the result is assigned to the corresponding
 variable.
@@ -342,7 +359,8 @@ variable.
 As with <B>binary format</B>, the <I>formatString</I> consists of a
 sequence of zero or more field specifiers separated by zero or more
 spaces.  Each field specifier is a single type character followed by
-an optional numeric <I>count</I>.  Most field specifiers consume one
+an optional flag character followed by an optional numeric <I>count</I>.
+Most field specifiers consume one
 argument to obtain the variable into which the scanned values should
 be placed.  The type character specifies how the binary data is to be
 interpreted.  The <I>count</I> typically indicates how many items of
@@ -354,7 +372,10 @@ position to satisfy the current field specifier, then the
 corresponding variable is left untouched and <B>binary scan</B> returns
 immediately with the number of variables that were set.  If there are
 not enough arguments for all of the fields in the format string that
-consume arguments, then an error is generated.
+consume arguments, then an error is generated. The flag character
+&#8220;u&#8221;
+may be given to cause some types to be read as unsigned values. The flag
+is accepted for all field types but is ignored for non-integer fields.
 <P>
 A similar example as with <B>binary format</B> should explain the
 relation between field specifiers and arguments in case of the binary
@@ -383,29 +404,35 @@ bit set (0x80 for chars, 0x8000 for shorts, 0x80000000 for ints),
 will be sign extended.  Thus the following will occur:
 <PRE>set signShort [<B>binary format</B> s1 0x8000]
 <B>binary scan</B> $signShort s1 val; <I># val == 0xFFFF8000</I></PRE>
-If you want to produce an unsigned value, then you can mask the return 
-value to the desired size.  For example, to produce an unsigned short 
-value:
-<PRE>set val [expr { $val &amp; 0xFFFF }]; <I># val == 0x8000</I></PRE>
+If you require unsigned values you can include the
+&#8220;u&#8221;
+flag character following
+the field type. For example, to read an unsigned short value:
+<PRE>set signShort [<B>binary format</B> s1 0x8000]
+<B>binary scan</B> $signShort su1 val; <I># val == 0x00008000</I></PRE>
 <P>
 Each type-count pair moves an imaginary cursor through the binary data,
 reading bytes from the current position.  The cursor is initially
 at position 0 at the beginning of the data.  The type may be any one of
 the following characters:
 <P>
-<DL>
+<DL class="binary scan">
 <DT><A NAME="M32"><B>a</B></A><DD>
 The data is a byte string of length <I>count</I>.  If <I>count</I>
 is <B>*</B>, then all of the remaining bytes in <I>string</I> will be
 scanned into the variable.  If <I>count</I> is omitted, then one
 byte will be scanned.
 All bytes scanned will be interpreted as being characters in the
-range &#92;u0000-&#92;u00ff so the <B>encoding convertfrom</B> command might be
-needed if the string is not an ISO 8859-1 string.
+range &#92;u0000-&#92;u00ff so the <B>encoding convertfrom</B> command will be
+needed if the string is not a binary string or a string encoded in ISO
+8859-1.
 For example,
 <PRE><B>binary scan</B> abcde&#92;000fghi a6a10 var1 var2</PRE>
 will return <B>1</B> with the string equivalent to <B>abcde&#92;000</B>
-stored in <I>var1</I> and <I>var2</I> left unmodified.
+stored in <I>var1</I> and <I>var2</I> left unmodified, and
+<PRE><B>binary scan</B> &#92;342&#92;202&#92;254 a* var1
+set var2 [encoding convertfrom utf-8 $var1]</PRE>
+will store a Euro-currency character in <I>var2</I>.
 <P><DT><A NAME="M33"><B>A</B></A><DD>
 This form is the same as <B>a</B>, except trailing blanks and nulls are stripped from
 the scanned value before it is stored in the variable.  For example,
@@ -413,7 +440,10 @@ the scanned value before it is stored in the variable.  For example,
 will return <B>1</B> with <B>abc efghi</B> stored in <I>var1</I>.
 <P><DT><A NAME="M34"><B>b</B></A><DD>
 The data is turned into a string of <I>count</I> binary digits in
-low-to-high order represented as a sequence of ``1'' and ``0''
+low-to-high order represented as a sequence of
+&#8220;1&#8221;
+and
+&#8220;0&#8221;
 characters.  The data bytes are scanned in first to last order with
 the bits being taken in low-to-high order within each byte.  Any extra
 bits in the last byte are ignored.  If <I>count</I> is <B>*</B>, then
@@ -428,24 +458,27 @@ high-to-low order within each byte.  For example,
 <PRE><B>binary scan</B> &#92;x70&#92;x87&#92;x05 B5B* var1 var2</PRE>
 will return <B>2</B> with <B>01110</B> stored in <I>var1</I> and
 <B>1000011100000101</B> stored in <I>var2</I>.
-<P><DT><A NAME="M36"><B>h</B></A><DD>
+<P><DT><A NAME="M36"><B>H</B></A><DD>
 The data is turned into a string of <I>count</I> hexadecimal digits in
-low-to-high order represented as a sequence of characters in the set
-``0123456789abcdef''.  The data bytes are scanned in first to last
-order with the hex digits being taken in low-to-high order within each
-byte.  Any extra bits in the last byte are ignored.  If <I>count</I>
-is <B>*</B>, then all of the remaining hex digits in <I>string</I> will be
-scanned.  If <I>count</I> is omitted, then one hex digit will be
-scanned.  For example,
-<PRE><B>binary scan</B> &#92;x07&#92;x86&#92;x05 h3h* var1 var2</PRE>
+high-to-low order represented as a sequence of characters in the set
+&#8220;0123456789abcdef&#8221;.
+The data bytes are scanned in first to last
+order with the hex digits being taken in high-to-low order within each
+byte. Any extra bits in the last byte are ignored. If <I>count</I> is
+<B>*</B>, then all of the remaining hex digits in <I>string</I> will be
+scanned. If <I>count</I> is omitted, then one hex digit will be
+scanned. For example,
+<PRE><B>binary scan</B> &#92;x07&#92;xC6&#92;x05&#92;x1f&#92;x34 H3H* var1 var2</PRE>
+will return <B>2</B> with <B>07c</B> stored in <I>var1</I> and
+<B>051f34</B> stored in <I>var2</I>.
+<P><DT><A NAME="M37"><B>h</B></A><DD>
+This form is the same as <B>H</B>, except the digits are taken in
+reverse (low-to-high) order within each byte. For example,
+<PRE><B>binary scan</B> &#92;x07&#92;x86&#92;x05&#92;x12&#92;x34 h3h* var1 var2</PRE>
 will return <B>2</B> with <B>706</B> stored in <I>var1</I> and
-<B>50</B> stored in <I>var2</I>.
-<P><DT><A NAME="M37"><B>H</B></A><DD>
-This form is the same as <B>h</B>, except the digits are taken in
-high-to-low order within each byte.  For example,
-<PRE><B>binary scan</B> &#92;x07&#92;x86&#92;x05 H3H* var1 var2</PRE>
-will return <B>2</B> with <B>078</B> stored in <I>var1</I> and
-<B>05</B> stored in <I>var2</I>.
+<B>502143</B> stored in <I>var2</I>.
+Note that most code that wishes to parse the hexadecimal digits from
+multiple bytes in order should use the <B>H</B> format.
 <P><DT><A NAME="M38"><B>c</B></A><DD>
 The data is turned into <I>count</I> 8-bit signed integers and stored
 in the corresponding variable as a list. If <I>count</I> is <B>*</B>,
@@ -556,13 +589,13 @@ will return <B>1</B> with <B>1.6000000238418579</B> stored in
 <P><DT><A NAME="M49"><B>r</B></A><DD>
 This form is the same as <B>f</B> except that the data is interpreted
 as <I>count</I> single-precision floating point number in little-endian
-order.  This conversion is not portable to systems not using IEEE
-floating point representations.
+order.  This conversion is not portable to the minority of systems not
+using IEEE floating point representations.
 <P><DT><A NAME="M50"><B>R</B></A><DD>
 This form is the same as <B>f</B> except that the data is interpreted
 as <I>count</I> single-precision floating point number in big-endian
-order.  This conversion is not portable to systems not using IEEE
-floating point representations.
+order.  This conversion is not portable to the minority of systems not
+using IEEE floating point representations.
 <P><DT><A NAME="M51"><B>d</B></A><DD>
 This form is the same as <B>f</B> except that the data is interpreted
 as <I>count</I> double-precision floating point numbers in the
@@ -574,13 +607,13 @@ stored in <I>var1</I>.
 <P><DT><A NAME="M52"><B>q</B></A><DD>
 This form is the same as <B>d</B> except that the data is interpreted
 as <I>count</I> double-precision floating point number in little-endian
-order.  This conversion is not portable to systems not using IEEE
-floating point representations.
+order.  This conversion is not portable to the minority of systems not
+using IEEE floating point representations.
 <P><DT><A NAME="M53"><B>Q</B></A><DD>
 This form is the same as <B>d</B> except that the data is interpreted
 as <I>count</I> double-precision floating point number in big-endian
-order.  This conversion is not portable to systems not using IEEE
-floating point representations.
+order.  This conversion is not portable to the minority of systems not
+using IEEE floating point representations.
 <P><DT><A NAME="M54"><B>x</B></A><DD>
 Moves the cursor forward <I>count</I> bytes in <I>string</I>.  If
 <I>count</I> is <B>*</B> or is larger than the number of bytes after the
@@ -639,7 +672,7 @@ previously presented <I>writeString</I> procedure:
 <B><A HREF="../TclCmd/format.htm">format</A></B>, <B><A HREF="../TclCmd/scan.htm">scan</A></B>, <B><A HREF="../TclCmd/tclvars.htm">tclvars</A></B>
 <H3><A NAME="M60">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#binary">binary</A>, <A href="../Keywords/F.htm#format">format</A>, <A href="../Keywords/S.htm#scan">scan</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1997 by Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1997 by Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

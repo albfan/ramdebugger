@@ -1,24 +1,39 @@
-<HTML><HEAD><TITLE>Tk Library Procedures - Tk_GetVisual manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetVisual manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> GetVisual</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="GetVisual.htm#M2" NAME="L379">NAME</A>
-<DL><DD>Tk_GetVisual - translate from string to visual</DL>
-<DD><A HREF="GetVisual.htm#M3" NAME="L380">SYNOPSIS</A>
+<DD><A HREF="GetVisual.htm#M2" NAME="L380">NAME</A>
+<DL><DD>Tk_GetVisual - translate from string to visual</DD></DL>
+<DD><A HREF="GetVisual.htm#M3" NAME="L381">SYNOPSIS</A>
 <DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>Visual *
+<DD><B>Tk_GetVisual(</B><I>interp, tkwin, string, depthPtr, colormapPtr</I><B>)</B>
 </DL>
-<DD><A HREF="GetVisual.htm#M4" NAME="L381">ARGUMENTS</A>
-<DL>
+<DD><A HREF="GetVisual.htm#M4" NAME="L382">ARGUMENTS</A>
+<DL class="arguments">
 </DL>
-<DD><A HREF="GetVisual.htm#M5" NAME="L382">DESCRIPTION</A>
-<DL>
-<DD><A HREF="GetVisual.htm#M6" NAME="L383"><I>class depth</I></A>
-<DD><A HREF="GetVisual.htm#M7" NAME="L384"><B>default</B></A>
-<DD><A HREF="GetVisual.htm#M8" NAME="L385"><I>pathName</I></A>
-<DD><A HREF="GetVisual.htm#M9" NAME="L386"><I>number</I></A>
-<DD><A HREF="GetVisual.htm#M10" NAME="L387"><B>best</B> ?<I>depth</I>?</A>
+<DD><A HREF="GetVisual.htm#M5" NAME="L383">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="GetVisual.htm#M6" NAME="L384"><I>class depth</I></A>
+<DD><A HREF="GetVisual.htm#M7" NAME="L385"><B>default</B></A>
+<DD><A HREF="GetVisual.htm#M8" NAME="L386"><I>pathName</I></A>
+<DD><A HREF="GetVisual.htm#M9" NAME="L387"><I>number</I></A>
+<DD><A HREF="GetVisual.htm#M10" NAME="L388"><B>best</B> ?<I>depth</I>?</A>
+<DL class="description">
+<DD><A HREF="GetVisual.htm#M11" NAME="L389">(a)</A>
+<DD><A HREF="GetVisual.htm#M12" NAME="L390">(b)</A>
+<DD><A HREF="GetVisual.htm#M13" NAME="L391">(c)</A>
+<DD><A HREF="GetVisual.htm#M14" NAME="L392">(d)</A>
 </DL>
-<DD><A HREF="GetVisual.htm#M11" NAME="L388">CREDITS</A>
-<DD><A HREF="GetVisual.htm#M12" NAME="L389">KEYWORDS</A>
-</DL><HR>
+</DL>
+<DD><A HREF="GetVisual.htm#M15" NAME="L393">CREDITS</A>
+<DD><A HREF="GetVisual.htm#M16" NAME="L394">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_GetVisual - translate from string to visual
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -26,12 +41,12 @@ Tk_GetVisual - translate from string to visual
 Visual *<BR>
 <B>Tk_GetVisual(</B><I>interp, tkwin, string, depthPtr, colormapPtr</I><B>)</B><BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter to use for error reporting.
 <P><DT>Tk_Window <B>tkwin</B> (in)<DD>
 Token for window in which the visual will be used.
-<P><DT>CONST char <B>*string</B> (in)<DD>
+<P><DT>const char <B>*string</B> (in)<DD>
 String that identifies the desired visual.  See below for
 valid formats.
 <P><DT>int <B>*depthPtr</B> (out)<DD>
@@ -55,7 +70,7 @@ and stores its X identifier at <I>*colormapPtr</I>.
 The <I>string</I> argument specifies the desired visual in one
 of the following ways:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M6"><I>class depth</I></A><DD>
 The string consists of a class name followed by an integer depth,
 with any amount of white space (including none) in between.
@@ -78,28 +93,34 @@ as <I>tkwin</I>.
 <P><DT><A NAME="M9"><I>number</I></A><DD>
 Use the visual whose X identifier is <I>number</I>.
 <P><DT><A NAME="M10"><B>best</B> ?<I>depth</I>?</A><DD>
-Choose the ``best possible'' visual, using the following rules, in
-decreasing order of priority:
-(a) a visual that has exactly the desired depth is best, followed
+Choose the
+&#8220;best possible&#8221;
+visual, using the following rules, in decreasing order of priority:
+<P>
+<DL class="description">
+<DT><A NAME="M11">(a)</A><DD>
+a visual that has exactly the desired depth is best, followed
 by a visual with greater depth than requested (but as little extra
 as possible), followed by a visual with less depth than requested
 (but as great a depth as possible);
-(b) if no <I>depth</I> is specified, then the deepest available visual
+<P><DT><A NAME="M12">(b)</A><DD>
+if no <I>depth</I> is specified, then the deepest available visual
 is chosen;
-(c) <B>pseudocolor</B> is better than <B>truecolor</B> or <B>directcolor</B>,
+<P><DT><A NAME="M13">(c)</A><DD>
+<B>pseudocolor</B> is better than <B>truecolor</B> or <B>directcolor</B>,
 which are better than <B>staticcolor</B>, which is better than
 <B>staticgray</B> or <B>grayscale</B>;
-(d) the default visual for the screen is better than any other visual.
-
+<P><DT><A NAME="M14">(d)</A><DD>
+the default visual for the screen is better than any other visual.
 <P></DL>
-<H3><A NAME="M11">CREDITS</A></H3>
+<P></DL>
+<H3><A NAME="M15">CREDITS</A></H3>
 The idea for <B>Tk_GetVisual</B>, and the first implementation, came
 from Paul Mackerras.
-
-<H3><A NAME="M12">KEYWORDS</A></H3>
+<H3><A NAME="M16">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#colormap">colormap</A>, <A href="../Keywords/S.htm#screen">screen</A>, <A href="../Keywords/V.htm#visual">visual</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

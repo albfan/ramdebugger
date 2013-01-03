@@ -1,27 +1,36 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_InitStubs manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_InitStubs manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> InitStubs</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="InitStubs.htm#M2" NAME="L383">NAME</A>
-<DL><DD>Tcl_InitStubs - initialize the Tcl stubs mechanism</DL>
-<DD><A HREF="InitStubs.htm#M3" NAME="L384">SYNOPSIS</A>
+<DD><A HREF="InitStubs.htm#M2" NAME="L384">NAME</A>
+<DL><DD>Tcl_InitStubs - initialize the Tcl stubs mechanism</DD></DL>
+<DD><A HREF="InitStubs.htm#M3" NAME="L385">SYNOPSIS</A>
 <DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>const char *
+<DD><B>Tcl_InitStubs</B>(<I>interp, version, exact</I>)
 </DL>
-<DD><A HREF="InitStubs.htm#M4" NAME="L385">ARGUMENTS</A>
-<DL>
+<DD><A HREF="InitStubs.htm#M4" NAME="L386">ARGUMENTS</A>
+<DL class="arguments">
 </DL>
-<DD><A HREF="InitStubs.htm#M5" NAME="L386">INTRODUCTION</A>
-<DL>
-<DD><A HREF="InitStubs.htm#M6" NAME="L387">1)</A>
-<DD><A HREF="InitStubs.htm#M7" NAME="L388">2)</A>
+<DD><A HREF="InitStubs.htm#M5" NAME="L387">INTRODUCTION</A>
+<DL class="introduction">
+<DD><A HREF="InitStubs.htm#M6" NAME="L388">1)</A>
+<DD><A HREF="InitStubs.htm#M7" NAME="L389">2)</A>
 </DL>
-<DL>
-<DD><A HREF="InitStubs.htm#M8" NAME="L389">1)</A>
-<DD><A HREF="InitStubs.htm#M9" NAME="L390">2)</A>
-<DD><A HREF="InitStubs.htm#M10" NAME="L391">3)</A>
+<DL class="introduction">
+<DD><A HREF="InitStubs.htm#M8" NAME="L390">1)</A>
+<DD><A HREF="InitStubs.htm#M9" NAME="L391">2)</A>
+<DD><A HREF="InitStubs.htm#M10" NAME="L392">3)</A>
 </DL>
-<DD><A HREF="InitStubs.htm#M11" NAME="L392">DESCRIPTION</A>
-<DD><A HREF="InitStubs.htm#M12" NAME="L393">SEE ALSO</A>
-<DD><A HREF="InitStubs.htm#M13" NAME="L394">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="InitStubs.htm#M11" NAME="L393">DESCRIPTION</A>
+<DD><A HREF="InitStubs.htm#M12" NAME="L394">SEE ALSO</A>
+<DD><A HREF="InitStubs.htm#M13" NAME="L395">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_InitStubs - initialize the Tcl stubs mechanism
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -29,7 +38,7 @@ Tcl_InitStubs - initialize the Tcl stubs mechanism
 const char *<BR>
 <B>Tcl_InitStubs</B>(<I>interp, version, exact</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Tcl interpreter handle.
 <P><DT>const char <B>*version</B> (in)<DD>
@@ -47,7 +56,7 @@ The Tcl stubs mechanism defines a way to dynamically bind
 extensions to a particular Tcl implementation at run time.
 This provides two significant benefits to Tcl users:
 <P>
-<DL>
+<DL class="introduction">
 <DT><A NAME="M6">1)</A><DD>
 Extensions that use the stubs mechanism can be loaded into
 multiple versions of Tcl without being recompiled or
@@ -71,7 +80,7 @@ need to take steps to use the stubs mechanism with their extensions.
 Enabling the stubs mechanism for an extension requires the following
 steps:
 <P>
-<DL>
+<DL class="introduction">
 <DT><A NAME="M8">1)</A><DD>
 Call <B>Tcl_InitStubs</B> in the extension before calling any other
 Tcl functions.
@@ -105,7 +114,7 @@ acceptable, does not support stubs, or any other error condition occurred.
 <B><A HREF="../TkLib/TkInitStubs.htm">Tk_InitStubs</A></B>
 <H3><A NAME="M13">KEYWORDS</A></H3>
 <A href="../Keywords/S.htm#stubs">stubs</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1998-1999 Scriptics Corporation
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1998-1999 Scriptics Corporation
+</div>
 </BODY></HTML>

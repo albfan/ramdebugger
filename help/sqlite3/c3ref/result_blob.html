@@ -1,0 +1,314 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>Setting The Result Of An SQL Function</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: "Verdana" "sans-serif";
+    padding: 8px 1%;
+}
+
+a { color: #45735f }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:240px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.toolbar {
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding:1px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #80a796; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* rounded corners */
+.se  { background: url(../images/se.png) 100% 100% no-repeat #80a796}
+.sw  { background: url(../images/sw.png) 0% 100% no-repeat }
+.ne  { background: url(../images/ne.png) 100% 0% no-repeat }
+.nw  { background: url(../images/nw.png) 0% 0% no-repeat }
+
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="../index.html">
+<img class="logo" src="../images/SQLite.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% style="clear:both"><tr><td>
+  <div class="se"><div class="sw"><div class="ne"><div class="nw">
+  <div class="toolbar">
+    <a href="../about.html">About</a>
+    <a href="../sitemap.html">Sitemap</a>
+    <a href="../docs.html">Documentation</a>
+    <a href="../download.html">Download</a>
+    <a href="../copyright.html">License</a>
+    <a href="../news.html">News</a>
+    <a href="http://www.sqlite.org/cvstrac/index">Developers</a>
+    <a href="../support.html">Support</a>
+  </div></div></div></div></div>
+</td></tr></table>
+  
+<a href="intro.html"><h2>SQLite C Interface</h2></a><h2>Setting The Result Of An SQL Function</h2><blockquote><pre>void sqlite3_result_blob(sqlite3_context*, const void*, int, void(*)(void*));
+void sqlite3_result_double(sqlite3_context*, double);
+void sqlite3_result_error(sqlite3_context*, const char*, int);
+void sqlite3_result_error16(sqlite3_context*, const void*, int);
+void sqlite3_result_error_toobig(sqlite3_context*);
+void sqlite3_result_error_nomem(sqlite3_context*);
+void sqlite3_result_error_code(sqlite3_context*, int);
+void sqlite3_result_int(sqlite3_context*, int);
+void sqlite3_result_int64(sqlite3_context*, sqlite3_int64);
+void sqlite3_result_null(sqlite3_context*);
+void sqlite3_result_text(sqlite3_context*, const char*, int, void(*)(void*));
+void sqlite3_result_text16(sqlite3_context*, const void*, int, void(*)(void*));
+void sqlite3_result_text16le(sqlite3_context*, const void*, int,void(*)(void*));
+void sqlite3_result_text16be(sqlite3_context*, const void*, int,void(*)(void*));
+void sqlite3_result_value(sqlite3_context*, sqlite3_value*);
+void sqlite3_result_zeroblob(sqlite3_context*, int n);
+</pre></blockquote><p>
+These routines are used by the xFunc or xFinal callbacks that
+implement SQL functions and aggregates.  See
+<a href="../c3ref/create_function.html">sqlite3_create_function()</a> and <a href="../c3ref/create_function.html">sqlite3_create_function16()</a>
+for additional information.</p>
+
+<p>These functions work very much like the <a href="../c3ref/bind_blob.html">parameter binding</a> family of
+functions used to bind values to host parameters in prepared statements.
+Refer to the <a href="../c3ref/bind_blob.html">SQL parameter</a> documentation for additional information.</p>
+
+<p>The sqlite3_result_blob() interface sets the result from
+an application-defined function to be the BLOB whose content is pointed
+to by the second parameter and which is N bytes long where N is the
+third parameter.</p>
+
+<p>The sqlite3_result_zeroblob() interfaces set the result of
+the application-defined function to be a BLOB containing all zero
+bytes and N bytes in size, where N is the value of the 2nd parameter.</p>
+
+<p>The sqlite3_result_double() interface sets the result from
+an application-defined function to be a floating point value specified
+by its 2nd argument.</p>
+
+<p>The sqlite3_result_error() and sqlite3_result_error16() functions
+cause the implemented SQL function to throw an exception.
+SQLite uses the string pointed to by the
+2nd parameter of sqlite3_result_error() or sqlite3_result_error16()
+as the text of an error message.  SQLite interprets the error
+message string from sqlite3_result_error() as UTF-8. SQLite
+interprets the string from sqlite3_result_error16() as UTF-16 in native
+byte order.  If the third parameter to sqlite3_result_error()
+or sqlite3_result_error16() is negative then SQLite takes as the error
+message all text up through the first zero character.
+If the third parameter to sqlite3_result_error() or
+sqlite3_result_error16() is non-negative then SQLite takes that many
+bytes (not characters) from the 2nd parameter as the error message.
+The sqlite3_result_error() and sqlite3_result_error16()
+routines make a private copy of the error message text before
+they return.  Hence, the calling function can deallocate or
+modify the text after they return without harm.
+The sqlite3_result_error_code() function changes the error code
+returned by SQLite as a result of an error in a function.  By default,
+the error code is SQLITE_ERROR.  A subsequent call to sqlite3_result_error()
+or sqlite3_result_error16() resets the error code to SQLITE_ERROR.</p>
+
+<p>The sqlite3_result_toobig() interface causes SQLite to throw an error
+indicating that a string or BLOB is to long to represent.</p>
+
+<p>The sqlite3_result_nomem() interface causes SQLite to throw an error
+indicating that a memory allocation failed.</p>
+
+<p>The sqlite3_result_int() interface sets the return value
+of the application-defined function to be the 32-bit signed integer
+value given in the 2nd argument.
+The sqlite3_result_int64() interface sets the return value
+of the application-defined function to be the 64-bit signed integer
+value given in the 2nd argument.</p>
+
+<p>The sqlite3_result_null() interface sets the return value
+of the application-defined function to be NULL.</p>
+
+<p>The sqlite3_result_text(), sqlite3_result_text16(),
+sqlite3_result_text16le(), and sqlite3_result_text16be() interfaces
+set the return value of the application-defined function to be
+a text string which is represented as UTF-8, UTF-16 native byte order,
+UTF-16 little endian, or UTF-16 big endian, respectively.
+SQLite takes the text result from the application from
+the 2nd parameter of the sqlite3_result_text* interfaces.
+If the 3rd parameter to the sqlite3_result_text* interfaces
+is negative, then SQLite takes result text from the 2nd parameter
+through the first zero character.
+If the 3rd parameter to the sqlite3_result_text* interfaces
+is non-negative, then as many bytes (not characters) of the text
+pointed to by the 2nd parameter are taken as the application-defined
+function result.
+If the 4th parameter to the sqlite3_result_text* interfaces
+or sqlite3_result_blob is a non-NULL pointer, then SQLite calls that
+function as the destructor on the text or BLOB result when it has
+finished using that result.
+If the 4th parameter to the sqlite3_result_text* interfaces or
+sqlite3_result_blob is the special constant SQLITE_STATIC, then SQLite
+assumes that the text or BLOB result is in constant space and does not
+copy the it or call a destructor when it has finished using that result.
+If the 4th parameter to the sqlite3_result_text* interfaces
+or sqlite3_result_blob is the special constant SQLITE_TRANSIENT
+then SQLite makes a copy of the result into space obtained from
+from <a href="../c3ref/free.html">sqlite3_malloc()</a> before it returns.</p>
+
+<p>The sqlite3_result_value() interface sets the result of
+the application-defined function to be a copy the
+<a href="../c3ref/value.html">unprotected sqlite3_value</a> object specified by the 2nd parameter.  The
+sqlite3_result_value() interface makes a copy of the <a href="../c3ref/value.html">sqlite3_value</a>
+so that the <a href="../c3ref/value.html">sqlite3_value</a> specified in the parameter may change or
+be deallocated after sqlite3_result_value() returns without harm.
+A <a href="../c3ref/value.html">protected sqlite3_value</a> object may always be used where an
+<a href="../c3ref/value.html">unprotected sqlite3_value</a> object is required, so either
+kind of <a href="../c3ref/value.html">sqlite3_value</a> object can be used with this interface.</p>
+
+<p>If these routines are called from within the different thread
+than the one containing the application-defined function that received
+the <a href="../c3ref/context.html">sqlite3_context</a> pointer, the results are undefined.</p>
+
+<p><h3>Invariants:</h3>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr><td valign="top">H16403</td> 
+<td valign="top">
+The default return value from any SQL function is NULL.</td></tr>
+<tr><td valign="top">H16406</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_blob(C,V,N,D)</a> interface changes the
+return value of function C to be a BLOB that is N bytes
+in length and with content pointed to by V.</td></tr>
+<tr><td valign="top">H16409</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_double(C,V)</a> interface changes the
+return value of function C to be the floating point value V.</td></tr>
+<tr><td valign="top">H16412</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_error(C,V,N)</a> interface changes the return
+value of function C to be an exception with error code
+<a href="../c3ref/c_abort.html">SQLITE_ERROR</a> and a UTF-8 error message copied from V up to the
+first zero byte or until N bytes are read if N is positive.</td></tr>
+<tr><td valign="top">H16415</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_error16(C,V,N)</a> interface changes the return
+value of function C to be an exception with error code
+<a href="../c3ref/c_abort.html">SQLITE_ERROR</a> and a UTF-16 native byte order error message
+copied from V up to the first zero terminator or until N bytes
+are read if N is positive.</td></tr>
+<tr><td valign="top">H16418</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_error_toobig(C)</a> interface changes the return
+value of the function C to be an exception with error code
+<a href="../c3ref/c_abort.html">SQLITE_TOOBIG</a> and an appropriate error message.</td></tr>
+<tr><td valign="top">H16421</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_error_nomem(C)</a> interface changes the return
+value of the function C to be an exception with error code
+<a href="../c3ref/c_abort.html">SQLITE_NOMEM</a> and an appropriate error message.</td></tr>
+<tr><td valign="top">H16424</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_error_code(C,E)</a> interface changes the return
+value of the function C to be an exception with error code E.
+The error message text is unchanged.</td></tr>
+<tr><td valign="top">H16427</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_int(C,V)</a> interface changes the
+return value of function C to be the 32-bit integer value V.</td></tr>
+<tr><td valign="top">H16430</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_int64(C,V)</a> interface changes the
+return value of function C to be the 64-bit integer value V.</td></tr>
+<tr><td valign="top">H16433</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_null(C)</a> interface changes the
+return value of function C to be NULL.</td></tr>
+<tr><td valign="top">H16436</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_text(C,V,N,D)</a> interface changes the
+return value of function C to be the UTF-8 string
+V up to the first zero if N is negative
+or the first N bytes of V if N is non-negative.</td></tr>
+<tr><td valign="top">H16439</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_text16(C,V,N,D)</a> interface changes the
+return value of function C to be the UTF-16 native byte order
+string V up to the first zero if N is negative
+or the first N bytes of V if N is non-negative.</td></tr>
+<tr><td valign="top">H16442</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_text16be(C,V,N,D)</a> interface changes the
+return value of function C to be the UTF-16 big-endian
+string V up to the first zero if N is negative
+or the first N bytes or V if N is non-negative.</td></tr>
+<tr><td valign="top">H16445</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_text16le(C,V,N,D)</a> interface changes the
+return value of function C to be the UTF-16 little-endian
+string V up to the first zero if N is negative
+or the first N bytes of V if N is non-negative.</td></tr>
+<tr><td valign="top">H16448</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_value(C,V)</a> interface changes the
+return value of function C to be the <a href="../c3ref/value.html">unprotected sqlite3_value</a>
+object V.</td></tr>
+<tr><td valign="top">H16451</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_zeroblob(C,N)</a> interface changes the
+return value of function C to be an N-byte BLOB of all zeros.</td></tr>
+<tr><td valign="top">H16454</td> 
+<td valign="top">
+The <a href="../c3ref/result_blob.html">sqlite3_result_error()</a> and <a href="../c3ref/result_blob.html">sqlite3_result_error16()</a>
+interfaces make a copy of their error message strings before
+returning.</td></tr>
+<tr><td valign="top">H16457</td> 
+<td valign="top">
+If the D destructor parameter to <a href="../c3ref/result_blob.html">sqlite3_result_blob(C,V,N,D)</a>,
+<a href="../c3ref/result_blob.html">sqlite3_result_text(C,V,N,D)</a>, <a href="../c3ref/result_blob.html">sqlite3_result_text16(C,V,N,D)</a>,
+<a href="../c3ref/result_blob.html">sqlite3_result_text16be(C,V,N,D)</a>, or
+<a href="../c3ref/result_blob.html">sqlite3_result_text16le(C,V,N,D)</a> is the constant <a href="../c3ref/c_static.html">SQLITE_STATIC</a>
+then no destructor is ever called on the pointer V and SQLite
+assumes that V is immutable.</td></tr>
+<tr><td valign="top">H16460</td> 
+<td valign="top">
+If the D destructor parameter to <a href="../c3ref/result_blob.html">sqlite3_result_blob(C,V,N,D)</a>,
+<a href="../c3ref/result_blob.html">sqlite3_result_text(C,V,N,D)</a>, <a href="../c3ref/result_blob.html">sqlite3_result_text16(C,V,N,D)</a>,
+<a href="../c3ref/result_blob.html">sqlite3_result_text16be(C,V,N,D)</a>, or
+<a href="../c3ref/result_blob.html">sqlite3_result_text16le(C,V,N,D)</a> is the constant
+<a href="../c3ref/c_static.html">SQLITE_TRANSIENT</a> then the interfaces makes a copy of the
+content of V and retains the copy.</td></tr>
+<tr><td valign="top">H16463</td> 
+<td valign="top">
+If the D destructor parameter to <a href="../c3ref/result_blob.html">sqlite3_result_blob(C,V,N,D)</a>,
+<a href="../c3ref/result_blob.html">sqlite3_result_text(C,V,N,D)</a>, <a href="../c3ref/result_blob.html">sqlite3_result_text16(C,V,N,D)</a>,
+<a href="../c3ref/result_blob.html">sqlite3_result_text16be(C,V,N,D)</a>, or
+<a href="../c3ref/result_blob.html">sqlite3_result_text16le(C,V,N,D)</a> is some value other than
+the constants <a href="../c3ref/c_static.html">SQLITE_STATIC</a> and <a href="../c3ref/c_static.html">SQLITE_TRANSIENT</a> then
+SQLite will invoke the destructor D with V as its only argument
+when it has finished with the V value.</td></tr>
+</table>
+</p><p>See also lists of
+  <a href="objlist.html">Objects</a>,
+  <a href="constlist.html">Constants</a>, and
+  <a href="funclist.html">Functions</a>.</p><hr><small><i>
+This page last modified 2008/12/09 18:44:04 UTC
+</i></small></div></body></html>

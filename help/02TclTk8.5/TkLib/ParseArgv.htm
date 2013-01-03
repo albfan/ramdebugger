@@ -1,39 +1,48 @@
-<HTML><HEAD><TITLE>Library Procedures - Tk_ParseArgv manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_ParseArgv manual page - Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> ParseArgv</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="ParseArgv.htm#M2" NAME="L475">NAME</A>
-<DL><DD>Tk_ParseArgv - process command-line options</DL>
-<DD><A HREF="ParseArgv.htm#M3" NAME="L476">SYNOPSIS</A>
+<DD><A HREF="ParseArgv.htm#M2" NAME="L486">NAME</A>
+<DL><DD>Tk_ParseArgv - process command-line options</DD></DL>
+<DD><A HREF="ParseArgv.htm#M3" NAME="L487">SYNOPSIS</A>
 <DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>int
+<DD><B>Tk_ParseArgv</B>(<I>interp, tkwin, argcPtr, argv, argTable, flags</I>)
 </DL>
-<DD><A HREF="ParseArgv.htm#M4" NAME="L477">ARGUMENTS</A>
-<DL>
+<DD><A HREF="ParseArgv.htm#M4" NAME="L488">ARGUMENTS</A>
+<DL class="arguments">
 </DL>
-<DD><A HREF="ParseArgv.htm#M5" NAME="L478">DESCRIPTION</A>
-<DL>
-<DD><A HREF="ParseArgv.htm#M6" NAME="L479"><B>TK_ARGV_END</B></A>
-<DD><A HREF="ParseArgv.htm#M7" NAME="L480"><B>TK_ARGV_CONSTANT</B></A>
-<DD><A HREF="ParseArgv.htm#M8" NAME="L481"><B>TK_ARGV_INT</B></A>
-<DD><A HREF="ParseArgv.htm#M9" NAME="L482"><B>TK_ARGV_FLOAT</B></A>
-<DD><A HREF="ParseArgv.htm#M10" NAME="L483"><B>TK_ARGV_STRING</B></A>
-<DD><A HREF="ParseArgv.htm#M11" NAME="L484"><B>TK_ARGV_UID</B></A>
-<DD><A HREF="ParseArgv.htm#M12" NAME="L485"><B>TK_ARGV_CONST_OPTION</B></A>
-<DD><A HREF="ParseArgv.htm#M13" NAME="L486"><B>TK_ARGV_OPTION_VALUE</B></A>
-<DD><A HREF="ParseArgv.htm#M14" NAME="L487"><B>TK_ARGV_OPTION_NAME_VALUE</B></A>
-<DD><A HREF="ParseArgv.htm#M15" NAME="L488"><B>TK_ARGV_HELP</B></A>
-<DD><A HREF="ParseArgv.htm#M16" NAME="L489"><B>TK_ARGV_REST</B></A>
-<DD><A HREF="ParseArgv.htm#M17" NAME="L490"><B>TK_ARGV_FUNC</B></A>
-<DD><A HREF="ParseArgv.htm#M18" NAME="L491"><B>TK_ARGV_GENFUNC</B></A>
+<DD><A HREF="ParseArgv.htm#M5" NAME="L489">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="ParseArgv.htm#M6" NAME="L490"><B>TK_ARGV_END</B></A>
+<DD><A HREF="ParseArgv.htm#M7" NAME="L491"><B>TK_ARGV_CONSTANT</B></A>
+<DD><A HREF="ParseArgv.htm#M8" NAME="L492"><B>TK_ARGV_INT</B></A>
+<DD><A HREF="ParseArgv.htm#M9" NAME="L493"><B>TK_ARGV_FLOAT</B></A>
+<DD><A HREF="ParseArgv.htm#M10" NAME="L494"><B>TK_ARGV_STRING</B></A>
+<DD><A HREF="ParseArgv.htm#M11" NAME="L495"><B>TK_ARGV_UID</B></A>
+<DD><A HREF="ParseArgv.htm#M12" NAME="L496"><B>TK_ARGV_CONST_OPTION</B></A>
+<DD><A HREF="ParseArgv.htm#M13" NAME="L497"><B>TK_ARGV_OPTION_VALUE</B></A>
+<DD><A HREF="ParseArgv.htm#M14" NAME="L498"><B>TK_ARGV_OPTION_NAME_VALUE</B></A>
+<DD><A HREF="ParseArgv.htm#M15" NAME="L499"><B>TK_ARGV_HELP</B></A>
+<DD><A HREF="ParseArgv.htm#M16" NAME="L500"><B>TK_ARGV_REST</B></A>
+<DD><A HREF="ParseArgv.htm#M17" NAME="L501"><B>TK_ARGV_FUNC</B></A>
+<DD><A HREF="ParseArgv.htm#M18" NAME="L502"><B>TK_ARGV_GENFUNC</B></A>
 </DL>
-<DD><A HREF="ParseArgv.htm#M19" NAME="L492">FLAGS</A>
-<DL>
-<DD><A HREF="ParseArgv.htm#M20" NAME="L493"><B>TK_ARGV_DONT_SKIP_FIRST_ARG</B></A>
-<DD><A HREF="ParseArgv.htm#M21" NAME="L494"><B>TK_ARGV_NO_ABBREV</B></A>
-<DD><A HREF="ParseArgv.htm#M22" NAME="L495"><B>TK_ARGV_NO_LEFTOVERS</B></A>
-<DD><A HREF="ParseArgv.htm#M23" NAME="L496"><B>TK_ARGV_NO_DEFAULTS</B></A>
+<DD><A HREF="ParseArgv.htm#M19" NAME="L503">FLAGS</A>
+<DL class="flags">
+<DD><A HREF="ParseArgv.htm#M20" NAME="L504"><B>TK_ARGV_DONT_SKIP_FIRST_ARG</B></A>
+<DD><A HREF="ParseArgv.htm#M21" NAME="L505"><B>TK_ARGV_NO_ABBREV</B></A>
+<DD><A HREF="ParseArgv.htm#M22" NAME="L506"><B>TK_ARGV_NO_LEFTOVERS</B></A>
+<DD><A HREF="ParseArgv.htm#M23" NAME="L507"><B>TK_ARGV_NO_DEFAULTS</B></A>
 </DL>
-<DD><A HREF="ParseArgv.htm#M24" NAME="L497">EXAMPLE</A>
-<DD><A HREF="ParseArgv.htm#M25" NAME="L498">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="ParseArgv.htm#M24" NAME="L508">EXAMPLE</A>
+<DD><A HREF="ParseArgv.htm#M25" NAME="L509">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_ParseArgv - process command-line options
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -41,7 +50,7 @@ Tk_ParseArgv - process command-line options
 int<BR>
 <B>Tk_ParseArgv</B>(<I>interp, tkwin, argcPtr, argv, argTable, flags</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter to use for returning error messages.
 <P><DT>Tk_Window <B>tkwin</B> (in)<DD>
@@ -50,7 +59,7 @@ no Tk options will be processed.
 <P><DT>int <B>argcPtr</B> (in/out)<DD>
 Pointer to number of arguments in argv;  gets modified to hold
 number of unprocessed arguments that remain after the call.
-<P><DT>CONST char <B>**argv</B> (in/out)<DD>
+<P><DT>const char <B>**argv</B> (in/out)<DD>
 Command line arguments passed to main program.  Modified to
 hold unprocessed arguments that remain after the call.
 <P><DT>Tk_ArgvInfo <B>*argTable</B> (in)<DD>
@@ -76,7 +85,7 @@ the caller.  At the end of the call
 arguments that are left in <I>argv</I>, and <I>argv[*argcPtr]</I>
 will hold the value NULL.  Normally, <B>Tk_ParseArgv</B>
 assumes that <I>argv[0]</I> is a command name, so it is treated like
-an argument that doesn't match <I>argTable</I> and returned to the
+an argument that does not match <I>argTable</I> and returned to the
 caller;  however, if the <B>TK_ARGV_DONT_SKIP_FIRST_ARG</B> bit is set in
 <I>flags</I> then <I>argv[0]</I> will be processed just like the other
 elements of <I>argv</I>.
@@ -98,7 +107,10 @@ expected;  each of its entries has the following structure:
     char *<I>dst</I>;
     char *<I>help</I>;
 } Tk_ArgvInfo;</PRE>
-The <I>key</I> field is a string such as ``-display'' or ``-bg''
+The <I>key</I> field is a string such as
+&#8220;-display&#8221;
+or
+&#8220;-bg&#8221;
 that is compared with the values in <I>argv</I>.  <I>Type</I>
 indicates how to process an argument that matches <I>key</I>
 (more on this below).  <I>Src</I> and <I>dst</I> are additional
@@ -123,14 +135,16 @@ skipped and returned to the caller.
 <P>
 Once a matching argument specifier is found, <B>Tk_ParseArgv</B>
 processes the argument according to the <I>type</I> field of the
-specifier.  The argument that matched <I>key</I> is called ``the matching
-argument'' in the descriptions below.  As part of the processing,
+specifier.  The argument that matched <I>key</I> is called
+&#8220;the matching argument&#8221;
+in the descriptions below.  As part of the processing,
 <B>Tk_ParseArgv</B> may also use the next argument in <I>argv</I>
-after the matching argument, which is called ``the following
-argument''.  The legal values for <I>type</I>, and the processing
+after the matching argument, which is called
+&#8220;the following argument&#8221;.
+The legal values for <I>type</I>, and the processing
 that they cause, are as follows:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M6"><B>TK_ARGV_END</B></A><DD>
 Marks the end of the table.  The last entry in <I>argTable</I>
 must have this type;  all of its other fields are ignored and it
@@ -141,8 +155,11 @@ as a pointer to an integer.  <I>Src</I> is stored at <I>*dst</I>.
 The matching argument is discarded.
 <P><DT><A NAME="M8"><B>TK_ARGV_INT</B></A><DD>
 The following argument must contain an
-integer string in the format accepted by <B>strtol</B> (e.g. ``0''
-and ``0x'' prefixes may be used to specify octal or hexadecimal
+integer string in the format accepted by <B>strtol</B> (e.g.
+&#8220;0&#8221;
+and
+&#8220;0x&#8221;
+prefixes may be used to specify octal or hexadecimal
 numbers, respectively).  <I>Dst</I> is treated as a pointer to an
 integer;  the following argument is converted to an integer value
 and stored at <I>*dst</I>.  <I>Src</I> is ignored.  The matching
@@ -202,7 +219,7 @@ extra documentation, which will be included when some other
 This option is used by programs or commands that allow the last
 several of their options to be the name and/or options for some
 other program.  If a <B>TK_ARGV_REST</B> argument is found, then
-<B>Tk_ParseArgv</B> doesn't process any
+<B>Tk_ParseArgv</B> does not process any
 of the remaining arguments;  it returns them all at
 the beginning of <I>argv</I> (along with any other unprocessed arguments).
 In addition, <B>Tk_ParseArgv</B> treats <I>dst</I> as the address of an
@@ -224,7 +241,7 @@ The procedure should have the following structure:
 The <I>dst</I> and <I>key</I> parameters will contain the
 corresponding fields from the <I>argTable</I> entry, and
 <I>nextArg</I> will point to the following argument from <I>argv</I>
-(or NULL if there aren't any more arguments left in <I>argv</I>).
+(or NULL if there are not any more arguments left in <I>argv</I>).
 If <I>func</I> uses <I>nextArg</I> (so that
 <B>Tk_ParseArgv</B> should discard it), then it should return 1.  Otherwise it
 should return 0 and <B>TkParseArgv</B> will process the following
@@ -259,11 +276,11 @@ in the usual Tcl fashion, and return -1;  when this happens
 <B>Tk_ParseArgv</B> will abort its processing and return <B>TCL_ERROR</B>.
 <P></DL>
 <H3><A NAME="M19">FLAGS</A></H3>
-<DL>
+<DL class="flags">
 <DT><A NAME="M20"><B>TK_ARGV_DONT_SKIP_FIRST_ARG</B></A><DD>
 <B>Tk_ParseArgv</B> normally treats <I>argv[0]</I> as a program
 or command name, and returns it to the caller just as if it
-hadn't matched <I>argTable</I>.  If this flag is given, then
+had not matched <I>argTable</I>.  If this flag is given, then
 <I>argv[0]</I> is not given special treatment.
 <P><DT><A NAME="M21"><B>TK_ARGV_NO_ABBREV</B></A><DD>
 Normally, <B>Tk_ParseArgv</B> accepts unique abbreviations for
@@ -272,16 +289,15 @@ only exact matches will be acceptable.
 <P><DT><A NAME="M22"><B>TK_ARGV_NO_LEFTOVERS</B></A><DD>
 Normally, <B>Tk_ParseArgv</B> returns unrecognized arguments to the
 caller.  If this bit is set in <I>flags</I> then <B>Tk_ParseArgv</B>
-will return an error if it encounters any argument that doesn't
+will return an error if it encounters any argument that does not
 match <I>argTable</I>.  The only exception to this rule is <I>argv[0]</I>,
 which will be returned to the caller with no errors as
-long as <B>TK_ARGV_DONT_SKIP_FIRST_ARG</B> isn't specified.
+long as <B>TK_ARGV_DONT_SKIP_FIRST_ARG</B> is not specified.
 <P><DT><A NAME="M23"><B>TK_ARGV_NO_DEFAULTS</B></A><DD>
 Normally, <B>Tk_ParseArgv</B> searches an internal table of
 standard argument specifiers in addition to <I>argTable</I>.  If
 this bit is set in <I>flags</I>, then <B>Tk_ParseArgv</B> will
 use only <I>argTable</I> and not its default table.
-
 <P></DL>
 <H3><A NAME="M24">EXAMPLE</A></H3>
 Here is an example definition of an <I>argTable</I> and
@@ -338,13 +354,15 @@ Here are some example command lines and their effects.
 prog -of out200 infile    # sets fileName to reference &quot;out200&quot;
 prog -XN 10 infile        # sets the debug flag, also sets numReps</PRE>
 In all of the above examples, <I>argc</I> will be set by <B>Tk_ParseArgv</B> to 2,
-<I>argv</I>[0] will be ``prog'', <I>argv</I>[1] will be ``infile'',
+<I>argv</I>[0] will be
+&#8220;prog&#8221;,
+<I>argv</I>[1] will be
+&#8220;infile&#8221;,
 and <I>argv</I>[2] will be NULL.
-
 <H3><A NAME="M25">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#arguments">arguments</A>, <A href="../Keywords/C.htm#command line">command line</A>, <A href="../Keywords/O.htm#options">options</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1992 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1992 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

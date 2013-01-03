@@ -1,7 +1,13 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - options manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>options manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> options</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
 <DD><A HREF="options.htm#M2" NAME="L2">NAME</A>
-<DL><DD>options - Standard options supported by widgets</DL>
+<DL><DD>options - Standard options supported by widgets</DD></DL>
 <DD><A HREF="options.htm#M3" NAME="L3">DESCRIPTION</A>
 <DL>
 <DD><A HREF="options.htm#M-activebackground" NAME="L4">-activebackground, activeBackground, Foreground</A>
@@ -49,7 +55,7 @@
 </DL>
 <DD><A HREF="options.htm#M4" NAME="L46">SEE ALSO</A>
 <DD><A HREF="options.htm#M5" NAME="L47">KEYWORDS</A>
-</DL><HR>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 options - Standard options supported by widgets
 <H3><A NAME="M3">DESCRIPTION</A></H3>
@@ -60,7 +66,9 @@ of the standard options supported by that widget), but if a widget does
 support an option with one of the names listed below, then the option
 has exactly the effect described below.
 <P>
-In the descriptions below, ``Command-Line Name'' refers to the
+In the descriptions below,
+&#8220;Command-Line Name&#8221;
+refers to the
 switch used in class commands and <B>configure</B> widget commands to
 set this value.  For example, if an option's command-line switch is
 <B>-foreground</B> and there exists a widget <B>.a.b.c</B>, then the
@@ -69,9 +77,10 @@ command
 may be used to specify the value <B>black</B> for the option in
 the widget <B>.a.b.c</B>.  Command-line switches may be abbreviated,
 as long as the abbreviation is unambiguous.
-``Database Name'' refers to the option's name in the option database (e.g.
-in .Xdefaults files).  ``Database Class'' refers to the option's class value
-in the option database.
+&#8220;Database Name&#8221;
+refers to the option's name in the option database (e.g. in .Xdefaults files).
+&#8220;Database Class&#8221;
+refers to the option's class value in the option database.
 <DL>
 <DT>Command-Line Name: <B><A NAME="M-activebackground">-activebackground</A></B>
 <DT>Database Name: <B>activeBackground</B>
@@ -229,14 +238,18 @@ The value may have any of the forms acceptable to <B><A HREF="../TkLib/GetPixels
 <DT>Database Name: <B>insertOffTime</B>
 <DT>Database Class: <B>OffTime</B>
 <DD>Specifies a non-negative integer value indicating the number of
-milliseconds the insertion cursor should remain ``off'' in each blink cycle.
-If this option is zero then the cursor doesn't blink:  it is on
+milliseconds the insertion cursor should remain
+&#8220;off&#8221;
+in each blink cycle.
+If this option is zero then the cursor does not blink:  it is on
 all the time.
 <P><DT>Command-Line Name: <B><A NAME="M-insertontime">-insertontime</A></B>
 <DT>Database Name: <B>insertOnTime</B>
 <DT>Database Class: <B>OnTime</B>
 <DD>Specifies a non-negative integer value indicating the number of
-milliseconds the insertion cursor should remain ``on'' in each blink cycle.
+milliseconds the insertion cursor should remain
+&#8220;on&#8221;
+in each blink cycle.
 <P><DT>Command-Line Name: <B><A NAME="M-insertwidth">-insertwidth</A></B>
 <DT>Database Name: <B>insertWidth</B>
 <DT>Database Class: <B>InsertWidth</B>
@@ -258,7 +271,9 @@ If the value is false, updates are made continuously as the
 slider is dragged.
 If the value is true, updates are delayed until the mouse button
 is released to end the drag;  at that point a single notification
-is made (the value ``jumps'' rather than changing smoothly).
+is made (the value
+&#8220;jumps&#8221;
+rather than changing smoothly).
 <P><DT>Command-Line Name: <B><A NAME="M-justify">-justify</A></B>
 <DT>Database Name: <B>justify</B>
 <DT>Database Class: <B>Justify</B>
@@ -404,7 +419,7 @@ particular widget and may be determined by other options, such as
 <DT>Database Class: <B>Background</B>
 <DD>Specifies the color to use for the rectangular trough areas
 in widgets such as scrollbars and scales.  This option is ignored for
-scrollbars on Windows (native widget doesn't recognize this option).
+scrollbars on Windows (native widget does not recognize this option).
 <P><DT>Command-Line Name: <B><A NAME="M-underline">-underline</A></B>
 <DT>Database Name: <B>underline</B>
 <DT>Database Class: <B>Underline</B>
@@ -445,7 +460,11 @@ the information just after the last portion that is visible.
 The command is
 then passed to the Tcl interpreter for execution.  Typically the
 <B>xScrollCommand</B> option consists of the path name of a scrollbar
-widget followed by ``set'', e.g. ``.x.scrollbar set'':  this will cause
+widget followed by
+&#8220;set&#8221;,
+e.g.
+&#8220;.x.scrollbar set&#8221;:
+this will cause
 the scrollbar to be updated whenever the view in the window changes.
 If this option is not specified, then no command will be executed.
 <P><DT>Command-Line Name: <B><A NAME="M-yscrollcommand">-yscrollcommand</A></B>
@@ -463,8 +482,8 @@ on how this option is used.
 <B><A HREF="../TkCmd/colors.htm">colors</A></B>, <B><A HREF="../TkCmd/cursors.htm">cursors</A></B>, <B><A HREF="../TkCmd/font.htm">font</A></B>
 <H3><A NAME="M5">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#class">class</A>, <A href="../Keywords/N.htm#name">name</A>, <A href="../Keywords/S.htm#standard option">standard option</A>, <A href="../Keywords/S.htm#switch">switch</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

@@ -1,21 +1,34 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_OpenTcpClient manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_OpenTcpClient manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> OpenTcp</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="OpenTcp.htm#M2" NAME="L493">NAME</A>
-<DL><DD>Tcl_OpenTcpClient, Tcl_MakeTcpClientChannel, Tcl_OpenTcpServer - procedures to open channels using TCP sockets</DL>
-<DD><A HREF="OpenTcp.htm#M3" NAME="L494">SYNOPSIS</A>
+<DD><A HREF="OpenTcp.htm#M2" NAME="L510">NAME</A>
+<DL><DD>Tcl_OpenTcpClient, Tcl_MakeTcpClientChannel, Tcl_OpenTcpServer - procedures to open channels using TCP sockets</DD></DL>
+<DD><A HREF="OpenTcp.htm#M3" NAME="L511">SYNOPSIS</A>
 <DL>
+<DD><B>#include &lt;tcl.h&gt; </B>
+<DD>Tcl_Channel
+<DD><B>Tcl_OpenTcpClient</B>(<I>interp, port, host, myaddr, myport, async</I>)
+<DD>Tcl_Channel
+<DD><B>Tcl_MakeTcpClientChannel</B>(<I>sock</I>)
+<DD>Tcl_Channel
+<DD><B>Tcl_OpenTcpServer</B>(<I>interp, port, myaddr, proc, clientData</I>)
 </DL>
-<DD><A HREF="OpenTcp.htm#M4" NAME="L495">ARGUMENTS</A>
-<DL>
+<DD><A HREF="OpenTcp.htm#M4" NAME="L512">ARGUMENTS</A>
+<DL class="arguments">
 </DL>
-<DD><A HREF="OpenTcp.htm#M5" NAME="L496">DESCRIPTION</A>
-<DD><A HREF="OpenTcp.htm#M6" NAME="L497">TCL_OPENTCPCLIENT</A>
-<DD><A HREF="OpenTcp.htm#M7" NAME="L498">TCL_MAKETCPCLIENTCHANNEL</A>
-<DD><A HREF="OpenTcp.htm#M8" NAME="L499">TCL_OPENTCPSERVER</A>
-<DD><A HREF="OpenTcp.htm#M9" NAME="L500">PLATFORM ISSUES</A>
-<DD><A HREF="OpenTcp.htm#M10" NAME="L501">SEE ALSO</A>
-<DD><A HREF="OpenTcp.htm#M11" NAME="L502">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="OpenTcp.htm#M5" NAME="L513">DESCRIPTION</A>
+<DD><A HREF="OpenTcp.htm#M6" NAME="L514">TCL_OPENTCPCLIENT</A>
+<DD><A HREF="OpenTcp.htm#M7" NAME="L515">TCL_MAKETCPCLIENTCHANNEL</A>
+<DD><A HREF="OpenTcp.htm#M8" NAME="L516">TCL_OPENTCPSERVER</A>
+<DD><A HREF="OpenTcp.htm#M9" NAME="L517">PLATFORM ISSUES</A>
+<DD><A HREF="OpenTcp.htm#M10" NAME="L518">SEE ALSO</A>
+<DD><A HREF="OpenTcp.htm#M11" NAME="L519">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_OpenTcpClient, Tcl_MakeTcpClientChannel, Tcl_OpenTcpServer - procedures to open channels using TCP sockets
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -27,7 +40,7 @@ Tcl_Channel<BR>
 Tcl_Channel<BR>
 <B>Tcl_OpenTcpServer</B>(<I>interp, port, myaddr, proc, clientData</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Tcl interpreter to use for error reporting.  If non-NULL and an
 error occurs, an error message is left in the interpreter's result.
@@ -111,12 +124,12 @@ replacement for the standard channel.
 <H3><A NAME="M8">TCL_OPENTCPSERVER</A></H3>
 <B>Tcl_OpenTcpServer</B> opens a TCP socket on the local host on a specified
 <I>port</I> and uses the Tcl event mechanism to accept requests from clients
-to connect to it.  The <I>myaddr</I> argument specifies the network interface.
+to connect to it. The <I>myaddr</I> argument specifies the network interface.
 If <I>myaddr</I> is NULL the special address INADDR_ANY should be used to
 allow connections from any network interface.
 Each time a client connects to this socket, Tcl creates a channel
 for the new connection and invokes <I>proc</I> with information about
-the channel.  <I>Proc</I> must match the following prototype:
+the channel. <I>Proc</I> must match the following prototype:
 <PRE>typedef void Tcl_TcpAcceptProc(
         ClientData <I>clientData</I>,
         Tcl_Channel <I>channel</I>,
@@ -167,7 +180,7 @@ socket handle is a <B><A HREF="../TclCmd/socket.htm">SOCKET</A></B> as defined i
 <B><A HREF="../TclLib/OpenFileChnl.htm">Tcl_OpenFileChannel</A></B>, <B><A HREF="../TclLib/OpenFileChnl.htm">Tcl_RegisterChannel</A></B>, <B><A HREF="../TclCmd/vwait.htm">vwait</A></B>
 <H3><A NAME="M11">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#client">client</A>, <A href="../Keywords/S.htm#server">server</A>, <A href="../Keywords/T.htm#TCP">TCP</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1996-7 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1996-7 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

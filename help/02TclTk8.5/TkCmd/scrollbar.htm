@@ -1,12 +1,17 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - scrollbar manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>scrollbar manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> scrollbar</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="scrollbar.htm#M2" NAME="L1163">NAME</A>
-<DL><DD>scrollbar - Create and manipulate scrollbar widgets</DL>
-<DD><A HREF="scrollbar.htm#M3" NAME="L1164">SYNOPSIS</A>
+<DD><A HREF="scrollbar.htm#M2" NAME="L1240">NAME</A>
+<DL><DD>scrollbar - Create and manipulate scrollbar widgets</DD></DL>
+<DD><A HREF="scrollbar.htm#M3" NAME="L1241">SYNOPSIS</A>
 <DL>
-<DD><B>scrollbar</B> <I>pathName </I>?<I>options</I>?
 </DL>
-<DD><A HREF="scrollbar.htm#M4" NAME="L1165">STANDARD OPTIONS</A>
+<DD><A HREF="scrollbar.htm#M4" NAME="L1242">STANDARD OPTIONS</A>
 <DL>
 <DD><A HREF="options.htm#M-activebackground">-activebackground, activeBackground, Foreground</A>
 <DD><A HREF="options.htm#M-background">-background or -bg, background, Background</A>
@@ -23,52 +28,53 @@
 <DD><A HREF="options.htm#M-takefocus">-takefocus, takeFocus, TakeFocus</A>
 <DD><A HREF="options.htm#M-troughcolor">-troughcolor, troughColor, Background</A>
 </DL>
-<DD><A HREF="scrollbar.htm#M5" NAME="L1166">WIDGET-SPECIFIC OPTIONS</A>
+<DD><A HREF="scrollbar.htm#M5" NAME="L1243">WIDGET-SPECIFIC OPTIONS</A>
 <DL>
-<DD><A HREF="scrollbar.htm#M6" NAME="L1167">-activerelief, activeRelief, ActiveRelief</A>
-<DD><A HREF="scrollbar.htm#M7" NAME="L1168">-command, command, Command</A>
-<DD><A HREF="scrollbar.htm#M8" NAME="L1169">-elementborderwidth, elementBorderWidth, BorderWidth</A>
-<DD><A HREF="scrollbar.htm#M9" NAME="L1170">-width, width, Width</A>
+<DD><A HREF="scrollbar.htm#M6" NAME="L1244">-activerelief, activeRelief, ActiveRelief</A>
+<DD><A HREF="scrollbar.htm#M7" NAME="L1245">-command, command, Command</A>
+<DD><A HREF="scrollbar.htm#M8" NAME="L1246">-elementborderwidth, elementBorderWidth, BorderWidth</A>
+<DD><A HREF="scrollbar.htm#M9" NAME="L1247">-width, width, Width</A>
 </DL>
-<DD><A HREF="scrollbar.htm#M10" NAME="L1171">DESCRIPTION</A>
-<DD><A HREF="scrollbar.htm#M11" NAME="L1172">ELEMENTS</A>
-<DL>
-<DD><A HREF="scrollbar.htm#M12" NAME="L1173"><B>arrow1</B></A>
-<DD><A HREF="scrollbar.htm#M13" NAME="L1174"><B>trough1</B></A>
-<DD><A HREF="scrollbar.htm#M14" NAME="L1175"><B>slider</B></A>
-<DD><A HREF="scrollbar.htm#M15" NAME="L1176"><B>trough2</B></A>
-<DD><A HREF="scrollbar.htm#M16" NAME="L1177"><B>arrow2</B></A>
+<DD><A HREF="scrollbar.htm#M10" NAME="L1248">DESCRIPTION</A>
+<DD><A HREF="scrollbar.htm#M11" NAME="L1249">ELEMENTS</A>
+<DL class="elements">
+<DD><A HREF="scrollbar.htm#M12" NAME="L1250"><B>arrow1</B></A>
+<DD><A HREF="scrollbar.htm#M13" NAME="L1251"><B>trough1</B></A>
+<DD><A HREF="scrollbar.htm#M14" NAME="L1252"><B>slider</B></A>
+<DD><A HREF="scrollbar.htm#M15" NAME="L1253"><B>trough2</B></A>
+<DD><A HREF="scrollbar.htm#M16" NAME="L1254"><B>arrow2</B></A>
 </DL>
-<DD><A HREF="scrollbar.htm#M17" NAME="L1178">WIDGET COMMAND</A>
-<DL>
-<DD><A HREF="scrollbar.htm#M18" NAME="L1179"><I>pathName </I><B>activate </B>?<I>element</I>?</A>
-<DD><A HREF="scrollbar.htm#M19" NAME="L1180"><I>pathName </I><B>cget</B> <I>option</I></A>
-<DD><A HREF="scrollbar.htm#M20" NAME="L1181"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
-<DD><A HREF="scrollbar.htm#M21" NAME="L1182"><I>pathName </I><B>delta </B><I>deltaX deltaY</I></A>
-<DD><A HREF="scrollbar.htm#M22" NAME="L1183"><I>pathName </I><B>fraction </B><I>x y</I></A>
-<DD><A HREF="scrollbar.htm#M23" NAME="L1184"><I>pathName </I><B>get</B></A>
-<DD><A HREF="scrollbar.htm#M24" NAME="L1185"><I>pathName </I><B>identify</B> <I>x y</I></A>
-<DD><A HREF="scrollbar.htm#M25" NAME="L1186"><I>pathName </I><B>set</B> <I>first last</I></A>
+<DD><A HREF="scrollbar.htm#M17" NAME="L1255">WIDGET COMMAND</A>
+<DL class="widget command">
+<DD><A HREF="scrollbar.htm#M18" NAME="L1256"><I>pathName </I><B>activate </B>?<I>element</I>?</A>
+<DD><A HREF="scrollbar.htm#M19" NAME="L1257"><I>pathName </I><B>cget</B> <I>option</I></A>
+<DD><A HREF="scrollbar.htm#M20" NAME="L1258"><I>pathName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
+<DD><A HREF="scrollbar.htm#M21" NAME="L1259"><I>pathName </I><B>delta </B><I>deltaX deltaY</I></A>
+<DD><A HREF="scrollbar.htm#M22" NAME="L1260"><I>pathName </I><B>fraction </B><I>x y</I></A>
+<DD><A HREF="scrollbar.htm#M23" NAME="L1261"><I>pathName </I><B>get</B></A>
+<DD><A HREF="scrollbar.htm#M24" NAME="L1262"><I>pathName </I><B>identify</B> <I>x y</I></A>
+<DD><A HREF="scrollbar.htm#M25" NAME="L1263"><I>pathName </I><B>set</B> <I>first last</I></A>
 </DL>
-<DD><A HREF="scrollbar.htm#M26" NAME="L1187">SCROLLING COMMANDS</A>
-<DL>
-<DD><A HREF="scrollbar.htm#M27" NAME="L1188"><I>prefix </I><B>moveto </B><I>fraction</I></A>
-<DD><A HREF="scrollbar.htm#M28" NAME="L1189"><I>prefix </I><B>scroll </B><I>number </I><B>units</B></A>
-<DD><A HREF="scrollbar.htm#M29" NAME="L1190"><I>prefix </I><B>scroll </B><I>number </I><B>pages</B></A>
+<DD><A HREF="scrollbar.htm#M26" NAME="L1264">SCROLLING COMMANDS</A>
+<DL class="scrolling commands">
+<DD><A HREF="scrollbar.htm#M27" NAME="L1265"><I>prefix </I><B>moveto </B><I>fraction</I></A>
+<DD><A HREF="scrollbar.htm#M28" NAME="L1266"><I>prefix </I><B>scroll </B><I>number </I><B>units</B></A>
+<DD><A HREF="scrollbar.htm#M29" NAME="L1267"><I>prefix </I><B>scroll </B><I>number </I><B>pages</B></A>
 </DL>
-<DD><A HREF="scrollbar.htm#M30" NAME="L1191">OLD COMMAND SYNTAX</A>
-<DL>
-<DD><A HREF="scrollbar.htm#M31" NAME="L1192"><I>pathName </I><B>set</B> <I>totalUnits windowUnits firstUnit lastUnit</I></A>
+<DD><A HREF="scrollbar.htm#M30" NAME="L1268">OLD COMMAND SYNTAX</A>
+<DL class="old command syntax">
+<DD><A HREF="scrollbar.htm#M31" NAME="L1269"><I>pathName </I><B>set</B> <I>totalUnits windowUnits firstUnit lastUnit</I></A>
 </DL>
-<DL>
-<DD><A HREF="scrollbar.htm#M32" NAME="L1193"><I>prefix</I> <I>unit</I></A>
+<DL class="old command syntax">
+<DD><A HREF="scrollbar.htm#M32" NAME="L1270"><I>prefix</I> <I>unit</I></A>
 </DL>
-<DD><A HREF="scrollbar.htm#M33" NAME="L1194">BINDINGS</A>
-<DL>
+<DD><A HREF="scrollbar.htm#M33" NAME="L1271">BINDINGS</A>
+<DL class="bindings">
 </DL>
-<DD><A HREF="scrollbar.htm#M34" NAME="L1195">EXAMPLE</A>
-<DD><A HREF="scrollbar.htm#M35" NAME="L1196">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="scrollbar.htm#M34" NAME="L1272">EXAMPLE</A>
+<DD><A HREF="scrollbar.htm#M35" NAME="L1273">SEE ALSO</A>
+<DD><A HREF="scrollbar.htm#M36" NAME="L1274">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 scrollbar - Create and manipulate scrollbar widgets
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -112,7 +118,7 @@ name of a widget and either <B>xview</B> (if the scrollbar is for
 horizontal scrolling) or <B>yview</B> (for vertical scrolling).
 All scrollable widgets have <B>xview</B> and <B>yview</B> commands
 that take exactly the additional arguments appended by the scrollbar
-as described in SCROLLING COMMANDS below.
+as described in <B>SCROLLING COMMANDS</B> below.
 <P><DT>Command-Line Name: <B><A NAME="M8">-elementborderwidth</A></B>
 <DT>Database Name: <B>elementBorderWidth</B>
 <DT>Database Class: <B>BorderWidth</B>
@@ -159,7 +165,7 @@ below for details.
 A scrollbar displays five elements, which are referred to in the
 widget commands for the scrollbar:
 <P>
-<DL>
+<DL class="elements">
 <DT><A NAME="M12"><B>arrow1</B></A><DD>
 The top or left arrow in the scrollbar.
 <P><DT><A NAME="M13"><B>trough1</B></A><DD>
@@ -181,7 +187,7 @@ operations on the widget.  It has the following general form:
 determine the exact behavior of the command.  The following
 commands are possible for scrollbar widgets:
 <P>
-<DL>
+<DL class="widget command">
 <DT><A NAME="M18"><I>pathName </I><B>activate </B>?<I>element</I>?</A><DD>
 Marks the element indicated by <I>element</I> as active, which
 causes it to be displayed as specified by the <B>activeBackground</B>
@@ -262,7 +268,7 @@ The command may take any of the following forms.
 In each case, <I>prefix</I> is the contents of the
 <B>-command</B> option, which usually has a form like <B>.t yview</B>
 <P>
-<DL>
+<DL class="scrolling commands">
 <DT><A NAME="M27"><I>prefix </I><B>moveto </B><I>fraction</I></A><DD>
 <I>Fraction</I> is a real number between 0 and 1.
 The widget should adjust its view so that the point given
@@ -295,7 +301,7 @@ is deprecated.
 In the old command syntax, the <B>set</B> widget command has the
 following form:
 <P>
-<DL>
+<DL class="old command syntax">
 <DT><A NAME="M31"><I>pathName </I><B>set</B> <I>totalUnits windowUnits firstUnit lastUnit</I></A><DD>
 In this form the arguments are all integers.
 <I>TotalUnits</I> gives the total size of the object being displayed in the
@@ -317,7 +323,7 @@ widget command.
 The commands generated by scrollbars also have a different form
 when the old syntax is being used:
 <P>
-<DL>
+<DL class="old command syntax">
 <DT><A NAME="M32"><I>prefix</I> <I>unit</I></A><DD>
 <I>Unit</I> is an integer that indicates what should appear at
 the top or left of the associated widget's window.
@@ -336,7 +342,7 @@ the following default behavior.
 If the behavior is different for vertical and horizontal scrollbars,
 the horizontal behavior is described in parentheses.
 <P>
-<DL>
+<DL class="bindings">
 <DT>[1]<DD>
 Pressing button 1 over <B>arrow1</B> causes the view in the
 associated widget to shift up (left) by one unit so that the
@@ -350,7 +356,7 @@ If the button is held down, the action auto-repeats.
 <P><DT>[3]<DD>
 Pressing button 1 over the slider and dragging causes the view
 to drag with the slider.
-If the <B>jump</B> option is true, then the view doesn't drag along
+If the <B>jump</B> option is true, then the view does not drag along
 with the slider;  it changes only when the mouse button is released.
 <P><DT>[4]<DD>
 Pressing button 1 over <B>trough2</B> causes the view in the
@@ -407,10 +413,12 @@ text .tl.t -yscrollcommand {.tl.s set}
 grid .tl.t .tl.s -sticky nsew
 grid columnconfigure .tl 0 -weight 1
 grid rowconfigure .tl 0 -weight 1</PRE>
-<H3><A NAME="M35">KEYWORDS</A></H3>
+<H3><A NAME="M35">SEE ALSO</A></H3>
+<B>ttk:scrollbar</B>
+<H3><A NAME="M36">KEYWORDS</A></H3>
 <A href="../Keywords/S.htm#scrollbar">scrollbar</A>, <A href="../Keywords/W.htm#widget">widget</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

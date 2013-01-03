@@ -7,7 +7,7 @@
 #   - Private procedures implementing the interactive cell editing
 #   - Private procedures used in bindings related to interactive cell editing
 #
-# Copyright (c) 2003-2007  Csaba Nemethi (E-mail: csaba.nemethi@t-online.de)
+# Copyright (c) 2003-2008  Csaba Nemethi (E-mail: csaba.nemethi@t-online.de)
 #==============================================================================
 
 #
@@ -1351,29 +1351,30 @@ proc tablelist::doEditCell {win row col restore {cmd ""} {charPos -1}} {
 	destroy $f
 	return -code error $result
     }
+    catch {$w configure -relief ridge}
+    catch {$w configure -highlightthickness 0}
+    clearTakefocusOpt $w
     set class [winfo class $w]
     set isCheckbtn [string match "*Checkbutton" $class]
     set isText [expr {[string compare $class "Text"] == 0}]
     set isMentry [expr {[string compare $class "Mentry"] == 0}]
-    catch {$w configure -relief ridge}
-    catch {$w configure -highlightthickness 0}
     if {!$isCheckbtn} {
 	catch {$w configure -borderwidth 2}
+    }
+    if {$isText && $data($col-wrap) && $::tk_version >= 8.5} {
+	$w configure -wrap word
     }
     set alignment [lindex $data(colList) [expr {2*$col + 1}]]
     if {!$isText && !$isMentry} {
 	catch {$w configure -justify $alignment}
     }
-    clearTakefocusOpt $w
 
     #
-    # Replace the cell contents between the two tabs with the above frame
+    # Replace the cell's contents between the two tabs with the above frame
     #
-    set b $data(body)
-    set data(editKey) $key
-    set data(editRow) $row
-    set data(editCol) $col
+    array set data [list editKey $key editRow $row editCol $col]
     findTabs $win [expr {$row + 1}] $col $col tabIdx1 tabIdx2
+    set b $data(body)
     if {$isCheckbtn} {
 	set editIdx [$b index $tabIdx1+1c]
 	$b delete $editIdx $tabIdx2
@@ -1425,7 +1426,7 @@ proc tablelist::doEditCell {win row col restore {cmd ""} {charPos -1}} {
 	set data(invoked) 0
 	set text [lindex $item $col]
 	if {$editWin($name-useFormat) && [lindex $data(fmtCmdFlagList) $col]} {
-	    set text [uplevel #0 $data($col-formatcommand) [list $text]]
+	    set text [formatElem $win $key $row $col $text]
 	}
 	catch {
 	    eval [strMap {"%W" "$w"  "%T" "$text"} $editWin($name-putValueCmd)]
@@ -1448,18 +1449,6 @@ proc tablelist::doEditCell {win row col restore {cmd ""} {charPos -1}} {
 	set data(origEditText) \
 	    [eval [strMap {"%W" "$w"} $editWin($name-getTextCmd)]]
 	set data(rejected) 0
-
-	if {$isText} {
-	    #
-	    # Adjust the edit window's height
-	    #
-	    scan [$w index end-1c] "%d" numLines
-	    $w configure -height $numLines
-	    if {[info exists ::wcb::version]} {
-		wcb::callback $w after insert tablelist::adjustTextHeight
-		wcb::callback $w after delete tablelist::adjustTextHeight
-	    }
-	}
 
 	if {[string compare $editWin($name-getListCmd) ""] != 0 &&
 	    [string compare $editWin($name-selectCmd) ""] != 0} {
@@ -1522,6 +1511,26 @@ proc tablelist::doEditCell {win row col restore {cmd ""} {charPos -1}} {
 		$comp icursor end
 		$comp selection range 0 end
 	    }
+	}
+    }
+
+    if {$isText} {
+	#
+	# Adjust the edit window's height
+	#
+	if {[string compare [$w cget -wrap] "none"] != 0 &&
+	    $::tk_version >= 8.5} {
+	    bind $w <Configure> {
+		%W configure -height [%W count -displaylines 1.0 end]
+		[winfo parent %W] configure -height [winfo reqheight %W]
+	    }
+	} else {
+	    scan [$w index end-1c] "%d" numLines
+	    $w configure -height $numLines
+	}
+	if {[info exists ::wcb::version]} {
+	    wcb::cbappend $w after insert tablelist::adjustTextHeight
+	    wcb::cbappend $w after delete tablelist::adjustTextHeight
 	}
     }
 
@@ -1700,7 +1709,17 @@ proc tablelist::clearTakefocusOpt w {
 # edit window to the number of lines currently contained in it.
 #------------------------------------------------------------------------------
 proc tablelist::adjustTextHeight {w args} {
-    scan [$w index end-1c] "%d" numLines
+    if {$::tk_version < 8.5} {
+	#
+	# We can only count the logical lines (irrespective of wrapping)
+	#
+	scan [$w index end-1c] "%d" numLines
+    } else {
+	#
+	# Count the display lines (taking into account the line wraps)
+	#
+	set numLines [$w count -displaylines 1.0 end]
+    }
     $w configure -height $numLines
 
     set path [wcb::pathname $w]
@@ -1804,7 +1823,7 @@ proc tablelist::adjustEditWindow {win pixels} {
 	if {$auxType == 1} {					;# image
 	    setImgLabelWidth $data(body) editAuxMark $auxWidth
 	} else {						;# window
-	    if {[$aux cget -width] != $auxWidth} {
+	    if {[winfo exists $aux] && [$aux cget -width] != $auxWidth} {
 		$aux configure -width $auxWidth
 	    }
 	}
@@ -1933,7 +1952,7 @@ proc tablelist::saveEditConfigOpts w {
 	    set current [lindex $configSet 4]
 	    if {[string compare $default $current] != 0} {
 		set opt [lindex $configSet 0]
-		set data($tail$opt) [lindex $configSet 4]
+		set data($tail$opt) $current
 	    }
 	}
     }
@@ -2132,8 +2151,7 @@ proc tablelist::goToNextPrevCell {w amount args} {
 	set col $data(editCol)
 	set cmd condChangeSelection
     } else {
-	set row [lindex $args 0]
-	set col [lindex $args 1]
+	foreach {row col} $args {}
 	set cmd changeSelection
     }
 

@@ -1,30 +1,39 @@
-<HTML><HEAD><TITLE>Tk Tk Built-In Commands - Safe manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Safe manual page - Tk Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> loadTk</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <H3><A NAME="M2">NAME</A></H3>
 loadTk - Load Tk into a safe interpreter.
 <H3><A NAME="M3">SYNOPSIS</A></H3>
 <B>::safe::loadTk </B><I>slave</I> ?<B>-use</B> <I>windowId</I>? ?<B>-display</B> <I>displayName</I>? <BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
 Safe Tk is based on Safe Tcl, which provides a mechanism 
 that allows restricted and mediated
 access to auto-loading and packages for safe interpreters.
 Safe Tk adds the ability to configure the interpreter
 for safe Tk operations and load Tk into safe 
 interpreters.
-
-<H3><A NAME="M4">DESCRIPTION</A></H3>
+<P>
 The <B>::safe::loadTk</B> command initializes the required data structures
 in the named safe interpreter and then loads Tk into it.
 The interpreter must have been created with <B>::safe::interpCreate</B>
 or have been initialized with <B>::safe::interpInit</B>.
 The command returns the name of the safe interpreter.
 If <B>-use</B> is specified, the window identified by the specified system
-dependent identifier <I>windowId</I> is used to contain the ``.''
+dependent identifier <I>windowId</I> is used to contain the
+&#8220;.&#8221;
 window of the safe interpreter; it can be any valid id, eventually 
 referencing a window belonging to another application. As a convenience,
 if the window you plan to use is a Tk Window of the application you
 can use the window name (e.g. <B>.x.y</B>) instead of its window Id 
 (<B>[winfo id .x.y]</B>).
 When <B>-use</B> is not specified,
-a new toplevel window is created for the ``.'' window of
+a new toplevel window is created for the
+&#8220;.&#8221;
+window of
 the safe interpreter. On X11 if you want the embedded window
 to use another display than the default one, specify it with
 <B>-display</B>.
@@ -61,7 +70,7 @@ to generate a fatal X error.
 <A href="../Keywords/A.htm#alias">alias</A>, <A href="../Keywords/A.htm#auto-loading">auto-loading</A>, <A href="../Keywords/A.htm#auto_mkindex">auto_mkindex</A>, <A href="../Keywords/L.htm#load">load</A>, <A href="../Keywords/M.htm#master interpreter">master interpreter</A>, <A href="../Keywords/S.htm#safe
 interpreter">safe
 interpreter</A>, <A href="../Keywords/S.htm#slave interpreter">slave interpreter</A>, <A href="../Keywords/S.htm#source">source</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1995-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

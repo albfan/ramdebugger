@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>Test To See If The Library Is Threadsafe</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: "Verdana" "sans-serif";
+    padding: 8px 1%;
+}
+
+a { color: #45735f }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:240px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.toolbar {
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding:1px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #80a796; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* rounded corners */
+.se  { background: url(../images/se.png) 100% 100% no-repeat #80a796}
+.sw  { background: url(../images/sw.png) 0% 100% no-repeat }
+.ne  { background: url(../images/ne.png) 100% 0% no-repeat }
+.nw  { background: url(../images/nw.png) 0% 0% no-repeat }
+
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="../index.html">
+<img class="logo" src="../images/SQLite.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% style="clear:both"><tr><td>
+  <div class="se"><div class="sw"><div class="ne"><div class="nw">
+  <div class="toolbar">
+    <a href="../about.html">About</a>
+    <a href="../sitemap.html">Sitemap</a>
+    <a href="../docs.html">Documentation</a>
+    <a href="../download.html">Download</a>
+    <a href="../copyright.html">License</a>
+    <a href="../news.html">News</a>
+    <a href="http://www.sqlite.org/cvstrac/index">Developers</a>
+    <a href="../support.html">Support</a>
+  </div></div></div></div></div>
+</td></tr></table>
+  
+<a href="intro.html"><h2>SQLite C Interface</h2></a><h2>Test To See If The Library Is Threadsafe</h2><blockquote><pre>int sqlite3_threadsafe(void);
+</pre></blockquote><p>
+SQLite can be compiled with or without mutexes.  When
+the <a href="../compile.html#threadsafe">SQLITE_THREADSAFE</a> C preprocessor macro 1 or 2, mutexes
+are enabled and SQLite is threadsafe.  When the
+<a href="../compile.html#threadsafe">SQLITE_THREADSAFE</a> macro is 0,
+the mutexes are omitted.  Without the mutexes, it is not safe
+to use SQLite concurrently from more than one thread.</p>
+
+<p>Enabling mutexes incurs a measurable performance penalty.
+So if speed is of utmost importance, it makes sense to disable
+the mutexes.  But for maximum safety, mutexes should be enabled.
+The default behavior is for mutexes to be enabled.</p>
+
+<p>This interface can be used by a program to make sure that the
+version of SQLite that it is linking against was compiled with
+the desired setting of the <a href="../compile.html#threadsafe">SQLITE_THREADSAFE</a> macro.</p>
+
+<p>This interface only reports on the compile-time mutex setting
+of the <a href="../compile.html#threadsafe">SQLITE_THREADSAFE</a> flag.  If SQLite is compiled with
+SQLITE_THREADSAFE=1 then mutexes are enabled by default but
+can be fully or partially disabled using a call to <a href="../c3ref/config.html">sqlite3_config()</a>
+with the verbs <a href="../c3ref/c_config_getmalloc.html">SQLITE_CONFIG_SINGLETHREAD</a>, <a href="../c3ref/c_config_getmalloc.html">SQLITE_CONFIG_MULTITHREAD</a>,
+or <a href="../c3ref/c_config_getmalloc.html">SQLITE_CONFIG_MUTEX</a>.  The return value of this function shows
+only the default compile-time setting, not any run-time changes
+to that setting.</p>
+
+<p>See the <a href="../threadsafe.html">threading mode</a> documentation for additional information.</p>
+
+<p><h3>Invariants:</h3>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr><td valign="top">H10101</td> 
+<td valign="top">
+The <a href="../c3ref/threadsafe.html">sqlite3_threadsafe()</a> function shall return zero if
+and only if SQLite was compiled with mutexing code omitted.</td></tr>
+<tr><td valign="top">H10102</td> 
+<td valign="top">
+The value returned by the <a href="../c3ref/threadsafe.html">sqlite3_threadsafe()</a> function
+shall remain the same across calls to <a href="../c3ref/config.html">sqlite3_config()</a>.</td></tr>
+</table>
+</p><p>See also lists of
+  <a href="objlist.html">Objects</a>,
+  <a href="constlist.html">Constants</a>, and
+  <a href="funclist.html">Functions</a>.</p><hr><small><i>
+This page last modified 2008/12/09 18:44:04 UTC
+</i></small></div></body></html>

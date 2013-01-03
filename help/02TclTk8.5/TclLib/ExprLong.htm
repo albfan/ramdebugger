@@ -1,4 +1,32 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_ExprLong manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_ExprLong manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> ExprLong</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="ExprLong.htm#M2" NAME="L261">NAME</A>
+<DL><DD>Tcl_ExprLong, Tcl_ExprDouble, Tcl_ExprBoolean, Tcl_ExprString - evaluate an expression</DD></DL>
+<DD><A HREF="ExprLong.htm#M3" NAME="L262">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>int
+<DD><B>Tcl_ExprLong</B>(<I>interp, expr, longPtr</I>)
+<DD>int
+<DD><B>Tcl_ExprDouble</B>(<I>interp, expr, doublePtr</I>)
+<DD>int
+<DD><B>Tcl_ExprBoolean</B>(<I>interp, expr, booleanPtr</I>)
+<DD>int
+<DD><B>Tcl_ExprString</B>(<I>interp, expr</I>)
+</DL>
+<DD><A HREF="ExprLong.htm#M4" NAME="L263">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="ExprLong.htm#M5" NAME="L264">DESCRIPTION</A>
+<DD><A HREF="ExprLong.htm#M6" NAME="L265">SEE ALSO</A>
+<DD><A HREF="ExprLong.htm#M7" NAME="L266">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_ExprLong, Tcl_ExprDouble, Tcl_ExprBoolean, Tcl_ExprString - evaluate an expression
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -12,7 +40,7 @@ int<BR>
 int<BR>
 <B>Tcl_ExprString</B>(<I>interp, expr</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter in whose context to evaluate <I>expr</I>.
 <P><DT>const char <B>*expr</B> (in)<DD>
@@ -74,7 +102,11 @@ number, then they store 0 at <I>*booleanPtr</I> if
 the value was zero and 1 otherwise.
 If the expression's actual value is a non-numeric string then
 it must be one of the values accepted by <B><A HREF="../TclLib/GetInt.htm">Tcl_GetBoolean</A></B>
-such as ``yes'' or ``no'', or else an error occurs.
+such as
+&#8220;yes&#8221;
+or
+&#8220;no&#8221;,
+or else an error occurs.
 <P>
 <B>Tcl_ExprString</B> returns the value of the expression as a
 string stored in the interpreter's result.
@@ -83,8 +115,8 @@ string stored in the interpreter's result.
 <B><A HREF="../TclLib/ExprLongObj.htm">Tcl_ExprLongObj</A></B>, <B><A HREF="../TclLib/ExprLongObj.htm">Tcl_ExprDoubleObj</A></B>, <B><A HREF="../TclLib/ExprLongObj.htm">Tcl_ExprBooleanObj</A></B>, <B><A HREF="../TclLib/ExprLongObj.htm">Tcl_ExprObj</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#boolean">boolean</A>, <A href="../Keywords/D.htm#double">double</A>, <A href="../Keywords/E.htm#evaluate">evaluate</A>, <A href="../Keywords/E.htm#expression">expression</A>, <A href="../Keywords/I.htm#integer">integer</A>, <A href="../Keywords/O.htm#object">object</A>, <A href="../Keywords/S.htm#string">string</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1989-1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1989-1993 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

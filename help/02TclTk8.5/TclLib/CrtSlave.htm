@@ -1,4 +1,52 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_CreateSlave manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_CreateSlave manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> CrtSlave</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="CrtSlave.htm#M2" NAME="L153">NAME</A>
+<DL><DD>Tcl_IsSafe, Tcl_MakeSafe, Tcl_CreateSlave, Tcl_GetSlave, Tcl_GetMaster, Tcl_GetInterpPath, Tcl_CreateAlias, Tcl_CreateAliasObj, Tcl_GetAlias, Tcl_GetAliasObj, Tcl_ExposeCommand, Tcl_HideCommand - manage multiple Tcl interpreters, aliases and hidden commands</DD></DL>
+<DD><A HREF="CrtSlave.htm#M3" NAME="L154">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>int
+<DD><B>Tcl_IsSafe</B>(<I>interp</I>)
+<DD>int
+<DD><B>Tcl_MakeSafe</B>(<I>interp</I>)
+<DD>Tcl_Interp *
+<DD><B>Tcl_CreateSlave</B>(<I>interp, slaveName, isSafe</I>)
+<DD>Tcl_Interp *
+<DD><B>Tcl_GetSlave</B>(<I>interp, slaveName</I>)
+<DD>Tcl_Interp *
+<DD><B>Tcl_GetMaster</B>(<I>interp</I>)
+<DD>int
+<DD><B>Tcl_GetInterpPath</B>(<I>askingInterp, slaveInterp</I>)
+<DD>int
+<DD><B>Tcl_CreateAlias</B>(<I>slaveInterp, slaveCmd, targetInterp, targetCmd,
+<DD>                argc, argv</I>)
+<DD>int
+<DD><B>Tcl_CreateAliasObj</B>(<I>slaveInterp, slaveCmd, targetInterp, targetCmd,
+<DD>                   objc, objv</I>)
+<DD>int
+<DD><B>Tcl_GetAlias</B>(<I>interp, slaveCmd, targetInterpPtr, targetCmdPtr,
+<DD>             argcPtr, argvPtr</I>)
+<DD>int
+<DD><B>Tcl_GetAliasObj</B>(<I>interp, slaveCmd, targetInterpPtr, targetCmdPtr,
+<DD>                objcPtr, objvPtr</I>)
+<DD>int
+<DD><B>Tcl_ExposeCommand</B>(<I>interp, hiddenCmdName, cmdName</I>)
+<DD>int
+<DD><B>Tcl_HideCommand</B>(<I>interp, cmdName, hiddenCmdName</I>)
+</DL>
+<DD><A HREF="CrtSlave.htm#M4" NAME="L155">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="CrtSlave.htm#M5" NAME="L156">DESCRIPTION</A>
+<DD><A HREF="CrtSlave.htm#M6" NAME="L157">SEE ALSO</A>
+<DD><A HREF="CrtSlave.htm#M7" NAME="L158">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_IsSafe, Tcl_MakeSafe, Tcl_CreateSlave, Tcl_GetSlave, Tcl_GetMaster, Tcl_GetInterpPath, Tcl_CreateAlias, Tcl_CreateAliasObj, Tcl_GetAlias, Tcl_GetAliasObj, Tcl_ExposeCommand, Tcl_HideCommand - manage multiple Tcl interpreters, aliases and hidden commands
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -32,13 +80,15 @@ int<BR>
 int<BR>
 <B>Tcl_HideCommand</B>(<I>interp, cmdName, hiddenCmdName</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter in which to execute the specified command.
 <P><DT>const char <B>*slaveName</B> (in)<DD>
 Name of slave interpreter to create or manipulate.
 <P><DT>int <B>isSafe</B> (in)<DD>
-If non-zero, a ``safe'' slave that is suitable for running untrusted code
+If non-zero, a
+&#8220;safe&#8221;
+slave that is suitable for running untrusted code
 is created, otherwise a trusted slave is created.
 <P><DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*slaveInterp</B> (in)<DD>
 Interpreter to use for creating the source command for an alias (see
@@ -101,16 +151,21 @@ It also creates a slave command named <I>slaveName</I> in <I>interp</I> which
 allows <I>interp</I> to manipulate the new slave. 
 If <I>isSafe</I> is zero, the command creates a trusted slave in which Tcl
 code has access to all the Tcl commands.
-If it is <B>1</B>, the command creates a ``safe'' slave in which Tcl code
-has access only to set of Tcl commands defined as ``Safe Tcl''; see the
-manual entry for the Tcl <B><A HREF="../TclCmd/interp.htm">interp</A></B> command for details.
+If it is <B>1</B>, the command creates a
+&#8220;safe&#8221;
+slave in which Tcl code has access only to set of Tcl commands defined as
+&#8220;Safe Tcl&#8221;;
+see the manual entry for the Tcl <B><A HREF="../TclCmd/interp.htm">interp</A></B> command for details.
 If the creation of the new slave interpreter failed, <B>NULL</B> is returned.
 <P>
-<B>Tcl_IsSafe</B> returns <B>1</B> if <I>interp</I> is ``safe'' (was created
-with the <B>TCL_SAFE_INTERPRETER</B> flag specified),
+<B>Tcl_IsSafe</B> returns <B>1</B> if <I>interp</I> is
+&#8220;safe&#8221;
+(was created with the <B>TCL_SAFE_INTERPRETER</B> flag specified),
 <B>0</B> otherwise.
 <P>
-<B>Tcl_MakeSafe</B> marks <I>interp</I> as ``safe'', so that future
+<B>Tcl_MakeSafe</B> marks <I>interp</I> as
+&#8220;safe&#8221;,
+so that future
 calls to <B>Tcl_IsSafe</B> will return 1.  It also removes all known
 potentially-unsafe core functionality (both commands and variables)
 from <I>interp</I>.  However, it cannot know what parts of an extension
@@ -202,7 +257,7 @@ For a description of the Tcl interface to multiple interpreters, see
 <B><A HREF="../TclCmd/interp.htm">interp</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#alias">alias</A>, <A href="../Keywords/C.htm#command">command</A>, <A href="../Keywords/E.htm#exposed commands">exposed commands</A>, <A href="../Keywords/H.htm#hidden commands">hidden commands</A>, <A href="../Keywords/I.htm#interpreter">interpreter</A>, <A href="../Keywords/I.htm#invoke">invoke</A>, <A href="../Keywords/M.htm#master">master</A>, <A href="../Keywords/S.htm#slave">slave</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1995-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

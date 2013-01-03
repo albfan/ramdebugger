@@ -1,21 +1,46 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Threads manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Threads manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> Thread</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="Thread.htm#M2" NAME="L690">NAME</A>
-<DL><DD>Tcl_ConditionNotify, Tcl_ConditionWait, Tcl_ConditionFinalize, Tcl_GetThreadData, Tcl_MutexLock, Tcl_MutexUnlock, Tcl_MutexFinalize, Tcl_CreateThread, Tcl_JoinThread - Tcl thread support</DL>
-<DD><A HREF="Thread.htm#M3" NAME="L691">SYNOPSIS</A>
+<DD><A HREF="Thread.htm#M2" NAME="L741">NAME</A>
+<DL><DD>Tcl_ConditionNotify, Tcl_ConditionWait, Tcl_ConditionFinalize, Tcl_GetThreadData, Tcl_MutexLock, Tcl_MutexUnlock, Tcl_MutexFinalize, Tcl_CreateThread, Tcl_JoinThread - Tcl thread support</DD></DL>
+<DD><A HREF="Thread.htm#M3" NAME="L742">SYNOPSIS</A>
 <DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>void
+<DD><B>Tcl_ConditionNotify</B>(<I>condPtr</I>)
+<DD>void
+<DD><B>Tcl_ConditionWait</B>(<I>condPtr, mutexPtr, timePtr</I>)
+<DD>void
+<DD><B>Tcl_ConditionFinalize</B>(<I>condPtr</I>)
+<DD>Void *
+<DD><B>Tcl_GetThreadData</B>(<I>keyPtr, size</I>)
+<DD>void
+<DD><B>Tcl_MutexLock</B>(<I>mutexPtr</I>)
+<DD>void
+<DD><B>Tcl_MutexUnlock</B>(<I>mutexPtr</I>)
+<DD>void
+<DD><B>Tcl_MutexFinalize</B>(<I>mutexPtr</I>)
+<DD>int
+<DD><B>Tcl_CreateThread</B>(<I>idPtr, threadProc, clientData, stackSize, flags</I>)
+<DD>int
+<DD><B>Tcl_JoinThread</B>(<I>id, result</I>)
 </DL>
-<DD><A HREF="Thread.htm#M4" NAME="L692">ARGUMENTS</A>
-<DL>
+<DD><A HREF="Thread.htm#M4" NAME="L743">ARGUMENTS</A>
+<DL class="arguments">
 </DL>
-<DD><A HREF="Thread.htm#M5" NAME="L693">INTRODUCTION</A>
-<DD><A HREF="Thread.htm#M6" NAME="L694">DESCRIPTION</A>
-<DD><A HREF="Thread.htm#M7" NAME="L695">SYNCHRONIZATION AND COMMUNICATION</A>
-<DD><A HREF="Thread.htm#M8" NAME="L696">INITIALIZATION</A>
-<DD><A HREF="Thread.htm#M9" NAME="L697">SCRIPT-LEVEL ACCESS TO THREADS</A>
-<DD><A HREF="Thread.htm#M10" NAME="L698">SEE ALSO</A>
-<DD><A HREF="Thread.htm#M11" NAME="L699">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="Thread.htm#M5" NAME="L744">INTRODUCTION</A>
+<DD><A HREF="Thread.htm#M6" NAME="L745">DESCRIPTION</A>
+<DD><A HREF="Thread.htm#M7" NAME="L746">SYNCHRONIZATION AND COMMUNICATION</A>
+<DD><A HREF="Thread.htm#M8" NAME="L747">INITIALIZATION</A>
+<DD><A HREF="Thread.htm#M9" NAME="L748">SCRIPT-LEVEL ACCESS TO THREADS</A>
+<DD><A HREF="Thread.htm#M10" NAME="L749">SEE ALSO</A>
+<DD><A HREF="Thread.htm#M11" NAME="L750">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_ConditionNotify, Tcl_ConditionWait, Tcl_ConditionFinalize, Tcl_GetThreadData, Tcl_MutexLock, Tcl_MutexUnlock, Tcl_MutexFinalize, Tcl_CreateThread, Tcl_JoinThread - Tcl thread support
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -39,14 +64,14 @@ int<BR>
 int<BR>
 <B>Tcl_JoinThread</B>(<I>id, result</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Tcl_Condition <B>*condPtr</B> (in)<DD>
 A condition variable, which must be associated with a mutex lock.
 <P><DT>Tcl_Mutex <B>*mutexPtr</B> (in)<DD>
 A mutex lock.
 <P><DT>Tcl_Time <B>*timePtr</B> (in)<DD>
 A time limit on the condition wait.  NULL to wait forever.
-Note that a polling value of 0 seconds doesn't make much sense.
+Note that a polling value of 0 seconds does not make much sense.
 <P><DT>Tcl_ThreadDataKey <B>*keyPtr</B> (in)<DD>
 This identifies a block of thread local storage.  The key should be
 static and process-wide, yet each thread will end up associating
@@ -186,8 +211,8 @@ the script level.  One such package is the <B>Thread</B> package.
 <B><A HREF="../TclLib/Notifier.htm">Tcl_GetCurrentThread</A></B>, <B><A HREF="../TclLib/Notifier.htm">Tcl_ThreadQueueEvent</A></B>, <B><A HREF="../TclLib/Notifier.htm">Tcl_ThreadAlert</A></B>, <B><A HREF="../TclLib/Exit.htm">Tcl_ExitThread</A></B>, <B><A HREF="../TclLib/Exit.htm">Tcl_FinalizeThread</A></B>, <B><A HREF="../TclLib/Exit.htm">Tcl_CreateThreadExitHandler</A></B>, <B><A HREF="../TclLib/Exit.htm">Tcl_DeleteThreadExitHandler</A></B>, <B>Thread</B>
 <H3><A NAME="M11">KEYWORDS</A></H3>
 <A href="../Keywords/T.htm#thread">thread</A>, <A href="../Keywords/M.htm#mutex">mutex</A>, <A href="../Keywords/C.htm#condition variable">condition variable</A>, <A href="../Keywords/T.htm#thread local storage">thread local storage</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1999 Scriptics Corporation
-<A HREF="../copyright.htm">Copyright</A> &#169; 1998 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1999 Scriptics Corporation
+Copyright &copy; 1998 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

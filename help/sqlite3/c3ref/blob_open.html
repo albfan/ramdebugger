@@ -1,0 +1,158 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>Open A BLOB For Incremental I/O</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: "Verdana" "sans-serif";
+    padding: 8px 1%;
+}
+
+a { color: #45735f }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:240px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.toolbar {
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding:1px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #80a796; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* rounded corners */
+.se  { background: url(../images/se.png) 100% 100% no-repeat #80a796}
+.sw  { background: url(../images/sw.png) 0% 100% no-repeat }
+.ne  { background: url(../images/ne.png) 100% 0% no-repeat }
+.nw  { background: url(../images/nw.png) 0% 0% no-repeat }
+
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="../index.html">
+<img class="logo" src="../images/SQLite.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% style="clear:both"><tr><td>
+  <div class="se"><div class="sw"><div class="ne"><div class="nw">
+  <div class="toolbar">
+    <a href="../about.html">About</a>
+    <a href="../sitemap.html">Sitemap</a>
+    <a href="../docs.html">Documentation</a>
+    <a href="../download.html">Download</a>
+    <a href="../copyright.html">License</a>
+    <a href="../news.html">News</a>
+    <a href="http://www.sqlite.org/cvstrac/index">Developers</a>
+    <a href="../support.html">Support</a>
+  </div></div></div></div></div>
+</td></tr></table>
+  
+<a href="intro.html"><h2>SQLite C Interface</h2></a><h2>Open A BLOB For Incremental I/O</h2><blockquote><pre>int sqlite3_blob_open(
+  sqlite3*,
+  const char *zDb,
+  const char *zTable,
+  const char *zColumn,
+  sqlite3_int64 iRow,
+  int flags,
+  sqlite3_blob **ppBlob
+);
+</pre></blockquote><p>
+This interfaces opens a <a href="../c3ref/blob.html">handle</a> to the BLOB located
+in row iRow, column zColumn, table zTable in database zDb;
+in other words, the same BLOB that would be selected by:</p>
+
+<p><pre>
+SELECT zColumn FROM zDb.zTable WHERE <a href="../lang_createtable.html#rowid">rowid</a> = iRow;
+</pre></p>
+
+<p>If the flags parameter is non-zero, the the BLOB is opened for read
+and write access. If it is zero, the BLOB is opened for read access.</p>
+
+<p>Note that the database name is not the filename that contains
+the database but rather the symbolic name of the database that
+is assigned when the database is connected using <a href="../lang_attach.html">ATTACH</a>.
+For the main database file, the database name is "main".
+For TEMP tables, the database name is "temp".</p>
+
+<p>On success, <a href="../c3ref/c_abort.html">SQLITE_OK</a> is returned and the new <a href="../c3ref/blob.html">BLOB handle</a> is written
+to *ppBlob. Otherwise an <a href="../c3ref/c_abort.html">error code</a> is returned and any value written
+to *ppBlob should not be used by the caller.
+This function sets the <a href="../c3ref/sqlite3.html">database connection</a> error code and message
+accessible via <a href="../c3ref/errcode.html">sqlite3_errcode()</a> and <a href="../c3ref/errcode.html">sqlite3_errmsg()</a>.</p>
+
+<p>If the row that a BLOB handle points to is modified by an
+<a href="../lang_update.html">UPDATE</a>, <a href="../lang_delete.html">DELETE</a>, or by <a href="../lang_conflict.html">ON CONFLICT</a> side-effects
+then the BLOB handle is marked as "expired".
+This is true if any column of the row is changed, even a column
+other than the one the BLOB handle is open on.
+Calls to <a href="../c3ref/blob_read.html">sqlite3_blob_read()</a> and <a href="../c3ref/blob_write.html">sqlite3_blob_write()</a> for
+a expired BLOB handle fail with an return code of <a href="../c3ref/c_abort.html">SQLITE_ABORT</a>.
+Changes written into a BLOB prior to the BLOB expiring are not
+rollback by the expiration of the BLOB.  Such changes will eventually
+commit if the transaction continues to completion.</p>
+
+<p><h3>Invariants:</h3>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr><td valign="top">H17813</td> 
+<td valign="top">
+A successful invocation of the <a href="../c3ref/blob_open.html">sqlite3_blob_open(D,B,T,C,R,F,P)</a>
+interface shall open an <a href="../c3ref/blob.html">sqlite3_blob</a> object P on the BLOB
+in column C of the table T in the database B on
+the <a href="../c3ref/sqlite3.html">database connection</a> D.</td></tr>
+<tr><td valign="top">H17814</td> 
+<td valign="top">
+A successful invocation of <a href="../c3ref/blob_open.html">sqlite3_blob_open(D,...)</a> shall start
+a new transaction on the <a href="../c3ref/sqlite3.html">database connection</a> D if that
+connection is not already in a transaction.</td></tr>
+<tr><td valign="top">H17816</td> 
+<td valign="top">
+The <a href="../c3ref/blob_open.html">sqlite3_blob_open(D,B,T,C,R,F,P)</a> interface shall open
+the BLOB for read and write access if and only if the F
+parameter is non-zero.</td></tr>
+<tr><td valign="top">H17819</td> 
+<td valign="top">
+The <a href="../c3ref/blob_open.html">sqlite3_blob_open()</a> interface shall return <a href="../c3ref/c_abort.html">SQLITE_OK</a> on
+success and an appropriate <a href="../c3ref/c_abort.html">error code</a> on failure.</td></tr>
+<tr><td valign="top">H17821</td> 
+<td valign="top">
+If an error occurs during evaluation of <a href="../c3ref/blob_open.html">sqlite3_blob_open(D,...)</a>
+then subsequent calls to <a href="../c3ref/errcode.html">sqlite3_errcode(D)</a>,
+<a href="../c3ref/errcode.html">sqlite3_extended_errcode()</a>,
+<a href="../c3ref/errcode.html">sqlite3_errmsg(D)</a>, and <a href="../c3ref/errcode.html">sqlite3_errmsg16(D)</a> shall return
+information appropriate for that error.</td></tr>
+<tr><td valign="top">H17824</td> 
+<td valign="top">
+If any column in the row that a <a href="../c3ref/blob.html">sqlite3_blob</a> has open is
+changed by a separate <a href="../lang_update.html">UPDATE</a> or <a href="../lang_delete.html">DELETE</a> statement or by
+an <a href="../lang_conflict.html">ON CONFLICT</a> side effect, then the <a href="../c3ref/blob.html">sqlite3_blob</a> shall
+be marked as invalid.</td></tr>
+</table>
+</p><p>See also lists of
+  <a href="objlist.html">Objects</a>,
+  <a href="constlist.html">Constants</a>, and
+  <a href="funclist.html">Functions</a>.</p><hr><small><i>
+This page last modified 2008/12/09 18:44:04 UTC
+</i></small></div></body></html>

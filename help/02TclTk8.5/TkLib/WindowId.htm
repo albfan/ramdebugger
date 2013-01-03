@@ -1,6 +1,81 @@
-<HTML><HEAD><TITLE>Tk Library Procedures - Tk_WindowId manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_WindowId manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> WindowId</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="WindowId.htm#M2" NAME="L645">NAME</A>
+<DL><DD>Tk_WindowId, Tk_Parent, Tk_Display, Tk_DisplayName, Tk_ScreenNumber, Tk_Screen, Tk_X, Tk_Y, Tk_Width, Tk_Height, Tk_Changes, Tk_Attributes, Tk_IsContainer, Tk_IsEmbedded, Tk_IsMapped, Tk_IsTopLevel, Tk_ReqWidth, Tk_ReqHeight, Tk_MinReqWidth, Tk_MinReqHeight, Tk_InternalBorderLeft, Tk_InternalBorderRight, Tk_InternalBorderTop, Tk_InternalBorderBottom, Tk_Visual, Tk_Depth, Tk_Colormap, Tk_Interp  - retrieve information from Tk's local data structure</DD></DL>
+<DD><A HREF="WindowId.htm#M3" NAME="L646">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>Window
+<DD><B>Tk_WindowId</B>(<I>tkwin</I>)
+<DD>Tk_Window
+<DD><B>Tk_Parent</B>(<I>tkwin</I>)
+<DD>Display *
+<DD><B>Tk_Display</B>(<I>tkwin</I>)
+<DD>const char *
+<DD><B>Tk_DisplayName</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_ScreenNumber</B>(<I>tkwin</I>)
+<DD>Screen *
+<DD><B>Tk_Screen</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_X</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_Y</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_Width</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_Height</B>(<I>tkwin</I>)
+<DD>XWindowChanges *
+<DD><B>Tk_Changes</B>(<I>tkwin</I>)
+<DD>XSetWindowAttributes *
+<DD><B>Tk_Attributes</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_IsContainer</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_IsEmbedded</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_IsMapped</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_IsTopLevel</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_ReqWidth</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_ReqHeight</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_MinReqWidth</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_MinReqHeight</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_InternalBorderLeft</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_InternalBorderRight</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_InternalBorderTop</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_InternalBorderBottom</B>(<I>tkwin</I>)
+<DD>Visual *
+<DD><B>Tk_Visual</B>(<I>tkwin</I>)
+<DD>int
+<DD><B>Tk_Depth</B>(<I>tkwin</I>)
+<DD>Colormap
+<DD><B>Tk_Colormap</B>(<I>tkwin</I>)
+<DD>Tcl_Interp *
+<DD><B>Tk_Interp</B>(<I>tkwin</I>)
+</DL>
+<DD><A HREF="WindowId.htm#M4" NAME="L647">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="WindowId.htm#M5" NAME="L648">DESCRIPTION</A>
+<DD><A HREF="WindowId.htm#M6" NAME="L649">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
-Tk_WindowId, Tk_Parent, Tk_Display, Tk_DisplayName, Tk_ScreenNumber, Tk_Screen, Tk_X, Tk_Y, Tk_Width, Tk_Height, Tk_Changes, Tk_Attributes, Tk_IsContainer, Tk_IsEmbedded, Tk_IsMapped, Tk_IsTopLevel, Tk_ReqWidth, Tk_ReqHeight, Tk_MinReqWidth, Tk_MinReqHeight, Tk_InternalBorderLeft, Tk_InternalBorderRight, Tk_InternalBorderTop, Tk_InternalBorderBottom, Tk_Visual, Tk_Depth, Tk_Colormap  - retrieve information from Tk's local data structure
+Tk_WindowId, Tk_Parent, Tk_Display, Tk_DisplayName, Tk_ScreenNumber, Tk_Screen, Tk_X, Tk_Y, Tk_Width, Tk_Height, Tk_Changes, Tk_Attributes, Tk_IsContainer, Tk_IsEmbedded, Tk_IsMapped, Tk_IsTopLevel, Tk_ReqWidth, Tk_ReqHeight, Tk_MinReqWidth, Tk_MinReqHeight, Tk_InternalBorderLeft, Tk_InternalBorderRight, Tk_InternalBorderTop, Tk_InternalBorderBottom, Tk_Visual, Tk_Depth, Tk_Colormap, Tk_Interp  - retrieve information from Tk's local data structure
 <H3><A NAME="M3">SYNOPSIS</A></H3>
 <B>#include &lt;tk.h&gt;</B><BR>
 Window<BR>
@@ -9,7 +84,7 @@ Tk_Window<BR>
 <B>Tk_Parent</B>(<I>tkwin</I>)<BR>
 Display *<BR>
 <B>Tk_Display</B>(<I>tkwin</I>)<BR>
-CONST char *<BR>
+const char *<BR>
 <B>Tk_DisplayName</B>(<I>tkwin</I>)<BR>
 int<BR>
 <B>Tk_ScreenNumber</B>(<I>tkwin</I>)<BR>
@@ -57,8 +132,10 @@ int<BR>
 <B>Tk_Depth</B>(<I>tkwin</I>)<BR>
 Colormap<BR>
 <B>Tk_Colormap</B>(<I>tkwin</I>)<BR>
+<A HREF="../TclLib/Interp.htm">Tcl_Interp</A> *<BR>
+<B>Tk_Interp</B>(<I>tkwin</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT>Tk_Window <B>tkwin</B> (in)<DD>
 Token for window.
 <P></DL>
@@ -76,6 +153,9 @@ yet.
 <B>Tk_Parent</B> returns Tk's token for the logical parent of
 <I>tkwin</I>.  The parent is the token that was specified when
 <I>tkwin</I> was created, or NULL for main windows.
+<P>
+<B>Tk_Interp</B> returns the Tcl interpreter associated with a
+<I>tkwin</I> or NULL if there is an error.
 <P>
 <B>Tk_Display</B> returns a pointer to the Xlib display structure
 corresponding to <I>tkwin</I>.  <B>Tk_DisplayName</B> returns an
@@ -109,11 +189,11 @@ is not a free-standing window, but rather is embedded in some
 other application.
 <P>
 <B>Tk_IsMapped</B> returns a non-zero value if <I>tkwin</I>
-is mapped and zero if <I>tkwin</I> isn't mapped.
+is mapped and zero if <I>tkwin</I> is not mapped.
 <P>
 <B>Tk_IsTopLevel</B> returns a non-zero value if <I>tkwin</I>
 is a top-level window (its X parent is the root window of the
-screen) and zero if <I>tkwin</I> isn't a top-level window.
+screen) and zero if <I>tkwin</I> is not a top-level window.
 <P>
 <B>Tk_ReqWidth</B> and <B>Tk_ReqHeight</B> return information about
 the window's requested size.  These values correspond to the last
@@ -141,8 +221,8 @@ they may be overridden by calling <B><A HREF="../TkLib/SetVisual.htm">Tk_SetWind
 
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#attributes">attributes</A>, <A href="../Keywords/C.htm#colormap">colormap</A>, <A href="../Keywords/D.htm#depth">depth</A>, <A href="../Keywords/D.htm#display">display</A>, <A href="../Keywords/H.htm#height">height</A>, <A href="../Keywords/G.htm#geometry manager">geometry manager</A>, <A href="../Keywords/I.htm#identifier">identifier</A>, <A href="../Keywords/M.htm#mapped">mapped</A>, <A href="../Keywords/R.htm#requested size">requested size</A>, <A href="../Keywords/S.htm#screen">screen</A>, <A href="../Keywords/T.htm#top-level">top-level</A>, <A href="../Keywords/V.htm#visual">visual</A>, <A href="../Keywords/W.htm#width">width</A>, <A href="../Keywords/W.htm#window">window</A>, <A href="../Keywords/X.htm#x">x</A>, <A href="../Keywords/Y.htm#y">y</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1993 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1993 The Regents of the University of California.
+Copyright &copy; 1994-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

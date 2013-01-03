@@ -1,28 +1,33 @@
-<HTML><HEAD><TITLE>Tk Built-In Commands - bitmap manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>bitmap manual page - Tk Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkCmd</a> <small>&gt;</small> bitmap</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="bitmap.htm#M2" NAME="L117">NAME</A>
-<DL><DD>bitmap - Images that display two colors</DL>
-<DD><A HREF="bitmap.htm#M3" NAME="L118">SYNOPSIS</A>
+<DD><A HREF="bitmap.htm#M2" NAME="L166">NAME</A>
+<DL><DD>bitmap - Images that display two colors</DD></DL>
+<DD><A HREF="bitmap.htm#M3" NAME="L167">SYNOPSIS</A>
 <DL>
-<DD><B>image create bitmap </B>?<I>name</I>? ?<I>options</I>?
 </DL>
-<DD><A HREF="bitmap.htm#M4" NAME="L119">DESCRIPTION</A>
-<DD><A HREF="bitmap.htm#M5" NAME="L120">CREATING BITMAPS</A>
-<DL>
-<DD><A HREF="bitmap.htm#M6" NAME="L121"><B>-background </B><I>color</I></A>
-<DD><A HREF="bitmap.htm#M7" NAME="L122"><B>-data </B><I>string</I></A>
-<DD><A HREF="bitmap.htm#M8" NAME="L123"><B>-file </B><I>name</I></A>
-<DD><A HREF="bitmap.htm#M9" NAME="L124"><B>-foreground </B><I>color</I></A>
-<DD><A HREF="bitmap.htm#M10" NAME="L125"><B>-maskdata </B><I>string</I></A>
-<DD><A HREF="bitmap.htm#M11" NAME="L126"><B>-maskfile </B><I>name</I></A>
+<DD><A HREF="bitmap.htm#M4" NAME="L168">DESCRIPTION</A>
+<DD><A HREF="bitmap.htm#M5" NAME="L169">CREATING BITMAPS</A>
+<DL class="creating bitmaps">
+<DD><A HREF="bitmap.htm#M6" NAME="L170"><B>-background </B><I>color</I></A>
+<DD><A HREF="bitmap.htm#M7" NAME="L171"><B>-data </B><I>string</I></A>
+<DD><A HREF="bitmap.htm#M8" NAME="L172"><B>-file </B><I>name</I></A>
+<DD><A HREF="bitmap.htm#M9" NAME="L173"><B>-foreground </B><I>color</I></A>
+<DD><A HREF="bitmap.htm#M10" NAME="L174"><B>-maskdata </B><I>string</I></A>
+<DD><A HREF="bitmap.htm#M11" NAME="L175"><B>-maskfile </B><I>name</I></A>
 </DL>
-<DD><A HREF="bitmap.htm#M12" NAME="L127">IMAGE COMMAND</A>
-<DL>
-<DD><A HREF="bitmap.htm#M13" NAME="L128"><I>imageName </I><B>cget</B> <I>option</I></A>
-<DD><A HREF="bitmap.htm#M14" NAME="L129"><I>imageName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
+<DD><A HREF="bitmap.htm#M12" NAME="L176">IMAGE COMMAND</A>
+<DL class="image command">
+<DD><A HREF="bitmap.htm#M13" NAME="L177"><I>imageName </I><B>cget</B> <I>option</I></A>
+<DD><A HREF="bitmap.htm#M14" NAME="L178"><I>imageName </I><B>configure</B> ?<I>option</I>? ?<I>value option value ...</I>?</A>
 </DL>
-<DD><A HREF="bitmap.htm#M15" NAME="L130">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="bitmap.htm#M15" NAME="L179">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 bitmap - Images that display two colors
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -47,7 +52,7 @@ Like all images, bitmaps are created using the <B><A HREF="../TkCmd/image.htm">i
 command.
 Bitmaps support the following <I>options</I>:
 <P>
-<DL>
+<DL class="creating bitmaps">
 <DT><A NAME="M6"><B>-background </B><I>color</I></A><DD>
 Specifies a background color for the image in any of the standard
 ways accepted by Tk.  If this option is set to an empty string
@@ -92,7 +97,7 @@ It has the following general form:
 determine the exact behavior of the command.  The following
 commands are possible for bitmap images:
 <P>
-<DL>
+<DL class="image command">
 <DT><A NAME="M13"><I>imageName </I><B>cget</B> <I>option</I></A><DD>
 Returns the current value of the configuration option given
 by <I>option</I>.
@@ -115,8 +120,8 @@ this case the command returns an empty string.
 <P></DL>
 <H3><A NAME="M15">KEYWORDS</A></H3>
 <A href="../Keywords/B.htm#bitmap">bitmap</A>, <A href="../Keywords/I.htm#image">image</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

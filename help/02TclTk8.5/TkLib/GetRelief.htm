@@ -1,4 +1,29 @@
-<HTML><HEAD><TITLE>Tk Library Procedures - Tk_GetReliefFromObj manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tk_GetReliefFromObj manual page - Tk Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TkLib</a> <small>&gt;</small> GetRelief</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="GetRelief.htm#M2" NAME="L355">NAME</A>
+<DL><DD>Tk_GetReliefFromObj, Tk_GetRelief, Tk_NameOfRelief - translate between strings and relief values</DD></DL>
+<DD><A HREF="GetRelief.htm#M3" NAME="L356">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tk.h&gt;</B>
+<DD>int
+<DD><B>Tk_GetReliefFromObj(</B><I>interp, objPtr, reliefPtr</I><B>)</B>
+<DD>int
+<DD><B>Tk_GetRelief(</B><I>interp, name, reliefPtr</I><B>)</B>
+<DD>const char *
+<DD><B>Tk_NameOfRelief(</B><I>relief</I><B>)</B>
+</DL>
+<DD><A HREF="GetRelief.htm#M4" NAME="L357">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="GetRelief.htm#M5" NAME="L358">DESCRIPTION</A>
+<DD><A HREF="GetRelief.htm#M6" NAME="L359">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tk_GetReliefFromObj, Tk_GetRelief, Tk_NameOfRelief - translate between strings and relief values
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -7,23 +32,29 @@ int<BR>
 <B>Tk_GetReliefFromObj(</B><I>interp, objPtr, reliefPtr</I><B>)</B><BR>
 int<BR>
 <B>Tk_GetRelief(</B><I>interp, name, reliefPtr</I><B>)</B><BR>
-CONST char *<BR>
+const char *<BR>
 <B>Tk_NameOfRelief(</B><I>relief</I><B>)</B><BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 Interpreter to use for error reporting.
 <P><DT>Tcl_Obj <B>*objPtr</B> (in/out)<DD>
-String value contains name of relief (one of <B>flat</B>, <B>groove</B>,
-<B>raised</B>, <B>ridge</B>, <B>solid</B>, or <B>sunken</B>);
-internal rep will be modified to cache corresponding relief value.
+String value contains name of relief, one of
+&#8220;flat&#8221;,
+&#8220;groove&#8221;,
+&#8220;raised&#8221;,
+&#8220;ridge&#8221;,
+&#8220;solid&#8221;,
+or
+&#8220;sunken&#8221;;
+the internal rep will be modified to cache corresponding relief value.
 <P><DT>char <B>*string</B> (in)<DD>
 Same as <I>objPtr</I> except description of relief is passed as
 a string.
 <P><DT>int <B>*reliefPtr</B> (out)<DD>
 Pointer to location in which to store relief value corresponding to
 <I>objPtr</I> or <I>name</I>.
-<P><DT>CONST char <B>*name</B> ()<DD>
+<P><DT>const char <B>*name</B> ()<DD>
 Name of the relief.
 <P><DT>int <B>relief</B> (in)<DD>
 Relief value (one of <B>TK_RELIEF_FLAT</B>, <B>TK_RELIEF_RAISED</B>,
@@ -37,10 +68,10 @@ corresponding to the value of <I>objPtr</I>.  This value will be one of
 <B>TK_RELIEF_GROOVE</B>, <B>TK_RELIEF_SOLID</B>, or <B>TK_RELIEF_RIDGE</B>.
 Under normal circumstances the return value is <B>TCL_OK</B> and
 <I>interp</I> is unused.
-If <I>objPtr</I> doesn't contain one of the valid relief names
+If <I>objPtr</I> does not contain one of the valid relief names
 or an abbreviation of one of them, then <B>TCL_ERROR</B> is returned,
 <I>*reliefPtr</I> is unmodified, and an error message
-is stored in <I>interp</I>'s result if <I>interp</I> isn't NULL.
+is stored in <I>interp</I>'s result if <I>interp</I> is not NULL.
 <B>Tk_GetReliefFromObj</B> caches information about the return
 value in <I>objPtr</I>, which speeds up future calls to
 <B>Tk_GetReliefFromObj</B> with the same <I>objPtr</I>.
@@ -54,13 +85,13 @@ return value, so <B>Tk_GetRelief</B> is less efficient than
 <B>Tk_NameOfRelief</B> is the logical inverse of <B>Tk_GetRelief</B>.
 Given a relief value it returns the corresponding string (<B>flat</B>,
 <B>raised</B>, <B>sunken</B>, <B>groove</B>, <B>solid</B>, or <B>ridge</B>).
-If <I>relief</I> isn't a legal relief value, then ``unknown relief''
+If <I>relief</I> is not a legal relief value, then
+&#8220;unknown relief&#8221;
 is returned.
-
 <H3><A NAME="M6">KEYWORDS</A></H3>
 <A href="../Keywords/N.htm#name">name</A>, <A href="../Keywords/R.htm#relief">relief</A>, <A href="../Keywords/S.htm#string">string</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1998 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990 The Regents of the University of California.
+Copyright &copy; 1994-1998 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

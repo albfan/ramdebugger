@@ -1,4 +1,39 @@
-<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_ListObj manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>Tcl_ListObj manual page - Tcl Library Procedures</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclLib</a> <small>&gt;</small> ListObj</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
+<DL>
+<DD><A HREF="ListObj.htm#M2" NAME="L433">NAME</A>
+<DL><DD>Tcl_ListObjAppendList, Tcl_ListObjAppendElement, Tcl_NewListObj, Tcl_SetListObj, Tcl_ListObjGetElements, Tcl_ListObjLength, Tcl_ListObjIndex, Tcl_ListObjReplace - manipulate Tcl objects as lists</DD></DL>
+<DD><A HREF="ListObj.htm#M3" NAME="L434">SYNOPSIS</A>
+<DL>
+<DD><B>#include &lt;tcl.h&gt;</B>
+<DD>int
+<DD><B>Tcl_ListObjAppendList</B>(<I>interp, listPtr, elemListPtr</I>)
+<DD>int
+<DD><B>Tcl_ListObjAppendElement</B>(<I>interp, listPtr, objPtr</I>)
+<DD>Tcl_Obj *
+<DD><B>Tcl_NewListObj</B>(<I>objc, objv</I>)
+<DD><B>Tcl_SetListObj</B>(<I>objPtr, objc, objv</I>)
+<DD>int
+<DD><B>Tcl_ListObjGetElements</B>(<I>interp, listPtr, objcPtr, objvPtr</I>)
+<DD>int
+<DD><B>Tcl_ListObjLength</B>(<I>interp, listPtr, intPtr</I>)
+<DD>int
+<DD><B>Tcl_ListObjIndex</B>(<I>interp, listPtr, index, objPtrPtr</I>)
+<DD>int
+<DD><B>Tcl_ListObjReplace</B>(<I>interp, listPtr, first, count, objc, objv</I>)
+</DL>
+<DD><A HREF="ListObj.htm#M4" NAME="L435">ARGUMENTS</A>
+<DL class="arguments">
+</DL>
+<DD><A HREF="ListObj.htm#M5" NAME="L436">DESCRIPTION</A>
+<DD><A HREF="ListObj.htm#M6" NAME="L437">SEE ALSO</A>
+<DD><A HREF="ListObj.htm#M7" NAME="L438">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 Tcl_ListObjAppendList, Tcl_ListObjAppendElement, Tcl_NewListObj, Tcl_SetListObj, Tcl_ListObjGetElements, Tcl_ListObjLength, Tcl_ListObjIndex, Tcl_ListObjReplace - manipulate Tcl objects as lists
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -19,7 +54,7 @@ int<BR>
 int<BR>
 <B>Tcl_ListObjReplace</B>(<I>interp, listPtr, first, count, objc, objv</I>)<BR>
 <H3><A NAME="M4">ARGUMENTS</A></H3>
-<DL>
+<DL class="arguments">
 <DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
 If an error occurs while converting an object to be a list object,
 an error message is left in the interpreter's result object
@@ -199,23 +234,31 @@ it can be used to implement a number of list operations.
 For example, the following code inserts the <I>objc</I> objects
 referenced by the array of object pointers <I>objv</I>
 just before the element <I>index</I> of the list referenced by <I>listPtr</I>:
-<PRE>result = Tcl_ListObjReplace(interp, listPtr, index, 0, objc, objv);</PRE>
+<P>
+<PRE>result = Tcl_ListObjReplace(interp, listPtr, index, 0,
+        objc, objv);</PRE>
+<P>
 Similarly, the following code appends the <I>objc</I> objects
 referenced by the array <I>objv</I>
 to the end of the list <I>listPtr</I>:
+<P>
 <PRE>result = Tcl_ListObjLength(interp, listPtr, &amp;length);
 if (result == TCL_OK) {
-    result = Tcl_ListObjReplace(interp, listPtr, length, 0, objc, objv);
+    result = Tcl_ListObjReplace(interp, listPtr, length, 0,
+            objc, objv);
 }</PRE>
+<P>
 The <I>count</I> list elements starting at <I>first</I> can be deleted
 by simply calling <B>Tcl_ListObjReplace</B>
 with a NULL <I>objvPtr</I>:
-<PRE>result = Tcl_ListObjReplace(interp, listPtr, first, count, 0, NULL);</PRE>
+<P>
+<PRE>result = Tcl_ListObjReplace(interp, listPtr, first, count,
+        0, NULL);</PRE>
 <H3><A NAME="M6">SEE ALSO</A></H3>
 <B><A HREF="../TclLib/Object.htm">Tcl_NewObj</A></B>, <B><A HREF="../TclLib/Object.htm">Tcl_DecrRefCount</A></B>, <B><A HREF="../TclLib/Object.htm">Tcl_IncrRefCount</A></B>, <B><A HREF="../TclLib/SetResult.htm">Tcl_GetObjResult</A></B>
 <H3><A NAME="M7">KEYWORDS</A></H3>
 <A href="../Keywords/A.htm#append">append</A>, <A href="../Keywords/I.htm#index">index</A>, <A href="../Keywords/I.htm#insert">insert</A>, <A href="../Keywords/I.htm#internal representation">internal representation</A>, <A href="../Keywords/L.htm#length">length</A>, <A href="../Keywords/L.htm#list">list</A>, <A href="../Keywords/L.htm#list object">list object</A>, <A href="../Keywords/L.htm#list type">list type</A>, <A href="../Keywords/O.htm#object">object</A>, <A href="../Keywords/O.htm#object type">object type</A>, <A href="../Keywords/R.htm#replace">replace</A>, <A href="../Keywords/S.htm#string representation">string representation</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1996-1997 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1996-1997 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>

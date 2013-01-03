@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<title>Obtain Aggregate Function Context</title>
+<style type="text/css">
+body {
+    margin: auto;
+    font-family: "Verdana" "sans-serif";
+    padding: 8px 1%;
+}
+
+a { color: #45735f }
+a:visited { color: #734559 }
+
+.logo { position:absolute; margin:3px; }
+.tagline {
+  float:right;
+  text-align:right;
+  font-style:italic;
+  width:240px;
+  margin:12px;
+  margin-top:58px;
+}
+
+.toolbar {
+  font-variant: small-caps;
+  text-align: center;
+  line-height: 1.6em;
+  margin: 0;
+  padding:1px 8px;
+}
+.toolbar a { color: white; text-decoration: none; padding: 6px 12px; }
+.toolbar a:visited { color: white; }
+.toolbar a:hover { color: #80a796; background: white; }
+
+.content    { margin: 5%; }
+.content dt { font-weight:bold; }
+.content dd { margin-bottom: 25px; margin-left:20%; }
+.content ul { padding:0px; padding-left: 15px; margin:0px; }
+
+/* rounded corners */
+.se  { background: url(../images/se.png) 100% 100% no-repeat #80a796}
+.sw  { background: url(../images/sw.png) 0% 100% no-repeat }
+.ne  { background: url(../images/ne.png) 100% 0% no-repeat }
+.nw  { background: url(../images/nw.png) 0% 0% no-repeat }
+
+</style>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  
+</head>
+<body>
+<div><!-- container div to satisfy validator -->
+
+<a href="../index.html">
+<img class="logo" src="../images/SQLite.gif" alt="SQLite Logo"
+ border="0"></a>
+<div><!-- IE hack to prevent disappearing logo--></div>
+<div class="tagline">Small. Fast. Reliable.<br>Choose any three.</div>
+
+<table width=100% style="clear:both"><tr><td>
+  <div class="se"><div class="sw"><div class="ne"><div class="nw">
+  <div class="toolbar">
+    <a href="../about.html">About</a>
+    <a href="../sitemap.html">Sitemap</a>
+    <a href="../docs.html">Documentation</a>
+    <a href="../download.html">Download</a>
+    <a href="../copyright.html">License</a>
+    <a href="../news.html">News</a>
+    <a href="http://www.sqlite.org/cvstrac/index">Developers</a>
+    <a href="../support.html">Support</a>
+  </div></div></div></div></div>
+</td></tr></table>
+  
+<a href="intro.html"><h2>SQLite C Interface</h2></a><h2>Obtain Aggregate Function Context</h2><blockquote><pre>void *sqlite3_aggregate_context(sqlite3_context*, int nBytes);
+</pre></blockquote><p>
+The implementation of aggregate SQL functions use this routine to allocate
+a structure for storing their state.</p>
+
+<p>The first time the sqlite3_aggregate_context() routine is called for a
+particular aggregate, SQLite allocates nBytes of memory, zeroes out that
+memory, and returns a pointer to it. On second and subsequent calls to
+sqlite3_aggregate_context() for the same aggregate function index,
+the same buffer is returned. The implementation of the aggregate can use
+the returned buffer to accumulate data.</p>
+
+<p>SQLite automatically frees the allocated buffer when the aggregate
+query concludes.</p>
+
+<p>The first parameter should be a copy of the
+<a href="../c3ref/context.html">SQL function context</a> that is the first parameter
+to the callback routine that implements the aggregate function.</p>
+
+<p>This routine must be called from the same thread in which
+the aggregate SQL function is running.</p>
+
+<p><h3>Invariants:</h3>
+<table border="0" cellpadding="5" cellspacing="0">
+<tr><td valign="top">H16211</td> 
+<td valign="top">
+The first invocation of <a href="../c3ref/aggregate_context.html">sqlite3_aggregate_context(C,N)</a> for
+a particular instance of an aggregate function (for a particular
+context C) causes SQLite to allocate N bytes of memory,
+zero that memory, and return a pointer to the allocated memory.</td></tr>
+<tr><td valign="top">H16213</td> 
+<td valign="top">
+If a memory allocation error occurs during
+<a href="../c3ref/aggregate_context.html">sqlite3_aggregate_context(C,N)</a> then the function returns 0.</td></tr>
+<tr><td valign="top">H16215</td> 
+<td valign="top">
+Second and subsequent invocations of
+<a href="../c3ref/aggregate_context.html">sqlite3_aggregate_context(C,N)</a> for the same context pointer C
+ignore the N parameter and return a pointer to the same
+block of memory returned by the first invocation.</td></tr>
+<tr><td valign="top">H16217</td> 
+<td valign="top">
+The memory allocated by <a href="../c3ref/aggregate_context.html">sqlite3_aggregate_context(C,N)</a> is
+automatically freed on the next call to <a href="../c3ref/reset.html">sqlite3_reset()</a>
+or <a href="../c3ref/finalize.html">sqlite3_finalize()</a> for the <a href="../c3ref/stmt.html">prepared statement</a> containing
+the aggregate function associated with context C.</td></tr>
+</table>
+</p><p>See also lists of
+  <a href="objlist.html">Objects</a>,
+  <a href="constlist.html">Constants</a>, and
+  <a href="funclist.html">Functions</a>.</p><hr><small><i>
+This page last modified 2008/12/09 18:44:04 UTC
+</i></small></div></body></html>

@@ -1,29 +1,29 @@
-<HTML><HEAD><TITLE>Tcl Built-In Commands - after manual page</TITLE></HEAD><BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML>
+<HEAD><TITLE>after manual page - Tcl Built-In Commands</TITLE>
+<link rel="stylesheet" href="../docs.css" type="text/css" media="all">
+</HEAD>
+<BODY><H2><a href="../contents.htm">Tcl8.5.1/Tk8.5.1 Documentation</a> <small>&gt;</small> <a href="contents.htm">TclCmd</a> <small>&gt;</small> after</H2>
+<H3><A HREF="../UserCmd/contents.htm">Tcl/Tk Applications</A> | <A HREF="../TclCmd/contents.htm">Tcl Commands</A> | <A HREF="../TkCmd/contents.htm">Tk Commands</A> | <A HREF="../TclLib/contents.htm">Tcl Library</A> | <A HREF="../TkLib/contents.htm">Tk Library</A></H3>
 <DL>
-<DD><A HREF="after.htm#M2" NAME="L32">NAME</A>
-<DL><DD>after - Execute a command after a time delay</DL>
-<DD><A HREF="after.htm#M3" NAME="L33">SYNOPSIS</A>
+<DD><A HREF="after.htm#M2" NAME="L2">NAME</A>
+<DL><DD>after - Execute a command after a time delay</DD></DL>
+<DD><A HREF="after.htm#M3" NAME="L3">SYNOPSIS</A>
 <DL>
-<DD><B>after </B><I>ms</I>
-<DD><B>after </B><I>ms </I>?<I>script script script ...</I>?
-<DD><B>after cancel </B><I>id</I>
-<DD><B>after cancel </B><I>script script script ...</I>
-<DD><B>after idle </B>?<I>script script script ...</I>?
-<DD><B>after info </B>?<I>id</I>?
 </DL>
-<DD><A HREF="after.htm#M4" NAME="L34">DESCRIPTION</A>
-<DL>
-<DD><A HREF="after.htm#M5" NAME="L35"><B>after </B><I>ms</I></A>
-<DD><A HREF="after.htm#M6" NAME="L36"><B>after </B><I>ms </I>?<I>script script script ...</I>?</A>
-<DD><A HREF="after.htm#M7" NAME="L37"><B>after cancel </B><I>id</I></A>
-<DD><A HREF="after.htm#M8" NAME="L38"><B>after cancel </B><I>script script ...</I></A>
-<DD><A HREF="after.htm#M9" NAME="L39"><B>after idle </B><I>script </I>?<I>script script ...</I>?</A>
-<DD><A HREF="after.htm#M10" NAME="L40"><B>after info </B>?<I>id</I>?</A>
+<DD><A HREF="after.htm#M4" NAME="L4">DESCRIPTION</A>
+<DL class="description">
+<DD><A HREF="after.htm#M5" NAME="L5"><B>after </B><I>ms</I></A>
+<DD><A HREF="after.htm#M6" NAME="L6"><B>after </B><I>ms </I>?<I>script script script ...</I>?</A>
+<DD><A HREF="after.htm#M7" NAME="L7"><B>after cancel </B><I>id</I></A>
+<DD><A HREF="after.htm#M8" NAME="L8"><B>after cancel </B><I>script script ...</I></A>
+<DD><A HREF="after.htm#M9" NAME="L9"><B>after idle </B><I>script </I>?<I>script script ...</I>?</A>
+<DD><A HREF="after.htm#M10" NAME="L10"><B>after info </B>?<I>id</I>?</A>
 </DL>
-<DD><A HREF="after.htm#M11" NAME="L41">EXAMPLES</A>
-<DD><A HREF="after.htm#M12" NAME="L42">SEE ALSO</A>
-<DD><A HREF="after.htm#M13" NAME="L43">KEYWORDS</A>
-</DL><HR>
+<DD><A HREF="after.htm#M11" NAME="L11">EXAMPLES</A>
+<DD><A HREF="after.htm#M12" NAME="L12">SEE ALSO</A>
+<DD><A HREF="after.htm#M13" NAME="L13">KEYWORDS</A>
+</DL>
 <H3><A NAME="M2">NAME</A></H3>
 after - Execute a command after a time delay
 <H3><A NAME="M3">SYNOPSIS</A></H3>
@@ -38,7 +38,7 @@ This command is used to delay execution of the program or to execute
 a command in background sometime in the future.  It has several forms,
 depending on the first argument to the command:
 <P>
-<DL>
+<DL class="description">
 <DT><A NAME="M5"><B>after </B><I>ms</I></A><DD>
 <I>Ms</I> must be an integer giving a time in milliseconds.
 The command sleeps for <I>ms</I> milliseconds and then returns.
@@ -136,8 +136,8 @@ doOneStep</PRE>
 <B><A HREF="../TclCmd/concat.htm">concat</A></B>, <B><A HREF="../TclCmd/interp.htm">interp</A></B>, <B><A HREF="../TclCmd/update.htm">update</A></B>, <B><A HREF="../TclCmd/vwait.htm">vwait</A></B>
 <H3><A NAME="M13">KEYWORDS</A></H3>
 <A href="../Keywords/C.htm#cancel">cancel</A>, <A href="../Keywords/D.htm#delay">delay</A>, <A href="../Keywords/I.htm#idle callback">idle callback</A>, <A href="../Keywords/S.htm#sleep">sleep</A>, <A href="../Keywords/T.htm#time">time</A>
-<HR><PRE>
-<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
-<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+<div class="copy">Copyright &copy; 1995-1997 Roger E. Critchlow Jr.
+Copyright &copy; 1990-1994 The Regents of the University of California.
+Copyright &copy; 1994-1996 Sun Microsystems, Inc.
+</div>
 </BODY></HTML>
