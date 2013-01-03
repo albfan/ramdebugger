@@ -1,11 +1,28 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <tcl.h>
 
 
 enum P_or_R {P=0,R=1,PP=2};
 enum Word_types { NONE_WT,W_WT,BRACE_WT,DQUOTE_WT,BRACKET_WT};
+enum braces_history_types { open_BHT,close_BHT };
+
+struct Braces_history
+{
+  braces_history_types type;
+  int level;
+  int line;
+  int icharline;
+  Braces_history* next;
+
+  Braces_history(braces_history_types _type,int _level,int _line,int _icharline):type(_type),
+	level(_level),line(_line),icharline(_icharline),next(NULL){}
+  ~Braces_history(){
+    if(next) delete next;
+  }
+};
 
 struct InstrumenterState
 {
@@ -27,7 +44,49 @@ struct InstrumenterState
 
   int line;
   Word_types type;
+
+  int nextiscyan;
+  Braces_history* braces_hist_1,* braces_hist_end;
+
+  InstrumenterState() : braces_hist_1(NULL),braces_hist_end(NULL) {}
+  ~InstrumenterState() {
+    if(braces_hist_1) delete braces_hist_1;
+  }
+  int braces_history_error(int line);
 };
+
+
+int InstrumenterState::braces_history_error(int line)
+{
+  char buf[1024];
+  const char* currentfile=Tcl_GetVar(ip,"RamDebugger::currentfile",TCL_GLOBAL_ONLY);
+  if(!currentfile){
+    Tcl_SetObjResult(ip,Tcl_NewStringObj("error in InstrumenterState::braces_history_error",-1));
+    return TCL_ERROR;
+  }
+  Tcl_Obj *objPtr=Tcl_NewStringObj("BRACES POSITIONS\n",-1);
+  Braces_history* bh=braces_hist_1;
+  while(bh){
+    if(bh->type==open_BHT)
+      sprintf(buf,"%s:%d open brace pos=%d Level after=%d\n",
+	      currentfile,bh->line,bh->icharline,bh->level);
+    else
+      sprintf(buf,"%s:%d close brace pos=%d Level after=%d\n",
+	      currentfile,bh->line,bh->icharline,bh->level);
+    Tcl_AppendToObj(objPtr,buf,-1);
+    bh=bh->next;
+  }
+  Tcl_EvalEx(ip,"RamDebugger::TextOutClear; RamDebugger::TextOutRaise",-1,TCL_EVAL_GLOBAL);
+  Tcl_Obj *listPtr=Tcl_NewListObj(0,NULL);
+  Tcl_ListObjAppendElement(ip,listPtr,Tcl_NewStringObj("RamDebugger::TextOutInsert",-1));
+  Tcl_ListObjAppendElement(ip,listPtr,objPtr);
+  Tcl_IncrRefCount(listPtr);
+  Tcl_EvalObjEx(ip,listPtr,TCL_EVAL_GLOBAL);
+  Tcl_DecrRefCount(listPtr);
+  sprintf(buf,"error in line %d. There is one unmatched closing brace (})",line);
+  Tcl_SetObjResult(ip,Tcl_NewStringObj(buf,-1));
+  return TCL_ERROR;
+}
 
 inline Tcl_Obj *Tcl_CopyIfShared(Tcl_Obj *obj)
 {
@@ -92,6 +151,16 @@ void RamDebuggerInstrumenterInitState(InstrumenterState* is)
 	     "}\n"
 	     "foreach i [list variable set global incr lassign] {\n"
 	     "set ::RamDebugger::Instrumenter::colors($i) green\n"
+	     "}\n"
+	     "foreach i [list #include static const if else new delete for return sizeof while continue \
+		 break class typedef struct #else #endif #if] {\n"
+	     "set ::RamDebugger::Instrumenter::colors_cpp($i) magenta\n"
+	     "}\n"
+	     "foreach i [list #ifdef #ifndef #define #undef] {\n"
+	     "set ::RamDebugger::Instrumenter::colors_cpp($i) magenta2\n"
+	     "}\n"
+	     "foreach i [list char int double void] {\n"
+	     "set ::RamDebugger::Instrumenter::colors_cpp($i) green\n"
 	     "}",-1,0);
 
   result=Tcl_EvalEx(is->ip,"set RamDebugger::options(nonInstrumentingProcs)",-1,TCL_EVAL_GLOBAL);
@@ -939,6 +1008,317 @@ int RamDebuggerInstrumenterDoWork_do(Tcl_Interp *ip,char* block,int filenum,char
   return result;
 }
 
+
+Tcl_Obj* append_block_info(InstrumenterState* is,Tcl_Obj *blockinfocurrent,Tcl_Obj* colorPtr,int p1,int p2)
+{
+  blockinfocurrent=Tcl_CopyIfShared(blockinfocurrent);
+  Tcl_ListObjAppendElement(is->ip,blockinfocurrent,colorPtr);
+  Tcl_ListObjAppendElement(is->ip,blockinfocurrent,Tcl_NewIntObj(p1));
+  Tcl_ListObjAppendElement(is->ip,blockinfocurrent,Tcl_NewIntObj(p2));
+  
+  return blockinfocurrent;
+}
+
+Tcl_Obj* append_block_infoS(InstrumenterState* is,Tcl_Obj *blockinfocurrent,const char* color,
+		            int p1,int p2)
+{
+  return append_block_info(is,blockinfocurrent,Tcl_NewStringObj(color,-1),p1,p2);
+}
+
+Tcl_Obj* check_word_color_cpp(InstrumenterState* is,Tcl_Obj *blockinfocurrent,int icharline,
+		              int also_magenta2)
+{
+  Tcl_Obj *tmpObj;
+  if(is->wordtype==W_WT){
+    tmpObj=Tcl_GetVar2Ex(is->ip,"::RamDebugger::Instrumenter::colors_cpp",
+		         Tcl_GetStringFromObj(is->currentword,NULL),TCL_GLOBAL_ONLY);
+    if(tmpObj){
+      int icharlineold=icharline-Tcl_GetCharLength(is->currentword);
+      blockinfocurrent=append_block_info(is,blockinfocurrent,tmpObj,icharlineold,icharline);
+      if(strcmp(Tcl_GetStringFromObj(tmpObj,NULL),"green")==0){
+	is->nextiscyan=1;
+      } else if(also_magenta2 && strcmp(Tcl_GetStringFromObj(tmpObj,NULL),"also_magenta2")==0){
+	is->nextiscyan=1;
+      }
+    } else if(is->nextiscyan){
+      int icharlineold=icharline-Tcl_GetCharLength(is->currentword);
+      blockinfocurrent=append_block_infoS(is,blockinfocurrent,"cyan",icharlineold,icharline);
+      is->nextiscyan=0;
+    }
+    is->wordtype=NONE_WT;
+  }
+  return blockinfocurrent;
+}
+
+int RamDebuggerInstrumenterDoWorkForCpp_do(Tcl_Interp *ip,char* block,char* blockinfoname,int progress,int indentlevel_ini) {
+
+  int i,p1,length,
+    line,ichar,icharline,simplechar_line,simplechar_pos,
+    commentlevel,finishedline,result;
+  Tcl_Obj *blockinfo,*blockinfocurrent,*tmpObj;
+  char c,lastc,buf[1024];
+  
+  length = ( int)strlen(block);
+  if(length>5000 && progress){
+/*     RamDebugger::ProgressVar 0 1 */
+  } else {
+    progress=0;
+  }
+
+  InstrumenterState instrumenterstate,*is;
+  is=&instrumenterstate;
+  is->ip=ip;
+
+  blockinfo=Tcl_NewListObj(0,NULL);
+  Tcl_IncrRefCount(blockinfo);
+  blockinfocurrent=Tcl_NewListObj(0,NULL);
+  Tcl_IncrRefCount(blockinfocurrent);
+  Tcl_ListObjAppendElement(ip,blockinfocurrent,Tcl_NewIntObj(indentlevel_ini));
+  Tcl_ListObjAppendElement(ip,blockinfocurrent,Tcl_NewStringObj("n",-1));
+  RamDebuggerInstrumenterInitState(is);
+  is->braceslevel=indentlevel_ini;
+
+  commentlevel=0;
+//   braceslevelNoEval=0;
+//   checkExtraCharsAfterCQB=NONE_WT;
+//   wordslen=0;
+//   quoteintobraceline=-1;
+//   pword0=NULL
+  lastc=0;
+//   lastinstrumentedline=-1;
+  line=1;
+  ichar=0;
+  icharline=0;
+  simplechar_line=0;
+  simplechar_pos=0;
+  finishedline=1;
+  is->nextiscyan=0;
+
+  for(i=0;i<length;i++){
+    c=block[i];
+
+    if(ichar%5000 == 0 && progress){
+      /*       RamDebugger::ProgressVar [expr {$ichar*100/$length}] */
+    }
+    if(simplechar_line>0){
+      if(line>simplechar_line){
+	sprintf(buf,"error in line %d, position %d. There is no closing (')",simplechar_line,
+		simplechar_pos);
+	Tcl_SetObjResult(is->ip,Tcl_NewStringObj(buf,-1));
+	Tcl_DecrRefCount(blockinfo);
+	Tcl_DecrRefCount(blockinfocurrent);
+	return TCL_ERROR;
+      }
+      if(c=='\'' && lastc != '\\'){
+	simplechar_line=0;
+      }
+      if(lastc == '\\' && c=='\\')
+	lastc=0;
+      else lastc=c;
+      ichar++;
+
+      if(c=='\t') icharline+=8;
+      else if(c!='\n') icharline++;
+      else icharline=0;
+      continue;
+    }
+    switch(c){
+    case '"':
+      if(commentlevel){
+	// nothing
+      } else if(is->wordtype!=DQUOTE_WT){
+	is->wordtype=DQUOTE_WT;
+	is->wordtypeline=line;
+	is->wordtypepos=icharline;
+	finishedline=0;
+	break;
+      } else if(lastc != '\\'){
+	is->wordtype=NONE_WT;
+	if(is->wordtypeline==line) p1=is->wordtypepos;
+	else p1=0;
+	blockinfocurrent=append_block_infoS(is,blockinfocurrent,"grey",p1,icharline+1);
+	is->wordtypeline=0;
+      }
+      break;
+    case '\'':
+      if(!commentlevel && is->wordtype!=DQUOTE_WT && lastc != '\\'){
+	simplechar_line=line;
+	simplechar_pos=icharline;
+      }
+      break;
+    case '{':
+      if(!commentlevel && is->wordtype!=DQUOTE_WT){
+	blockinfocurrent=check_word_color_cpp(is,blockinfocurrent,icharline,0);
+	is->braceslevel++;
+	Braces_history* bh=new Braces_history(open_BHT,is->braceslevel,line,icharline);
+	if(!is->braces_hist_1)  is->braces_hist_1=bh;
+	else is->braces_hist_end->next=bh;
+	is->braces_hist_end=bh;
+	finishedline=1;
+      }
+      break;
+    case '}':
+      if(!commentlevel && is->wordtype!=DQUOTE_WT){
+	blockinfocurrent=check_word_color_cpp(is,blockinfocurrent,icharline,1);
+	is->braceslevel--;
+	Braces_history* bh=new Braces_history(close_BHT,is->braceslevel,line,icharline);
+	if(!is->braces_hist_1)  is->braces_hist_1=bh;
+	else is->braces_hist_end->next=bh;
+	is->braces_hist_end=bh;
+	if(is->braceslevel<0){
+	  return is->braces_history_error(line);
+	}
+	finishedline=1;
+      }
+      break;
+    case '*':
+      if(commentlevel==-1 || is->wordtype==DQUOTE_WT){
+	// nothing
+      } else if(lastc=='/'){
+	if(commentlevel==0){
+	  is->wordtype=NONE_WT;
+	  is->wordtypepos=icharline-1;
+	}
+	commentlevel++;
+      } else if(!commentlevel){
+	blockinfocurrent=check_word_color_cpp(is,blockinfocurrent,icharline,1);
+      }
+      break;
+    case '/':
+      if(commentlevel==-1 || is->wordtype==DQUOTE_WT){
+	// nothing
+      } else if(!commentlevel && lastc=='/'){
+	is->wordtype=NONE_WT;
+	is->wordtypepos=icharline-1;
+	commentlevel=-1;
+      } else if(lastc=='*'){
+	is->wordtype=NONE_WT;
+	if(commentlevel>=1){
+	  commentlevel--;
+	  if(commentlevel==0){
+	    blockinfocurrent=append_block_infoS(is,blockinfocurrent,"red",is->wordtypepos,icharline+1);
+	  }
+	}
+      } else if(!commentlevel){
+	blockinfocurrent=check_word_color_cpp(is,blockinfocurrent,icharline,1);
+      }
+      break;
+    case '(':
+	if(!commentlevel && is->braceslevel==0 && is->wordtype!=DQUOTE_WT){
+	  char* cw=Tcl_GetString(is->currentword);
+	  char* cipos=strstr(cw,"::");
+	  if(!cipos){
+	    blockinfocurrent=append_block_infoS(is,blockinfocurrent,"blue",is->wordtypepos,icharline);
+	  } else {
+	    blockinfocurrent=append_block_infoS(is,blockinfocurrent,"green",is->wordtypepos,
+		                                is->wordtypepos+cipos-cw+2);
+	    blockinfocurrent=append_block_infoS(is,blockinfocurrent,"blue",
+		                                is->wordtypepos+cipos-cw+2,icharline);
+	  }
+	  is->nextiscyan=0;
+	} else if(!commentlevel){
+	  blockinfocurrent=check_word_color_cpp(is,blockinfocurrent,icharline,1);
+	}
+	break;
+    case ';':
+      if(!commentlevel){
+	blockinfocurrent=check_word_color_cpp(is,blockinfocurrent,icharline,1);
+	if(is->wordtype!=DQUOTE_WT){
+	  finishedline=1;
+	}
+      }
+      break;
+    case '\n':
+      if(commentlevel){
+	blockinfocurrent=append_block_infoS(is,blockinfocurrent,"red",is->wordtypepos,icharline);
+	is->wordtypepos=0;
+	if(commentlevel==-1) commentlevel=0;
+	finishedline=1;
+      } else if(is->wordtype==DQUOTE_WT){
+	blockinfocurrent=append_block_infoS(is,blockinfocurrent,"grey",is->wordtypepos,icharline);
+	is->wordtypepos=0;
+      } else {
+	blockinfocurrent=check_word_color_cpp(is,blockinfocurrent,icharline,1);
+      }
+      blockinfo=Tcl_CopyIfShared(blockinfo);
+      Tcl_ListObjAppendElement(is->ip,blockinfo,blockinfocurrent);
+      line++;
+      tmpObj=Tcl_NewIntObj(is->braceslevel);
+      Tcl_IncrRefCount(tmpObj);
+      blockinfocurrent=Tcl_CopyIfShared(blockinfocurrent);
+      Tcl_SetListObj(blockinfocurrent,1,&tmpObj);
+      Tcl_DecrRefCount(tmpObj);
+      
+      blockinfocurrent=Tcl_CopyIfShared(blockinfocurrent);
+      if(finishedline){
+	Tcl_ListObjAppendElement(is->ip,blockinfocurrent,Tcl_NewStringObj("n",-1));
+      } else {
+	Tcl_ListObjAppendElement(is->ip,blockinfocurrent,Tcl_NewStringObj("c",-1));
+      }
+      break;
+    default:
+      if(commentlevel || is->wordtype==DQUOTE_WT){
+	// nothing
+      } else if(is->wordtype==NONE_WT){
+	if(isalnum(c) || c=='_' || c=='#' || c==':' || c==','){
+	  is->wordtype=W_WT;
+	  is->wordtypepos=icharline;
+	  is->currentword=Tcl_ResetString(is->currentword);
+	  is->currentword=Tcl_CopyIfShared(is->currentword);
+	  Tcl_AppendToObj(is->currentword,&c,1);
+	  finishedline=0;
+	}
+      } else if(is->wordtype==W_WT){
+	if(isalnum(c) || c=='_' || c=='#' || c==':' || c==','){
+	  is->currentword=Tcl_CopyIfShared(is->currentword);
+	  Tcl_AppendToObj(is->currentword,&c,1);
+	} else {
+	  blockinfocurrent=check_word_color_cpp(is,blockinfocurrent,icharline,1);
+	}
+      }
+    }
+    if(lastc == '\\' && c=='\\')
+      lastc=0;
+    else lastc=c;
+    ichar++;
+
+    if(c=='\t') icharline+=8;
+    else if(c!='\n') icharline++;
+    else icharline=0;
+  }
+  blockinfo=Tcl_CopyIfShared(blockinfo);
+  Tcl_ListObjAppendElement(is->ip,blockinfo,blockinfocurrent);
+
+  if(commentlevel>0){
+    sprintf(buf,"error: There is a non-closed comment beginning at line %d",is->wordtypeline);
+    Tcl_SetObjResult(is->ip,Tcl_NewStringObj(buf,-1));
+    Tcl_UpVar(ip,"1",blockinfoname,"blockinfo",0);
+    Tcl_SetVar2Ex(is->ip,"blockinfo",NULL,blockinfo,0);
+    Tcl_DecrRefCount(blockinfo);
+    Tcl_DecrRefCount(blockinfocurrent);
+    return TCL_ERROR;
+  }
+  if(is->braceslevel){
+    Tcl_UpVar(ip,"1",blockinfoname,"blockinfo",0);
+    Tcl_SetVar2Ex(is->ip,"blockinfo",NULL,blockinfo,0);
+    return is->braces_history_error(line);
+  }
+  result=RamDebuggerInstrumenterEndState(is);
+
+  Tcl_UpVar(ip,"1",blockinfoname,"blockinfo",0);
+  Tcl_SetVar2Ex(is->ip,"blockinfo",NULL,blockinfo,0);
+
+#ifdef _DEBUG
+  char* tmpblockinfo=Tcl_GetString(blockinfo);
+#endif
+  if(progress){
+    /*     RamDebugger::ProgressVar 100 */
+  }
+  Tcl_DecrRefCount(blockinfo);
+  Tcl_DecrRefCount(blockinfocurrent);
+  return result;
+}
+
 struct Xml_state_tag
 {
   char* tag;
@@ -979,8 +1359,8 @@ struct Xml_state
   int iline,icharline;
 
   Xml_state(Tcl_Interp *_ip,int _indentlevel): ip(_ip),indentlevel(_indentlevel),
-					       xml_state_tag_listNum(0),xml_states_names_listNum(0),
-					       iline(0),icharline(0) {}
+		                               xml_state_tag_listNum(0),xml_states_names_listNum(0),
+		                               iline(0),icharline(0) {}
   void enter_line_icharline(int _iline,int _icharline) { iline=_iline ; icharline=_icharline; }
 
   void push_state(Xml_states_names state);
@@ -991,7 +1371,7 @@ struct Xml_state
   void pop_tag(char* tag,int raiseerror,int len);
   void raise_error_if_tag_stack();
 
-  void raise_error(char* txt,int raiseerror);
+  void raise_error(const char* txt,int raiseerror);
 };
 
 void Xml_state::push_state(Xml_states_names state)
@@ -1078,7 +1458,7 @@ void Xml_state::raise_error_if_tag_stack()
   }
 }
 
-void Xml_state::raise_error(char* txt,int raiseerror)
+void Xml_state::raise_error(const char* txt,int raiseerror)
 {
   if(!raiseerror) return;
   char buf[1024];
@@ -1440,7 +1820,31 @@ int RamDebuggerInstrumenterDoWork(ClientData clientData, Tcl_Interp *ip, int obj
   return result;
 }
 
-
+int RamDebuggerInstrumenterDoWorkForCpp(ClientData clientData, Tcl_Interp *ip, int objc,
+		                  Tcl_Obj *CONST objv[])
+{
+  int result,progress=1,indentlevel_ini=0,raiseerror=1;
+  if (objc<3) {
+    Tcl_WrongNumArgs(ip, 1, objv,
+		     "block blockinfoname ?progress? ?indent_level_ini?");
+    return TCL_ERROR;
+  }
+  if (objc>=4){
+    result=Tcl_GetIntFromObj(ip,objv[3],&progress);
+    if(result) return TCL_ERROR;
+  }
+  if (objc>=5){
+    result=Tcl_GetIntFromObj(ip,objv[4],&indentlevel_ini);
+    if(result) return TCL_ERROR;
+  }
+  if (objc==6){
+    result=Tcl_GetBooleanFromObj(ip,objv[5],&raiseerror);
+    if(result) return TCL_ERROR;
+  }
+  result=RamDebuggerInstrumenterDoWorkForCpp_do(ip,Tcl_GetString(objv[1]),Tcl_GetString(objv[2]),
+    progress,indentlevel_ini);
+  return result;
+}
 
 int RamDebuggerInstrumenterDoWorkForXML(ClientData clientData, Tcl_Interp *ip, int objc,
 		                  Tcl_Obj *CONST objv[])
@@ -1472,12 +1876,16 @@ int RamDebuggerInstrumenterDoWorkForXML(ClientData clientData, Tcl_Interp *ip, i
 extern "C" DLLEXPORT int Ramdebuggerinstrumenter_Init(Tcl_Interp *interp)
 {
 #ifdef USE_TCL_STUBS
-  const char* retchar=Tcl_InitStubs(interp,"8.5",0);
+  Tcl_InitStubs(interp,"8.5",0);
   //Tk_InitStubs(interp,"8.5",0);
 #endif
 
   Tcl_CreateObjCommand( interp, "RamDebuggerInstrumenterDoWork",RamDebuggerInstrumenterDoWork,
 		        ( ClientData)0, NULL);
+  Tcl_CreateObjCommand( interp, "RamDebuggerInstrumenterDoWorkForCpp",RamDebuggerInstrumenterDoWorkForCpp,
+		        ( ClientData)0, NULL);
+
+
   Tcl_CreateObjCommand( interp, "RamDebuggerInstrumenterDoWorkForXML",RamDebuggerInstrumenterDoWorkForXML,
 		        ( ClientData)0, NULL);
   return TCL_OK;

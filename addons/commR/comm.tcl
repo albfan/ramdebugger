@@ -21,7 +21,7 @@
 #
 #        See the manual page comm.n for further details on this package.
 #
-# RCS: @(#) $Id: comm.tcl,v 1.5 2002/03/06 19:15:05 andreas_kupries Exp $
+# RCS: @(#) $Id: comm.tcl,v 1.1 2009/10/23 07:11:40 ramsan Exp $
 
 package require Tcl 8
 
@@ -350,7 +350,7 @@ proc ::commR::commNew {ch args} {
     }
     if {[string match ::commR::comm $ch]} {
 	# allow comm to be recreated after destroy
-    } elseif {![string compare $ch [info proc $ch]]} {
+    } elseif {![string compare $ch [info procs $ch]]} {
 	error "Already existing command: $ch"
     } else {
 	regsub  "set chan \[^\n\]*\n" [info body ::commR::comm] \
@@ -1185,7 +1185,7 @@ proc ::commR::commExec {chan fid remoteid buf} {
 proc ::commR::register { name local { varname "" } } {
 
     for { set i 12350 } { $i < 12360 } { incr i } {
-	if { $i == 12350 || [info command ::commR::comm] eq "" } {
+	if { $i == 12350 || [info commands ::commR::comm] eq "" } {
 	    set err [catch { ::commR::comm new ::commR::comm -port $i -local 1 \
 		    -listen 1 } errstring]
 	} else {
@@ -1197,12 +1197,16 @@ proc ::commR::register { name local { varname "" } } {
 	}
     }
     if { $i >= 12360 } { error "could not register port" }
-    proc ::commR::givename { id } "::commR::comm send -async \$id RamDebugger::MyNameIs [list $name] $i"
+    proc ::commR::givename { id } "::commR::comm send -async \$id RamDebugger::MyNameIs [list $name] $i; [list return $name]"
     # defer the cleanup for 2 seconds to allow other events to process
     #commR::comm hook lost {after 2000 set x 1; vwait x}
     return $i
 }
 
+proc ::commR::wait_for_debugger {} {
+    namespace eval ::RDC {}
+    vwait ::RDC::finished_loading_debugger
+}
 # ramsan: for compatibility
 interp alias "" ::comm::register "" ::commR::register
 
@@ -1224,4 +1228,4 @@ interp alias "" ::comm::register "" ::commR::register
 # }
 
 #eof
-package provide commR 4.0
+package provide commR 4.1

@@ -2,7 +2,7 @@
 # TCL Library for TkCVS
 
 #
-# $Id: merge.tcl,v 1.1.1.1 2001/06/07 15:03:42 ramsan Exp $
+# $Id: merge.tcl,v 1.1.1.1 2001-06-07 15:03:42 ramsan Exp $
 #
 
 proc merge_setup {} {

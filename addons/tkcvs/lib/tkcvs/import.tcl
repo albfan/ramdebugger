@@ -3,7 +3,7 @@
 #
 
 #
-# $Id: import.tcl,v 1.2 2006/06/30 17:40:13 ramsan Exp $
+# $Id: import.tcl,v 1.2 2006-06-30 17:40:13 ramsan Exp $
 #
 # Adds a new document to the repository.
 #

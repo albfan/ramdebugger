@@ -341,7 +341,7 @@ proc RamDebugger::Instrumenter::TryCompileFastInstrumenter { { raiseerror 0 } } 
     if { [file readable $dynlib] && [file mtime $dynlib] >= \
 	     [file mtime [file join $MainDir scripts RamDebuggerInstrumenter.cc]] } {
 	catch { load $dynlib }
-	if {[info command RamDebuggerInstrumenterDoWork] ne "" } { return }
+	if {[info commands RamDebuggerInstrumenterDoWork] ne "" } { return }
     }
     file delete -force [file join $AppDataDir compile]
     file copy -force [file join $MainDir scripts RamDebuggerInstrumenter.cc] \
@@ -350,7 +350,7 @@ proc RamDebugger::Instrumenter::TryCompileFastInstrumenter { { raiseerror 0 } } 
 
     set sourcefile [file join $AppDataDir RamDebuggerInstrumenter.cc]
 
-    set OPTS [list -shared -DUSE_TCL_STUBS -O2]
+    set OPTS [list -shared -DUSE_TCL_STUBS -O3]
     if {$::tcl_platform(platform) ne "windows"} { lappend OPTS "-fPIC" }
     set basedir [file dirname [file dirname [info nameofexecutable]]]
     lappend OPTS -I[file join $basedir include] \
@@ -362,7 +362,7 @@ proc RamDebugger::Instrumenter::TryCompileFastInstrumenter { { raiseerror 0 } } 
 	default {
 	    foreach i [glob -dir [file join $basedir lib] libtclstub*.a] {
 		regexp {[\d.]+} [file tail $i] version
-		if { $version >= 8.4 } { break }
+		if { $version >= 8.5 } { break }
 	    }
 	    set lib $i
 	}
@@ -407,7 +407,7 @@ proc RamDebugger::Instrumenter::DoWorkForTcl { block filenum newblocknameP newbl
 		    set dynlib [file join $RamDebugger::AppDataDir $dynlib_base]
 		}
 		catch { load $dynlib }
-		if { [info command RamDebuggerInstrumenterDoWork] eq "" && \
+		if { [info commands RamDebuggerInstrumenterDoWork] eq "" && \
 		         $RamDebugger::options(CompileFastInstrumenter) != 0 } {
 		    if { $RamDebugger::options(CompileFastInstrumenter) == -1 } {
 		        TryCompileFastInstrumenter 0
@@ -425,7 +425,7 @@ proc RamDebugger::Instrumenter::DoWorkForTcl { block filenum newblocknameP newbl
 	}
     }
 
-    if { [info command RamDebuggerInstrumenterDoWork] ne "" } {
+    if { [info commands RamDebuggerInstrumenterDoWork] ne "" } {
 	RamDebuggerInstrumenterDoWork $block $filenum $newblocknameP $newblocknameR \
 	    $blockinfoname $progress
     } else {
@@ -801,14 +801,66 @@ proc RamDebugger::Instrumenter::DoWorkForTime { block filename newblockname time
     append newblock $newblock2
 }
 
+proc RamDebugger::Instrumenter::DoWorkForC++ { block blockinfoname "progress 1" { indentlevel_ini 0 } \
+    { raiseerror 1 } } {
+    variable FastInstrumenterLoaded
 
-proc RamDebugger::Instrumenter::DoWorkForC++ { block blockinfoname "progress 1" { braceslevelIni 0 } } {
+    # this variable is used to make tests
+    set what c++
+
+    switch $what {
+	debug {
+	   # nothing
+	}
+	c++ {
+	    if { ![info exists FastInstrumenterLoaded] } {
+		if { $::tcl_platform(machine) == "amd64"} {
+		    set dynlib_base RamDebuggerInstrumenter6_x64[info sharedlibextension]
+		} else {
+		    set dynlib_base RamDebuggerInstrumenter6_x32[info sharedlibextension]
+		}
+		set dynlib [file join $RamDebugger::MainDir scripts $dynlib_base]
+		set err [catch { load $dynlib }]
+		if { $err } {
+		    set dynlib [file join $RamDebugger::AppDataDir $dynlib_base]
+		}
+		catch { load $dynlib }
+		if { [info commands RamDebuggerInstrumenterDoWorkForXML] eq "" && \
+		         $RamDebugger::options(CompileFastInstrumenter) != 0 } {
+		    if { $RamDebugger::options(CompileFastInstrumenter) == -1 } {
+		        TryCompileFastInstrumenter 0
+		        set RamDebugger::options(CompileFastInstrumenter) 0
+		    } else {
+		        TryCompileFastInstrumenter 1
+		    }
+		    catch { load $dynlib }
+		}
+		set FastInstrumenterLoaded 1
+	    }
+	}
+	tcl {
+	    # nothing
+	}
+    }
+
+    if { [info commands RamDebuggerInstrumenterDoWorkForCpp] ne "" } {
+	RamDebuggerInstrumenterDoWorkForCpp $block $blockinfoname \
+	    $progress $indentlevel_ini
+    } else {
+	uplevel [list RamDebugger::Instrumenter::DoWorkForC++_do $block $blockinfoname \
+		$progress $indentlevel_ini]
+    }
+}
+
+
+proc RamDebugger::Instrumenter::DoWorkForC++_do { block blockinfoname "progress 1" { braceslevelIni 0 } } {
 
     set length [string length $block]
     if { $length >= 5000 && $progress } {
 	RamDebugger::ProgressVar 0 1
+    } else {
+	set progress 0
     }
-
     upvar $blockinfoname blockinfo
     set blockinfo ""
     set blockinfocurrent [list $braceslevelIni n]
@@ -835,7 +887,7 @@ proc RamDebugger::Instrumenter::DoWorkForC++ { block blockinfoname "progress 1" 
     set line 1
     set ichar 0
     set icharline 0
-    set finishedline 0
+    set finishedline 1
     set nextiscyan 0
     set simplechar ""
     foreach c [split $block ""] {
@@ -849,10 +901,13 @@ proc RamDebugger::Instrumenter::DoWorkForC++ { block blockinfoname "progress 1" 
 	    if { $line > $iline } {
 		error "error in line $iline, position $icharinto. There is no closing (')"
 	    }
-	    if { $c == "'" } {
+	    if { $c == "'"  && $lastc != "\\" } {
 		set simplechar ""
 	    }
-	    set lastc $c 
+	    if { $lastc == "\\" && $c == "\\" } {
+		set lastc "\\\\"
+	    } else { set lastc $c }
+
 	    incr ichar
 	
 	    if { $c == "\t" } {
@@ -878,7 +933,7 @@ proc RamDebugger::Instrumenter::DoWorkForC++ { block blockinfoname "progress 1" 
 		}
 	    }
 	    ' {
-		if { !$commentlevel && $wordtype != "\"" } {
+		if { !$commentlevel && $wordtype != "\"" && $lastc != "\\" } {
 		    set simplechar [list $line $icharline]
 		}
 	    }
@@ -1080,7 +1135,9 @@ proc RamDebugger::Instrumenter::DoWorkForC++ { block blockinfoname "progress 1" 
 
 		if { $finishedline } {
 		    lappend blockinfocurrent "n"
-		} else { lappend blockinfocurrent "c" }
+		} else {
+		    lappend blockinfocurrent "c"
+		}
 	    }
 	    default {
 		if { $commentlevel || $wordtype == "\"" } {
@@ -1151,7 +1208,7 @@ proc RamDebugger::Instrumenter::DoWorkForC++ { block blockinfoname "progress 1" 
 	}
 	error "error: There is a non-closed brace at the end of the file (see Output for details)"
     }
-    if { $length >= 1000  && $progress } {
+    if { $progress } {
 	RamDebugger::ProgressVar 100
     }
 }
@@ -1439,7 +1496,7 @@ proc RamDebugger::Instrumenter::DoWorkForXML { block blockinfoname "progress 1" 
 		    set dynlib [file join $RamDebugger::AppDataDir $dynlib_base]
 		}
 		catch { load $dynlib }
-		if { [info command RamDebuggerInstrumenterDoWorkForXML] eq "" && \
+		if { [info commands RamDebuggerInstrumenterDoWorkForXML] eq "" && \
 		         $RamDebugger::options(CompileFastInstrumenter) != 0 } {
 		    if { $RamDebugger::options(CompileFastInstrumenter) == -1 } {
 		        TryCompileFastInstrumenter 0
@@ -1457,7 +1514,7 @@ proc RamDebugger::Instrumenter::DoWorkForXML { block blockinfoname "progress 1" 
 	}
     }
 
-    if { [info command RamDebuggerInstrumenterDoWorkForXML] ne "" } {
+    if { [info commands RamDebuggerInstrumenterDoWorkForXML] ne "" } {
 	RamDebuggerInstrumenterDoWorkForXML $block $blockinfoname \
 	    $progress $indentlevel_ini $raiseerror
     } else {
@@ -1465,6 +1522,7 @@ proc RamDebugger::Instrumenter::DoWorkForXML { block blockinfoname "progress 1" 
 		$progress $indentlevel_ini $raiseerror]
     }
 }
+
 proc RamDebugger::Instrumenter::DoWorkForXML_do { block blockinfoname "progress 1" { indentlevel_ini 0 } \
     { raiseerror 1 } } {
 
@@ -1724,7 +1782,59 @@ proc RamDebugger::Instrumenter::DoWorkForXML_do { block blockinfoname "progress 
     }
 }
 
+proc _incr_l2 { idx } {
+    lassign $idx idx1 idx2
+    return [list $idx1 [incr idx2]]
+}
 
+proc RamDebugger::Instrumenter::DoWorkForMakefile { block blockinfoname "progress 1" } {
+
+    set length [string length $block]
+    if { $length >= 5000 && $progress } {
+	RamDebugger::ProgressVar 0 1
+    }
+
+    upvar $blockinfoname blockinfo
+    set blockinfo ""
+    set continuation 0
+
+    set iline 1
+    set nlines [regexp {\n} $block]
+    foreach line [split $block \n] {
+	set line [string map [list "\t" "        "] $line]
+	if { $iline%50 == 0  && $progress } {
+	    RamDebugger::ProgressVar [expr $iline*100/$nlines]
+	}
+	if { !$continuation } {
+	    set blockinfocurrent [list 0 n]
+	} else {
+	    set blockinfocurrent [list 0 c]
+	}
+	if { [regexp -indices {^\s*#.*} $line idxs] } {
+	    lappend blockinfocurrent red {*}[_incr_l2 $idxs]
+	    set continuation 0
+	} else {
+	    if { [regexp -indices {^\s*(\w+)\s*=} $line {} idxs] } {
+		lappend blockinfocurrent green {*}[_incr_l2 $idxs]
+	    }
+	    foreach "- idxs"  [regexp -inline -indices {\$\((\w+)\)?} $line] {
+		lappend blockinfocurrent magenta {*}[_incr_l2 $idxs]
+	    }
+	    if { [regexp -indices {^\s*(ifeq|ifneq|else|endif)} $line {} idxs] } {
+		lappend blockinfocurrent blue {*}[_incr_l2 $idxs]
+	    }
+	    if { [regexp -indices {^\s*([^:]+):} $line {} idxs] } {
+		lappend blockinfocurrent blue {*}[_incr_l2 $idxs]
+	    }
+	    set continuation [regexp {\\$} $line]
+	}
+	incr iline
+	lappend blockinfo $blockinfocurrent
+    }
+    if { $length >= 1000  && $progress } {
+	RamDebugger::ProgressVar 100
+    }
+}
 
 
 

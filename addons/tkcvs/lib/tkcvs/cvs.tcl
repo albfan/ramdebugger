@@ -3,7 +3,7 @@
 #
 
 #
-# $Id: cvs.tcl,v 1.2 2006/06/30 17:40:13 ramsan Exp $
+# $Id: cvs.tcl,v 1.2 2006-06-30 17:40:13 ramsan Exp $
 # 
 # Contains procedures used in interaction with CVS.
 #

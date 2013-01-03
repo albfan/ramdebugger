@@ -3,7 +3,7 @@
 #
 
 #
-# $Id: reports.tcl,v 1.2 2006/06/30 17:40:16 ramsan Exp $
+# $Id: reports.tcl,v 1.2 2006-06-30 17:40:16 ramsan Exp $
 #
 # Procedures for CVS reports.
 #

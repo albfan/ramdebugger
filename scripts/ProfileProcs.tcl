@@ -236,7 +236,7 @@ snit::widget tablestree {
 	bind $tree <Return> "[mymethod execute_select]"
 	bind $tree <ButtonRelease-1> "[bind TreeCtrl <ButtonRelease-1>]
 		[mymethod execute_select %x %y] ; break"
-	bind $tree <ButtonPress-3> {
+	bind $tree <<ContextualPress>> {
 	    set id ""
 	    foreach "type id" [%W identify %x %y] break
 	    if { $type != "item" || $id == "" } { return }
@@ -516,7 +516,7 @@ snit::widget procstree {
 	}
 	set procs ""
 	if { $ns eq "::" } { set pattern ::* } else { set pattern ${ns}::* }
-	foreach i [RamDebugger::EvalRemoteAndReturn [list info proc $pattern]] {
+	foreach i [RamDebugger::EvalRemoteAndReturn [list info procs $pattern]] {
 	    lappend procs [namespace tail $i]
 	}
 	foreach i [lsort -dictionary $procs] {
@@ -581,7 +581,7 @@ snit::widget procstree {
 	bind $tree <ButtonRelease-1> "[bind TreeCtrl <ButtonRelease-1>]
 		[mymethod execute_select %x %y] ; break"
 	bind $tree <Double-1> [mymethod execute_select %x %y double]
-	bind $tree <ButtonPress-3> {
+	bind $tree <<ContextualPress>> {
 	    set id ""
 	    foreach "type id" [%W identify %x %y] break
 	    if { $type != "item" || $id == "" } { return }

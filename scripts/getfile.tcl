@@ -69,10 +69,11 @@ proc RamDebugger::GetFile { what types title }  {
     bind $f <Destroy> "[list unset ::RamDebugger::getFileToolbar]"
 
     bind $f.e1 <<ComboboxSelected>> [list set RamDebugger::getFile_done 1]
-    bind $f.e1 <Control-o> "[list $f.b1 invoke] ; break"
+    bind $f.e1 <$::control-o> "[list $f.b1 invoke] ; break"
     bind $f.e1 <Return> "[list set RamDebugger::getFile_done 1] ; break"
     bind $f.e1 <Escape> [list set RamDebugger::getFile_done 0]
     bind $f.e1 <Alt-BackSpace> "[list RamDebugger::GetFile_del_backwards] ; break"
+    bind $f.e1 <$::control-BackSpace> "[list RamDebugger::GetFile_del_backwards] ; break"
     bind $f.e1 <Home> [list RamDebugger::GetFile_Home home]
     bind $f.e1 <Shift-Home> [list RamDebugger::GetFile_Home desktop]
     bind $f <1> {
@@ -86,10 +87,10 @@ proc RamDebugger::GetFile { what types title }  {
 	}
     }
     bind $f.l1 <1> [list RamDebugger::GetFile_contextual $f $f.e1 $f.b1 %X %Y]
-    bind $f.l1 <3> [list RamDebugger::GetFile_contextual $f $f.e1 $f.b1 %X %Y]
+    bind $f.l1 <<Contextual>> [list RamDebugger::GetFile_contextual $f $f.e1 $f.b1 %X %Y]
 
-    bind $f.e1 <3> [list RamDebugger::GetFile_contextual $f $f.e1 $f.b1 %X %Y]
-    #bind $f.e1.e <3> [list RamDebugger::GetFile_contextual $f $f.e1 $f.b1 %X %Y]
+    bind $f.e1 <<Contextual>> [list RamDebugger::GetFile_contextual $f $f.e1 $f.b1 %X %Y]
+    #bind $f.e1.e <<Contextual>> [list RamDebugger::GetFile_contextual $f $f.e1 $f.b1 %X %Y]
 
     bind $f.e1 <Control-Tab> "[list set RamDebugger::getFile_done 0] ; [bind $text <Control-KeyPress-Tab>]"
 
@@ -105,12 +106,14 @@ proc RamDebugger::GetFile { what types title }  {
 	if { ![info exists options(defaultdir)] } { set options(defaultdir) [pwd] }
 	set getfilestring $options(defaultdir)/
     }
+    update idletasks
+    grab $f
     focus $f.e1
+
     $f.e1 xview moveto 1
     $f.e1 icursor end
 
     set getFileToolbar 1
-    grab $f
 
     while 1 {
 	set getFile_done 0

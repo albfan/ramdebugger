@@ -1,5 +1,5 @@
 #
-# $Id: static.tcl,v 1.1.1.1 2001/06/07 15:03:42 ramsan Exp $
+# $Id: static.tcl,v 1.1.1.1 2001-06-07 15:03:42 ramsan Exp $
 #
 #  DESCRIPTION
 #      This file contains a procedure written in Tcl that supports static 

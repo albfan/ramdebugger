@@ -15,7 +15,7 @@ namespace eval ::dialogwinmsgs {
 
 }
 
-if { [info command _] eq "" } {
+if { [info commands _] eq "" } {
     proc _ { args } {
 	if { [regexp {(.*)\#C\#.*} [lindex $args 0] {} str] } {
 	    set args [lreplace $args 0 0 $str]
@@ -24,20 +24,20 @@ if { [info command _] eq "" } {
     }
 }
 
-if { [info command tkTabToWindow] == "" } {
+if { [info commands tkTabToWindow] == "" } {
     interp alias "" tkTabToWindow "" tk::TabToWindow
     #::tk::unsupported::ExposePrivateCommand tkTabToWindow
 }
-if { [info command tkButtonInvoke] == "" } {
+if { [info commands tkButtonInvoke] == "" } {
     interp alias "" tkButtonInvoke "" tk::ButtonInvoke
     #::tk::unsupported::ExposePrivateCommand tkButtonInvoke
 }
 
-package provide dialogwin 1.5
+package provide dialogwin 1.7
 
 ################################################################################
-#  This software is copyrighted by Ramon Ribó (RAMSAN) ramsan@cimne.upc.es.
-#  (http://gid.cimne.upc.es/ramsan) The following terms apply to all files 
+#  This software is copyrighted by Ramon RibÃ³ (RAMSAN) ramsan@cimne.upc.es.
+#  (http://gid.cimne.upc.es/ramsan) The following terms apply to all files
 #  associated with the software unless explicitly disclaimed in individual files.
 
 #  The authors hereby grant permission to use, copy, modify, distribute,
@@ -64,7 +64,7 @@ package provide dialogwin 1.5
 #  MODIFICATIONS.
 ################################################################################
 
-if { [info command CCGetRGB] eq "" } {
+if { [info commands CCGetRGB] eq "" } {
     proc CCGetRGB { w color} {
 	set ret $color
 	set n [ scan $color \#%2x%2x%2x r g b]
@@ -80,7 +80,7 @@ if { [info command CCGetRGB] eq "" } {
 }
 
 
-if { [info command CCColorActivo] eq "" } {
+if { [info commands CCColorActivo] eq "" } {
     proc CCColorActivo { color_usuario { factor 17} } {
 	set ret ""
 	set color_nuevo [ CCGetRGB . $color_usuario]
@@ -107,7 +107,7 @@ namespace eval DialogWin {
     variable grab
 }
 
-#current styles are: 
+#current styles are:
 #        ridgeframe
 #        separator
 #
@@ -158,7 +158,7 @@ proc DialogWin::Init { winparent title style { morebuttons "" } { OKname "" } { 
 
     if { $OKname == "" } {
 	set OKname [_ OK]
-    } 
+    }
     if { $Cancelname != "" } {
 	set CancelName $Cancelname
     } elseif { $OKname == "-" } {
@@ -577,7 +577,7 @@ proc DialogWinTop::Init { winparent title style commands { morebuttons "" } { OK
 	bind $w <Escape> "tkButtonInvoke $w.buts.b0"
 	wm protocol $w WM_DELETE_WINDOW "tkButtonInvoke $w.buts.b0"
     }
-    
+
      bind $w <Destroy> {
 	 if { [winfo class %W] == "Toplevel" } {
 	      DialogWinTop::DestroyWindow %W
@@ -626,7 +626,7 @@ proc DialogWinTop::TabOrderPrevNext { w what } {
     set ipos [lsearch $tabo $w]
     set tabo [concat [lrange $tabo [expr {$ipos+1}] end] [lrange $tabo 0 [expr {$ipos-1}]]]
     if { $what eq "prev" } { set tabo [lreverse $tabo] }
-    
+
     foreach w $tabo {
 	if { [tk::FocusOK $w] } {
 	    tk::TabToWindow $w
@@ -638,7 +638,7 @@ proc DialogWinTop::TabOrderPrevNext { w what } {
 
 proc DialogWinTop::SetTabOrder { winlist } {
     variable taborder
-    
+
     set top [winfo toplevel [lindex $winlist 0]]
     set taborder($top) $winlist
 
@@ -915,7 +915,7 @@ proc snit_messageBox { args } {
 	incr i
 	set opts($opt) [lindex $args $i]
     }
-    
+
     if { $opts(-do_not_ask_again) } {
 	if { $opts(-type) ni "ok okcancel yesno yesnocancel" } {
 	    error "error. option -do_not_ask_again can only be used for types 'ok','okcancel','yesno' and 'yesnocancel'"
@@ -989,7 +989,7 @@ proc snit_messageBox { args } {
 
     grid $f.l1 $f.msg -sticky nw
     grid configure $f.msg -padx 5 -pady 5
-    
+
     if { $opts(-do_not_ask_again) } {
 	ttk::checkbutton $f.cb1 -text [_ "Do not show again for this session"] -variable \
 	    [$w give_uservar do_not_ask_again 0]
@@ -998,7 +998,7 @@ proc snit_messageBox { args } {
 
     $w focusbutton [expr $opts(-defaultpos)+2]
     set action [$w createwindow]
-    
+
     if { $opts(-do_not_ask_again) && [$w give_uservar_value do_not_ask_again] } {
 	set do_not_ask_again 1
     } else {
@@ -1041,8 +1041,11 @@ proc tk_dialog_snit {w title text textsmall bitmap image default args} {
 
 proc tk_dialog_snit1 { parent title text textsmall image default args} {
 
-    set w $parent.%AUTO%
-
+    if { $parent eq "." } {
+	set w .%AUTO%
+    } else {
+	set w $parent.%AUTO%
+    }
     set w [dialogwin_snit $w -title $title -morebuttons $args \
 	       -okname - -cancelname -]
     set f [$w giveframe]
@@ -1104,7 +1107,7 @@ snit::widget dialogwin_snit {
     option -entrylabel ""
     option -entrydefault ""
     option -entryvalues ""
-    
+
     option -repeat_answer_check 0
     option -frame_grid_cmd ""
     option -frame_toplevel toplevel
@@ -1123,7 +1126,7 @@ snit::widget dialogwin_snit {
     variable typeuservar
     variable traces ""
     variable destroy_handlers ""
-    
+
     constructor args {
 	#wm manage $win
 	
@@ -1131,7 +1134,7 @@ snit::widget dialogwin_snit {
 
 	wm withdraw $win
 	
-	if {0&& [info command ttk::button] eq "" } {
+	if {0&& [info commands ttk::button] eq "" } {
 	    set button_cmd button
 	    set label_cmd label
 	    set entry_cmd entry
@@ -1189,7 +1192,7 @@ snit::widget dialogwin_snit {
 	if { $options(-okname) eq "" } { set options(-okname) [_ "Ok"] }
 	if { $options(-cancelname) eq "" } {
 	    set options(-cancelname) [_ "Cancel"]
-	    
+	
 	    if { $options(-okname) eq "-" && $options(-morebuttons) eq "" } {
 		set options(-cancelname) [_ "Close"]
 	    }
@@ -1295,7 +1298,7 @@ snit::widget dialogwin_snit {
 	    grid {*}$togrid -row 1
 	    grid $win.buts.repeat {*}[lrepeat [expr {[llength $togrid]-1}] -] \
 		-sticky w -padx 2 -pady 2 -row 0
-	    
+	
 #            grid $win.buts.repeat -row 0 -column [llength $togrid] -sticky w -padx 2
 #             grid $win.buts.repeat {*}[lrepeat [expr {[llength $togrid]-1}] -] \
 #                 -sticky w -padx 2 -pady 2
@@ -1367,7 +1370,7 @@ snit::widget dialogwin_snit {
 		}
 	    }
 	    set entryvalue $options(-entrydefault)
-	    
+	
 	    grid $win.f.l $win.f.e -sticky w -padx 3 -pady 3
 	    grid configure $win.f.e -sticky ew
 	    grid columnconfigure $win.f 1 -weight 1
@@ -1411,8 +1414,8 @@ snit::widget dialogwin_snit {
 	    if { $style eq "" } { set style [winfo class $win.f] }
 	    set err [catch { ttk::style lookup $style -background } bg]
 	    if { $err } { set bg white }
-	}  
-	return $bg 
+	}
+	return $bg
     }
     method invokeok { { visible 1 } } {
 	if { ![winfo exists $win.buts.ok] } { return }
@@ -1620,8 +1623,12 @@ snit::widget dialogwin_snit {
 	set parent [winfo parent $win]
 	set top [winfo toplevel $parent]
 
-	if { $::tcl_platform(os) != "Darwin" } {
+	if { $::tcl_platform(os) ne "Darwin" } {
 	    wm manage $win
+	}
+	if { $::tcl_platform(os) eq "Windows CE" } {
+	    bind $win <ConfigureRequest> { if { "%W" eq [winfo toplevel %W] } { etcl::autofit %W }}
+	    bind $win <Expose> { if { "%W" eq [winfo toplevel %W] } { etcl::autofit %W }}
 	}
 	wm withdraw $win
 	update idletasks
@@ -1657,7 +1664,7 @@ snit::widget dialogwin_snit {
 	    set big 0
 	    if { $width > .8*$scr_w } { set big 1 }
 	    if { $height > .8*$scr_h } { set big 1 }
-	    
+	
 	    if { $big || [wm state $top] == "withdrawn" } {
 		set x [expr {$scr_x+$scr_w/2-$width/2}]
 		set y [expr {$scr_y+$scr_h/2-$height/2}]
@@ -1695,7 +1702,7 @@ snit::widget dialogwin_snit {
 	    if { [wm state $top] ne "withdrawn" } {
 		wm transient $win $parent
 	    }
-	}        
+	}
 	update idletasks
 	wm deiconify $win
 	update idletasks
@@ -1850,7 +1857,7 @@ snit::widget dialogwin_snit {
 		error "error in give_typeuservar_value"
 	    }
 	}
-    } 
+    }
     typemethod unset_typeuservar { key} {
 	unset typeuservar($key)
     }
@@ -1898,6 +1905,7 @@ snit::widget dialogwin_snit {
 		foreach w $v {
 		    if { [string is integer $w] } {
 		        switch $w {
+		            1 { $self disableok }
 		            0 { $self disablecancel }
 		            default { $self disablebutton $w }
 		        }
@@ -1941,7 +1949,7 @@ snit::widget dialogwin_snit {
 		    disable { $w itemconfigure all -fill grey }
 		}
 	    }
-	    default {              
+	    default {
 		switch $enable_disable {
 		    enable {
 		        set err [catch { $w state !disabled }]
@@ -1962,7 +1970,7 @@ snit::widget dialogwin_snit {
     # example: if dict contains:
     #    value1 "key2 1" value2 "key2 0 key3 v" default "key4 1"
     # when value of key is changed to 'value1', the value of key "key2" is
-    # changed to "1". when value of key is changed to 'value2', the value 
+    # changed to "1". when value of key is changed to 'value2', the value
     # of key "key2" is changed t0 "0" and the value of "key3" is changed to "v"
     # for any other value, key4 is changed to 1
     # there can be a "default" value that is applied if none of the other values apply
@@ -2061,7 +2069,7 @@ if 0 {
 	-entrylabel [_ "Password"]: -entrytext [_ "Enter password to encrypt"]:
     set action [$win._ask createwindow]
     while 1 {
-	if { $action <= 0 } { 
+	if { $action <= 0 } {
 	    destroy $win._ask
 	    return
 	}
@@ -2102,7 +2110,7 @@ if 0 {
 #     switch -- [$w giveaction] {
 #         -1 - 0 { destroy $w }
 #         1 - 2 {
-#            
+#
 #             if { [$w giveaction] == 1 } { destroy $w }
 #         }
 #     }
@@ -2115,12 +2123,12 @@ snit::widgetadaptor wizard_snit {
 
     delegate method * to hull
     delegate option * to hull
-    
-    # every element is composed of: title build_callback check_callback has_finish_button 
+
+    # every element is composed of: title build_callback check_callback has_finish_button
     # is_labelframe is_hidden previous_page
     # check_callback can be void on all pages except the last
     variable dataList ""
-    
+
     variable curr_callback
     variable frame
 
@@ -2128,7 +2136,7 @@ snit::widgetadaptor wizard_snit {
 	installhull using dialogwin_snit -callback [mymethod _callback] \
 	    -morebuttons [list [_ Previous] [_ Next] [_ Finish] [_ Cancel]] \
 	    -okname - -cancelname - -geometry 500x300 -transient 1
-    
+
 	$self configurelist $args
 	
 	set f [$win giveframe]
@@ -2337,11 +2345,11 @@ snit::widgetadaptor wizard_snit {
 #     if { $view_binding ne "" } { puts hohoho }
 #     if { $flag1 } { puts "activated flag" }
 #  }
-# 
+#
 ################################################################################
 
 
-# ramsan: i perquè toqueu això?
+# ramsan: i perquÃ¨ toqueu aixÃ²?
 if { [catch { package require compass_utils }] } {
     proc ::parse_args { args } {
 	
@@ -2413,7 +2421,7 @@ if { [catch { package require compass_utils }] } {
 		            $compulsory $args]]
 		return ""
 	    }
-	    
+	
 	}
 	foreach name [array names opts] {
 	    uplevel 1 [list set [string trimleft $name -] $opts($name)]
@@ -2425,7 +2433,7 @@ if { [catch { package require compass_utils }] } {
 	}
 	return [lrange $arguments $inum end]
     }
-    
+
     proc ::_parse_args_string { cmd optional compulsory arguments } {
 	
 	set str "error. usage: $cmd "

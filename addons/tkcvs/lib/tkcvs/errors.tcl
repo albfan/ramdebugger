@@ -3,7 +3,7 @@
 #
 
 #
-# $Id: errors.tcl,v 1.1.1.1 2001/06/07 15:03:42 ramsan Exp $
+# $Id: errors.tcl,v 1.1.1.1 2001-06-07 15:03:42 ramsan Exp $
 #
 # Procedures for unimplemented procedures and error messages used by
 # TkCVS.

@@ -2,7 +2,7 @@
 #
 
 #
-# $Id: modbrowse.tcl,v 1.1.1.1 2001/06/07 15:03:42 ramsan Exp $
+# $Id: modbrowse.tcl,v 1.1.1.1 2001-06-07 15:03:42 ramsan Exp $
 #
 # Set up a check out dialog.
 #

@@ -3,7 +3,7 @@
 #
 
 #
-# $Id: filebrowse.tcl,v 1.1.1.1 2001/06/07 15:03:42 ramsan Exp $
+# $Id: filebrowse.tcl,v 1.1.1.1 2001-06-07 15:03:42 ramsan Exp $
 #
 # Sets up a dialog to browse the contents of a module.
 #

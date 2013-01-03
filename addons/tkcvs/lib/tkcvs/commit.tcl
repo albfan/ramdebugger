@@ -3,7 +3,7 @@
 #
  
 # 
-# $Id: commit.tcl,v 1.1.1.1 2001/06/07 15:03:42 ramsan Exp $
+# $Id: commit.tcl,v 1.1.1.1 2001-06-07 15:03:42 ramsan Exp $
 #
 # Set up a small commit dialog.
 #

@@ -1,5 +1,5 @@
 #
-# $Id: tkcvs_def.tcl,v 1.5 2008-10-03 12:31:58 ramsan Exp $
+# $Id: tkcvs_def.tcl,v 1.6 2009-03-25 23:47:15 ramsan Exp $
 #
 # TkCVS defaults file.
 #
@@ -277,7 +277,8 @@ if {$tcl_platform(platform) == "windows"} {
 	gimp *.gif
 	gnuclient *
     }
-    set cvscfg(tkdiff) "tkdiff"
+    set cvscfg(tkdiff) [list $TclExe [file join $ScriptBin tkdiff.tcl]]
+    #set cvscfg(tkdiff) "tkdiff"
     # Commands to change file attributes.
     # 12-Jan-2000 lcs
     set cvscfg(chmod_ro_cmd)   "chmod a-w"

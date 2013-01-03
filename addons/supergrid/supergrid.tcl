@@ -82,7 +82,7 @@
 
 package require Tcl 8.3
 package require Tk 8.3
-package provide supergrid 1.1
+package provide supergrid 1.0
 
 namespace eval supergrid {
     variable UseGPrefix ""
@@ -93,11 +93,10 @@ namespace eval supergrid {
 		           Separator Entry treectrl hugecombo labelframe spinbox]
     variable SubGridClasses [list Frame Labelframe]
     variable HorizontalClasses [list Entry Text Canvas  Listbox PanedWindow TitleFrame ComboBox \
-	NoteBook MainFrame ScrolledWindow Panedwindow TreeCtrl Labelframe Spinbox Hugecombo \
-        TNotebook]
+	NoteBook MainFrame ScrolledWindow Panedwindow TreeCtrl Labelframe Spinbox Hugecombo]
     variable VerticalClasses [list Text Canvas Listbox PanedWindow TitleFrame NoteBook MainFrame \
-	ScrolledWindow panedwindow Panedwindow TreeCtrl Labelframe TNotebook]
-    variable ScrollClasses [list Scrollbar TScrollbar]
+	ScrolledWindow panedwindow Panedwindow TreeCtrl Labelframe]
+    variable ScrollClasses [list Scrollbar]
     variable DiscardClasses [list Toplevel Menu]
     variable DiscardWidgets {^\.#BWidget}
 

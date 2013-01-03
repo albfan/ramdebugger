@@ -3,7 +3,7 @@
 #
 
 #
-# $Id: workdir.tcl,v 1.2 2006/06/30 17:40:19 ramsan Exp $
+# $Id: workdir.tcl,v 1.2 2006-06-30 17:40:19 ramsan Exp $
 #
 # Current working directory display.  Handles all of the functions
 # concerned with navigating about the current directory on the main

@@ -9,4 +9,4 @@
 # full path name of this file's directory.
 
 if {![package vsatisfies [package provide Tcl] 8]} {return}
-package ifneeded commR 4.0 [list source [file join $dir comm.tcl]]
+package ifneeded commR 4.1 [list source [file join $dir comm.tcl]]

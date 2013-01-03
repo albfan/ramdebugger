@@ -429,6 +429,8 @@ proc MainFrame::showstatusbar { path name } {
     set status $path.status
     if { [string equal $name "none"] } {
 	pack forget $status
+	# ramsan: without changing height to 1 it does not disappear
+	$path.botf configure -height 1
     } else {
 	pack $status -in $path.botf -fill x
 	switch -- $name {

@@ -3,41 +3,46 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
         <style type="text/css">
-	p { text-align:justify; }
-	body { font-family: Verdana, Arial, Helvetica, Geneva; font-size 8px; }
-
-	a { text-decoration:none }
-	pre { font-family:Courier New, Courier, Mono; }
-	h1 { font-family:Arial; font-size: 28; }
-	h2 { font-family:Arial; font-size: 24; }
-	h3 { font-family:Arial; font-size: 22; }
-	h4 { font-family:Arial; font-size: 18; }
-	P { font-family:Arial, Helvetica, sans-serif; font-size: 17; }
-	code { font-family:Courier New, Courier, Mono; font-size: 16; }
-	li { font-family:Arial, Helvetica, sans-serif; font-size: 17; }
-	ol { font-family:Arial, Helvetica, sans-serif; font-size: 17; }
-	ul { font-family:Arial, Helvetica, sans-serif; font-size: 17; }
-    </style>
-        <title>Debugging RamDebugger</title>
+	    p { text-align:justify; }
+	    body { font-family: Verdana, Arial, Helvetica, Geneva; font-size 8px; }
+	    a { text-decoration:none }
+	    pre { font-family:Courier New, Courier, Mono; }
+	    h1 { font-family:Arial; font-size: 28; font-weight: bold; color:DarkBlue; }
+	    h2 { font-family:Arial; font-size: 24; font-weight: bold; color:DarkBlue; }
+	    h3 { font-family:Arial; font-size: 22; font-weight: bold; color:DarkBlue; }
+	    h4 { font-family:Arial; font-size: 18; font-weight: bold; color:DarkBlue; }
+	    h4 { font-family:Arial; font-size: 18; font-weight: bold; color:DarkBlue; }
+	    h4 { font-family:Arial; font-size: 18; font-weight: bold; color:DarkBlue; }
+	    P { text-align:justify; font-family:Arial, Helvetica, sans-serif; font-size: 17; }
+	    code { font-family:Courier New, Courier, Mono; font-size: 16; }
+	    li { text-align:justify; font-family:Arial, Helvetica, sans-serif; font-size: 17; 
+		margin-top: 7px; }
+	    ol { text-align:justify; font-family:Arial, Helvetica, sans-serif; font-size: 17;  
+		margin-top: 7px; }
+	    ul { text-align:justify; font-family:Arial, Helvetica, sans-serif; font-size: 17; 
+		margin-top: 7px; }
+	</style>
+        <title>Revisions</title>
     </head>
     <body>
-        <a name="Usage&gt;Debugging RamDebugger"/>
-        <h3>Debugging RamDebugger</h3>
-        <p>As a good debugger must do, RamDebugger permmits to debugger itself. As it is not a simple
-code, this is a good testing of the program capabilities.
-It can be debugged either locally or remotely. To debug itself locally,
-open TCL source file <b>RamDebugger.tcl</b>
- and choose <code>File-&gt;Debug
-on-&gt;Currentfile</code>
-. See <a href="RamDebugger7.html#Usage&gt;Debugging locally">Debugging locally</a>
- for details.
-To debug itself remotely, open two RamDebuggers. From one of them, connect to the other
-with <code>File-&gt;Debug on-&gt;RamDebugger</code>
-. In <b>Windows</b>
-, if option <code>Automatically
-check remote files</code>
- is unset (the default), it can be necessary to use <code>Debug on-&gt;
-Update remotes</code>
- on both RamDebuggers.        </p>
+        <a name="Usage&gt;Revisions"/>
+        <h3>Revisions</h3>
+        <p>
+            <code>RamDebugger</code>
+ uses program <code>cvs</code>
+ in order to maintain revisions of the edited
+files. It creates automatically a CVS repository in a hidden directory and saves revisions
+of the files to that repository.        </p>
+        <p>It is possible to visualize the differences between two revisions or between one revision
+and current file by using menu command: Files-&gt;Revisions-&gt;Open revisions list. (it uses
+program <code>Tkdiff</code>
+ to visualize the differences.        </p>
+        <p>It is possible to remove revisions history for a set of selected files (in Files-&gt;Revision-&gt;
+View revised files). The history is removed but the file is not modified. It can save
+disk space.</p>
+        <p>It is possible to activate or deactivate the <code>Auto save</code>
+ feature in the preferences
+window (Edit-&gt;Preferences-&gt;Auto save). If activated, instead of making backups of the
+files it saves automatically revisions of the edited file at fixed intervals.        </p>
     </body>
 </html>

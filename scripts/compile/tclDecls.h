@@ -8,7 +8,7 @@
  * See the file "license.terms" for information on usage and redistribution
  * of this file, and for a DISCLAIMER OF ALL WARRANTIES.
  *
- * RCS: @(#) $Id: tclDecls.h,v 1.93 2002/08/05 15:01:04 dgp Exp $
+ * RCS: @(#) $Id: tclDecls.h,v 1.1 2005/08/10 12:27:04 escolano Exp $
  */
 
 #ifndef _TCLDECLS

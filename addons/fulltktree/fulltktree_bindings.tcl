@@ -1,4 +1,15 @@
 
+if { $::tcl_platform(platform) eq "windows" } {
+    event add <<ContextualPress>> <ButtonPress-3>
+    event add <<Contextual>> <ButtonRelease-3>
+    event add <<Contextual>> <App>
+} elseif { $::tcl_platform(os) eq "Darwin" } {
+    event add <<ContextualPress>> <ButtonPress-2>
+    event add <<Contextual>> <ButtonRelease-2>
+} else {
+    event add <<ContextualPress>> <ButtonPress-3>
+    event add <<Contextual>> <ButtonRelease-3>
+}
 
 bind FullTreeCtrl <Double-ButtonPress-1> {
     TreeCtrl::FullTkTreeEditCancel %W
@@ -716,10 +727,33 @@ proc ::TreeCtrl::EntryOpen {T item column element} {
     }
     place configure $T.entry -width $width
 
-    focus $T.entry
-    grab $T.entry
-
+    SetGrabAndFocus $T.entry $T.entry
     return $T.entry
+}
+
+proc ::TreeCtrl::SetGrabAndFocus { focuswin grabwin } {
+
+    set oldGrab [grab current $grabwin]
+    if { $oldGrab ne "" && [winfo exists $oldGrab] } {
+	set grabStatus [grab status $oldGrab]
+	grab release $oldGrab
+    } else {
+	set grabStatus ""
+    }
+    tkwait  visibility $grabwin
+    focus $focuswin
+    grab $grabwin
+    bind $grabwin <Unmap> +[list ::TreeCtrl::ReleaseGrabAndFocus $oldGrab $grabStatus]
+}
+
+proc ::TreeCtrl::ReleaseGrabAndFocus { oldGrab grabStatus } {
+    if { $oldGrab ne "" }  {
+	if { $grabStatus ne "global" } {
+	    if { [winfo exists $oldGrab] && [winfo ismapped $oldGrab] } { grab $oldGrab }
+	} else {
+	    if { [winfo exists $oldGrab] && [winfo ismapped $oldGrab] } { grab -global $oldGrab }
+	}
+    }
 }
 
 # Like EntryOpen, but Entry widget expands/shrinks during typing
@@ -832,9 +866,7 @@ proc ::TreeCtrl::EntryExpanderOpen {T item column element} {
     place $T.entry -x $ex -y [expr {$y1 - $ebw - 1}] \
 	-bordermode outside -width $width
 
-    focus $T.entry
-    grab $T.entry
-
+    SetGrabAndFocus $T.entry $T.entry
     return $T.entry
 }
 
@@ -967,9 +999,7 @@ proc ::TreeCtrl::TextOpen {T item column element {width 0} {height 0}} {
 	-height [expr {$y2 - $y1 + ($tbw + 1) * 2}] \
 	-bordermode outside
 
-    focus $T.text
-    grab $T.text
-
+    SetGrabAndFocus $T.text $T.text
     return $T.text
 }
 
@@ -1087,9 +1117,7 @@ proc ::TreeCtrl::TextExpanderOpen {T item column element width} {
 	-height [expr {$height + $tbw * 2}] \
 	-bordermode outside
 
-    focus $T.text
-    grab $T.text
-
+    SetGrabAndFocus $T.text $T.text
     return $T.text
 }
 
@@ -1174,7 +1202,7 @@ proc ::TreeCtrl::ComboOpen {T item column element editable values { defvalue -NO
 	$T.combo state !readonly
 	$T.combo delete 0 end
     } else {
-	if { [info command cu::combobox] ne "" } {
+	if { [info commands cu::combobox] ne "" } {
 	    cu::combobox $T.combo
 	} else {
 	    ttk::combobox $T.combo
@@ -1295,9 +1323,7 @@ proc ::TreeCtrl::ComboOpen {T item column element editable values { defvalue -NO
     }
     place configure $T.combo -width $width
 
-    focus $T.combo
-    grab $T.combo
-
+    SetGrabAndFocus $T.combo $T.combo
     return $T.combo
 }
 
@@ -1458,9 +1484,7 @@ proc ::TreeCtrl::EntryComboOpen {T item column element editable values defval1 d
     set width [expr {$right - $ex}]
     place configure $T.fcombo -width $width
 
-    focus $T.fcombo.e
-    grab $T.fcombo
-
+    SetGrabAndFocus $T.fcombo.e $T.fcombo
     return
 }
 
@@ -1660,9 +1684,7 @@ proc ::TreeCtrl::ComboTreeOpen {T item column element editable values_tree { def
     }
     place configure $T.combotree -width $width
 
-    focus $T.combotree
-    grab $T.combotree
-
+    SetGrabAndFocus $T.combotree $T.combotree
     return $T.combotree
 }
 
@@ -1804,9 +1826,8 @@ proc ::TreeCtrl::AnyWidgetOpen {T item column element widget } {
 	set width [expr {$right - $ex - 1}]
     }
     place configure $widget -width $width -height [expr {$bottom-$top+1}]
-    focus $widget
-    grab $widget
-
+    
+    SetGrabAndFocus $widget $widget
     return $widget
 }
 

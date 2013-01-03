@@ -3,7 +3,7 @@
 #
 
 #
-# $Id: modules.tcl,v 1.2 2006/06/30 17:40:15 ramsan Exp $
+# $Id: modules.tcl,v 1.2 2006-06-30 17:40:15 ramsan Exp $
 #
 # Procedures to parse the CVS modules file and store whatever is
 # read into various associative arrays, sorted, and unsorted lists.

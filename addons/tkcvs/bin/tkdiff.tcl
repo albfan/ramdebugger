@@ -3,6 +3,19 @@
 # the next line restarts using wish \
 exec wish "$0" -- ${1+"$@"}
 
+set comms [list tkButtonInvoke tkTextSelectTo tkEntryInsert tkEntryBackspace \
+    tk_textCut tk_textCopy tk_textPaste tk_focusNext tk_focusPrev tkTextClosestGap \
+    tkTextAutoScan tkCancelRepeat tkTabToWindow]
+
+foreach i $comms {
+    auto_load $i
+    if {![llength [info commands $i]]} {
+	tk::unsupported::ExposePrivateCommand $i
+    }
+}
+
+# $Id: tkdiff.tcl,v 1.5 2009-03-25 23:47:59 ramsan Exp $
+
 ###############################################################################
 #
 # TkDiff -- A graphical front-end to diff for Unix and Windows.
@@ -971,7 +984,6 @@ proc commandline {} {
     set revs 0
     set pths 0
     set lbls 0
-
     # Loop through argv, storing revision args in rev and file args in
     # finfo. revs and pths are counters.
     while {$argindex < $argc} {

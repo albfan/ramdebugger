@@ -418,7 +418,7 @@ proc RamDebugger::Wizard::CondMatWizard { text filename } {
 	lappend DialogWin::user(FIELDNAMES) $f
     }
     EnterInitialData $text $nice_image "Create $what" "Enter data to define $what:"
-    set numlevels [llength [info command ::RamDebugger::Wizard::CondMatPage*]]
+    set numlevels [llength [info commands ::RamDebugger::Wizard::CondMatPage*]]
     set level 1
     while 1 {
 	switch $level 1 { set hasprevious 0 } default { set hasprevious 1 }
@@ -522,7 +522,9 @@ proc RamDebugger::Wizard::CondMatWizard { text filename } {
 }
 
 namespace eval RamDebugger::Wizard {
-    package require Img
+    package require img::png
+    package require img::jpeg
+    package require img::gif
     
     set nice_image [image create photo -data {
 /9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRof

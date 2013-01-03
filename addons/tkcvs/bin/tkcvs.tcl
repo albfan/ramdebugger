@@ -3,7 +3,7 @@
 # the next line restarts using wish \
 exec wish "$0" -- ${1+"$@"}
 
-set ScriptBin [file dirname [info script]]
+set ScriptBin [file normalize [file dirname [info script]]]
 
 set comms [list tkButtonInvoke tkTextSelectTo tkEntryInsert tkEntryBackspace \
     tk_textCut tk_textCopy tk_textPaste tk_focusNext tk_focusPrev tkTextClosestGap \
@@ -29,7 +29,7 @@ foreach i $comms {
 
 
 #
-# $Id: tkcvs.tcl,v 1.4 2006/06/30 17:39:59 ramsan Exp $
+# $Id: tkcvs.tcl,v 1.6 2009-03-25 23:47:52 ramsan Exp $
 #
 # TkCVS Main program -- A Tk interface to CVS.
 #

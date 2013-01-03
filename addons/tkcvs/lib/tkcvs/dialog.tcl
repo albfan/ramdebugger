@@ -3,7 +3,7 @@
 #
  
 # 
-# $Id: dialog.tcl,v 1.1.1.1 2001/06/07 15:03:42 ramsan Exp $
+# $Id: dialog.tcl,v 1.1.1.1 2001-06-07 15:03:42 ramsan Exp $
 #
 # Smallish dialogs - add, tag
 #

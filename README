@@ -1,0 +1,42 @@
+
+RamDebugger is a graphical debugger for the scripting lenguage Tcl-TK.
+
+DESCRIPTION
+===========
+
+
+       Graphical debugger for the scripting language Tcl-TK.
+	
+	With RamDebugger, it is possible to make Local Debugging, where the debugger starts
+	the program to be debugged. and Remote debugging, where the program to debug is already
+	started and RamDebugger connects to it.
+
+	FEATURES
+	
+	* IDE for code edition of TCL, XML and c/c++
+	* Full debugging of TCL and c/c++
+	* Works in Linux, Windows and MacOSX
+	* It supports editing XML code
+	* It contains a GUI for version control system (cvs or fossil)
+    
+
+INSTALL
+========
+
+To install the program:
+
+unzip RamDebugger-source7.1.2.zip
+Install TCL and all the necessary TCL packages (NOTE: Check ActivestateTCL and teacup installer inside)
+
+EXECUTION
+========
+
+To execute the program:
+
+Open script file 'RamDebugger.tcl'
+
+SUPPORT
+=======
+
+Compass Engineering <info@compassis.com>
+http://www.compassis.com
