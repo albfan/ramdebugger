@@ -32,6 +32,7 @@ proc cu::scale { args } {}
 proc cu::multiline_entry { args } {}
 proc cu::view_csv { args } {}
 proc cu::check_listbox { args } {}
+proc cu::menubutton_frame { args } {}
 proc cu::menubutton_check_listbox { args } {}
 proc cu::notebook { args } {}
 proc cu::report_makerT { args } {}
@@ -56,7 +57,7 @@ snit::widgetadaptor cu::menubutton_button {
     delegate option -_text to hull as -text
 
     variable xmin
-    variable is_button_active 1
+    variable is_button_active 1 ; # 0, 1, only_button
     variable press_after ""
     
     constructor args {
@@ -66,7 +67,11 @@ snit::widgetadaptor cu::menubutton_button {
 	bind $win <Down> [list ttk::menubutton::Popdown %W]
 	bind $win <Motion> [mymethod check_cursor %x %y]
 	bind $win <Configure> [mymethod  _calc_xmin]
-
+	
+	foreach i [list <ButtonPress-1> <ButtonRelease-1> <B1-Leave>] {
+	    regsub {1} $i {3} i3
+	    bind $win $i3 [bind TMenubutton $i]
+	}
 	$self configurelist $args
     }
     onconfigure -image {img} {
@@ -101,10 +106,13 @@ snit::widgetadaptor cu::menubutton_button {
     method give_is_button_active_var {} {
 	return [myvar is_button_active]
     }
+    method set_is_button_active { value } {
+	set is_button_active $value
+    }
     method BP1 { x y } {
-	if { !$is_button_active } { return }
+	if { $is_button_active == 0 } { return }
 	
-	if { $x < $xmin && $options(-command) ne "" } {
+	if { ($x < $xmin || $is_button_active eq "only_button") && $options(-command) ne "" } {
 	    $win instate !disabled {
 		catch { tile::clickToFocus $win }
 		catch { ttk::clickToFocus $win }
@@ -122,12 +130,12 @@ snit::widgetadaptor cu::menubutton_button {
 	}
     }
     method BR1 { x y } {
-	if { !$is_button_active } { return }
+	if { $is_button_active == 0 } { return }
 	
 	if { $press_after ne "" } {
 	    after cancel $press_after
 	}
-	if { $press_after ne "" && $x < $xmin && $options(-command) ne "" } {
+	if { $press_after ne "" && ($x < $xmin || $is_button_active eq "only_button") && $options(-command) ne "" } {
 	    $win instate {pressed !disabled} {
 		$win state !pressed
 		uplevel #0 $options(-command)
@@ -138,7 +146,7 @@ snit::widgetadaptor cu::menubutton_button {
 	set press_after ""
     }
     method check_cursor { x y } {
-	if { $x < $xmin } {
+	if { $x < $xmin || $is_button_active eq "only_button" } {
 	    $win configure -cursor ""
 	} else {
 	    $win configure -cursor bottom_side
@@ -161,6 +169,7 @@ snit::widgetadaptor cu::menubutton_checkbutton {
 	installhull using ttk::checkbutton -style Toolbutton
 	bind $win <ButtonPress-1> [mymethod BP1 %x %y]
 	bind $win <ButtonRelease-1> [mymethod BR1 %x %y]
+	bind $win <ButtonPress-3> [mymethod BP3 %x %y]
 	bind $win <Down> [mymethod popup]
 	bind $win <Motion> [mymethod check_cursor %x %y]
 	bind $win <Configure> [mymethod  _calc_xmin]
@@ -169,10 +178,17 @@ snit::widgetadaptor cu::menubutton_checkbutton {
     }
     onconfigure -image {img} {
 	set options(-image) $img
-	
-	set new_img [cu::add_down_arrow_to_image $img]
-	$self configure -_image $new_img
-	bind $win <Destroy> +[list image delete $new_img]
+
+	set imgSpec ""
+	foreach "state img" [list "" {*}$img] {
+	    set new_img [cu::add_down_arrow_to_image $img]
+	    bind $win <Destroy> +[list image delete $new_img]
+	    if { $state ne "" } {
+		lappend imgSpec $state
+	    }
+	    lappend imgSpec $new_img
+	}
+	$self configure -_image $imgSpec
     }
     method _calc_xmin {} {
 	if { [winfo width $win] > 1 } {
@@ -189,6 +205,7 @@ snit::widgetadaptor cu::menubutton_checkbutton {
 	}
     }
     method BP1 { x y } {
+	set press_after ""
 	if { $x >= $xmin } {
 	    $win instate !disabled {
 		catch { tile::clickToFocus $win }
@@ -201,14 +218,14 @@ snit::widgetadaptor cu::menubutton_checkbutton {
 	}
     }
     method BP1_after {} {
-	set press_after ""
+	set press_after "pressed"
 	$self popup
     }
     method BR1 { x y } {
 	if { $press_after ne "" } {
 	    after cancel $press_after
 	}
-	if { $press_after eq "" || $x >= $xmin } {
+	if { $press_after eq "pressed" || $x >= $xmin } {
 	    $win instate {pressed !disabled} {
 		$win state !pressed
 	    }
@@ -216,6 +233,12 @@ snit::widgetadaptor cu::menubutton_checkbutton {
 	    return -code break
 	}
 	set press_after ""
+    }
+    method BP3 { x y } {
+	$win instate {pressed !disabled} {
+	    $win state !pressed
+	}
+	$self popup
     }
     method check_cursor { x y } {
 	if { $x < $xmin } {
@@ -455,11 +478,14 @@ snit::widgetadaptor cu::combobox {
 }
 
 snit::widgetadaptor cu::nicelabel {
-    
+    option -link_callback ""
+
     delegate method _insert to hull as insert
     delegate method _delete to hull as delete
     delegate method * to hull
     delegate option * to hull
+
+    variable underlinefont
 
     constructor args {
 	if { [lsearch -exact [font names] TkDefaultFont] != -1 } {
@@ -468,9 +494,10 @@ snit::widgetadaptor cu::nicelabel {
 	    set font "-size 10"
 	}
 	text $self -width 5 -height 1 -bd 0 -insertwidth 0 -spacing3 3 -font $font \
-	    -takefocus 0 -wrap word
+	    -takefocus 0 -wrap word -highlightthickness 0
+		
 	set bg [cu::give_widget_background [winfo parent $self]]
-	$self configure -bg $bg
+	$self configure -background $bg
 	$self configure -cursor ""
 	installhull $self
 	
@@ -490,7 +517,9 @@ snit::widgetadaptor cu::nicelabel {
 	set boldfont [font actual [$self cget -font]]
 	set ipos [expr {[lsearch $boldfont -weight]+1}]
 	set boldfont [lreplace $boldfont $ipos $ipos bold]
-
+	
+	set underlinefont [list {*}[font actual [$self cget -font]] -underline 1]
+	
 	$self tag configure subscript -font $font -offset -3
 	$self tag configure superscript -font $font -offset 3
 	$self tag configure bold -font $boldfont
@@ -510,6 +539,27 @@ snit::widgetadaptor cu::nicelabel {
 	$self _insert $index $txt $tagList
 	$self configure -state disabled
     }
+    method insert_link { index txt link title } {
+	
+	if { $index ne "end" } {
+	    set index 1.$index
+	} else {
+	    set index end-1c
+	}
+	set index [$self index $index]
+	set tag link$index
+	$self tag configure $tag -foreground blue -font $underlinefont
+	if { $title ne "" } {
+	    tooltip::tooltip $self -tag $tag $title
+	}
+	$self configure -state normal
+	$self _insert $index $txt [list $tag]
+	$self configure -state disabled
+	
+	$self tag bind $tag <1> [mymethod _eval_link $link]
+	$self tag bind $tag <Enter> +[list $self configure -cursor hand2]
+	$self tag bind $tag <Leave> +[list $self configure -cursor ""]
+    }
     method delete { index1 index2 } {
 	$self configure -state normal
 	$self _delete $index1 $index2
@@ -523,6 +573,9 @@ snit::widgetadaptor cu::nicelabel {
 	if { $ds != [$win cget -height] } {
 	    $win configure -height $ds
 	}
+    }
+    method _eval_link { cmd } {
+	uplevel #0 $options(-link_callback) $cmd
     }
 }
 
@@ -670,6 +723,7 @@ snit::widgetadaptor cu::combobox_tree {
 		-columns $columns -expand 1 \
 		-selectmode browse -showheader 0 -showlines 0  \
 		-showbutton 0 -indent 0 -bd 0 \
+		-have_vscrollbar 1 \
 		-have_search_button automatic]
 		
 	grid $toctree -sticky nsew
@@ -1038,7 +1092,8 @@ snit::widgetadaptor cu::combobox_tree {
 	    }
 	}
 
-	if { $options(-nice_print_separator) ne "" && [$win instate readonly] } {
+	#  && [$win instate readonly]
+	if { $options(-nice_print_separator) ne "" } {
 	    set l ""
 	    foreach i $vLocal {
 		if { $i ne "" } { lappend l $i }
@@ -1145,7 +1200,7 @@ snit::widgetadaptor cu::scale {
     delegate option * to hull
 
     constructor args {
-	installhull using canvas -width 200 -height 24 -bg grey -takefocus 1 -highlightthickness 0 -bd 0 \
+	installhull using canvas -width 200 -height 24 -background grey -takefocus 1 -highlightthickness 0 -bd 0 \
 	    -relief solid
 	$self create_images
 	set scale_left2_full [image create photo]
@@ -1224,6 +1279,7 @@ snit::widgetadaptor cu::scale {
 	if { $options(-left_text) ne "" ||  $options(-right_text) ne "" ||  $options(-title) ne "" } {
 	    #set font TkSmallCaptionFont 
 	    set font SystemTinyFont
+	    $self delete labels
 	    if { [$self find withtag labels] eq "" } {
 		if { $options(-left_text) ne "" } {
 		    $self create text 0 0 -anchor nw -text $options(-left_text) -font $font -tags labels
@@ -1252,8 +1308,8 @@ snit::widgetadaptor cu::scale {
 	$self create image $x $ymed -anchor center -image cu::scale::img::slider -tags slider
 	switch $options(-label_style) {
 	    time {
-		set txt [cu::nice_time  $value]
-		set tw [font measure $font $txt]
+		set txt [cu::nice_time -refs [list $options(-from) $options(-to)] $value]
+		set tw [expr {[font measure $font $txt]+4}]
 		set x [expr {$x+[image width cu::scale::img::slider]}]
 		if { $x+$tw > $width-[image width cu::scale::img::scale_right] } {
 		    set x [expr {$x-2.5*[image width cu::scale::img::scale_right]-$tw}]
@@ -1370,7 +1426,7 @@ snit::widgetadaptor cu::scale {
 	set f [$w giveframe]
 	
 	ttk::label $f.l1 -text [_ "value"]:
-	spinbox $f.e -textvariable [$w give_uservar value [$self give_value]] -from $options(-from) 
+	spinbox $f.e -textvariable [$w give_uservar value [$self give_value]] -from $options(-from) \
 	    -to $options(-to) -increment [expr {0.1*($options(-to)-$options(-from))}]
 
 	grid $f.l1 $f.e -sticky w -padx 2 -pady 3
@@ -1866,15 +1922,15 @@ snit::widget cu::dater {
 
 	$hull configure -background black
 
-	frame $win.f -bg $options(-topframecolor)
-	label $win.f.l1 -image fletxa-left-16 -padx 2 -pady 1 -bg \
+	frame $win.f -background $options(-topframecolor)
+	label $win.f.l1 -image fletxa-left-16 -padx 2 -pady 1 -background \
 	    $options(-topframecolor)
 	frame $win.f.central
-	label $win.f.central.l1 -textvariable [myvar month] -bg $options(-topframecolor) \
-	    -fg white -font $options(-font)
-	label $win.f.central.l2 -textvariable [myvar year] -bg $options(-topframecolor) \
-	    -fg white -font $options(-font)
-	label $win.f.l3 -image fletxa-right-16 -padx 4 -pady 1 -bg \
+	label $win.f.central.l1 -textvariable [myvar month] -background $options(-topframecolor) \
+	    -foreground white -font $options(-font)
+	label $win.f.central.l2 -textvariable [myvar year] -background $options(-topframecolor) \
+	    -foreground white -font $options(-font)
+	label $win.f.l3 -image fletxa-right-16 -padx 4 -pady 1 -background \
 	    $options(-topframecolor) -font $options(-font)
 
 	grid $win.f.central.l1 -row 0 -column 0
@@ -1893,7 +1949,7 @@ snit::widget cu::dater {
 
 	set idx 0
 	foreach i $days {
-	    label $win.l$idx -text $i -bg white -padx 0 -pady 0 -anchor w \
+	    label $win.l$idx -text $i -background white -padx 0 -pady 0 -anchor w \
 		-font $options(-font)
 	    grid $win.l$idx -row 1 -column $idx -padx 0 -pady 0 -sticky ew
 	    incr idx
@@ -1952,7 +2008,7 @@ snit::widget cu::dater {
 	set options(-topframecolor) $value
 	foreach w [list $win.f $win.f.l1 $win.f.central.l1 $win.f.central.l2 \
 		$win.f.l3] {
-	    $w configure -bg $options(-topframecolor)
+	    $w configure -background $options(-topframecolor)
 	}
     }
     onconfigure -font { value } {
@@ -2073,23 +2129,23 @@ snit::widget cu::dater {
 	    destroy $win.b$idx
 
 	    if { $options(-detailed_view) } {
-		frame $win.b$idx -bg cornsilk2 -bd 0 -takefocus 0 \
+		frame $win.b$idx -background cornsilk2 -bd 0 -takefocus 0 \
 		    -width 70 -height 70
 		grid propagate $win.b$idx 0
 		set label $win.b$idx.l
 	    } elseif { $today_month != $curr_month || $today_day != $i } {
 		set label $win.b$idx
 	    } else {
-		frame $win.b$idx -bg brown -bd 0 -takefocus 0
+		frame $win.b$idx -background brown -bd 0 -takefocus 0
 		set label $win.b$idx.l
 	    }
-	    label $label -text $i -bg white -relief flat -bd 0 \
+	    label $label -text $i -background white -relief flat -bd 0 \
 		-padx 4 -pady 1 -takefocus 1 -font $options(-font)
 	    if { $rel_month != 0 } {
-		$label configure -fg grey
+		$label configure -foreground grey
 	    }
 	    if { $options(-detailed_view) } {
-		$label configure -padx 3 -pady 0 -bg cornsilk2 -font $options(-font)
+		$label configure -padx 3 -pady 0 -background cornsilk2 -font $options(-font)
 		grid $label -padx 1 -pady 1 -sticky nw
 
 	    } elseif { $today_month == $curr_month && $today_day == $i } {
@@ -2123,7 +2179,7 @@ snit::widget cu::dater {
 		if { $options(-detailed_view) } {
 		    set jdx 0
 		    foreach j $txtList {
-		        label $win.b$idx.l$jdx -anchor w -bg cornsilk2 \
+		        label $win.b$idx.l$jdx -anchor w -background cornsilk2 \
 		            -font $options(-font)
 		        tooltip $win.b$idx.l$jdx $j
 		        $win.b$idx.l$jdx configure -text $j
@@ -2141,11 +2197,11 @@ snit::widget cu::dater {
 	    bind $label <space> [mymethod select_day $curr_date]
 	    bind $label <Return> [mymethod select_day $curr_date]
 	    bind $label <Escape> [mymethod select_day ""]
-	    bind $label <FocusIn> [list $label configure -bg orange]
+	    bind $label <FocusIn> [list $label configure -background orange]
 	    if { $options(-detailed_view) } {
-		bind $label <FocusOut> [list $label configure -bg cornsilk2]
+		bind $label <FocusOut> [list $label configure -background cornsilk2]
 	    } else {
-		bind $label <FocusOut> [list $label configure -bg white]
+		bind $label <FocusOut> [list $label configure -background white]
 	    }
 
 	    foreach "key d" [list Left "-1day" Right "+1day" Up "-1week" \
@@ -2300,6 +2356,14 @@ snit::widget cu::dater_entry {
 	} else {
 	    set today [clock format [clock seconds] -format "%Y-%m-%d"]
 	}
+	
+	bind $win <Up> "[mymethod change_date 1 day]; break"
+	bind $win <Down> "[mymethod change_date -1 day]; break"
+	bind $win <Shift-Up> "[mymethod change_date 1 month]; break"
+	bind $win <Shift-Down> "[mymethod change_date -1 month]; break"
+	bind $win <Control-Shift-Up> "[mymethod change_date 1 year]; break"
+	bind $win <Control-Shift-Down> "[mymethod change_date -1 year]; break"
+
 	set isCreated 1
 	$self configurelist $args
     }
@@ -2353,6 +2417,11 @@ snit::widget cu::dater_entry {
     }
     method set_today {} {
 	$self configure -date $today
+    }
+    method change_date { args } {
+	set date [$self cget -date]
+	set date [clock format [clock add [clock scan $date] {*}$args] -format "%Y-%m-%d"]
+	$self configure -date $date
     }
     method check_value {} {
 	upvar #0 $options(-textvariable) v
@@ -2545,6 +2614,7 @@ snit::widgetadaptor cu::check_listbox {
 	    -columns $columns -expand 1 \
 	    -selectmode extended -showlines 1 -showrootlines 0 -indent 1 -showbutton 1 \
 	    -showheader 0 -sensitive_cols all -buttonpress_open_close 0 \
+	    -have_vscrollbar 1 \
 	    -contextualhandler_menu [mymethod contextual_menu]  \
 	    -editbeginhandler [mymethod edit_name_begin] \
 	    -editaccepthandler [mymethod edit_name_accept] \
@@ -3075,6 +3145,111 @@ snit::widget cu::_check_listbox_as_menu {
 	    grab $save_grab
 	}
 	wm withdraw $win
+	event generate $win <<ComboboxSelected>> 
+    }
+}
+
+################################################################################
+#    cu::menubutton_frame
+################################################################################
+
+snit::widgetadaptor cu::menubutton_frame {
+    option -postcommand ""
+    
+    delegate method * to hull
+    delegate option * to hull
+    
+    variable mymenu
+    variable save_grab ""
+    variable save_focus ""
+    
+    constructor args {
+	installhull using ttk::menubutton
+	bindtags $win [linsert [bindtags $win] 1 menubutton_frame]
+	
+	bind $win <ButtonPress-1> [mymethod BP1 %x %y]
+	bind $win <ButtonRelease-1> [mymethod BR1 %x %y]
+
+	set mymenu [toplevel $win.m -relief solid -bd 1]
+	$mymenu configure -bg [cu::give_widget_background $win]
+	wm withdraw $mymenu
+	update idletasks
+	wm overrideredirect $mymenu 1
+	wm transient $mymenu [winfo toplevel $win]
+
+	bind $win <space> [mymethod post]
+	bind $win <Return> [mymethod post]
+
+	bind $mymenu <<ComboboxSelected>> [mymethod endpost]
+	$self configurelist $args
+    }
+    method giveframe {} {
+	return $mymenu
+    }
+    method BP1 { x y } {
+       $self post
+    }
+    method BR1 { x y } {
+	$win instate {pressed !disabled} {
+	    $win state !pressed
+	}
+	return -code break
+    }
+    method post {} {
+	if { [$win instate disabled] } { return }
+	
+	if { $options(-postcommand) ne "" } {
+	    uplevel #0 $options(-postcommand)
+	}
+	catch { tile::clickToFocus $win }
+	catch { ttk::clickToFocus $win }
+	$win state pressed
+	
+	set x [winfo rootx $win]
+	set y [expr {[winfo rooty $win]+[winfo height $win]}]
+	lassign [list 200 220] wi he
+	
+	if { $x+$wi > [winfo screenwidth $mymenu] } {
+	    if { [winfo screenwidth $mymenu]-$x > 150 } {
+		set wi [expr {[winfo screenwidth $mymenu]-$x}]
+	    } else {
+		set x [expr {[winfo screenwidth $mymenu]-$wi}]
+		if { $x < 0 } { set x 0 }
+	    }
+	}
+	if { $y+$he > [winfo screenheight $mymenu] } {
+	    if { [winfo screenheight $mymenu]-$y > 100 } {
+		set he [expr {[winfo screenheight $mymenu]-$y}]
+	    } else {
+		set y [expr {[winfo screenheight $mymenu]-$he}]
+		if { $y < 0 } { set y 0 }
+	    }
+	}
+	wm geometry $mymenu ${wi}x${he}+$x+$y
+	wm deiconify $mymenu
+	set save_grab [grab current $win]
+	set save_focus [focus]
+	grab -global $mymenu
+	bind $mymenu <1> [mymethod check_unpost %x %y]
+	bind $mymenu <Escape> [mymethod unpost]
+	focus $mymenu
+    }
+    method check_unpost { x y } {
+	if { $x < 0 || $x > [winfo width $mymenu] || 
+	    $y < 0 || $y > [winfo height $mymenu] } {
+	    $self unpost
+	}
+    }
+    method unpost {} {
+	$win instate {pressed !disabled} {
+	    $win state !pressed
+	}
+	grab release $mymenu
+
+	catch { grab $save_grab }
+	catch { focus $save_focus }
+    
+	wm withdraw $mymenu
 	event generate $win <<ComboboxSelected>> 
     }
 }
@@ -3958,17 +4133,18 @@ snit::widget cu::scrollframe {
     variable frame
     variable canvas
     variable scroll
+    variable act_bind
+    
     
     constructor args {
-	$self configure -bd 0
+	$self configure -bd 0   
 	set canvas [canvas $win.c -bd 0 -highlightthickness 0 -yscrollcommand [list $win.scroll set]]
 	set scroll [scrollbar $win.scroll -orient vertical -command [list $win.c yview]]
-	grid $canvas $scroll -sticky ns
+	grid $canvas $scroll -sticky nsew
 	grid $canvas -sticky nsew
 	grid columnconfigure $win 0 -weight 1
 	grid rowconfigure $win 0 -weight 1
 	grid remove $scroll
-	
 	$self configurelist $args
 	
 	if { $options(-text) ne "" } {
@@ -3984,8 +4160,10 @@ snit::widget cu::scrollframe {
 	return $self
     }
     method giveframe {} { return $frame }
+    method givescroll {} { return $scroll }
+    method givecanvas {} { return $canvas }
     
-    method check_scroll {} {
+    method check_scroll {} {      
 	$canvas configure -height [winfo reqheight $frame] -width [winfo reqwidth $frame]
 	if { [winfo width $canvas] == 1 } { return }
 	#update idletasks
@@ -4001,11 +4179,14 @@ snit::widget cu::scrollframe {
 	$canvas configure -scrollregion [list 0 0 [winfo width $canvas] $height]
 	$canvas configure -height $height
 	if { [winfo height $canvas] < $reqheight - 10 } {
-	    grid $scroll
+	    grid $scroll     
 	} else {
 	    grid remove $scroll
 	}
-    }
+   
+	
+    }   
+    
     method yview { args } {
 	$self check_scroll
 	$canvas yview {*}$args
@@ -4099,7 +4280,7 @@ snit::widgetadaptor cu::handle {
     delegate option * to hull
     
     constructor args {
-	installhull using canvas -bg grey -bd 0 -highlightthickness 0 -cursor hand2
+	installhull using canvas -background grey -bd 0 -highlightthickness 0 -cursor hand2
 	bind $win <Configure> [mymethod draw]
 	
 	if { [info command ::cu::img::handle_h] eq "" } {
@@ -4155,30 +4336,35 @@ snit::widgetadaptor cu::handle {
     }
 }
 
-# pack [cu::notebook .t -menu_callback mc -last_menu_callback mc_last]
-# ttk::label .t.l1 -text label1
-# ttk::label .t.l2 -text label2
-# .t add .t.l1 -text label1
-# .t add .t.l2 -text label2
-# 
-# proc mc { menu } {
-#     $menu add command -label pepet
-# }
-# proc mc_last { menu } {
-#     $menu add command -label last
-# }
+if 0 {
+    pack [cu::notebook .t -menu_callback mc -last_menu_callback mc_last]
+    ttk::label .t.l1 -text label1
+    ttk::label .t.l2 -text label2
+    .t add .t.l1 -text label1
+    .t add .t.l2 -text label2
+    
+    proc mc { menu } {
+	$menu add command -label pepet
+    }
+    proc mc_last { menu } {
+	$menu add command -label last
+    }
+    
+    cu::combobox_tree .t -state readonly
+    .t tree_insert end s1 l1 0
+    .t tree_insert end s2 l2 0
+    .t tree_insert end s3 l3 0
+    .t tree_insert -command "puts kk" end command command 0
+    pack .t
+}
 
-# cu::combobox_tree .t -state readonly
-# .t tree_insert end s1 l1 0
-# .t tree_insert end s2 l2 0
-# .t tree_insert end s3 l3 0
-# .t tree_insert -command "puts kk" end command command 0
-# pack .t
-# 
-
-
-
-
+if 0 {
+    wm geometry . 600x300+600+600
+    set img [list [cu::get_image internet-check-off] selected [cu::get_image internet-check-on]]
+    pack [cu::menubutton_checkbutton .cb -image $img -variable ::var -menu .cb.m]
+    menu .cb.m -tearoff 0
+    .cb.m add command -label test1
+}
 
 
 

@@ -6,6 +6,7 @@ namespace eval cu {
     variable topdir [file normalize [file dirname [info script]]]
     variable init_tile_styles_done
     variable add_down_arrow_to_image_delta 7
+    variable inside_gid 0
 }
 
 ################################################################################
@@ -15,6 +16,10 @@ namespace eval cu {
 proc cu::init_tile_styles { args } {
     variable topdir
     variable init_tile_styles_done
+    variable inside_gid
+    if { [ info exists ::GIDDEFAULT]} {
+	set inside_gid 1
+    }
     
     set optional {
 	{ -theme blue|none "none" }
@@ -22,7 +27,6 @@ proc cu::init_tile_styles { args } {
     set compulsory ""
     parse_args $optional $compulsory $args
 
-    
     package require Tk
     if { [info exists init_tile_styles_done] } { return }
     set init_tile_styles_done 1
@@ -34,61 +38,65 @@ proc cu::init_tile_styles { args } {
     } else {
 	set ispocket 0
     }
-    if { [ tk windowingsystem] eq "x11" || $ispocket } {
-	set err [catch {
+    if { !$inside_gid } {
+	if { [ tk windowingsystem] eq "x11" || $ispocket } {
+	    set err [catch {
 		ttk::style theme use clam
-#                 package require ttk::theme::tilegtk
-#                 ttk::style theme use tilegtk
+		#                 package require ttk::theme::tilegtk
+		#                 ttk::style theme use tilegtk
 	    }]
-	if { $err } {
-	    ttk::style theme use clam
+	    if { $err } {
+		ttk::style theme use clam
+	    }
 	}
-    }
-    if { "clam" in [ttk::style theme names] } {
-	ttk::style theme settings clam {
-	    ttk::style configure TButton -padding 1
-	    ttk::style configure TMenubutton -padding 1
-	    ttk::style map Toolbutton -background "focus grey [ttk::style map Toolbutton -background]"
+	if { "clam" in [ttk::style theme names] } {
+	    ttk::style theme settings clam {
+		ttk::style configure TButton -padding 1
+		ttk::style configure TMenubutton -padding 1
+		ttk::style map Toolbutton -background "focus grey [ttk::style map Toolbutton -background]"
+		ttk::style map TCombobox -foreground "disabled #999999 [ttk::style map TCombobox -foreground]"
+		ttk::style map TCombobox -fieldbackground "disabled #d9d9d9 [ttk::style map TCombobox -fieldbackground]"
+	    }
 	}
-    }
-    if { "xpnative" in [ttk::style theme names] } {
-	ttk::style theme settings xpnative {
-	    ttk::style map TMenubutton -background "focus grey [ttk::style map Toolbutton -background]"
+	if { "xpnative" in [ttk::style theme names] } {
+	    ttk::style theme settings xpnative {
+		ttk::style map TMenubutton -background "focus grey [ttk::style map Toolbutton -background]"
+	    }
 	}
-    }
-    
-    if { $theme eq "blue" } {
-	# this is the part that keeps blue color for forms
 	
-	#set color #bfe4df
-	#set color #b6dde7
-	set color #c1dfe7
-	#set color_dark #9ac5d0
-	set color_dark #bfe4df
-	foreach i [list TLabel TCheckbutton TRadiobutton \
-		TCombobox TFrame TLabelframe TNotebook \
-		TLabelframe.Label TSizegrip Toolbutton] {
-	    ttk::style configure $i -background $color
-	    ttk::style map $i -background [list disabled $color]
-	}
-	foreach i [list TButton TMenubutton \
-		TCombobox ] {
-	    ttk::style configure $i -background $color_dark
-	    ttk::style map $i -background [list disabled $color_dark]
-	}
-	ttk::style map TCombobox -fieldbackground [list readonly $color_dark]
+	if { $theme eq "blue" } {
+	    # this is the part that keeps blue color for forms
+	    
+	    set color #e4e8ed            
+	    set color_dark #e4e8ed
+	    set color_darker #818486
+	    
+	    foreach i [list TLabel TCheckbutton TRadiobutton \
+			   TCombobox TFrame TLabelframe TNotebook \
+			   TLabelframe.Label TSizegrip Toolbutton] {
+		ttk::style configure $i -background $color
+		ttk::style map $i -background [list disabled $color]
+	    }
+	    foreach i [list TButton TMenubutton TCombobox TScrollbar] {
+		ttk::style configure $i -background $color_dark
+		ttk::style map $i -background [list disabled $color_dark]
+	    }
+	    ttk::style map TCombobox -fieldbackground [list readonly $color_dark]
 	
-	foreach i [list TLabelframe Frame Label Checkbutton Panedwindow] {
-	    option add *$i*Background $color
+	    foreach i [list TLabelframe Frame Label Checkbutton Panedwindow Menu] {
+		option add *$i*Background $color
+	    }
+	    option add *Menu*Background $color
+	    option add *Menu*activeForeground $color_darker
 	}
-    }
-
-    set wntoolbar_button_bg [get_image wntoolbar_button_bg]
-    set wntoolbar_toolbar_bg [get_image wntoolbar_toolbar_bg]
+    } ;# !inside_gid
+    image create photo wntoolbar_toolbar_bg -file [file join $topdir images wntoolbar_toolbar_bg.gif]
+    image create photo wntoolbar_button_bg -file [file join $topdir images wntoolbar_button_bg.gif]
+    image create photo wntoolbar_button_bg_pressed -file [file join $topdir images wntoolbar_button_bg_pressed.gif]
 
     set err [catch {
-	    ttk::style element create WNtoolbar.background image $wntoolbar_toolbar_bg \
-		-border "14 2 2 2" -sticky nsew
+	    ttk::style element create WNtoolbar.background image wntoolbar_toolbar_bg \
+		-border "2 30 2 0" -sticky nsew
     } errstring]
     if { $err } {
 	return -code error -errorinfo $::errorInfo $errstring
@@ -98,19 +106,30 @@ proc cu::init_tile_styles { args } {
     #catch { ttk::style default WNtoolbar -padding "14 1 1 1" }
     catch { ttk::style configure WNtoolbar -padding "14 1 1 1" }
     
-    ttk::style element create WNbutton.background image $wntoolbar_button_bg \
-	-sticky nsew -width 0 -height 0
+    ttk::style element create WNbutton.background image \
+	[list wntoolbar_button_bg active wntoolbar_button_bg_pressed pressed wntoolbar_button_bg_pressed] \
+	-sticky nsew -width 0 -height 0 -border "2 0 2 0"
     
-    if { [ tk windowingsystem] eq "x11" } {
-	ttk::style layout WNbutton [ttk::style layout TButton]
-	ttk::style configure WNbutton -background #bfe4df
-    } else {
-	ttk::style layout WNbutton {
-	    WNbutton.background -sticky nsew
-	    Toolbutton.border -sticky nswe -children {
-		Toolbutton.padding -sticky nswe -children {
-		    Toolbutton.label -sticky nswe
-		}
+    # if { [ tk windowingsystem] eq "x11" } {
+    #         ttk::style layout WNbutton [ttk::style layout TButton]
+    #         ttk::style configure WNbutton -background #bfe4df
+    # } else {
+    #         ttk::style layout WNbutton {
+    #             WNbutton.background -sticky nsew
+    #             Toolbutton.border -sticky nswe -children {
+    #                 Toolbutton.padding -sticky nswe -children {
+    #                     Toolbutton.label -sticky nswe
+    #                 }
+    #             }
+    #         }
+    # }
+    
+    
+    ttk::style layout WNbutton {
+	WNbutton.background -sticky nsew
+	Toolbutton.border -sticky nswe -children {
+	    Toolbutton.padding -sticky nswe -children {
+		Toolbutton.label -sticky nswe
 	    }
 	}
     }
@@ -120,6 +139,21 @@ proc cu::init_tile_styles { args } {
 	    Label.padding -sticky nswe -border 1 -children {Label.label -sticky nswe}
 	}
     }
+    
+    ttk::style layout TEntry.warning [ttk::style layout TEntry]
+    ttk::style configure TEntry.warning -foreground red
+    
+    image create photo wnsizegrip_bg -width 1 -height 16
+    wnsizegrip_bg copy wntoolbar_toolbar_bg -from 15 10
+    ttk::style element create WNSizegrip.background image wnsizegrip_bg \
+		-sticky nsew
+    
+    ttk::style layout WNSizegrip {
+	WNSizegrip.background -sticky nsew
+	Sizegrip.sizegrip -side bottom -sticky se
+    }
+    #option add *TSizegrip*Style WNSizegrip
+    
     set l "WNbutton.background -sticky nsew\n[ttk::style layout TMenubutton]"
     ttk::style layout WNmenubutton $l
     
@@ -129,16 +163,17 @@ proc cu::init_tile_styles { args } {
     
     ttk::style element create WNsearch.field image \
 	[list search1 focus search2] \
-	-border {22 7 14} -sticky ew
+	-border {22 7 14} -sticky ew -padding "22 0 0 0"
     
     ttk::style layout WNsearch.entry {
+	WNbutton.background -sticky nsew
 	WNsearch.field -sticky nswe -border 1 -children {
 	    Entry.padding -sticky nswe -children {
 		Entry.textarea -sticky nswe
 	    }
 	}
     }
-    ttk::style configure WNsearch.entry -background #bfe4df
+#     ttk::style configure WNsearch.entry -background #bfe4df
     
     ttk::style layout TSizegripWhite [ttk::style layout TSizegrip]
     ttk::style configure TSizegripWhite -background white
@@ -149,13 +184,19 @@ proc cu::init_tile_styles { args } {
     ttk::style layout SmallToolbutton [ttk::style layout Toolbutton]
     ttk::style configure SmallToolbutton {*}[ttk::style configure Toolbutton] -padding 0
     
-    if { "aqua" in [ttk::style theme names] } {
-	ttk::style theme settings aqua {    
-	    ttk::style configure Toolbutton -padding 0
+    ttk::style layout TCheckbutton.small [ttk::style layout TCheckbutton]
+    ttk::style configure TCheckbutton.small {*}[ttk::style configure Toolbutton] -padding 0 \
+	-font TkSmallCaptionFont
+    
+    if { !$inside_gid } {
+	if { "aqua" in [ttk::style theme names] } {
+	    ttk::style theme settings aqua {    
+		ttk::style configure Toolbutton -padding 0
+	    }
 	}
-    }
 	
-    option add *Text*Background white
+	option add *Text*Background white
+    } ;# !inside_gid
     option add *Multiline_entry*Background white
     option add *Wordwidget_and_toolbox*Background white
 
@@ -400,6 +441,45 @@ proc cu::add_dnd_recursive { w } {
 }
 
 ################################################################################
+#    enable & disable recursive
+################################################################################
+
+# state can be: normal or disabled
+proc cu::enable_disable_recursive { w state } {
+    variable enable_disable_state_save
+    
+   if { $state eq "disabled" } {
+	if { [string match "T*" [winfo class $w]] && [winfo class $w] ne "Toplevel" } {
+	    catch {
+		set stateS [$w state]
+		$w state [concat $stateS disabled]
+		dict set enable_disable_state_save $w $stateS
+	    }
+	} else {
+	    catch {
+		set stateS [$w cget -state]
+		$w configure -state disabled
+		dict set enable_disable_state_save $w $stateS   
+	    }
+	}
+    } elseif { [dict exists $enable_disable_state_save $w] } {
+	set stateS [dict get $enable_disable_state_save $w]
+	if { [string match "T*" [winfo class $w]] && [winfo class $w] ne "Toplevel" } {
+	    if { "disabled" ni $stateS } {
+		lappend stateS "!disabled"
+	    }
+	    $w state $stateS
+	} else {
+	    $w configure -state $stateS
+	}
+	dict unset enable_disable_state_save $w
+    }    
+    foreach wi [winfo children $w] {
+	enable_disable_recursive $wi $state
+    }
+}
+
+################################################################################
 #    cu::adapt_text_length
 ################################################################################
 
@@ -536,7 +616,7 @@ proc cu::text_entry_bindings { w } {
     # "backslash" and "c" are here to help with a problem in Android VNC
     bind $w <$::control-backslash> "[list cu::text_entry_insert $w];break"
     bind $w <$::control-less> "[list cu::text_entry_insert $w];break"
-    foreach "acc1 acc2 c" [list plus "" {[]} c "" {{}} 1 "" || 1 1 \\ 3 "" {#}] {
+    foreach "acc1 acc2 c" [list plus "" {[]} c "" {{}} ccedilla "" {{}} 1 "" || 1 1 \\ 3 "" {#}] {
 	set cmd "[list cu::text_entry_insert $w $c];break"
 	if { $acc2 eq "" } {
 	set k2 ""
@@ -545,6 +625,16 @@ proc cu::text_entry_bindings { w } {
     }
     bind $w <$::control-less><KeyPress-$acc1>$k2 $cmd
     bind $w <$::control-backslash><KeyPress-$acc1>$k2 $cmd
+    }
+
+    if { $::tcl_platform(platform) ne "windows" } {                   
+	foreach "ev k" [list braceleft \{ braceright \} bracketleft \[ bracketright \] backslash \\ \
+		            bar | at @ numbersign # asciitilde ~ EuroSign €] {
+	    # they are class bindings so as search in text widgets can continue working
+	    bind Text <$ev> "[list tk::TextInsert %W $k]; break"
+	    bind TEntry <$ev> "[list tk::TextInsert %W $k]; break"
+	    bind Entry <$ev> "[list tk::TextInsert %W $k]; break"
+	}
     }
 }
 

@@ -555,7 +555,7 @@ proc cu::text_entry_bindings { w } {
     # "backslash" and "c" are here to help with a problem in Android VNC
     bind $w <$::control-backslash> "[list cu::text_entry_insert $w];break"
     bind $w <$::control-less> "[list cu::text_entry_insert $w];break"
-    foreach "acc1 acc2 c" [list plus "" {[]} c "" {{}} 1 "" || 1 1 \\ 3 "" {#}] {
+    foreach "acc1 acc2 c" [list plus "" {[]} c "" {{}} ccedilla "" {{}} 1 "" || 1 1 \\ 3 "" {#}] {
 	set cmd "[list cu::text_entry_insert $w $c];break"
 	if { $acc2 eq "" } {
 	set k2 ""
@@ -564,6 +564,11 @@ proc cu::text_entry_bindings { w } {
     }
     bind $w <$::control-less><KeyPress-$acc1>$k2 $cmd
     bind $w <$::control-backslash><KeyPress-$acc1>$k2 $cmd
+    }
+    
+    foreach "ev k" [list braceleft \{ braceright \} bracketleft \[ bracketright \] backslash \\ \
+	    bar | at @ numbersign # asciitilde ~ EuroSign €] {
+	bind $w <$ev> "[list tk::TextInsert $w $k]"
     }
 }
 
@@ -937,28 +942,67 @@ proc cu::ps { args } {
 
     if { $::tcl_platform(platform) eq "windows" } {
 	package require compass_utils::c
-	return [cu::_ps_win {*}$args]
+	set ps_args ""
+	foreach i $args {
+	    if { $i eq "" } { continue }
+	    if { ![regexp {^\*} $i] } {
+		set i "*$i"
+	    }
+	    if { ![regexp {\*$} $i] } {
+		set i "$i*"
+	    }
+	    lappend ps_args $i
+	}
+	set ret [cu::_ps_win {*}$ps_args]
+	catch { package require twapi }
+	set retret ""
+	foreach i $ret {
+	    lassign $i cmd pid
+	    if { [info command ::twapi::get_process_info] ne "" } {
+		set d [twapi::get_process_info $pid -createtime -privilegedtime -workingset]
+		set stime [clock format [twapi::large_system_time_to_secs [dict get $d -createtime]] \
+		        -format "%H:%M:%S"]
+		set cputime [clock format [twapi::large_system_time_to_secs \
+		            [dict get $d -privilegedtime]] -format "%H:%M:%S" -timezone :UTC]
+		set size [expr {[dict get $d -workingset]/1024}]
+		set i [list $cmd $pid $stime $cputime $size]
+	    }
+	    lappend retret $i
+	}
+	return $retret
     } else {
 	# does not do exactly the same than in Windows
 	#set err [catch { exec pgrep -l -f [lindex $args 0] } ret]
 	#set retList  [split $ret \n]
 	lassign $args pattern
 	if { $pattern eq "" } {
-	    set err [catch { exec ps -u $::env(USER) --no-headers -o pid,stime,time,size,cmd } ret]
+	    set err [catch { exec ps -u $::env(USER) --no-headers -o pid,stime,time,pcpu,size,cmd } ret]
+	} elseif { [string is integer -strict $pattern] } {
+	    set err [catch { exec ps --pid $pattern --no-headers -o pid,stime,time,pcpu,size,cmd } ret]
 	} else {
-	    set err [catch { exec ps -u $::env(USER) --no-headers -o pid,stime,time,size,cmd | grep -i $pattern } ret]
+	    set err [catch { exec ps -u $::env(USER) --no-headers -o pid,stime,time,pcpu,size,cmd | grep -i $pattern } ret]
 	}        
 	if { $err } {
 	    return ""
 	} else {
 	    set retList ""
 	    foreach line [split $ret \n] {
-		regexp {(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(.*)} $line {} pid stime cputime size cmd
-		lappend retList [list $cmd $pid $stime $cputime $size]
+		regexp {(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(.*)} $line {} pid stime cputime \
+		    pcpu size cmd
+		set pcpu [format "%02.0f%%" $pcpu]
+		if { $pattern ne "" && $cmd eq "grep -i $pattern" } { continue }
+		lappend retList [list $cmd $pid $stime "$cputime ($pcpu)" $size]
 	    }
 	    return $retList
 	}
     }
+}
+
+proc cu::file::correct_name { file } {
+    if { $::tcl_platform(platform) eq "windows" } {
+	regsub -all {[:*?""<>|]} $file {_} file
+    }
+    return [string trim $file]
 }
 
 proc cu::file::execute { args } {

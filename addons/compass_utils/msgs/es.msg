@@ -722,11 +722,105 @@ selected usando la fórmula de Simpson.}
 ::msgcat::mcset es animation animación
 ::msgcat::mcset es {Connection with the server has been lost (%s)} {La conexión con el servidor se ha perdido (%s)}
 ::msgcat::mcset es {Open new database} {Abrir nueva base de datos}
+::msgcat::mcset es {Examples: word1 and word2 idx>250} {Ejemplos: palabra1 y palabra2 idx>250}
+::msgcat::mcset es {Draw faces} {Dibujar caras}
+::msgcat::mcset es {txt files} {Archivos txt}
+::msgcat::mcset es {Save faces} {Guardar caras}
+::msgcat::mcset es {Open faces} {Abrir caras}
+::msgcat::mcset es {Octree not defined here} {Octree no definido aquí}
+::msgcat::mcset es {Press arrows and prev/next page to move face} {Pulse flechas y página previa/siguiente para mover la cara}
+::msgcat::mcset es {Press mouse-1 and move mouse to move face in XY} {Pulse ratón-1 y mueva el ratón para mover cara en XY}
+::msgcat::mcset es {Press shift-mouse-1 and move mouse to move face in Z} {Pulse Mayús-ratón-1 y mueva el ratón para mover cara en Z}
+::msgcat::mcset es {Press 0,1,2,3,4,5 to change face idx} {Pulse 0,1,2,3,4,5 para cambiar idx de la cara}
+::msgcat::mcset es {Press 'Return' to draw face} {Pulse 'Volver' para dibujar cara}
+::msgcat::mcset es {Press 's' to save faces. 'r' to recover} {Pulse 's' para guardar caras. 'r' para recuperar}
+::msgcat::mcset es {Cound not open log file '%s' (%s)} {No se pudo abrir el archivo de registro '% s'  (% s)}
 ::msgcat::mcset es {Retrieving '%s'...} {Obteniendo '%s'...}
+::msgcat::mcset es {error: could not resolve image '%s' as '%s'} {error: no se pudo resolver la imagen '% s' como '% s'}
 ::msgcat::mcset es {error: could not resolve image '%s'} {error: no se pudo resolver la imagen '%s'}
+::msgcat::mcset es {Import from spreadsheet} {Importar de la hoja de cálculo}
+::msgcat::mcset es {Microsoft Excel (.xml)(*.xml)} {Microsoft Excel (.xml)(*.xml)}
+::msgcat::mcset es {Text (.csv)(*.csv)} {Texto (.csv)(*.csv)}
+::msgcat::mcset es {Export to spreadsheet} {Exportar a la hoja de cálculo}
+::msgcat::mcset es {GUI preferences} {Preferencias GUI}
+::msgcat::mcset es {CSV files} {Ficheros CSV}
+::msgcat::mcset es {Import data spreadsheet file (CSV file)} {Importar datos del archivo de la hoja de cálculo (archivo CSV)}
+::msgcat::mcset es {File extension should be csv} {La extensión del archivo debe ser csv}
+::msgcat::mcset es {Import data from spreadsheet file (XML file)} {Importar datos del archivo de la hoja de cálculo (archivo XML)}
+::msgcat::mcset es {Save graph as spreadsheet (CSV file)} {Guardar gráfico como hoja de cálculo (archivo CSV)}
+::msgcat::mcset es {Graphical appearance} {Apariencia gráfica}
 ::msgcat::mcset es colors colores
 ::msgcat::mcset es {Background color view} {Color de fondo en la visualización}
+::msgcat::mcset es {Color view} {Imagen en color}
+::msgcat::mcset es {Color selection} {Selección de color}
+::msgcat::mcset es {Foreground color view} {Primer plano de imagen en color}
+::msgcat::mcset es {Add grid lines to graph} {Añadir líneas de cuadrícula al gráfico}
+::msgcat::mcset es {To control the presence and appearance of grid lines on the graph} {Controlar la presencia y la apariencia de las líneas de cuadrícula en el gráfico}
+::msgcat::mcset es {Choose a %s color} {Elegir un color %s}
+::msgcat::mcset es {Could not start server at port %s. (%s)} {No se pudo iniciar el servidor en el puerto% s. (%s)}
+::msgcat::mcset es {Starting server at port %d. Work dir: %s} {Inicio del servidor en el puerto%d. Dir. de trabajo: %s}
+::msgcat::mcset es {Executing '$args' in '$dir'} {Ejecutando '$args' en '$dir'}
+::msgcat::mcset es {file exists '%s': %s} {existe el archivo '%s': %s}
+::msgcat::mcset es {File '%s' is not a regular file} {El archivo '%s' no es un archivo normal}
+::msgcat::mcset es {file_save_in_cache '%s'} {archivo_guardado_en_cache '%s'}
+::msgcat::mcset es {Enter server password. Result=%s} {Introducir contraseña de servidor. Resultado=%s}
+::msgcat::mcset es {error in retrieving info for process %s (%s)} {error al recuperar información para el proceso %s (%s)}
+::msgcat::mcset es {error in retrieving info for process %s (%s)
+} {error al recuperar información para el proceso %s (%s)
+}
+::msgcat::mcset es {error: -appdir cannot be void} {error: -appdir no puede ser nulo}
+::msgcat::mcset es {Error installing service. It is necessary to be root (%s)} {Error al instalar el servicio. Es necesario ser raíz (%s)}
+::msgcat::mcset es {Service %s starting at port %s. appdir=%s
+
+%s} {Servicio %s comienza en puerto %s. appdir =%s
+
+%s}
+::msgcat::mcset es {Service %s starting at ports %s
+
+%s} {Servicio %s comienza en puertos %s
+
+%s}
+::msgcat::mcset es {error: options -install_remote is only available for the Windows version} {error: opciones -instalación_remota sólo está disponible para Windows}
 ::msgcat::mcset es New#C#Masculino Nuevo
 ::msgcat::mcset es Activate Activar
+::msgcat::mcset es Dectivate Desactivar
+::msgcat::mcset es {Move up} {Mover arriba}
+::msgcat::mcset es {Move down} {Mover abajo}
+::msgcat::mcset es {Add row} {Añadir fila}
+::msgcat::mcset es {Edit row} {Editar fila}
+::msgcat::mcset es row Fila
 ::msgcat::mcset es all todo
+::msgcat::mcset es {Import from CSV file} {Importar desde archivo CSV}
+::msgcat::mcset es {Export to CSV file} {Exportar a archivo CSV}
+::msgcat::mcset es {error: default values for option must be elements of the list} {error: los valores por defecto para la opción debe ser elementos de la lista}
+::msgcat::mcset es {Export to CSV} {Exportar a CSV}
+::msgcat::mcset es {It is necessary to select one entry in order to delete it} {Es necesario seleccionar entrada para eliminarla}
+::msgcat::mcset es {Input data} {Datos de entrada}
+::msgcat::mcset es {$col} {$col}
+::msgcat::mcset es {options multiple editable} {opciones múltiples editables}
+::msgcat::mcset es {options multiple non-editable} {opciones múltiples no editables}
+::msgcat::mcset es {Data cannot be saved. It is not valid XML (%s)} {Datos no pueden ser guardados. No es válido XML (%s)}
+::msgcat::mcset es {Select %s} {Seleccionar %s}
+::msgcat::mcset es {Select field} {Seleccionar campo}
 ::msgcat::mcset es Select Seleccionar
+::msgcat::mcset es {There has been a timeout in the connection} {Se ha producido un tiempo de espera en la conexión}
+::msgcat::mcset es {Error checking file '%s' (%s)} {Error al comprobar archivo '%s' (%s)}
+::msgcat::mcset es {Host does not have users. Create first one user} {Host no tiene usuarios. Crear primero un usuario}
+::msgcat::mcset es {User is not allowed to run analysis} {El usuario no está autorizado a ejecutar el análisis}
+::msgcat::mcset es {It is necessary a password to connect to host '%s'} {Es necesaria una contraseña para conectarse al host '%s'}
+::msgcat::mcset es {Are you sure to unconnect from host '%s' and kill any process?} {¿Está seguro de desconectarse del host '% s' acabar cualquier proceso?}
+::msgcat::mcset es {Remember password} {Recordar contraseña}
+::msgcat::mcset es {Program is not running} {El programa no se ejecuta}
+::msgcat::mcset es {Server password} {Contraseña del servidor}
+::msgcat::mcset es {Exit after analysis} {Salir después de análisis}
+::msgcat::mcset es {Server is in evaluation version mode} {El servidor está en modo evaluación}
+::msgcat::mcset es {Server is in professional version mode} {El servidor está en modo profesional}
+::msgcat::mcset es {Do you want to introduce a password?} {¿Quiere introducir contraseña?}
+::msgcat::mcset es {Server professional mode} {Servidor modo profesional}
+::msgcat::mcset es {Server does not accept passwords} {Servidor no acepta contraseña}
+::msgcat::mcset es {Could not enter password in server (%s)} {No pudo entrar contraseña en servidor (%s)}
+::msgcat::mcset es {Program is running} {Programa en ejecución}
+::msgcat::mcset es {Connected to server '%s' - Evaluation version} {Conectado al servidor '%s'.Versión evaluación}
+::msgcat::mcset es {Connected to server '%s' Professional version} {Conectado al servidor '%s'.Versión profesional}
+::msgcat::mcset es {Not connected to server} {No conectado al servidor}
+::msgcat::mcset es {Error retrieving server_platform (%s)} {Error al recuperar servidor_plataforma (%s)}

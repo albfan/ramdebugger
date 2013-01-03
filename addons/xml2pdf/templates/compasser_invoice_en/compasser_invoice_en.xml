@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?><!-- -*- coding: utf-8;-*- -->
+<lognoter_pdf_template>
+  <p n="papersize" v="A4"/>
+  <boxList>
+    <box boxtype="image" pagetype="all" dimensions="7.05% 4.89% 26.2% 12.6%" group="">
+      <p n="imagename" v="../compass_logo300-4cm.png"/>
+      <p n="substitutions" v=""/>
+    </box>
+    <box boxtype="text" pagetype="all" dimensions="7.27% 22.7% 55% 23.7%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="10"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="sw"/>
+      <p n="justify" v="left"/>
+      <p n="text">
+        <wordwidget>
+          <para>[if { [xpath /compasser_invoice_en/budget_type] eq "budget" } { set ret PRESUPUESTO/BUDGET } elseif { [xpath /compasser_invoice_en/budget_type] eq "proforma" } {   set ret "FACTURA/INVOICE PROFORMA" } elseif { [xpath /compasser_invoice_en/budget_type] eq "purchaseorder" } {   set ret "PURCHASE ORDER" } elseif { [xpath /compasser_invoice_en/budget_type] eq "creditnote" } {   set ret "FACTURA RECTIFICATIVA/CREDIT NOTE" } else { set ret FACTURA/INVOICE }] Nº [xpath /compasser_invoice_en/invoice_number]</para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+    <box boxtype="text" pagetype="all" dimensions="70.7% 22.6% 92.4% 23.7%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="10"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="se"/>
+      <p n="justify" v="right"/>
+      <p n="text">
+        <wordwidget>
+          <para>Fecha/Date: [xpath /compasser_invoice_en/invoice_date]</para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+    <box boxtype="text" pagetype="all" dimensions="48.9% 5.21% 92.8% 20.8%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="10"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="se"/>
+      <p n="justify" v="left"/>
+      <p n="text">
+        <wordwidget>
+          <para>[xpath "/compasser_invoice_en/Company_name"]</para>
+          <para>[xpath "/compasser_invoice_en/Department"]</para>
+          <para>[xpath "/compasser_invoice_en/Address"]</para>
+          <para>[xpath "/compasser_invoice_en/zip_code"] [xpath "/compasser_invoice_en/City"]</para>
+          <para>[xpath /compasser_invoice_en/Country]</para>
+          <para>[xpath /compasser_invoice_en/NIF]</para>
+          <para>[xpath "/compasser_invoice_en/additional_line_invoice"]</para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+    <box boxtype="text" pagetype="all" dimensions="26.4% 4.89% 49.8% 11.8%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="7"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="sw"/>
+      <p n="justify" v="left"/>
+      <p n="text">
+        <wordwidget>
+          <para>
+            <emphasis role="strong">Compass Ingeniería y Sistemas, SA</emphasis>
+          </para>
+          <para>T. +34 93 218 19 89</para>
+          <para>F. +34 93 396 97 46</para>
+          <para>E. info@compassis.com</para>
+          <para>c/ Tuset, 8 7-2</para>
+          <para>08006 Barcelona (Spain)</para>
+          <para>V.A.T.: ES-A62485180</para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="0"/>
+    </box>
+    <box boxtype="text" pagetype="all" dimensions="13.5% 93.3% 86.4% 94%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="6"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="n"/>
+      <p n="justify" v="left"/>
+      <p n="text">
+        <wordwidget>
+          <para>
+            <emphasis role="strong">Compass Ingeniería y Sistemas S.A. </emphasis>
+  Sociedad inscrita en el R.M. de Barcelona, T.33954, fol. 128, hoja B236843, inscrip. 1. CIF. A-62485180                        </para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="0"/>
+    </box>
+    <box boxtype="mainbox" pagetype="all" dimensions="7.49% 27% 92.3% 74.1%" group="">
+      <p n="flownumber" v="1"/>
+    </box>
+    <box boxtype="text" pagetype="all" dimensions="7.16% 82.3% 92.6% 92.3%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="10"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="nw"/>
+      <p n="justify" v="left"/>
+      <p n="text">
+        <wordwidget>
+          <para>[xpathfull "/compasser_invoice_en/conditions"]</para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="7.16%   24% 92.7% 24%" group="">
+      <p n="fillcolor" v="black"/>
+      <p n="outlinecolor" v="#000000"/>
+      <p n="outlinewidth" v="1"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="7.16% 93.1% 92.7% 93.1%" group="">
+      <p n="fillcolor" v="black"/>
+      <p n="outlinecolor" v="#8EA2CE"/>
+      <p n="outlinewidth" v="1"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="7.16% 24.5% 92.7% 24.5%" group="">
+      <p n="fillcolor" v=""/>
+      <p n="outlinecolor" v="#000000"/>
+      <p n="outlinewidth" v="1.5"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="7.16% 24.5% 92.7% 24.5%" group="">
+      <p n="fillcolor" v=""/>
+      <p n="outlinecolor" v="#000000"/>
+      <p n="outlinewidth" v="1.5"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="7.16% 74.5% 92.7% 74.5%" group="">
+      <p n="fillcolor" v=""/>
+      <p n="outlinecolor" v="#000000"/>
+      <p n="outlinewidth" v="1.5"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="7.16% 80.5% 92.7% 80.5%" group="">
+      <p n="fillcolor" v=""/>
+      <p n="outlinecolor" v="#000000"/>
+      <p n="outlinewidth" v="1.5"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="7.16% 24.5% 7.16% 80.5%" group="">
+      <p n="fillcolor" v=""/>
+      <p n="outlinecolor" v="#000000"/>
+      <p n="outlinewidth" v="1.5"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="92.7% 24.5% 92.7% 80.5%" group="">
+      <p n="fillcolor" v=""/>
+      <p n="outlinecolor" v="#000000"/>
+      <p n="outlinewidth" v="1.5"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="20%   24.5% 20%   74.5%" group="">
+      <p n="fillcolor" v=""/>
+      <p n="outlinecolor" v="#000000"/>
+      <p n="outlinewidth" v="1.5"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="76.1% 24.5% 76.1% 80.6%" group="">
+      <p n="fillcolor" v=""/>
+      <p n="outlinecolor" v="#000000"/>
+      <p n="outlinewidth" v="1.5"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="76.1% 76.5% 92.7% 76.5%" group="">
+      <p n="fillcolor" v=""/>
+      <p n="outlinecolor" v="#000000"/>
+      <p n="outlinewidth" v="1.5"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="76.1% 78.5% 92.7% 78.5%" group="">
+      <p n="fillcolor" v=""/>
+      <p n="outlinecolor" v="#000000"/>
+      <p n="outlinewidth" v="1.5"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="7.16% 27.1% 92.7% 27.1%" group="">
+      <p n="fillcolor" v=""/>
+      <p n="outlinecolor" v="#000000"/>
+      <p n="outlinewidth" v="1.5"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="text" pagetype="all" dimensions="7.2% 24.6% 20% 26.2%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="10"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="s"/>
+      <p n="justify" v="center"/>
+      <p n="text">
+        <wordwidget>
+          <para>
+            <emphasis role="strong">Cantidad/Qty</emphasis>
+          </para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+    <box boxtype="text" pagetype="all" dimensions="19.7% 24.6% 74.3% 26.2%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="10"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="s"/>
+      <p n="justify" v="center"/>
+      <p n="text">
+        <wordwidget>
+          <para>
+            <emphasis role="strong">Concepto/Description</emphasis>
+          </para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+    <box boxtype="text" pagetype="all" dimensions="76.1% 24.6% 93.2% 26.2%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="10"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="s"/>
+      <p n="justify" v="center"/>
+      <p n="text">
+        <wordwidget>
+          <para>
+            <emphasis role="strong">Importe/Price (\u20ac)</emphasis>
+          </para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+    <box boxtype="text" pagetype="lastpage" dimensions="75.1% 74.7% 92.2% 76%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="10"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="se"/>
+      <p n="justify" v="right"/>
+      <p n="text">
+        <wordwidget>
+          <para>[xpath "/compasser_invoice_en/base"]</para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+    <box boxtype="text" pagetype="lastpage" dimensions="74.9% 76.6% 92.2% 78%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="10"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="se"/>
+      <p n="justify" v="right"/>
+      <p n="text">
+        <wordwidget>
+          <para>[xpath "/compasser_invoice_en/VAT_value"]</para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+    <box boxtype="text" pagetype="lastpage" dimensions="74.9% 78.7% 92.2% 80%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="10"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="se"/>
+      <p n="justify" v="right"/>
+      <p n="text">
+        <wordwidget>
+          <para>[xpath "/compasser_invoice_en/total"]\u20ac</para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+    <box boxtype="text" pagetype="all" dimensions="57.0% 74.7% 75.4% 76%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="10"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="se"/>
+      <p n="justify" v="right"/>
+      <p n="text">
+        <wordwidget>
+          <para>Base imponible/Subtotal</para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+    <box boxtype="text" pagetype="all" dimensions="57.0% 76.6% 75.4% 78%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="10"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="se"/>
+      <p n="justify" v="right"/>
+      <p n="text">
+        <wordwidget>
+          <para>VAT [xpath "/compasser_invoice_en/VAT"]%</para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+    <box boxtype="text" pagetype="all" dimensions="57.0% 78.7% 75.4% 80%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="10"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="se"/>
+      <p n="justify" v="right"/>
+      <p n="text">
+        <wordwidget>
+          <para>
+            <emphasis role="strong">TOTAL</emphasis>
+          </para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+    <box boxtype="text" pagetype="all" dimensions="24.2% 41.5% 69.9% 60.5%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="48"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="nw"/>
+      <p n="justify" v="45 degrees"/>
+      <p n="text">
+        <wordwidget>
+          <para>[if { [xpath "is_copy"]  == 1 } { return COPY } else { return "" }]</para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+  </boxList>
+  <container n="state"/>
+  <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+    <xsl:output method="xml" indent="yes"/>
+    <xsl:template match="items">
+      <table relativesizes="- 15 66 19" cols_justify="center justify right" tabstyle="plain">
+        <xsl:for-each select="item">
+          <row>
+            <entry>
+              <xsl:value-of select="quantity"/>
+            </entry>
+            <entry>
+              <xsl:value-of select="concept"/>
+            </entry>
+            <entry>
+              <xsl:value-of select="price"/>
+            </entry>
+          </row>
+        </xsl:for-each>
+      </table>
+    </xsl:template>
+    <xsl:template match="/compasser_invoice_en">
+      <xsl:copy select=".">
+        <xsl:apply-templates select="*"/>
+      </xsl:copy>
+    </xsl:template>
+    <xsl:template match="*">
+      <xsl:copy-of select="."/>
+    </xsl:template>
+  </xsl:stylesheet>
+</lognoter_pdf_template>
+

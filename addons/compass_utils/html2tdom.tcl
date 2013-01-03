@@ -145,7 +145,7 @@ proc html2tdom::parse { html } {
     #unset -nocomplain xsltcmd; #DEBUG
     if { ![info exists xsltcmd] } {
 	set filename [file join $topdir html2docbook.xslt]
-	set xsltdoc [dom parse [tDOM::xmlReadFile $filename]]
+	set xsltdoc [cu::dom::parse [tDOM::xmlReadFile $filename]]
 	set xsltcmd [$xsltdoc toXSLTcmd]
     }
     set newdoc [$xsltcmd $doc]
@@ -464,7 +464,7 @@ proc docbook2txt::go { args } {
     set compulsory "xml"
     parse_args $optional $compulsory $args
 
-    set doc [dom parse $xml]
+    set doc [cu::dom::parse $xml]
     
     switch $output_style {
 	text {
@@ -479,7 +479,7 @@ proc docbook2txt::go { args } {
 
     if { ![info exists xsltcmd] } {
 	set filename [file join $topdir $file]
-	set xsltdoc [dom parse [tDOM::xmlReadFile $filename]]
+	set xsltdoc [cu::dom::parse [tDOM::xmlReadFile $filename]]
 	set xsltcmd [$xsltdoc toXSLTcmd]
     }
     set newdoc [$xsltcmd $doc]
@@ -586,7 +586,7 @@ proc docbook2txt::_wiki2docbook_para { txt } {
 	    append _ [xml_map1 $text] "</ulink>"
 	} elseif { [lindex $ret 3 0] != -1 } {
 	    set xml [string range $txt {*}[lindex $ret 3]]
-	    set err [catch { dom parse $xml } doc]
+	    set err [catch { cu::dom::parse $xml } doc]
 	    if { !$err } {
 		append _ [$doc asXML]
 	    } else {

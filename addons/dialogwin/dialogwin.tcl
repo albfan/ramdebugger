@@ -1273,7 +1273,6 @@ snit::widget dialogwin_snit {
 	    }
 	    wm withdraw $win
 	}
-	
 	if {0&& [info commands ttk::button] eq "" } {
 	    set button_cmd button
 	    set label_cmd label
@@ -1297,6 +1296,8 @@ snit::widget dialogwin_snit {
 	    frame $win.f0.c -background #880000 -bd 1 -relief solid -height 4 \
 		-cursor hand2
 	    bind $win.f0.c <ButtonRelease-1> [mymethod toogle_frame_toplevel]
+	    
+	    tooltip::tooltip $win.f0.c [_ "Press here to dock or undock the window"]
 
 	    grid $win.f0.c -sticky ew -row 0 -column 0
 	    grid columnconfigure $win.f0 0 -weight 1
@@ -1843,26 +1844,27 @@ snit::widget dialogwin_snit {
     }
     method createwindownowait_as_toplevel {} {
 
-	if { [winfo exists $win.f0.buts] } {   
-	    if { [winfo exists $win.sep] } { grid $win.sep }
-	    grid $win.buts
-	    grid remove $win.f0.buts
-	}
 	set parent [winfo parent $win]
 	set top [winfo toplevel $parent]
 
 	if { $::tcl_platform(os) ne "Darwin" } {
 	    wm manage $win
 	}
+	wm withdraw $win
+	update
+
 	wm title $win $options(-title)
-	
 	if { $::tcl_platform(os) eq "Windows CE" } {
 	    bind $win <ConfigureRequest> { if { "%W" eq [winfo toplevel %W] } { etcl::autofit %W }}
 	    bind $win <Expose> { if { "%W" eq [winfo toplevel %W] } { etcl::autofit %W }}
 	}
-	update idletasks
-	wm withdraw $win
 	#update idletasks
+
+	if { [winfo exists $win.f0.buts] } {   
+	    if { [winfo exists $win.sep] } { grid $win.sep }
+	    grid $win.buts
+	    grid remove $win.f0.buts
+	}
 
 	lassign "" width height x y
 	if { [catch { package present twapi }] == 0 } {
@@ -2597,8 +2599,6 @@ snit::widgetadaptor wizard_snit {
 #
 ################################################################################
 
-
-# ramsan: i perquè toqueu això?
 if { [catch { package require compass_utils }] } {
     proc ::parse_args { args } {
 	
@@ -2608,34 +2608,41 @@ if { [catch { package require compass_utils }] } {
 	}
 	set compulsory "optional compulsory arguments"
 	
-	set cmdname [lindex [info level [expr {[info level]-1}]] 0]
-	
-	if { [string match -* [lindex $args 0]] } {
+	if { [info level] == 1 } {
+	    set cmdname [list [info nameofexecutable]]
+	    if { ![info exists ::starkit::topdir] } {
+		lappend cmdname $::argv0
+	    }
+	} else {
+	    set cmdname [lindex [info level [expr {[info level]-1}]] 0]
+	}
+	if { [llength $args] > [llength $compulsory] && [string match -* [lindex $args 0]] } {
 	    parse_args $optional $compulsory $args
 	} else {
 	    set raise_compulsory_error 1
 	    set compulsory_min ""
 	    if { [llength $args] != [llength $compulsory] } {
 		uplevel 1 [list error [_parse_args_string $cmdname $optional \
-		            $compulsory $args]]
+		            $compulsory $arguments]]
 		return ""
 	    }
-	    foreach $compulsory $args break
+	    lassign $args {*}$compulsory
 	}
 	
 	foreach i $optional {
-	    foreach "name namevalue default" $i break
+	    lassign $i name namevalue default
 	    set opts_value($name) $namevalue
 	    if { [llength $i] > 2 } {
 		set opts($name) $default
 	    }
 	}
-	while { [string match -* [lindex $arguments 0]] } {
+	while { (!$raise_compulsory_error || [llength $arguments] > [llength $compulsory]) &&
+	    [string match -* [lindex $arguments 0]] } {
 	    if { [lindex $arguments 0] eq "--" } {
 		set arguments [lrange $arguments 1 end]
 		break
 	    }
-	    foreach "name value" [lrange $arguments 0 1] break
+	    lassign [lrange $arguments 0 1] name value
 	    if { [regexp {(.*)=(.*)} $name {} name value] } {
 		set has_att_value 1
 	    } else {
@@ -2654,7 +2661,7 @@ if { [catch { package require compass_utils }] } {
 		}
 	    } else {
 		uplevel 1 [list error [_parse_args_string $cmdname $optional \
-		            $compulsory $args]]
+		            $compulsory $arguments]]
 		return ""
 	    }
 	}
@@ -2662,15 +2669,15 @@ if { [catch { package require compass_utils }] } {
 	    if { $compulsory_min ne "" } {
 		if { [llength $arguments] < $compulsory_min || \
 		    [llength $arguments] > [llength $compulsory] } {
-		    uplevel 1 [list error [_parse_args_string $cmdname $optional $compulsory]]
+		    uplevel 1 [list error [_parse_args_string $cmdname $optional $compulsory $arguments]]
 		    return ""
 		}
 	    } elseif { [llength $arguments] != [llength $compulsory] } {
 		uplevel 1 [list error [_parse_args_string $cmdname $optional \
-		            $compulsory $args]]
+		            $compulsory $arguments]]
 		return ""
 	    }
-	
+	    
 	}
 	foreach name [array names opts] {
 	    uplevel 1 [list set [string trimleft $name -] $opts($name)]
@@ -2682,7 +2689,6 @@ if { [catch { package require compass_utils }] } {
 	}
 	return [lrange $arguments $inum end]
     }
-
     proc ::_parse_args_string { cmd optional compulsory arguments } {
 	
 	set str "error. usage: $cmd "

@@ -3,7 +3,7 @@ package require snit
 package require msgcat
 package require textutil
 
-package provide compass_utils 1.10
+package provide compass_utils 1.12
 
 msgcat::mcload [file join [file dirname [info script]] msgs]
 
@@ -101,6 +101,40 @@ proc cu::list_to_commalist { list } {
 	lappend ret [string map $map $elm]
     }
     return [join $ret ","]
+}
+
+proc cu::package_forget { package } {
+
+    set err [catch { package present $package } ret]
+    if { $err } { return }
+
+    set args ""
+    set script [package ifneeded $package [package require $package]]
+    foreach line [cu::splitx $script {[;\n]}] {
+	switch -- [lindex $line 0] {
+	    "load" {
+		set args [lrange $line 1 end]
+	    }
+	    "source" {
+		#nothing
+	    }
+	    default {
+		interp create cup_for
+		cup_for eval [info_fullproc [lindex $line 0] [lindex $line 0]]
+		cup_for alias load lappend args
+		set err [catch { cup_for eval $line }]
+		interp delete cup_for
+	    }
+	}
+	if { $args ne "" } {
+	    break
+	}
+    }
+    if { $args eq "" } {
+	error "error in cu::package_forget. package ifneeded is not in the accepted syntax"
+    }
+    unload {*}$args
+    package forget $package
 }
 
 proc list_unique { list } {
@@ -507,6 +541,32 @@ proc cu::file::appdatadir { program_name } {
     return $AppDataDir
 }
 
+proc cu::file::desktopdir {} {
+
+    if { $::tcl_platform(platform) eq "windows" } {
+	set key {HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders}
+	return [registry get $key Desktop]
+    } else {
+	set f [file join $::env(HOME) .config user-dirs.dirs]
+	if { [file exists $f]} {
+	    set fin [open $f r]
+	    set data [read $fin]
+	    close $fin
+	    set rex "XDG_DESKTOP_DIR\s*=(.*)"
+	    if { [regexp -line $rex $data {} dir] } {
+		set dir [string trim $dir " \t\n\""]
+		set dir [string map [list \$HOME $::env(HOME)] $dir]
+		return $dir
+	    }
+	    set dir [file join $::env(HOME) Desktop]
+	    if { [file exists $dir] } {
+		return $dir
+	    }
+	    return $::env(HOME)
+	}
+    }
+}
+
 proc cu::file::give_standard_dirs {} {
     if { $::tcl_platform(platform) eq "windows" } {
 	set dirs ""
@@ -883,6 +943,13 @@ proc cu::file::get_executable_path { exe } {
     return $exe
 }
 
+proc cu::file::correct_name { file } {
+    if { $::tcl_platform(platform) eq "windows" } {
+	regsub -all {[:*?""<>|]} $file {_} file
+    }
+    return [string trim $file]
+}
+
 proc cu::file::execute { args } {
     
     set optional {
@@ -983,7 +1050,7 @@ proc cu::file::execute { args } {
 		    }
 		}
 		set cmdList ""
-		foreach i [list firefox konqueror mozilla opera netscape] {
+		foreach i [list google-chrome firefox konqueror mozilla opera netscape] {
 		    lappend cmdList "$i \"$file\""
 		}
 		exec sh -c [join $cmdList "||"] & 
@@ -1161,7 +1228,20 @@ proc cu::file::sha1 { file } {
     return $ret
 }
 
-proc cu::nice_time { seconds } {
+proc cu::nice_time { args } {
+    
+    set optional {
+	{ -refs valuesList "" }
+    }
+    set compulsory "seconds"
+    parse_args $optional $compulsory $args
+
+    set max [expr {abs($seconds)}]
+    foreach ref $refs {
+	if { abs($ref) > $max } {
+	    set max [expr {abs($ref)}]
+	}
+    }
     if { $seconds < 0 } {
 	set sign "-"
     } else {
@@ -1172,12 +1252,22 @@ proc cu::nice_time { seconds } {
     set centi_seconds [expr {round(100*($seconds-$secondsI))}]
     set hours [expr {$secondsI/3600}]
     set secondsI [expr {$secondsI-$hours*3600}]
-    set minutes  [expr {$secondsI/60}]
+    set minutes [expr {$secondsI/60}]
     set secondsI [expr {$secondsI-$minutes*60}]
     if { $seconds != 0 && $seconds < 1 } {
-	return [format "$sign%.3g" $seconds]
+	return [format "${sign}00:%.3g" $seconds]
     } elseif { $seconds < 60 && $centi_seconds != 0 } {
-	return [format "$sign%02d.%02d" $secondsI $centi_seconds]
+	if { $max > 60 } {
+	    return [format "${sign}00:%02d.%02d" $secondsI $centi_seconds]
+	} else {
+	    return [format "${sign}%02d.%02d" $secondsI $centi_seconds]
+	}
+    } elseif { $seconds < 60 } {
+	if { $max > 60 } {
+	    return [format "${sign}00:%02d" $secondsI]
+	} else {
+	    return [format "${sign}%02d" $secondsI]
+	}
     } elseif { $hours != 0 } {
 	return [format "$sign%02d:%02d:%02d" $hours $minutes $secondsI]
     } else {
@@ -1250,15 +1340,18 @@ proc ::mylog::init { args } {
 	package require sqlite3
 	if { $logfile ne "" } {
 	    if { $restart_file } {
-		set err [catch {
-		        sqlite3 ::mylog::db $logfile
-		        ::mylog::db eval { delete from log }
-		        ::mylog::db close
-		    }]
-		if { $err } {
-		    catch { ::mylog::db close }
-		    file delete $file
-		}
+		# it is faster
+		file delete $file
+		
+#                 set err [catch {
+#                         sqlite3 ::mylog::db $logfile
+#                         ::mylog::db eval { delete from log }
+#                         ::mylog::db close
+#                     }]
+#                 if { $err } {
+#                     catch { ::mylog::db close }
+#                     file delete $file
+#                 }
 	    }
 	    sqlite3 ::mylog::db $logfile
 	} else {
@@ -1583,10 +1676,17 @@ proc ::mylog::_view_log_fulltktree { args } {
 	    -topbuttons $topbuttons \
 	    -callback [list ::mylog::_view_log_fulltktree_do $args] -grab 0 \
 	    -geometry $geometry]
+    
+    if { $parent eq "" } {
+	set parent [winfo parent $w]
+    }
 	
     catch { wm protocol $w WM_DELETE_WINDOW [list mylog::_view_log_close $w] }
     bind $w <Destroy> [list mylog::_view_log_destroy $w $destroy_handler]
-	
+
+    if { $frame_toplevel eq "toplevel" } {
+	wm iconphoto $w [cu::get_image Compasser22]
+    }
     set f [$w giveframe]
     
     cu::combobox $f.e1 -textvariable [$w give_uservar search ""] -valuesvariable [$w give_uservar searchList ""]
@@ -1637,7 +1737,9 @@ proc ::mylog::_view_log_fulltktree { args } {
     bind $w <F3> [list mylog::_view_log_check_reduced_view -toggle $w]
     bind $w <F4> [list mylog::_view_log_check_notes_view -toggle $w]
     bind $w <F5> [list mylog::_view_log_fill $w]
+    bind $w <F7> [list catch [list draw_post::filter_entities]]
     bind $w <F1> [list mylog::_view_draw_box_in_gid_post $w ""]
+    bind $w <Control-F1> [list mylog::_view_draw_box_in_gid_post -toggle 0 $w ""]
     bind $w <Shift-F1> [list mylog::_view_log_draw_faces -toggle $w]
     bind $w <Control-u> [list draw_post::update_gui_redraw_all]
     bind $w <Shift-F2> [list mylog::_view_point_in_gid_post $w ""]
@@ -1646,7 +1748,12 @@ proc ::mylog::_view_log_fulltktree { args } {
     bind $f.e1 <BackSpace> "[bind [winfo class $f.e1] <BackSpace>] ; break"
     bind $w <Delete> [list ::mylog::_clear_search $w $f.e1]
     
-    for { set i 1 } { $i <= 5 } { incr i } {
+    if { $parent ne "" } {
+	set wp [winfo toplevel $parent]
+	bind $w <F6> [bind $wp <F6>]
+	bind $w <Shift-F6> [bind $wp <Shift-F6>]
+    }
+    for { set i 1 } { $i <= 7 } { incr i } {
 	bind $w <Control-KeyPress-$i> [bind $w <F$i>]
 	bind $w <Control-Shift-KeyPress-$i> [bind $w <Shift-F$i>]
     }
@@ -1708,6 +1815,7 @@ proc ::mylog::_view_log_contextual_menu { tree w - menu item itemList } {
     $menu add command -label [_ "Update"] -acc F5 -command [list mylog::_view_log_fill $w]
     
     if { $item ne "" && [regexp {p0=(\S+)\s+L=(\S+)} [$tree item text $item 4]] } {
+	$menu add command -label [_ "Filter entities"] -acc F7 -command [list catch [list draw_post::filter_entities]]
 	$menu add separator
 	$menu add command -label [_ "Draw box"] -acc F1 -command [list mylog::_view_draw_box_in_gid_post $w $itemList]
 	$menu add command -label [_ "Draw faces"] -acc Shift-F1 -command [list mylog::_view_log_draw_faces -toggle $w]
@@ -1756,14 +1864,7 @@ proc mylog::_view_log_change_color { color w itemList } {
 
 proc ::mylog::_view_point_in_gid_post { w itemList } {
     
-    set tree [$w give_uservar_value tree]
-    
-    if { $itemList eq "" } {
-	set itemList [$tree selection get]
-    }
-
-    foreach item $itemList {
-	set txt [$tree item text $item 4]
+    foreach txt [_view_draw_box_txtList $w $itemList] {
 	if { ![regexp {([-+.\deE]+),([-+.\deE]+),([-+.\deE]+)} $txt {} px py pz] } { continue }
 	draw_post::draw_signal_point 0 [list $px $py $pz]
     }
@@ -1857,7 +1958,7 @@ proc ::mylog::_view_log_draw_faces_do { w what args } {
     } else {
 	set moveL ""
     }
-    lassign [cu::give_octree_near_boxes {*}$moveL $point] idx subbox
+    lassign [ggc::give_octree_near_boxes {*}$moveL $point] idx subbox
     if { $subbox eq "" } {
 	tk_messageBox -message [_ "Octree not defined here"]
 	return
@@ -1901,7 +2002,7 @@ proc ::mylog::_view_log_draw_faces { args } {
 
     if { [$w give_uservar_value draw_faces] } {
 	if { ![winfo exists $t] } {
-	    text $t -width 80 -height 6 -bg [$w cget -bg]
+	    text $t -width 80 -height 6 -background [$w cget -background]
 	    grid $t -sticky nsew -columnspan 3 -padx 2 -pady 2
 	    
 	    $t insert end [_ "Press arrows and prev/next page to move face"]\n
@@ -1933,14 +2034,8 @@ proc ::mylog::_view_log_draw_faces { args } {
 }
 proc ::mylog::_view_point_in_gid_post_zoomed { w itemList } {
     
-    set tree [$w give_uservar_value tree]
-    
-    if { $itemList eq "" } {
-	set itemList [$tree selection get]
-    }
     set found 0
-    foreach item $itemList {
-	set txt [$tree item text $item 4]
+    foreach txt [_view_draw_box_txtList $w $itemList] {
 	if { [regexp {([-+.\deE]+),([-+.\deE]+),([-+.\deE]+)} $txt {} px py pz] } {
 	    set found 1
 	    break
@@ -1948,13 +2043,14 @@ proc ::mylog::_view_point_in_gid_post_zoomed { w itemList } {
     }
     if { !$found } { return }
     
-    if { [$w exists_uservar last_drawn_entity] } {
-	if { [$w give_uservar_value last_drawn_entity] eq [list point [list $px $py $pz]] } {
-	    $w set_uservar_value last_drawn_entity [list point [list $px $py $pz] redraw 1]
-	    draw_post::update_gui_redraw_all
-	    return
-	}
-    }
+# I do not remember why it was here
+#     if { [$w exists_uservar last_drawn_entity] } {
+#         if { [$w give_uservar_value last_drawn_entity] eq [list point [list $px $py $pz]] } {
+#             $w set_uservar_value last_drawn_entity [list point [list $px $py $pz] redraw 1]
+#             draw_post::update_gui_redraw_all
+#             return
+#         }
+#     }
     
     set xml {
 	<gidpost_batch version='1.0'>
@@ -1966,7 +2062,22 @@ proc ::mylog::_view_point_in_gid_post_zoomed { w itemList } {
 	</gidpost_batch>
     }
     set ortho {{-11.1777 -10.9342} {-0.129088 0.121778} {-1483.85 1633.85}}
-    set rotation_center {-11.0492 0 -2.09955}
+    set rotation_center ""
+    
+    lassign [$w give_uservar_value draw_entity_factor [list 1.0 0]] factor time
+    if { [clock seconds]-$time > 2 } {
+	set factor 1
+    }
+    for { set i 0 } { $i < 3 } { incr i } {
+	set c [expr {0.5*([lindex $ortho $i 0]+[lindex $ortho $i 1])}]
+	set r [expr {0.5*([lindex $ortho $i 1]-[lindex $ortho $i 0])}]
+	lset ortho $i 0 [expr {$c-$factor*$r}]
+	lset ortho $i 1 [expr {$c+$factor*$r}]
+	lappend rotation_center $c
+    }
+    set factor [expr {10*$factor}]
+    if { $factor > 1e6 } { set factor 1 }
+    $w set_uservar_value draw_entity_factor [list $factor [clock seconds]]
 
     package require compass_utils::math    
     set delta [m::sub [list $px $py $pz] $rotation_center]
@@ -1977,26 +2088,49 @@ proc ::mylog::_view_point_in_gid_post_zoomed { w itemList } {
     set xml [string map [list %ORTHO% $ortho %CENTER% [list $px $py $pz]] $xml]
     draw_post::eval_batch_data $xml
 
-    foreach item $itemList {
-	set txt [$tree item text $item 4]
+    foreach txt [_view_draw_box_txtList $w $itemList] {
 	if { ![regexp {([-+.\deE]+),([-+.\deE]+),([-+.\deE]+)} $txt {} px py pz] } { continue }
 	draw_post::draw_signal_point 0 [list $px $py $pz]
 	$w set_uservar_value last_drawn_entity [list point [list $px $py $pz]]
     }
 }
 
-proc ::mylog::_view_draw_box_in_gid_post { w itemList } {
+proc ::mylog::_view_draw_box_txtList { w itemList } {
     
     set tree [$w give_uservar_value tree]
+    set rex1 {p0=(\S+)\s+L=(\S+)}
     
-    if { $itemList eq "" } {
+    if { $itemList eq "" && [string match $tree* [focus]] } {
 	set itemList [$tree selection get]
     }
+    set txtList ""
+    if { $itemList eq "" } {
+	set err [catch { clipboard get } txt]
+	if { !$err } {
+	    lappend txtList $txt
+	}
+    } else {
+	foreach item $itemList {
+	    lappend txtList [$tree item text $item 4]
+	}
+    }
+    return $txtList
+}
+
+proc ::mylog::_view_draw_box_in_gid_post { args } {
+	
+    set optional {
+	{ -toggle boolean 1 }
+    }
+    set compulsory "w itemList"
+    parse_args $optional $compulsory $args
+
     if { ![$w exists_uservar last_drawn_entity] } {
 	$w set_uservar_value last_drawn_entity ""
     }
-    foreach item $itemList {
-	set txt [$tree item text $item 4]
+    set idx 0
+    foreach txt [_view_draw_box_txtList $w $itemList] {
+	incr idx
 	if { ![regexp {p0=(\S+)\s+L=(\S+)} $txt {} p0 L] } { continue }
 	
 	set p0 [split $p0 ","]
@@ -2011,8 +2145,11 @@ proc ::mylog::_view_draw_box_in_gid_post { w itemList } {
 		lappend entList $i $num
 	    }
 	}
-	draw_post::draw_point_line_indicator -toggle 1 -draw_arrow_to_center 0 box_axes $p0 $L $entList
+	draw_post::draw_point_line_indicator -toggle $toggle -draw_arrow_to_center 0 box_axes $p0 $L $entList
 	$w set_uservar_value last_drawn_entity [list p0 $p0 L $L entity [lrange $entList end-1 end]]
+    }
+    if { !$idx } {
+	error "it is necessary to have focus on the tree or to have a box in the clipboard"
     }
 }
 
@@ -2240,7 +2377,8 @@ proc ::mylog::_view_log_fill { args } {
 	}
     }
     _create_time_tree $tree $times_dict 0 0
-    
+
+    update idletasks
     if { [llength $selected_idx] } {
 	$tree see active
     } else {
@@ -2428,7 +2566,7 @@ proc ::parse_args { args } {
     } else {
 	set cmdname [lindex [info level [expr {[info level]-1}]] 0]
     }
-    if { [string match -* [lindex $args 0]] } {
+    if { [llength $args] > [llength $compulsory] && [string match -* [lindex $args 0]] } {
 	parse_args $optional $compulsory $args
     } else {
 	set raise_compulsory_error 1
@@ -2438,7 +2576,7 @@ proc ::parse_args { args } {
 		        $compulsory $arguments]]
 	    return ""
 	}
-	foreach $compulsory $args break
+	lassign $args {*}$compulsory
     }
 
     foreach i $optional {
@@ -2448,13 +2586,13 @@ proc ::parse_args { args } {
 	    set opts($name) $default
 	}
     }
-    while { [string match -* [lindex $arguments 0]] && (!$raise_compulsory_error || 
-	[llength $arguments] > [llength $compulsory]) } {
+    while { (!$raise_compulsory_error || [llength $arguments] > [llength $compulsory]) &&
+	[string match -* [lindex $arguments 0]] } {
 	if { [lindex $arguments 0] eq "--" } {
 	    set arguments [lrange $arguments 1 end]
 	    break
 	}
-	foreach "name value" [lrange $arguments 0 1] break
+	lassign [lrange $arguments 0 1] name value
 	if { [regexp {(.*)=(.*)} $name {} name value] } {
 	    set has_att_value 1
 	} else {
@@ -2546,13 +2684,67 @@ proc ::parse_args_create_cmd { optional compulsory } {
 }
 
 ################################################################################
-#    XML & xpath utilities
+#    XML & xpath utilities & tdom
 #
 ################################################################################
 
+namespace eval cu::dom {}
+
+proc cu::dom::parse { args } {
+    
+    set optional {
+	{ -keepEmpties "" 0 }
+    }
+    set compulsory "xml"
+    parse_args $optional $compulsory $args
+
+    set opts ""
+    if { $keepEmpties } { lappend opts -keepEmpties }
+    
+    set err [catch { dom parse {*}$opts $xml } doc]
+    if { $err } {
+	set xml [cu::xml_correct_incorrect_characters $xml]
+	set doc [dom parse {*}$opts $xml]
+    }
+    return $doc
+}
+
+proc cu::xml_correct_incorrect_characters { xml } {
+    global _xml_map
+    
+    _xml_map_init
+    return [string map $_xml_map $xml]
+
+#    set chars "\u1\u2\u3\u4\u5\u6\u7\u8\ub\uc\ue\uf\u10\u11\u12\u13\u14\u15\u16\u17\u18\u19\u1a\u1b\u1c\u1d\u1e\u1f"
+# 
+#     set map ""
+#     foreach i [split $chars ""]  {
+#         lappend map $i ""
+#     }
+#     return [string map $map $xml]
+}
+
+
+proc _xml_map_init {} {
+    global _xml_map
+    
+    if { [info exists _xml_map] } { return }
+    
+    set _xml_map ""
+    for { set i 0 } { $i < 32 } { incr i } {
+	if { $i in [list 9 10 13] } { continue }
+	lappend _xml_map [subst [format "\\u%04x" $i]] ""
+    }
+}
+
 proc xml_map { args } {
+    global _xml_map
+
     set map [list > "&gt;" < "&lt;" & "&amp;" \" "&quot;" ' "&apos;"]
-    return [string map $map [join $args ""]]
+
+    _xml_map_init    
+    set ret [string map $_xml_map [join $args ""]]
+    return [string map $map $ret]
 }
 
 proc xml_map_inv { args } {
@@ -2561,8 +2753,13 @@ proc xml_map_inv { args } {
 }
 
 proc xml_map1 { args } {
+    global _xml_map
+
     set map [list > "&gt;" < "&lt;" & "&amp;"]
-    return [string map $map [join $args ""]]
+
+    _xml_map_init    
+    set ret [string map $_xml_map [join $args ""]]
+    return [string map $map $ret]
 }
 
 proc xml_map1_inv { args } {
@@ -2658,16 +2855,6 @@ proc format_xml1 { string args } {
 	lappend cmd [xml_map1 $i]
     }
     return [eval $cmd]
-}
-
-proc cu::xml_correct_incorrect_characters { xml } {
-   set chars "\u1\u2\u3\u4\u5\u6\u7\u8\ub\uc\ue\uf\u10\u11\u12\u13\u14\u15\u16\u17\u18\u19\u1a\u1b\u1c\u1d\u1e\u1f"
-
-    set map ""
-    foreach i [split $chars ""]  {
-	lappend map $i ""
-    }
-    return [string map $map $xml]
 }
 
 namespace eval ::dom::domNode {}
@@ -2874,7 +3061,7 @@ proc cu::store_program_preferences { args } {
 	} elseif { [info exists ::env(HOME)] } {
 	    set file [file normalize ~/.compass_${program_name}_prefs]
 	} else {
-	    set file [file normalize [file join /tmp compass_${program_name}_prefs]]
+	    set file [file normalize [file join /var/tmp .compass_${program_name}_prefs]]
 	}
 	set err [catch { tDOM::xmlReadFile $file } xml]
 	if { $err } { set xml "<preferences/>" }
@@ -2895,11 +3082,13 @@ proc cu::store_program_preferences { args } {
 	close $fout
     }
 }
+
 proc cu::get_program_preferences { args } {
 
     set optional {
 	{ -valueName name "" }
 	{ -default default_value "" }
+	{ -debug boolean 0 }
     }
     set compulsory "program_name"
 
@@ -2928,11 +3117,14 @@ proc cu::get_program_preferences { args } {
 	} elseif { [info exists ::env(HOME)] } {
 	    set file [file normalize ~/.compass_${program_name}_prefs]
 	} else {
-	    set file [file normalize [file join /tmp compass_${program_name}_prefs]]
+	    set file [file normalize [file join /var/tmp .compass_${program_name}_prefs]]
 	}
-	set err [catch { tDOM::xmlReadFile $file } xml]
+	if { $debug } {
+	    puts "cu::get_program_preferences file=$file"
+	}
+	set err [catch { tDOM::xmlReadFile $file } xml opts]
 	if { !$err } {
-	    set err [catch { dom parse $xml } doc]
+	    set err [catch { dom parse $xml } doc opts]
 	    if { !$err } {
 		set root [$doc documentElement]
 		set domNode [$root selectNodes "pref\[@n=[xpath_str $valueNameF]\]"]
@@ -2940,6 +3132,9 @@ proc cu::get_program_preferences { args } {
 		    set data [$domNode text]
 		}
 	    }
+	}
+	if { $err && $debug } {
+	    puts [dict get $opts -errorinfo]
 	}
     }
     return $data
@@ -3197,29 +3392,71 @@ proc cu::ps { args } {
 
     if { $::tcl_platform(platform) eq "windows" } {
 	package require compass_utils::c
-	return [cu::_ps_win {*}$args]
+	set ps_args ""
+	foreach i $args {
+	    if { $i eq "" } { continue }
+	    if { ![regexp {^\*} $i] } {
+		set i "*$i"
+	    }
+	    if { ![regexp {\*$} $i] } {
+		set i "$i*"
+	    }
+	    lappend ps_args $i
+	}
+	set ret [cu::_ps_win {*}$ps_args]
+	catch { package require twapi }
+	set retret ""
+	foreach i $ret {
+	    lassign $i cmd pid
+	    if { [info command ::twapi::get_process_info] ne "" } {
+		set d [twapi::get_process_info $pid -createtime -privilegedtime -workingset]
+		set stime [clock format [twapi::large_system_time_to_secs [dict get $d -createtime]] \
+		        -format "%H:%M:%S"]
+		set cputime [clock format [twapi::large_system_time_to_secs \
+		            [dict get $d -privilegedtime]] -format "%H:%M:%S" -timezone :UTC]
+		set size [expr {[dict get $d -workingset]/1024}]
+		set i [list $cmd $pid $stime $cputime $size]
+	    }
+	    lappend retret $i
+	}
+	return $retret
     } else {
 	# does not do exactly the same than in Windows
 	#set err [catch { exec pgrep -l -f [lindex $args 0] } ret]
 	#set retList  [split $ret \n]
 	lassign $args pattern
 	if { $pattern eq "" } {
-	    set err [catch { exec ps -u $::env(USER) --no-headers -o pid,stime,time,size,cmd } ret]
+	    set err [catch { exec ps -u $::env(USER) --no-headers -o pid,stime,time,pcpu,size,cmd } ret]
+	} elseif { [string is integer -strict $pattern] } {
+	    set err [catch { exec ps --pid $pattern --no-headers -o pid,stime,time,pcpu,size,cmd } ret]
 	} else {
-	    set err [catch { exec ps -u $::env(USER) --no-headers -o pid,stime,time,size,cmd | grep -i $pattern } ret]
+	    set err [catch { exec ps -u $::env(USER) --no-headers -o pid,stime,time,pcpu,size,cmd | grep -i $pattern } ret]
 	}        
 	if { $err } {
 	    return ""
 	} else {
 	    set retList ""
 	    foreach line [split $ret \n] {
-		regexp {(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(.*)} $line {} pid stime cputime size cmd
+		regexp {(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(.*)} $line {} pid stime cputime \
+		    pcpu size cmd
+		set pcpu [format "%02.0f%%" $pcpu]
 		if { $pattern ne "" && $cmd eq "grep -i $pattern" } { continue }
-		lappend retList [list $cmd $pid $stime $cputime $size]
+		lappend retList [list $cmd $pid $stime "$cputime ($pcpu)" $size]
 	    }
 	    return $retList
 	}
     }
+}
+
+proc cu::ps_mem { pid } {
+    set ret [cu::ps $pid]
+    if { [llength $ret] == 0 } {
+	error "error: process $pid does not exist"
+    } elseif { [llength $ret] > 1 } {
+	error "error: process $pid returns this: $ret"
+    }
+    lassign [lindex $ret 0] cmd pid stime cputime size
+    return $size
 }
 
 ################################################################################

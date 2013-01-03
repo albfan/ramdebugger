@@ -32,7 +32,7 @@ if { 0 } {
 #
 # set ndoc [formulae::give_updated_tree $key]
 #
-# set ndoc [formulae::create_reportD -lognoter_db db -page page $key root]
+# set ndoc [formulae::create_reportD -lognoter_db db -page page $key root $current_values $webserver]
 #
 # set dict [formulae::give_params_dict $key]
 #
@@ -1001,12 +1001,12 @@ proc formulae::edit_properties_update { args } {
     set c [$w give_uservar_value print_name_widget]
     $c ClearText
     if { [$w give_uservar_value prop_type] eq "condition" } {
-	$c configure -state disabled -bg grey90
+	$c configure -state disabled -background grey90
 	foreach label [_find_neighbor_labels_buttons $c] {
 	    $label state disabled
 	}
     } else {
-	$c configure -state normal -bg white
+	$c configure -state normal -background white
 	if { $field_name ne "" } {
 	    $c ApplyXMLdataAsText <lognoter>[node_pn_xml $node]</lognoter>
 	}
@@ -4156,7 +4156,7 @@ snit::widgetadaptor snit_notebook {
 	    set columns [list [list 10 [_ Pages] left imagetext 1]]
 
 	    ttk::frame $win.f.paned.f1 -style WNtoolbar -padding "2 0"
-	    ttk::label $win.f.paned.f1.l1 -text [_ "Form pages"] -style WNlabel
+	    ttk::label $win.f.paned.f1.l1 -text [_ "Form pages"] -style WNbutton
 	    tooltip::tooltip $win.f.paned.f1.l1 [_ "Select the form page"]
 
 	    set toctree [fulltktree $win.f.paned.f1.tree -width 120 \
@@ -4595,15 +4595,18 @@ snit::widgetadaptor snit_notebook {
 		    -command [mymethod view_database_list hide_list]
 
 		$win.f.db.more.m add separator
+		$win.f.db.more.m add command -label [_ "Clear form"] -command [mymethod \
+		        manage_database clear_form]
+
 		$win.f.db.more.m add command -label [_ "Delete entries"] \
 		    -image [cu::get_icon remove-16] -compound left \
 		    -command [mymethod manage_database delete in_menu]
 		
 		if { $has_unique_name } {
 		    frame $win.f.db.name -bd 0
-		    ttk::label $win.f.db.name.l -text [_ "Name"]: -style WNlabel
+		    ttk::label $win.f.db.name.l -text [_ "Name"]: -background #a0a2a0
 		    cu::combobox $win.f.db.name.cb -textvariable [myvar current_id_name] \
-		        -valuesvariable [myvar current_id_values]
+		        -valuesvariable [myvar current_id_values] 
 		    
 		    bind $win.f.db.name.cb <Control-s> [mymethod manage_database search_any]
 		    bind $win.f.db.name.cb <Return> [mymethod manage_database create]
@@ -5411,6 +5414,9 @@ snit::widgetadaptor snit_notebook {
 		    focus $focus
 		}
 	    }
+	    clear_form {
+		return [uplevel #0 $options(-fill_form_callback) [list 0 "" ""]]
+	    }
 	    fill_entries_default {
 		if { ![info exists db_list] } { return }
 		if { [llength [$db_list item children 0]] == 0 } { return }
@@ -5695,7 +5701,7 @@ snit::widgetadaptor snit_notebook {
 		}
 	    }
 	    update_idle {
-		if { [info exist db_update_idle] } { after cancel $db_update_idle }
+		if { [info exists db_update_idle] } { after cancel $db_update_idle }
 		set db_update_idle [after 100 [list catch [mymethod manage_database update]]]
 	    }
 	    update {
@@ -5721,7 +5727,7 @@ snit::widgetadaptor snit_notebook {
 		if { $see_entries ne "" } {
 		    set fill_database_entries $see_entries
 		}
-		if { [info exist db_update_idle] } {
+		if { [info exists db_update_idle] } {
 		    after cancel $db_update_idle
 		    unset db_update_idle
 		}
@@ -5953,6 +5959,8 @@ snit::widgetadaptor snit_notebook {
 		
 		$menu add command -label [_ "Fill form"] -command [mymethod \
 		        manage_database fill_entries]
+		$menu add command -label [_ "Clear form"] -command [mymethod \
+		        manage_database clear_form]
 		$menu add command -label [_ "Search"] -command [mymethod \
 		        manage_database search_any]
 		$menu add checkbutton -label [_ "View dates"] -variable \
@@ -6094,7 +6102,7 @@ snit::widgetadaptor snit_notebook {
 		set f [$w giveframe]
 		package require wordwidget_snit
 		wordwidget_snit $f.t -width 45 -height 15  -readonly 1
-		catch { $f.t configure -bg [$f cget -bg] }
+		catch { $f.t configure -background [$f cget -background] }
 		pack $f.t -fill both -expand 1
 		
 		set xml "<lognoter>"
@@ -6310,6 +6318,7 @@ proc formulae::_create_interp { key lognoter lognoter_db snit_notebook database 
 	interp alias $f_interp current "" formulae::identity $page
 	interp alias $f_interp give_tablename "" formulae::give_tablename $lognoter_db $snit_notebook $database $page
 	interp alias $f_interp update_database_table_xml "" formulae::create_update_database_table_xml $lognoter_db      
+	interp alias $f_interp exporttofile "" $lognoter_db exporttofile     
 	
 	if { $snit_notebook ne "" } {
 	    interp alias $f_interp refresh "" $snit_notebook manage_database update
@@ -6712,19 +6721,20 @@ proc formulae::ask_for_period_create_table_update { w wtable } {
     set sql_whereG ""
     
     if { $datename ne "" } {
-	append sql_whereG " where $datename >= [$lognoter_db sql vs0 $start_date] and 
+	append sql_whereG "$datename >= [$lognoter_db sql vs0 $start_date] and 
 	    $datename <= [$lognoter_db sql vs0 $end_date]"
     }
     if { $sql_where ne "" } {
 	if { $sql_whereG ne "" } {
-	    append sql_whereG " and"
+	    append sql_whereG " and "
 	    if { [regexp {\mor\M} $sql_where] && ![regexp {^\s*[(].*[)]\s*$} $sql_where] } {
-		set sql_where "($sql_where)"
+		append sql_whereG "($sql_where)"
+	    } else {
+		append sql_whereG $sql_where
 	    }
 	} else {
-	    append sql_whereG " where"
+	    set sql_whereG $sql_where
 	}
-	append sql_whereG " $sql_where"
     }
     set idx 0
     foreach sel [list $sel1 $sel2] {
@@ -6734,11 +6744,44 @@ proc formulae::ask_for_period_create_table_update { w wtable } {
 	    if { !$err && [string tolower $cmd0] in [list "union" "union all"] } {
 		set cmdList ""
 		foreach i [lrange $sel 1 end] {
-		    lappend cmdList "$i $sql_whereG"
+		    set groupby ""
+		    regexp {(?i)(.*)\m(group\s+by\M.*)} $sel {} sel groupby
+		    if { $sql_whereG ne "" } {
+		        set sql_where ""
+		        regexp {(?i)(.*)\m(where\M.*)} $sel {} sel sql_where
+		        set cmd_i "$sel"
+		        if { $sql_where ne "" } {
+		            append cmd_i " $sql_where and ($sql_whereG)"
+		        } else {
+		            append cmd_i " where $sql_whereG"
+		        }
+		    } else {
+		        set cmd_i "$sel"   
+		    }
+		    if { $groupby ne "" } {
+		        append cmd_i " $groupby"
+		    }
+		    lappend cmdList $cmd_i
 		}
 		set cmd [join $cmdList " $cmd0 "]
 	    } else {
-		set cmd "$sel $sql_whereG"
+		set groupby ""
+		regexp {(?i)(.*)\m(group\s+by\M.*)} $sel {} sel groupby
+		if { $sql_whereG ne "" } {
+		    set sql_where ""
+		    regexp {(?i)(.*)\m(where\M.*)} $sel {} sel sql_where
+		    set cmd "$sel"
+		    if { $sql_where ne "" } {
+		        append cmd " $sql_where and ($sql_whereG)"
+		    } else {
+		        append cmd " where $sql_whereG"
+		    }
+		} else {
+		    set cmd "$sel"   
+		}
+		if { $groupby ne "" } {
+		    append cmd " $groupby"
+		}
 	    }
 	    if { $orderby ne "" } {
 		append cmd " order by $orderby"
@@ -6888,7 +6931,7 @@ proc formulae::ask_for_period_set_full_years_range { w } {
 proc formulae::ask_for_period_update_columns { w wtable } {
     
     lassign [$w give_uservar_value table_definition] - fields - - - - -
-    set columns ""
+    lassign "" columns sort_type_cols
     foreach i $fields {
 	if { $i in "id Id Entry" } {
 	    set width 6
@@ -6897,9 +6940,17 @@ proc formulae::ask_for_period_update_columns { w wtable } {
 	} else {
 	    set width 10
 	}
-	lappend columns [list $width $i left text 1]
+	if { $i in [list Debit Credit] } {
+	    set justify right
+	    set sort_type real
+	} else {
+	    set justify left
+	    set sort_type dictionary
+	}
+	lappend columns [list $width $i $justify text 1]
+	lappend sort_type_cols $sort_type
     }
-    $wtable configure -columns $columns
+    $wtable configure -columns $columns -sort_type_cols $sort_type_cols
     $wtable item delete all
 }
 
@@ -7016,57 +7067,61 @@ proc formulae::query_manager { key } {
 	lappend table_definitionList [list Compasser>$name $fields $datename $table $sel1 $sel2 $orderby]
     }
     set tables [$db sql table_names]
-#     foreach year [rangeF 2001 2007] {
-#         set tables_year [lsearch -inline -all $tables accounting_operations_register_${year}_gestidret*]
-#         if { [llength $tables_year] == 0 } {
-#             set tables_year [lsearch -inline -all $tables accounting_operations_register_${year}]
-#         }
-#         set table [lindex [lsort -dictionary $tables_year] end]
-#         if { $table ni $tables } {
-#             continue
-#             #error "error finding table op for $year"
-#         }
-#         regsub -all {operations} $table {accounts} table_acc
-#         if { $table_acc ni $tables } {
-#             set table_acc "accounting_accounts_register"
-#         }
-#         set table_gen accounting_general_register_$year
-#         if { $table_gen ni $tables } {
-#             set table_gen accounting_general_register
-#         }
-#         set name "$year>Accounts general ($table_gen)"
-#         set fields [list number name]
-#         set sel1 "select [$db sql fs $fields] from [$db sql fs0 $table_gen]"
-#         set sel2 ""
-#         set datename ""
-#         set orderby [$db sql fs0 id]
-#         lappend table_definitionList [list $name $fields $datename $table_gen $sel1 $sel2 $orderby]
-# 
-#         set name "$year>Accounts ($table_acc)"
-#         set fields [list number name]
-#         set sel1 "select [$db sql fs $fields] from [$db sql fs0 $table_acc]"
-#         set sel2 ""
-#         set datename ""
-#         set orderby [$db sql fs0 id]
-#         lappend table_definitionList [list $name $fields $datename $table_acc $sel1 $sel2 $orderby]
-# 
-#         set name "$year>Accounting ($table)"
-#         set fields1 [list session_id session_date account_1 amount_euros_1 amount_euros_2 concept]
-#         set fields_name1 [list Entry Date "Account number" Debit Credit Concept]
-#         set fields2 [list name]
-#         set fields_name2 [list Name]
-#         set fields [concat $fields_name1 $fields_name2]
-#         set sel1 "select [$db sql fs_prefix op $fields1 $fields_name1],[$db sql fs_prefix acc $fields2 $fields_name2] from
-#             [$db sql fs0 $table] as op left join [$db sql fs0 $table_acc] as acc 
-#             on [$db sql fs0_prefix op account_1]=[$db sql fs0_prefix acc "number"] "
-#         set sel2 "select '','','',round(sum(op.amount_euros_1),2),round(sum(op.amount_euros_2),2),
-#             round(sum(op.amount_euros_1-op.amount_euros_2),2),'' from
-#             [$db sql fs0 $table] as op left join [$db sql fs0 $table_acc] as acc 
-#             on [$db sql fs0_prefix op "account_1"]=[$db sql fs0_prefix acc "number"] "
-#         set datename session_date
-#         set orderby [$db sql fs0_prefix op id]
-#         lappend table_definitionList [list $name $fields $datename $table $sel1 $sel2 $orderby]
-#     }
+    
+    if 0 {
+	# now it is deactivated because we have copied accounting data of older years to lognoter tables
+    foreach year [rangeF 2001 2007] {
+	set tables_year [lsearch -inline -all $tables accounting_operations_register_${year}_gestidret*]
+	if { [llength $tables_year] == 0 } {
+	    set tables_year [lsearch -inline -all $tables accounting_operations_register_${year}]
+	}
+	set table [lindex [lsort -dictionary $tables_year] end]
+	if { $table ni $tables } {
+	    continue
+	    #error "error finding table op for $year"
+	}
+	regsub -all {operations} $table {accounts} table_acc
+	if { $table_acc ni $tables } {
+	    set table_acc "accounting_accounts_register"
+	}
+	set table_gen accounting_general_register_$year
+	if { $table_gen ni $tables } {
+	    set table_gen accounting_general_register
+	}
+	set name "$year>Accounts general ($table_gen)"
+	set fields [list number name]
+	set sel1 "select [$db sql fs $fields] from [$db sql fs0 $table_gen]"
+	set sel2 ""
+	set datename ""
+	set orderby [$db sql fs0 id]
+	lappend table_definitionList [list $name $fields $datename $table_gen $sel1 $sel2 $orderby]
+
+	set name "$year>Accounts ($table_acc)"
+	set fields [list number name]
+	set sel1 "select [$db sql fs $fields] from [$db sql fs0 $table_acc]"
+	set sel2 ""
+	set datename ""
+	set orderby [$db sql fs0 id]
+	lappend table_definitionList [list $name $fields $datename $table_acc $sel1 $sel2 $orderby]
+
+	set name "$year>Accounting ($table)"
+	set fields1 [list session_id session_date account_1 amount_euros_1 amount_euros_2 concept]
+	set fields_name1 [list Entry Date "Account number" Debit Credit Concept]
+	set fields2 [list name]
+	set fields_name2 [list Name]
+	set fields [concat $fields_name1 $fields_name2]
+	set sel1 "select [$db sql fs_prefix op $fields1 $fields_name1],[$db sql fs_prefix acc $fields2 $fields_name2] from
+	    [$db sql fs0 $table] as op left join [$db sql fs0 $table_acc] as acc 
+	    on [$db sql fs0_prefix op account_1]=[$db sql fs0_prefix acc "number"] "
+	set sel2 "select '','','',round(sum(op.amount_euros_1),2),round(sum(op.amount_euros_2),2),
+	    round(sum(op.amount_euros_1-op.amount_euros_2),2),'' from
+	    [$db sql fs0 $table] as op left join [$db sql fs0 $table_acc] as acc 
+	    on [$db sql fs0_prefix op "account_1"]=[$db sql fs0_prefix acc "number"] "
+	set datename session_date
+	set orderby [$db sql fs0_prefix op id]
+	lappend table_definitionList [list $name $fields $datename $table $sel1 $sel2 $orderby]
+	}
+    }
     lassign "" acc_selList tableList
 
     foreach year [rangeF 2001 2011] {
@@ -7108,6 +7163,46 @@ proc formulae::query_manager { key } {
 	    on [$db sql fs0_prefix op "Account number"]=[$db sql fs0_prefix acc "Number"] "
 	set datename Date
 	set orderby [$db sql fs0_prefix op id]
+	lappend table_definitionList [list $name $fields $datename $table $sel1 $sel2 $orderby]
+	lappend acc_selList $sel1
+	lappend tableList $table
+	
+	set name "$year>Accounting balance"
+	set table [$db default_table_for_page "$page0>accounting data"]
+	set table_acc [$db default_table_for_page "$page0>accounts"]
+	set fields [list "Account number" Debit Name]
+
+	set sel1 "select [$db sql fs0_prefix op "Account number"],round(sum(op.Debit-op.Credit),2),
+	    [$db sql fs0_prefix acc Name] from
+	    [$db sql fs0 $table] as op left join [$db sql fs0 $table_acc] as acc 
+	    on [$db sql fs0_prefix op "Account number"]=[$db sql fs0_prefix acc "Number"] 
+	    where ([$db sql fs0_prefix op "Origin type"]!=[$db sql vs0 "accounting_end"] and
+	    [$db sql fs0_prefix op "Origin type"]!=[$db sql vs0 "accounting_restatement"])
+	    group by [$db sql fs0_prefix op "Account number"] "
+	set sel2 "select '',round(sum(op.Debit-op.Credit),2),'','','' from
+	    [$db sql fs0 $table] as op "
+	set datename Date
+	set orderby [$db sql fs0_prefix op "Account number"]
+	lappend table_definitionList [list $name $fields $datename $table $sel1 $sel2 $orderby]
+	lappend acc_selList $sel1
+	lappend tableList $table
+	
+	set name "$year>Accounting balance3"
+	set table [$db default_table_for_page "$page0>accounting data"]
+	set table_acc [$db default_table_for_page "$page0>accounts"]
+	set fields [list "Account number" Debit Name]
+
+	set sel1 "select substr(op.\"Account number\",1,3) as accn,round(sum(op.Debit-op.Credit),2),
+	    [$db sql fs0_prefix acc Name] from
+	    [$db sql fs0 $table] as op left join [$db sql fs0 $table_acc] as acc 
+	    on substr(op.\"Account number\",1,3)=[$db sql fs0_prefix acc "Number"]
+	    where ([$db sql fs0_prefix op "Origin type"]!=[$db sql vs0 "accounting_end"] and
+	    [$db sql fs0_prefix op "Origin type"]!=[$db sql vs0 "accounting_restatement"])
+	    group by accn "
+	set sel2 "select '',round(sum(op.Debit-op.Credit),2),'','','' from
+	    [$db sql fs0 $table] as op"
+	set datename Date
+	set orderby "substr(op.\"Account number\",1,3)"
 	lappend table_definitionList [list $name $fields $datename $table $sel1 $sel2 $orderby]
 	lappend acc_selList $sel1
 	lappend tableList $table
@@ -7489,8 +7584,9 @@ proc formulae::destroy_window { key } {
     set doc [dict get $values $key doc]
     set interp [dict get $values $key interp]
 
-    if { $doc ne "" } { $doc delete }
-    
+    if { $doc ne "" && [dict_getd $values $key delete_dom_on_destroy 1] } {
+	$doc delete
+    }
     check_unconnect_ramdebugger $key
 
     interp delete $interp
@@ -7540,6 +7636,7 @@ proc formulae::create_windowD { args } {
 	{ -tabstyle arrows|arrows_small|notebook|left_tree|right_tree|tree arrows }
 	{ -update_callback callback "" }
 	{ -destroy_callback callback "" }
+	{ -delete_dom_on_destroy boolean 1 }
 	{ -state normal|disabled normal }
 	{ -lognoter_db db "" }
 	{ -lognoter db "" }
@@ -7596,6 +7693,7 @@ proc formulae::create_windowD { args } {
     foreach "n v" [list doc $new_doc window_parent $wp update_stack ""  \
 	    svg_stack "" uvalues_moredata "" nicer_name "" tabstyle $tabstyle \
 	    update_callback $update_callback destroy_callback $destroy_callback \
+	    delete_dom_on_destroy $delete_dom_on_destroy \
 	    lognoter_db $lognoter_db lognoter $lognoter database_default_table \
 	    $database_default_table state $state maintain_grid $maintain_grid \
 	    showhidden $showhidden notes_widgets $notes_widgets \
@@ -7642,6 +7740,7 @@ proc formulae::create_windowD_do { args } {
     variable values
     variable values_default
     variable uvalues
+    variable uvalues_initial
     variable current_set
 
     set optional {
@@ -8093,7 +8192,7 @@ proc formulae::create_windowD_do { args } {
 		    package require xml2pdf
 		    ttk::panedwindow $l.p -orient horizontal
 		    $l.p add [frame $l.p.f1]
-		    canvas $l.p.c -bg white
+		    canvas $l.p.c -background white
 		    set svg2draw [svg2draw %AUTO% -destroy_with_canvas 1 -canvas $l.p.c]
 		    set svg_stack [dict get $values $key svg_stack]
 		    lappend svg_stack $svg2draw
@@ -8151,6 +8250,11 @@ proc formulae::create_windowD_do { args } {
     
     #after idle [namespace code [list _check_paned_size $wp.n]]
     
+    foreach "n v" [array get uvalues "$key,*"] {
+	set uvalues_initial($n) $v
+    }
+    dict set values $key uvalues_moredata_initial [dict get $values $key uvalues_moredata]
+
     if { [dict get $values $key state] eq "disabled" } {    
 	$wp.n manage_database fill_entries_default
     }
@@ -9096,7 +9200,7 @@ proc formulae::process_window_container { key w containerNode numContainer } {
 		}
 		set wi1_end $max_w
 	    }
-	    if { [$node @location] eq "same_menu" && [llength $wi2] == 1 && [llength $wi1] &&
+	    if { [$node @location ""] eq "same_menu" && [llength $wi2] == 1 && [llength $wi1] &&
 		[winfo class $wi1_end] in "TButton TMenubutton" && [winfo class $wi2] eq "TButton" } {
 		lassign "" conf1 conf1b conf2
 		if { [winfo class $wi1_end] eq "TButton" } {
@@ -9278,6 +9382,7 @@ proc formulae::check_container_condition { name condition nb tab key } {
 	    $nb tab $tab -state normal
 	}
     }
+    
     if { $err } {
 	regsub {\s*condition error:.*$} [tooltip::tooltip $nb] {} txt
 	if { $txt ne "" } { append txt "\n" }
@@ -10564,13 +10669,19 @@ proc formulae::_are_fields_equal { f1 f2 } {
 proc formulae::fill_form { key check_has_changes input_values input_values_more } {
     variable values
     variable uvalues
+    variable uvalues_initial
 	
     set interp [dict get $values $key interp]
 
     if { !$check_has_changes } {
 	dict set values $key disable_onchange 1
+	    
+	foreach "n v" [array get uvalues_initial "$key,*"] {
+	    set uvalues($n) $v
+	}
+	dict set values $key uvalues_moredata [dict get $values $key uvalues_moredata_initial]
     }
-    
+
     dict for "n v" $input_values_more {
 	if { $check_has_changes } {
 	    if { [dict_getd $values $key uvalues_moredata $n ""] ne $v } {
@@ -10673,7 +10784,7 @@ proc formulae::add_to_contextual { key menu } {
 	    }
 	}
 	if { [$node @pn ""] eq "" } { continue }
-	lappend m [list [node_pn $node] $image $cmd [$node @location ""] [$node @pns ""]]
+	lappend m [list [node_pn $node] $image $cmd [$node @location ""] [$node @pns ""] $node]
     }
     if { ![llength $m] } { return }
     
@@ -10683,8 +10794,11 @@ proc formulae::add_to_contextual { key menu } {
     set submenu ""
     set idx 0
     foreach i $m {
-	lassign $i txt img cmd location pns
+	lassign $i txt img cmd location pns node
 	
+	if { [llength [lsearch -all -index 0 -exact $m $txt]] > 1 } {
+	    set txt "[node_pn [$node parentNode]] - $txt"
+	}
 	if { $location eq "same_menu" } {
 	    if { $submenu eq "" } {
 		lassign $last_i last_txt last_img last_cmd last_location last_pns
@@ -10739,7 +10853,7 @@ proc formulae::window_actualize { args } {
     if { $conditions_window ne "" } {
 	set wp $conditions_window
 	destroy $wp.conditions_window
-	set w [toplevel $wp.conditions_window -bd 2 -relief raised -bg white]
+	set w [toplevel $wp.conditions_window -bd 2 -relief raised -background white]
 	wm overrideredirect $w 1
 	
 	wm withdraw $w
@@ -10853,6 +10967,7 @@ proc formulae::create_report { args } {
     $doc documentElement root
     return [create_reportD -lognoter_db $lognoter_db $key $root]
 }
+
 proc formulae::create_reportD { args } {
     variable values
     
@@ -10860,7 +10975,7 @@ proc formulae::create_reportD { args } {
 	{ -lognoter_db db "" }
 	{ -page page "" }
     }
-    set compulsory "key root"
+    set compulsory "key root current_user_values webserver"
     parse_args $optional $compulsory $args
 
     if { ![info exists values] } { set values "" }
@@ -10881,7 +10996,7 @@ proc formulae::create_reportD { args } {
     if { [$root @user_defined_print ""] ne "" } {
 	set err [catch { uplevel #0 [$root @user_defined_print] $key $lognoter_db [$root @database ""] } ret]
 	if { $err } {
-	    snit_messageBox -message $ret
+	    #snit_messageBox -message $ret
 	} else {
 	    set xml "<report version='1.0'>"
 	    append xml $ret
@@ -10956,9 +11071,14 @@ proc formulae::create_reportD { args } {
 	table {
 	    set print_table_type all
 	}
-    }    
+    }
+    
     if { $print_type ne "none" } {
-	report_loadcases $key $root $nroot $table $print_type
+	if { $current_user_values eq "" } {
+	    report_loadcases $key $root $nroot $table $print_type
+	} else {
+	    report_currentcase $key $root $nroot $current_user_values $print_type $webserver
+	}
     }
     if { $print_table_type ne "none" && $table ne "" } {
 	formulae::report_loadcases_table $key $root $nroot $table $print_table_type
@@ -10986,6 +11106,8 @@ proc formulae::check_state_condition { key node } {
 	    if { $err } { set  condition 1 }
 	} elseif { [string is boolean -strict $condition] } {
 	    # nothing
+	} elseif { [string equal $condition "hidden"] } {
+	    set condition 1
 	} else {
 	    error [_ "error in field '%s'. Condition not ok" [$node @n]]
 	}
@@ -11001,6 +11123,7 @@ proc formulae::process_container { key nnode containerNode } {
     set interp [dict get $values $key interp]
     
     foreach node [$containerNode selectNodes param|condition] {
+	if { [$node @field_type ""] eq "button" } { continue }
 	lassign "" txt txt_xml
 	if { [$node nodeName] eq "param" } {
 	    set txt "[node_pn $node]"
@@ -11101,23 +11224,40 @@ proc formulae::process_container { key nnode containerNode } {
 	    }
 	} else {
 	    set is_expression 0
-	    set err [catch { expr {[$node @value]*1.0} } v]
-	    if { $err } { set v [$node @value] }
+	    if { [$node @field_type ""] eq "numeric" } {
+	       set err [catch { expr {[$node @value]*1.0} } v]
+	       if { $err } { set v [$node @value] }
+	    } else {
+	       set v [$node @value]
+	    }
 	}
 	if { [$node nodeName] eq "param" } {
-	    $interp eval [list set ::[$node @n] $v]
-	    dict set values $key nicer_name [$node @n] [node_pn_xml $node]
-	    
-	    if { [string index $txt end] ne "=" } {
-		append txt "="
-		append txt_xml "="
-	    }
-	    append txt "[nicer_number $v]"
-	    append txt_xml "[nicer_number $v]"
-	    if { [$node hasAttribute units] } {
-		append txt " [nicer_units [$node @units]]"
-		append txt_xml " [nicer_units [$node @units]]"
-	    }
+	    if { [$node @field_type] ne "table" } {
+		$interp eval [list set ::[$node @n] $v]
+		dict set values $key nicer_name [$node @n] [node_pn_xml $node]
+		
+		if { [string index $txt end] ne "=" } {
+		    append txt " = "
+		    append txt_xml " = "
+		}
+		
+		if { [$node @field_type ""] eq "numeric" } {
+		    append txt "[nicer_number $v]"
+		    append txt_xml "[nicer_number $v]"
+		    if { [$node hasAttribute units] } {
+		        append txt " [nicer_units [$node @units]]"
+		        append txt_xml " [nicer_units [$node @units]]"
+		    }
+		} else {
+		    set v [string map {"C/" "C\\"} $v]
+		    append txt "$v"
+		    append txt_xml "$v"
+		    if { [$node hasAttribute units] } {
+		        append txt " [$node @units]"
+		        append txt_xml " [$node @units]"
+		    }
+		}
+	    }    
 	} else {
 	    if { [$node hasAttribute units] } {
 		append txt " [nicer_units [$node @units]]"
@@ -11221,7 +11361,100 @@ proc formulae::process_container { key nnode containerNode } {
 	    $entry setAttribute morerows 1
 	}
     }
+    if { [$containerNode hasAttribute field_type] } {
+	if { [$containerNode @field_type] eq "table" } {
+	    set list_values [$containerNode @value]
+	    report_param_table $key $containerNode $nnode $list_values
+	}
+    }    
 }
+
+proc formulae::report_param_table { key node nnode current_values  } {
+    variable values
+    
+    set interp [dict get $values $key interp]
+    
+    if { [$node hasAttribute columns] } {
+	set num_cols [llength [$node @columns]]
+    } else {
+	set num_cols 0
+    }
+    
+    if {$num_cols == "0"} { return }
+    
+    set num_rows [$node @height]
+    if { [llength $num_rows] == 0 } { return }
+
+    set xml "<table type=\"substitute\"><row>"
+    
+    foreach header_column [$node @columns] {
+	foreach "n v" $header_column {
+	    set pn $n
+	    set err [catch { dom parse <emphasis>$pn</emphasis> }]
+	    if { !$err } {
+	       #append xml "<entry><emphasis role='formula'>$pn"
+	       append xml "<entry>$pn"
+	    } else {
+	       append xml "<entry><emphasis role='formula'>[xml $pn]"
+	       append xml "<entry>[xml $pn]"
+	    }
+	    #append xml "</emphasis>"
+	    append xml "</entry>"
+	    break  
+	}       
+    }    
+    append xml </row>
+
+    foreach row_values $current_values {
+	append xml "<row>"
+	foreach value $row_values {
+	    set err [catch { expr {$value*1.0} } v]
+	    if { $err } { set v $value }
+	    append xml "<entry>"
+	    set err [catch { format %.4g $v } num]
+	    if { $err } { set num $v }
+	    if { [regexp {(.*)e([+-])(\d+)} $num {} p1 s exp] } {
+		if { $s eq "+" } { set s "" }
+		if { $exp != 0 } { set exp [string trimleft $exp 0] }
+		set num "$p1·10<sup>$s$exp</sup>"
+	    }
+	    if { [check_state_condition $key $node] } {
+		append xml "$num"
+	    }
+	    if {$num eq ""} {
+		append xml ".."
+	    }
+	    append xml "</entry>"
+	}
+	append xml "</row>"
+    }
+    
+    append xml "</table>"
+    
+    $nnode appendXML $xml
+    set stable [$nnode selectNodes {//table[@type="substitute"]}] 
+    foreach c_stable [$stable childNodes] {
+	$nnode insertBefore $c_stable $stable
+    }
+    $stable delete
+
+    set tableNode [$nnode selectNodes {child::*[last()]}]
+    set numEntries [$tableNode selectNodes {count(row[1]/entry)}]
+
+    set num_max 6
+    while { $numEntries > $num_max } {
+	set newtableNode [$nnode appendChildTag table [list attributes() cols_justify center]]
+	foreach rowNode [$tableNode selectNodes row] {
+	    set newrowNode [$newtableNode appendChildTag row]
+	    set xp [format {entry[position()>%d]} $num_max]
+	    foreach entryNode [$rowNode selectNodes $xp] {
+		$newrowNode appendChild $entryNode
+	    }
+	}
+	set tableNode $newtableNode
+	set numEntries [$tableNode selectNodes {count(row[1]/entry)}]
+    }
+}    
 
 proc formulae::report_loadcases_table { key root nroot table print_table_type } {
     variable values
@@ -11429,22 +11662,54 @@ proc formulae::report_loadcases { key root nroot table print_type } {
 		
 		set xp [format_xpath {(//param[@n=%s])[1]} $n]
 		set paramNode [$root selectNodes $xp]
-		if { $paramNode eq "" } { continue }
-		
-		set field_type [$paramNode @field_type ""]
-		if { $field_type eq "" && [regexp {\[e\s+(.*)\]} [$paramNode @value]] } {
-		    set field_type expression
-		}
-		if { $field_type ni [list expression "text expression" "formatted expression"] } {
-		    $paramNode setAttribute value $v
+		if { $paramNode ne "" } { 
+		    set field_type [$paramNode @field_type ""]
+		    if { $field_type eq "" && [regexp {\[e\s+(.*)\]} [$paramNode @value]] } {
+		       set field_type expression
+		    }
+		    if { $field_type ni [list expression "text expression" "formatted expression"] } {
+		       $paramNode setAttribute value $v
+		    }
+		} else {
+		    set xp [format_xpath {(container[@n=%s])[1]} $n]
+		    set tableNode [$root selectNodes $xp]
+		    if { $tableNode eq "" || [$tableNode @field_type ""] ne "table" } { continue }
+		    $tableNode setAttribute value $v
 		}
 	    }
 	}
 	if { $name ne "" } {
 	    set em [$nroot appendChildTag para emphasis]
 	    $em setAttribute role header
-	    $em appendChildText [_ "Set %s" $name]
+	    $em appendChildText [_ "SET %s" $name]
 	}
+	
+	foreach c_root [$root childNodes] {
+	    if { [$c_root nodeName] ne "container" } { continue }
+	    foreach cc_root [$c_root childNodes] {
+		if { [$cc_root nodeName] ne "param" } { continue }
+		if { [$cc_root @field_type] ne "table" } { continue }
+		set tableNode $cc_root
+		set newtableNode [dom parse <container></container>]
+		$newtableNode documentElement _newtableNode
+		foreach attr_name [$tableNode attributes] {
+		   set attr_value [$tableNode getAttribute $attr_name]
+		   $_newtableNode setAttribute $attr_name $attr_value
+		}
+		if { [[$tableNode parentNode] hasAttribute pn] } {
+		   $_newtableNode setAttribute pns [[$tableNode parentNode] @pn]
+		} else {
+		   $_newtableNode setAttribute pns [[$tableNode parentNode] @n]
+		}
+		if { [[$tableNode parentNode] hasAttribute location] } {
+		   $_newtableNode setAttribute location [[$tableNode parentNode] @location]
+		}
+		[$tableNode parentNode] setAttribute pns "no print title"
+		$root insertBefore $_newtableNode [$tableNode parentNode]
+		$tableNode delete
+	    }
+	}
+	
 	foreach node [$root selectNodes container] {
 	    switch [$node nodeName] {
 		container {
@@ -11453,26 +11718,66 @@ proc formulae::report_loadcases { key root nroot table print_type } {
 		            "" "" $key]
 		    if { !$cnd } { continue }
 		    
-		    set ns { svg http://www.w3.org/2000/svg }
-		    set svgNode [$node selectNodes -namespaces $ns svg:svg]
-		    if { $svgNode ne "" } {
-		        set m [$nroot appendChildTag mediaobject imageobject]
-		        $m appendXML [$svgNode asXML]
-		        set svgNode [$m selectNodes -namespaces $ns svg:svg]
-		        $svgNode setAttribute width 50% height 50%
+		    if { ![$node hasAttribute field_type] } {  
+		        set ns { svg http://www.w3.org/2000/svg }
+		        set svgNode [$node selectNodes -namespaces $ns svg:svg]
+		        if { $svgNode ne "" } {
+		            set m [$nroot appendChildTag mediaobject imageobject]
+		            $m appendXML [$svgNode asXML]
+		            set svgNode [$m selectNodes -namespaces $ns svg:svg]
+		            $svgNode setAttribute width 50% height 50%
+		        }
+		        if { ![$node hasAttribute pns] } {
+		            set em [$nroot appendChildTag para emphasis]
+		            $em setAttribute role header
+		            $em appendChildText [node_pn_xml $node] 
+		            if { [$node @help ""] ne "" } {
+		                set para [$nroot appendChildTag para]
+		                $para appendChildText [$node @help]
+		            }
+		        } elseif { [$node @pns] ne "no print title" } {
+		            set em [$nroot appendChildTag para emphasis]
+		            $em setAttribute role header
+		            $em appendChildText [node_pn_xml $node] 
+		            if { [$node @help ""] ne "" } {
+		                set para [$nroot appendChildTag para]
+		                $para appendChildText [$node @help]
+		            }
+		        }
+		        set tag [$nroot appendChildTag table]
+		        $tag setAttribute \
+		            relativesizes "0 65 35" tabstyle "" \
+		            cols_justify "left left"  
+		    } elseif { [$node @field_type] eq "table" } {
+		        if { ![[$node previousSibling] hasAttribute field_type] } {
+		            set em [$nroot appendChildTag para emphasis]
+		            $em setAttribute role header
+		            if { [$node hasAttribute pns] } {
+		                $em appendChildText [$node @pns]
+		            } else {
+		                $em appendChildText [node_pn_xml $node] 
+		            } 
+		            if { [$node @help ""] ne "" } {
+		                set para [$nroot appendChildTag para]
+		                $para appendChildText [$node @help]
+		            }
+		        } elseif { [[$node previousSibling] @field_type] ne "table" } {
+		            set em [$nroot appendChildTag para emphasis]
+		            $em setAttribute role header
+		            if { [$node hasAttribute pns] } {
+		                $em appendChildText [$node @pns]
+		            } else {
+		                $em appendChildText [node_pn_xml $node] 
+		            } 
+		            if { [$node @help ""] ne "" } {
+		                set para [$nroot appendChildTag para]
+		                $para appendChildText [$node @help]
+		            }
+		        }
+		        set tag [$nroot appendChildTag table]
+		        $tag setAttribute \
+		            cols_justify "center"
 		    }
-		    set em [$nroot appendChildTag para emphasis]
-		    $em setAttribute role header
-		    $em appendChildText [node_pn_xml $node]
-		    
-		    if { [$node @help ""] ne "" } {
-		        set para [$nroot appendChildTag para]
-		        $para appendChildText [$node @help]
-		    }
-		    set tag [$nroot appendChildTag table]
-		    $tag setAttribute \
-		        relativesizes "0 65 35" tabstyle "" \
-		        cols_justify "left left"
 		    process_container $key $tag $node
 		}
 	    }
@@ -11481,6 +11786,119 @@ proc formulae::report_loadcases { key root nroot table print_type } {
     }
 }
 
+proc formulae::report_currentcase { key root nroot current_user_values print_type webserver } {
+    
+    variable values
+    
+    foreach "n v" $current_user_values {
+       set xp [format_xpath {(//param[@n=%s])[1]} $n]
+       set paramNode [$root selectNodes $xp]
+       if { $paramNode eq "" } { continue }
+    
+       set field_type [$paramNode @field_type ""]
+       if { $field_type eq "" && [regexp {\[e\s+(.*)\]} [$paramNode @value]] } {
+	   set field_type expression
+       }
+       if { $field_type ni [list expression "text expression" "formatted expression"] } {
+	   $paramNode setAttribute value $v
+       }
+    }
+    
+    foreach tableNode [$root selectNodes {//param[@field_type="table"]}] {
+       if { [[$tableNode parentNode] nodeName] ne "container" } { continue }
+       set newtableNode [dom parse <container></container>]
+       $newtableNode documentElement _newtableNode
+       foreach attr_name [$tableNode attributes] {
+	   set attr_value [$tableNode getAttribute $attr_name]
+	   $_newtableNode setAttribute $attr_name $attr_value
+       }
+       if { [[$tableNode parentNode] hasAttribute pn] } {
+	   $_newtableNode setAttribute pns [[$tableNode parentNode] @pn]
+       } else {
+	   $_newtableNode setAttribute pns [[$tableNode parentNode] @n]
+       }
+       $_newtableNode setAttribute location [[$tableNode parentNode] @location ""]
+       [$tableNode parentNode] setAttribute pns "no print title"
+       $root insertBefore $_newtableNode [$tableNode parentNode]
+       $tableNode delete
+    }    
+
+    foreach node [$root selectNodes container] {
+	switch [$node nodeName] {
+	    container {
+		if { [$node @state normal] eq "hidden" } { continue }
+    
+		if { !$webserver } {
+		   set cnd [check_container_condition [$node @n] [$node @condition ""] \
+		            "" "" $key ]
+		   if { !$cnd } { continue }
+		}
+		   
+		if { ![$node hasAttribute field_type] } {  
+		    set ns { svg http://www.w3.org/2000/svg }
+		    set svgNode [$node selectNodes -namespaces $ns svg:svg]
+		    if { $svgNode ne "" } {
+		        set m [$nroot appendChildTag mediaobject imageobject]
+		        $m appendXML [$svgNode asXML]
+		        set svgNode [$m selectNodes -namespaces $ns svg:svg]
+		        $svgNode setAttribute width 50% height 50%
+		    }
+		    if { ![$node hasAttribute pns] } {
+		        set em [$nroot appendChildTag para emphasis]
+		        $em setAttribute role header
+		        $em appendChildText [node_pn_xml $node] 
+		        if { [$node @help ""] ne "" } {
+		            set para [$nroot appendChildTag para]
+		            $para appendChildText [$node @help]
+		        }
+		    } elseif { [$node @pns] ne "no print title" } {
+		        set em [$nroot appendChildTag para emphasis]
+		        $em setAttribute role header
+		        $em appendChildText [node_pn_xml $node] 
+		        if { [$node @help ""] ne "" } {
+		            set para [$nroot appendChildTag para]
+		            $para appendChildText [$node @help]
+		        }
+		    }
+		    set tag [$nroot appendChildTag table]
+		    $tag setAttribute \
+		       relativesizes "0 65 35" tabstyle "" \
+		       cols_justify "left left"  
+		} elseif { [$node @field_type] eq "table" } {
+		    if { ![[$node previousSibling] hasAttribute field_type] } {
+		        set em [$nroot appendChildTag para emphasis]
+		        $em setAttribute role header
+		        if { [$node hasAttribute pns] } {
+		            $em appendChildText [$node @pns]
+		        } else {
+		            $em appendChildText [node_pn_xml $node] 
+		        } 
+		        if { [$node @help ""] ne "" } {
+		            set para [$nroot appendChildTag para]
+		            $para appendChildText [$node @help]
+		        }
+		    } elseif { [[$node previousSibling] @field_type] ne "table" } {
+		        set em [$nroot appendChildTag para emphasis]
+		        $em setAttribute role header
+		        if { [$node hasAttribute pns] } {
+		            $em appendChildText [$node @pns]
+		        } else {
+		            $em appendChildText [node_pn_xml $node] 
+		        } 
+		        if { [$node @help ""] ne "" } {
+		            set para [$nroot appendChildTag para]
+		            $para appendChildText [$node @help]
+		        }
+		    } 
+		    set tag [$nroot appendChildTag table]
+		    $tag setAttribute \
+		        cols_justify "center"
+		}
+		process_container $key $tag $node
+	    }
+	}
+    }
+}    
 
 proc formulae::print_report { ndoc file format } {
 
@@ -11722,6 +12140,79 @@ proc formulae::give_file_from_form { args } {
     return [list $contents $cdate $mdate $content_type $size]
 }
 
+proc formulae::give_entries_from_database { args } {
+    variable values
+    set optional {
+	{ -lognoter_db db "" }
+	{ -page page "" }
+    }
+    set compulsory "doc edit_choose_name"
+    parse_args $optional $compulsory $args
+    
+    set root [$doc selectNodes //formulae]
+    
+    set table [$root @database]
+    set vList ""
+       
+    set cmd "select distinct [$lognoter_db sql fs0 $edit_choose_name] from [$lognoter_db sql fs0 $table] 
+	order by [$lognoter_db sql fs0 $edit_choose_name]"
+    foreach v [$lognoter_db sql sel $cmd] {
+       if { $v eq "" } { continue }
+       lappend vList $v
+    } 
+
+    return [list $vList]   
+}    
+
+proc formulae::load_values_from_database { args } {
+    variable values
+    set optional {
+	{ -lognoter_db db "" }
+    }
+    set compulsory "doc edit_choose_name edit_choose_value"
+    parse_args $optional $compulsory $args
+    
+    set root [$doc selectNodes //formulae]
+    set table [$root @database]
+    
+    set valuesList [$lognoter_db sql sel "select * from [$lognoter_db sql fs0 $table] where \
+	    [$lognoter_db sql fs0 $edit_choose_name]=[$lognoter_db sql vs0 $edit_choose_value]"]
+
+    set values [lrange $valuesList 3 end]
+    
+    foreach node [$doc selectNodes //param] {
+	if { [$node @field_type ""] eq "file" } { 
+	   set param_name [$node @n]
+	   set param_value [lindex $values 0]
+	   dict set loaded_values $param_name $param_value
+	   set values [lreplace $values 0 6] 
+	} else {
+	   set param_name [$node @n]
+	   set param_value [lindex $values 0]
+	   dict set loaded_values $param_name $param_value
+	   set values [lreplace $values 0 0]
+	}  
+    }
+
+    return [list $loaded_values]
+}
+
+proc formulae::delete_values_in_database { args } {
+    variable values
+    set optional {
+	{ -lognoter_db db "" }
+    }
+    set compulsory "doc edit_choose_name edit_choose_value"
+    parse_args $optional $compulsory $args
+    
+    set root [$doc selectNodes //formulae]
+    set table [$root @database]
+    foreach value [split $edit_choose_value ,] {
+	$lognoter_db sql sel "delete from [$lognoter_db sql fs0 $table] where \
+		[$lognoter_db sql fs0 $edit_choose_name]=[$lognoter_db sql vs0 $value]"
+    }
+}
+
 proc formulae::check_conditions { args } {
     variable values
     set optional {
@@ -11800,13 +12291,13 @@ proc formulae::check_conditions { args } {
 	  if { ![string match "!ERROR*" $v] } {
 	     set v_map [string map { 1 false 0 true } $v]
 	     dict set condition_values [$node @n] $v_map [$node @field_type]
-	     if { [$node @field_type ""] eq "file" } {
-		dict set condition_values combo_[$node @n] $v_map button 
+	     if { [$node @field_type ""] eq "file" || [$node @field_type ""] eq "date" } {
+		dict set condition_values button_[$node @n] $v_map button 
 	     } 
 	  } else {
 	     dict set condition_values [$node @n] true ""
-	     if { [$node @field_type ""] eq "file" } {
-		dict set condition_values combo_[$node @n] true button 
+	     if { [$node @field_type ""] eq "file" || [$node @field_type ""] eq "date" } {
+		dict set condition_values button_[$node @n] true button 
 	     }
 	  }
 	  if { [$node @n] ni $field_names } {
@@ -11936,8 +12427,7 @@ proc formulae::check_conditions { args } {
     return [list $condition_values]
 }
 
-proc formulae::print_formulas { key node value v } {
-    
+proc formulae::print_formulas { key node value v } {  
     if { [$node nodeName] ne "condition" } {
        if { [$node hasAttribute pn] && [$node @pn] ne "" } { 
 	  set txt "[$node @pn]"
@@ -11999,26 +12489,197 @@ proc formulae::print_formulas { key node value v } {
        return [list $txt]  
 }
 
-proc formulae::calc_and_update_tree { args } {
+proc formulae::button_respond { args } { 
     variable values
     set optional {
 	{ -lognoter_db db "" }
 	{ -page page "" }
     }
-    set compulsory "doc values_dict XSLTcmd"
+    set compulsory "doc button_name values_dict "
     parse_args $optional $compulsory $args
 
     set page_tcl_code ""
     foreach node [$doc selectNodes //tcl] {
 	append page_tcl_code "[$node text]\n"
     }
+    
+    set root [$doc selectNodes //formulae]    
+    
+    set key [unique_key]
+    #formulae::_create_interp { key lognoter lognoter_db snit_notebook database page }
+    set interp [_create_interp $key "" $lognoter_db "" [$root @database ""] $page]
+    
+    dict set values $key doc $doc
+    dict set values $key interp $interp
+    if { $lognoter_db ne "" } {
+	dict set values $key lognoter_db $lognoter_db
+    }    
+
+    set valuesP_dict ""
+    dict for "n v" $values_dict {
+	if { [regexp {^p_(.*)} $n {} n] } {
+	    $interp eval [list set ::$n $v]
+	    dict set valuesP_dict $n $v
+	}
+    }
+    
+    foreach node [$doc selectNodes //param] {
+	if { [$node @n ""] eq $button_name } {
+	   set command [$node @command]
+	} 
+    }
+
+    set err [catch { $interp eval $page_tcl_code }]
+    if {!$err} { $interp eval [list set ::current_values $valuesP_dict]}
+
+    if {!$err} {
+	set err [catch { lassign [$interp eval $command] file }]
+	if {$err} { set file "ERROR"}
+    } else {
+       set file "ERROR"
+    }
+
+    return [file tail $file] 
+}    
+
+proc formulae::give_exported_file { args } {
+    variable values
+    set optional {
+	{ -lognoter_db db "" }
+    }
+    set compulsory "file_name"
+    parse_args $optional $compulsory $args
+   
+    set temp_dir [cu::file::tempdir] 
+    set file [file join $temp_dir $file_name]  
+
+    set channel [open $file r]
+    fconfigure $channel -translation binary
+    set contents [read $channel]
+    close $channel
+
+    set now [clock seconds] 
+    set date [clock format $now -format "%Y-%m-%d"]
+    set time [clock format $now -format "%H:%M:%S"]
+    set format_now ""
+    lappend format_now $date $time
+    set cdate [date_timestampsql2tcl $format_now]
+    set mdate [date_timestampsql2tcl $format_now]
+    
+    set extension [string trimleft [file extension $file_name]]                
+    set size [string length $contents]
+
+    set map [list txt text-plain doc msword bin octet-stream exe octet-stream so octet-stream \
+	    dll octet-stream pdf pdf xls vnd.ms-excel ppt vnd.ms-powerpoint gtar x-gtar \
+	    hdf x-hdf js x-javascript tgz x-tar tar x-tar tcl x-tcl zip zip xhtml xhtml+xml \
+	    xht xhtml+xml xml xml xsl xml dtd xml-dtd xslt xslt+xml au basic snd basic \
+	    mid midi midi midi kar midi mpga mpeg mp2 mpeg mp3 mpeg aif x-aiff aiff x-aiff \
+	    aifc x-aiff m3u x-mpegurl ram x-pn-realaudio rm x-pn-realaudio ram x-realaudio \
+	    bmp bmp cgm cgm gif gif ief ief jpeg jpeg jpg jpeg jpe jpeg png png \
+	    svg svg+xml ico x-icon css css shtml html html html htm html asc plain \
+	    rtx richtext rtf rtf sgml sgml sgm sgml tsv tab-separated-values mpeg mpeg mpg mpeg \
+	    mpe mpeg qt quicktime mov quicktime avi x-msvideo movie x-sgi-movie wnl wnl]
+    
+    set subtype [string map -nocase $map $extension]
+    
+    set content_type "application/$subtype; charset=utf-8"
+
+    return [list $contents $cdate $mdate $content_type $size]
+}
+
+proc formulae::calc_and_update_tree { args } {
+    variable values
+    set optional {
+	{ -lognoter_db db "" }
+	{ -page page "" }
+    }
+    set compulsory "doc values_dict XSLTcmd user_with_rights"
+    parse_args $optional $compulsory $args
+
+    set page_tcl_code ""
+    foreach node [$doc selectNodes //tcl] {
+	append page_tcl_code "[$node text]\n"
+    }
+    
+    if { $values_dict eq "" } {
+       set is_response 0
+    } else {
+       set is_response 1
+    }
+
     set root [$doc selectNodes //formulae]
     
-    set edit_choose_name [dict_getd $values_dict edit_choose_name ""]
-    set edit_choose_value [dict_getd $values_dict edit_choose_value ""]
-    if { $edit_choose_value eq "" } {
-	set edit_choose_value [dict_getd $values_dict p_edit_choose_value ""]
+    if { $user_with_rights && [$root hasAttribute view_database_list] } {
+	if { [$root @view_database_list] eq "show_both" } {
+	    set show_both 1
+	} else {
+	    set show_both 0
+	}
+    } else {
+	set show_both 0
     }
+    
+    if { $show_both && $values_dict eq "" } {
+	set table [$root @database]
+	set vList ""
+	set link_root_name [$doc selectNodes //para//ulink]
+	if { $link_root_name ne "" && [$link_root_name hasAttribute url] } {
+	    set link_choose_name [$link_root_name @url]
+	    set llink_choose_name [split $link_choose_name &]
+	    foreach i $llink_choose_name {
+		if { [regexp "edit_choose_name" $i] } {
+		    set edit_choose_name [lindex [split $i =] end]
+		    break
+		}
+	    } 
+	}
+	if { [info exists edit_choose_name] } {
+	    if { $edit_choose_name ne "" } {
+		set show_database 1
+		set edit_choose_value ""
+	    } else {
+		set show_database 0
+	    }
+	} else {
+	    set show_database 0
+	}
+	if { $show_database } {
+	    set cmd "select distinct [$lognoter_db sql fs0 $edit_choose_name] from [$lognoter_db sql fs0 $table] 
+		order by [$lognoter_db sql fs0 $edit_choose_name]"
+	    foreach v [$lognoter_db sql sel $cmd] {
+		if { $v eq "" } { continue }
+		lappend vList $v
+	    } 
+	    set xml [format_xml {
+		<container n="select_field" pn="%s">
+		   <param n="$edit_choose_name" pn="%s" field_type="database" values="%s" value="%s"/>
+		</container>
+	    } [_ "Select field"] [_ "Select"] [join $vList ","] [lindex $vList 0]]
+	    $root appendXML $xml
+	}
+    } elseif { $show_both && [regexp new $values_dict] } {
+	set table [$root @database]
+	set vList ""
+	set edit_choose_name [dict_getd $values_dict edit_choose_name ""]
+	set edit_choose_value [dict_getd $values_dict p_$edit_choose_name ""]
+	set cmd "select distinct [$lognoter_db sql fs0 $edit_choose_name] from [$lognoter_db sql fs0 $table] 
+		order by [$lognoter_db sql fs0 $edit_choose_name]"
+	foreach v [$lognoter_db sql sel $cmd] {
+	   if { $v eq "" } { continue }
+	   lappend vList $v
+	} 
+	if { $edit_choose_value in $vList } {
+	   return [list "!ERROR $edit_choose_name $edit_choose_value already exists"]
+	} elseif { $edit_choose_value eq "" } {
+	   return [list "!ERROR You must select a name for this $edit_choose_name"]
+	}
+	set edit_choose_name ""
+	set edit_choose_value ""
+    } else {
+	set edit_choose_name [dict_getd $values_dict edit_choose_name ""]
+	set edit_choose_value [dict_getd $values_dict edit_choose_value ""]
+    } 
+
     if { [dict exists $values_dict edit_choose] } {
 	if { $edit_choose_name eq "" } {
 	    error "when using parameter 'edit_choose' it is necessary to use parameter 'edit_choose_name'"
@@ -12090,14 +12751,14 @@ proc formulae::calc_and_update_tree { args } {
 	dict set valuesP_dict $edit_choose_name $edit_choose_value
     }
     
-    set err [catch {
-	    $interp eval $page_tcl_code
-	}]
+    set err [catch {$interp eval $page_tcl_code}]
+    
 #     if { $err } {
 #         puts $::errorInfo
 #     }
 
     set has_errors 0
+    set error_description ""
     set field_names [list]
     
     if { [$root hasAttribute print_formulas] } {
@@ -12124,6 +12785,7 @@ proc formulae::calc_and_update_tree { args } {
 		set has_errors 1
 		$interp eval [list set has_errors 1]
 		set v "!ERROR ($v)"
+		lappend error_description $v
 	    } elseif { $err && [string match "*no such variable*" $v] } {
 		regexp {"(.*?)"} $v disabled_field
 		set disabled_field [string trim $disabled_field \"]
@@ -12147,7 +12809,17 @@ proc formulae::calc_and_update_tree { args } {
 		   } 
 		} 
 	    } else {
-		set v [$node @value]
+		if { $is_response && [$node @field_type ""] eq "options non-editable" } {
+		    set vs [$node @values ""]
+		    set valuesList [comma_field_to_list $vs]
+		    if { $valuesList eq "0 1" || $valuesList eq "1 0" } {
+		       set v 0
+		    } else {
+		       set v [$node @value]
+		    }
+		} else {
+		    set v [$node @value]
+		}
 	    }
 	    if { [lsearch [list "text"] [$node @field_type ""]] == -1 } {
 		set err [catch { expr {$v*1.0} } newvalue]
@@ -12232,6 +12904,48 @@ proc formulae::calc_and_update_tree { args } {
 		    set valuesP_dict [dict remove $valuesP_dict file_status_[$node @n]]
 		}
 		$interp eval [list set ::[$node @n] $filename]
+	    } 
+	    
+	    if { [$node @field_type ""] eq "table" } {
+		set columns [$node @columns ""]
+		set rows_num [$node @height ""]
+		set columns_num [llength $columns]
+		set lcolumn_names ""
+		set lcolumn_widths ""
+		set ltable_values ""
+		foreach c $columns {
+		    foreach "c_name c_len" $c {
+		       if { [regexp -indices "len" $c_len location] } {
+		           regexp -start [lindex $location 0] {[0-9]+} $c_len length   
+		           lappend lcolumn_names $c_name
+		           lappend lcolumn_widths $length
+		       }
+		    } 
+		}
+		set column_names [join $lcolumn_names ","]
+		set column_widths [join $lcolumn_widths ","]
+		set table_values [$node @value]
+		foreach row_values $table_values {
+		    foreach cell_value $row_values {
+		        if { $cell_value eq "" } {
+		           lappend ltable_values ""
+		        } else {
+		           lappend ltable_values $cell_value
+		        }
+		    }
+		} 
+		if { [llength $table_values] < $rows_num } {
+		    for {set j 1} {$j<=$columns_num} {incr j} {
+		        lappend ltable_values ""
+		    }
+		}
+		set table_values [join $ltable_values ","]
+		$node removeAttribute columns
+		$node removeAttribute value
+		$node setAttribute width $columns_num
+		$node setAttribute column_names $column_names
+		$node setAttribute column_widths $column_widths
+		set v $table_values
 	    } else {
 		$interp eval [list set ::[$node @n] $v]
 	    }
@@ -12253,6 +12967,7 @@ proc formulae::calc_and_update_tree { args } {
 		$node setAttribute value ""
 	    } elseif { [string match "formatted" [$node @field_type ""]] } {
 		if { ![string match "<wordwidget>*" $v] && ![string match "</wordwidget>" $v] } {
+		   $node setAttribute print $v
 		   set to_parse 1
 		   if { [string trim $v] eq "" } { set to_parse 0 }
 		   if { [string match "!ERROR*" $v] } {
@@ -12349,9 +13064,7 @@ proc formulae::calc_and_update_tree { args } {
 		} else {
 		   $node setAttribute condition false
 		}          
-	    } else {
-		$node setAttribute condition false
-	    }
+	    } 
 	} else {
 	    #when [$node nodeName] eq "condition"
 	    if { ![string match "!ERROR*" $v] } {
@@ -12403,8 +13116,13 @@ proc formulae::calc_and_update_tree { args } {
 	    }
 	}
     }
+
     interp delete $interp
     dict set values $key ""
+    
+    if { $has_errors } {
+       return [list $error_description]
+    }
 }
 
 ################################################################################
@@ -13002,7 +13720,7 @@ snit::widgetadaptor formulae::wizard {
 		set size [expr {[font actual $font -size]-1}]
 		set font [concat [font actual $font] [list -size $size]]
 		set bfont [concat [font actual $font] [list -size $size -weight bold]]
-		text $f.t -bg [$win.gr1 giveframe_background] -bd 0 -width 20 -height 3 \
+		text $f.t -background [$win.gr1 giveframe_background] -bd 0 -width 20 -height 3 \
 		    -wrap word -font $font
 		$f.t tag configure bold -font $bfont
 		$f.t insert end "[_ Note]: " bold \

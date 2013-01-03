@@ -253,7 +253,7 @@ proc RamDebugger::GetSelOrWordInIndex { args } {
 		if { [$text compare $idx1 >= end-1c] } { break }
 		set char [$text get $idx1]
 	    }
-	    if { ![regexp {[^()]*\([^)]+\)} $var] } {
+	    if { ![regexp {[^()]*\([^\)]+\)} $var] } {
 		set var [string trimright $var "()"]
 	    }
 	} else { set var "" }
@@ -340,7 +340,7 @@ proc RamDebugger::DisplayVarWindow { mainwindow { var "" } } {
 	set var [GetSelOrWordInIndex insert]
     }
 
-    set w [dialogwin_snit $text.%AUTO% -title [_ "View expression or variable"] -okname \
+    set w [dialogwin_snit $text.%AUTO% -title [_ "View expression or variable"] -class RamDebugger -okname \
 	    [_ Eval] -cancelname [_ Close] -grab 0 -callback [list RamDebugger::DisplayVarWindowDo]]
     set f [$w giveframe]
  
@@ -376,7 +376,7 @@ proc RamDebugger::DisplayVarWindow { mainwindow { var "" } } {
 
     $w set_uservar_value combo [ttk::combobox $f.e1 -textvariable [$w give_uservar expression] \
 	-values $options(old_expressions)]
-    
+
     cu::text_entry_bindings $f.e1
 
     set c { %W icursor [expr { [%W index "insert"]-1}] }
@@ -459,7 +459,7 @@ proc RamDebugger::DisplayBreakpointsWindow {} {
     variable breakpoints
     variable currentfile
     
-    set w [dialogwin_snit $text.%AUTO% -title [_ "Breakpoints window"] -okname \
+    set w [dialogwin_snit $text.%AUTO% -title [_ "Breakpoints window"] -class RamDebugger -okname \
 	    [_ "Apply Cond"] -cancelname [_ Close] -morebuttons [list \
 		[_ Delete] [_ "Delete all"] [_ View] [_ En/Dis] [_ Trace]]]
     set f [$w giveframe]
@@ -474,7 +474,7 @@ proc RamDebugger::DisplayBreakpointsWindow {} {
     ttk::entry $f.e1 -textvariable [$w give_uservar cond ""] -width 80
     
     cu::text_entry_bindings $f.e1
-
+    
     set columns [list \
 	    [list 6 [_ "Num"] left text 0] \
 	    [list 6 [_ "En/dis"] left text 0] \
@@ -845,7 +845,7 @@ proc RamDebugger::PreferencesWindow {} {
     variable options_def
     variable iswince
     
-    set w [dialogwin_snit $text.%AUTO% -title [_ "Preferences window"] -morebuttons \
+    set w [dialogwin_snit $text.%AUTO% -title [_ "Preferences window"] -class RamDebugger -morebuttons \
 	    [list [_ Apply] [_ Defaults]]]
     set f [$w giveframe]
 
@@ -1253,7 +1253,7 @@ proc RamDebugger::PreferencesWindow {} {
 		    }
 		    set options(executable_dirs) [$w give_uservar_value executable_dirs]
 		    UpdateExecDirs
-		    RamDebugger::CVS::ManageAutoSave
+		    RamDebugger::VCS::ManageAutoSave
 		    if { $options(CompileFastInstrumenter) == 1 } {
 		        Instrumenter::TryCompileFastInstrumenter 1
 		    }
@@ -1314,7 +1314,7 @@ proc RamDebugger::PreferencesWindow {} {
 		foreach i [array names options_def extensions,*] {
 		    set options($i) $options_def($i)
 		}
-		RamDebugger::CVS::ManageAutoSave
+		RamDebugger::VCS::ManageAutoSave
 	    }
 	}
 	set action [$w waitforwindow]
@@ -1341,7 +1341,7 @@ proc RamDebugger::DisplayTimesWindowReport { wp } {
     
     set w $wp.report
     destroy $w
-    dialogwin_snit $w -title [_ "Timing report"] -okname -]
+    dialogwin_snit $w -title [_ "Timing report"] -class RamDebugger -okname -]
     set f [$w giveframe]
 
     ttk::combobox $f.cb1 -textvariable [$w give_uservar units sec] -state readonly -width 10 \
@@ -1522,7 +1522,7 @@ proc RamDebugger::DisplayTimesWindow {} {
     variable text
     variable TimeMeasureData
     
-    set w [dialogwin_snit $text.%AUTO% -title [_ "Timing control"] -okname \
+    set w [dialogwin_snit $text.%AUTO% -title [_ "Timing control"] -class RamDebugger -okname \
 	    [_ Start] -cancelname [_ Close] -morebuttons [list [_ "Stop"] [_ "Report"]] \
 	    -grab 0 -callback [list RamDebugger::DisplayTimesWindowDo]]
     set f [$w giveframe]
@@ -1656,7 +1656,7 @@ proc RamDebugger::AboutWindow {} {
     set par [winfo toplevel $text]
     set w $par.about
     destroy $w
-    toplevel $w
+    toplevel $w -class RamDebugger
     wm protocol $w WM_DELETE_WINDOW {
 	  # nothing
     }
@@ -1813,7 +1813,7 @@ proc RamDebugger::GotoLine {} {
 	set active_text $text_secondary
     } else { set active_text $text }
 
-    set w [dialogwin_snit $active_text._ask -title [_ "Goto line"]]
+    set w [dialogwin_snit $active_text._ask -title [_ "Goto line"] -class RamDebugger]
     set f [$w giveframe]
 
     ttk::label $f.l -text [_ "Go to line:"]
@@ -1922,7 +1922,7 @@ proc RamDebugger::DebugCurrentFileArgsWindow {} {
 	lappend tcl_or_tks $tcl_or_tk_in
     }
     
-    set w [dialogwin_snit $text._ask -title [_ "TCL Execution arguments"]]
+    set w [dialogwin_snit $text._ask -title [_ "TCL Execution arguments"] -class RamDebugger]
     set f [$text._ask giveframe]
 
     ttk::label $f.l -text [_ "Current file to debug:"]
@@ -2279,7 +2279,7 @@ proc RamDebugger::SearchInFiles {} {
 
     set txt [GetSelOrWordInIndex insert]
     
-    set w [dialogwin_snit $text.%AUTO% -title [_ "Search in files"] \
+    set w [dialogwin_snit $text.%AUTO% -title [_ "Search in files"] -class RamDebugger \
 	    -grab 0 -transient 1 -callback [namespace code SearchInFilesDo] \
 	    -cancelname [_ Close]]
     set f [$w giveframe]
@@ -2422,7 +2422,7 @@ proc RamDebugger::SearchWindow { args }  {
     variable SearchToolbar
     variable searchFromBegin
     variable iswince
-
+    
     set optional {
 	{ -replace boolean 0 }
 	{ -auto_close boolean|force 0 }
@@ -2435,7 +2435,7 @@ proc RamDebugger::SearchWindow { args }  {
     if { ![info exists options(SearchToolbar_autoclose)] } {
 	set options(SearchToolbar_autoclose) 1
     }
-    
+
     if { $auto_close != 0 } {
 	if { $auto_close ne "force" && !$options(SearchToolbar_autoclose) } { return }
 
@@ -3012,6 +3012,12 @@ proc RamDebugger::Search { w what { raiseerror 0 } {f "" } } {
 	    foreach i [list F1 F2 F5 F6 F9 F10 F11] {
 		bind $w.search <$i> "destroy $w.search"
 	    }
+	    if { $::tcl_platform(platform) ne "windows" } {                   
+		foreach "ev k" [list braceleft \{ braceright \} bracketleft \[ bracketright \] backslash \\ \
+		        bar | at @ numbersign # asciitilde ~ EuroSign €] {
+		    bind $w.search <$ev> "$w.search icursor end; [list tkEntryInsert $w.search $k]; break"
+		}
+	    }
 	    bind $w.search <Return> "destroy $w.search ; break"
 	    bind $w.search <$::control-i> "RamDebugger::Search $w iforward ; break"
 	    bind $w.search <$::control-r> "RamDebugger::Search $w ibackward ; break"
@@ -3380,7 +3386,8 @@ proc RamDebugger::DoinstrumentThisfile { file } {
 	return 0
     }
 
-    set w [dialogwin_snit $text._ask -title "Debugged program source" -okname - -cancelname OK]
+    set w [dialogwin_snit $text._ask -title "Debugged program source" -class RamDebugger \
+	    -okname - -cancelname OK]
     set f [$w giveframe]
 
     label $f.l1 -text "The debugged program is trying to source file:" -grid "0 nw"
@@ -3487,7 +3494,7 @@ proc RamDebugger::DisplayPositionsStack { args } {
     }
     
     destroy $curr_text.dps
-    set w [dialogwin_snit $curr_text.dps -title [_ "Positions stack window"] -grab 0 \
+    set w [dialogwin_snit $curr_text.dps -title [_ "Positions stack window"] -class RamDebugger -grab 0 \
 	    -morebuttons [list [_ "Up"] [_ "Down"] [_ "View"]] -okname [_ "Delete"] -cancelname [_ "Close"] \
 	    -callback [list RamDebugger::DisplayPositionsStackDo0]]
     set f [$w giveframe]
@@ -3846,7 +3853,7 @@ proc RamDebugger::MacrosDo { w what } {
 		return
 	    }
 	    set macro [$list item text [lindex $itemList 0] 0]
-	    tk_messageBox -message AA-[namespace children ::RamDebugger::Macros]
+	    #tk_messageBox -message AA-[namespace children ::RamDebugger::Macros]
 
 	    ::RamDebugger::Macros::$macro $text
 	}
@@ -3869,7 +3876,7 @@ proc RamDebugger::MacrosDo { w what } {
 proc RamDebugger::Macros { parent } {
     
     destroy $parent.macros
-    set w [dialogwin_snit $parent.macros -title [_ "Macros"] -okname [_ "Execute"] \
+    set w [dialogwin_snit $parent.macros -title [_ "Macros"] -class RamDebugger -okname [_ "Execute"] \
 	    -morebuttons [list [_ "Edit"] [_ "Default"]] \
 	    -cancelname [_ Close] -grab 0 -callback [list RamDebugger::MacrosDo0]]
     set f [$w giveframe]
@@ -3951,8 +3958,11 @@ proc RamDebugger::_AddActiveMacrosToMenu { mainframe menu } {
 	}
     }
     foreach i [array names Macros::macrodata *,accelerator] {
-	if { $Macros::macrodata($i) != "" } {
+	if { $Macros::macrodata($i) ne "" } {
 	    regexp {(.*),accelerator} $i {} name
+	    if { ![regexp {^<.*>$} $Macros::macrodata($i)] } {
+		tk_messageBox -message "Error. Accelerator for macro '$name' not ok (needs <...>): $Macros::macrodata($i)"
+	    }
 	    bind all $Macros::macrodata($i) [list RamDebugger::Macros::$name $text]
 	    bind $text $Macros::macrodata($i) "[list RamDebugger::Macros::$name $text];break"
 
@@ -4262,7 +4272,7 @@ proc RamDebugger::insert_brackets_braces {} {
     variable text
     cu::text_entry_insert $text
 }
-
+    
 # 
 # proc RamDebugger::insert_brackets_braces { { what "" } } {
 #     variable last_insert_brackets_braces
@@ -4306,3 +4316,137 @@ proc RamDebugger::insert_brackets_braces {} {
 # }
 
 
+################################################################################
+#    go_to_proc
+################################################################################
+
+proc RamDebugger::go_to_proc {} {
+    variable text
+    
+    lassign "" procs_n procs_c
+    set numline 1
+    set lines [split [$text get 1.0 end-1c] \n]
+    set len [llength $lines]
+    foreach line $lines {
+	set types {proc|method|constructor|onconfigure|snit::type|snit::widget|snit::widgetadaptor}
+
+	if { [regexp "^\\s*(?:::)?($types)\\s+(\[\\w:]+)" $line {} type name] } {
+	    set namespace ""
+	    regexp {(.*)::([^:]+)} $name {} namespace name
+	    set comments ""
+	    set iline [expr {$numline-1}]
+	    while { $iline > 0 } {
+		set tline [lindex $lines [expr {$iline-1}]]
+		if { [regexp {^\s*#\s*\}} $tline] } { break }
+		if { [regexp {^\s*#([-()\s\w.,;:]*)$} $tline {} c] } {
+		   append comments "$c " 
+		} elseif { ![regexp {^\s*$|^\s*#} $tline] } { break }
+		incr iline -1
+	    }
+	    set comments [string trim $comments]
+	    if { $comments eq "" } {
+		lappend procs_n [list $name $namespace "" $type $numline]
+	    } else {
+		lappend procs_c [list $name $namespace $comments $type $numline]
+	    }
+	}
+	incr numline
+    }
+    set procs [lsort -dictionary -index 0 $procs_c]
+    lappend procs {*}[lsort -dictionary -index 0 $procs_n]
+
+    set wg $text.g
+    destroy $wg
+    dialogwin_snit $wg -title [_ "Go to proc"]
+    set f [$wg giveframe]
+    
+    set columns [list \
+	    [list 32 [_ "Proc name"] left text 0] \
+	    [list 14 [_ "Proc namespace"] left text 0] \
+	    [list 32 [_ "Comments"] left text 0] \
+	    [list  8 [_ "Proc type"] left text 0] \
+	    [list  6 [_ "line"] right text 0] \
+	]
+    fulltktree $f.lf -width 650 \
+	-columns $columns -expand 0 \
+	-sort_type_cols [list dictionary dictionary dictionary dictionary integer] \
+	-selectmode extended -showheader 1 -showlines 0  \
+	-have_search_button automatic \
+	-indent 0 -sensitive_cols all \
+	-selecthandler2 "[list $wg invokeok];#"
+    set list $f.lf
+    
+    $f.lf element configure e_text_sel -lines 2
+
+    foreach i $procs {
+	$list insert end $i
+	if { [string match *snit* [lindex $i 3]] } {
+	    $f.lf item element configure end 0 e_text_sel -fill [list grey disabled \
+		    $fulltktree::SystemHighlightText {selected focus} orange ""]
+	}
+    }
+
+    set range [$text tag ranges sel]
+    if { [llength $range] } {
+	set txt [$text get {*}$range]
+	$f.lf set_search_string $txt
+    } else {
+	set var ""
+	set idx0 [$text index insert]
+	set char [$text get $idx0]
+	while { [string is wordchar $char] } {
+	    set var $char$var
+	    set idx0 [$text index $idx0-1c]
+	    if { [$text compare $idx0 <= 1.0] } { break }
+	    set char [$text get $idx0]
+	}
+	set idx1 [$text index insert+1c]
+	set char [$text get $idx1]
+	while { [string is wordchar $char] } {
+	    append var $char
+	    set idx1 [$text index $idx1+1c]
+	    if { [$text compare $idx1 >= end-1c] } { break }
+	    set char [$text get $idx1]
+	}
+	if { ![regexp {[^()]*\([^\)]+\)} $var] } {
+	    set var [string trimright $var "()"]
+	}
+	if { [$text compare $idx1 > $idx0] } {
+	    set txt [$text get "$idx0+1c" "$idx1"]
+	    $f.lf set_search_string $txt
+	}        
+	catch {
+	    $list selection add 1
+	    $list activate 1
+	}
+    }
+    grid configure $f.lf -sticky nsew
+    grid columnconfigure $f 0 -weight 1
+    grid rowconfigure $f 0 -weight 1 
+    focus $list
+
+    set action [$wg createwindow]
+
+    while 1 {
+	switch -- $action {
+	    -1 - 0 {
+		destroy $wg
+		return
+	    }
+	    1 {
+		set itemList [$list selection get]
+		if { [llength $itemList] == 1 } {
+		    set line [$list item text [lindex $itemList 0] 4]
+		    $text mark set insert $line.0
+		    $text see $line.0
+		    focus $text
+		    destroy $wg
+		    return
+		} else {
+		    tk_messageBox -message [_ "Select one function in order to go to it"]
+		}
+	    }
+	}
+	set action [$wg waitforwindow]
+    }
+}

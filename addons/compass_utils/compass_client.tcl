@@ -5,6 +5,8 @@ package require sha1
 package require compass_utils::c
 #package require compass_utils::img
 
+package provide compass_utils::client_server 1.12
+
 namespace eval compass_client {
     variable topdir [file dirname [info script]]
     variable server_id_info ""
@@ -822,9 +824,9 @@ proc compass_client::enter_analysis_password { w } {
     set wp [dialogwin_snit $w.pass -title [_ "Enter analysis password"]]
 
     set f [$wp giveframe]
-    set err [catch { $f cget -bg } bg]
+    set err [catch { $f cget -background } bg]
     if { $err } { set bg white }
-    text $f.t1 -width 30 -height 4 -bg $bg -bd 0
+    text $f.t1 -width 30 -height 4 -background $bg -bd 0
     $f.t1 insert end $data
     $f.t1 configure -state disabled
     bind $f.t1 <1> [list focus $f.t1]

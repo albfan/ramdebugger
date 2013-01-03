@@ -61,7 +61,7 @@ namespace eval RamDebugger {
     #    RamDebugger version
     ################################################################################
 
-    set Version 8.0
+    set Version 8.1
 
     ################################################################################
     #    Non GUI commands
@@ -133,6 +133,7 @@ namespace eval RamDebugger {
     variable grabStatus
     variable oldFocus
     variable big_icons 0
+    variable inside_gid 0
     
     ################################################################################
     # Handlers to save files. Array with names: filename
@@ -435,7 +436,7 @@ proc RamDebugger::UpdateExecDirs {} {
     variable topdir_external
 
     if { $::tcl_platform(platform) == "windows" } {
-	set file [filenormalize [file join $topdir_external addons]]
+	set file [filenormalize [file join $topdir_external addons exe]]
 	if { [file isdirectory $file] && [lsearch -exact $options(executable_dirs) $file] == -1 } {
 	    lappend options(executable_dirs) $file
 	}
@@ -1747,6 +1748,11 @@ proc RamDebugger::rlist { args } {
 	    Makefile { set filetype "Makefile" }
 	}
     }
+    if { [regexp -nocase -line -- {<\?xml\s+} [string range $files($currentfile) 0 50]] } {
+	set filetype XML
+    }
+    set options(filetype) $filetype
+    
     if { $filetype == "TCL" && ![info exists instrumentedfilesP($currentfile)] \
 	     && !$force && !$reinstrument && !$currentfileIsModified } {
 	set filenum [lsearchfile $fileslist $currentfile]
@@ -2941,11 +2947,13 @@ proc RamDebugger::RecieveFromGdb {} {
 		set file $fullfile
 	    }
 	}
-	if { [file pathtype $file] == "relative" } {
-	    set executable [lindex $options(debugcplusplus) 0]
-	    set dir [file dirname $executable]
-	    if { [file exists [file join $dir $file]] } {
-		set file [file join $dir $file]
+	if { [file pathtype $file] eq "relative" } {
+	    if { [info exists options(debugcplusplus)] } {
+		set executable [lindex $options(debugcplusplus) 0]
+		set dir [file dirname $executable]
+		if { [file exists [file join $dir $file]] } {
+		    set file [file join $dir $file]
+		}
 	    }
 	    if { [info exists cproject::project] && \
 		     [file exists [file join [file dirname $cproject::project] $file]] } {
@@ -4070,7 +4078,7 @@ proc RamDebugger::OpenFileF { args } {
 	}
     }
     ManagePositionsImages
-    RamDebugger::CVS::indicator_update
+    RamDebugger::VCS::indicator_update
     WaitState 0
     if { [focus -lastfor $text] eq $text || \
 	     [focus -lastfor $text] eq [winfo toplevel $text] } {
@@ -4099,6 +4107,9 @@ proc RamDebugger::OpenFileSecondary { args } {
 
     WaitState 1
 
+    if { $options(filetype) ne "auto" && $options(filetype_only_this_file) } {
+	set options(filetype) auto
+    }
     set linenum 1
     if { $file eq $currentfile } {
 	set linenum [scan [$text index insert] %d]
@@ -4187,6 +4198,9 @@ proc RamDebugger::OpenFileSaveHandler { file data handler } {
 
     WaitState 1
 
+    if { $options(filetype) ne "auto" && $options(filetype_only_this_file) } {
+	set options(filetype) auto
+    }
     set linenum 1
     if { $file == $currentfile } {
 	set idx [$text index insert]
@@ -4481,6 +4495,8 @@ proc RamDebugger::SaveFileF { args } {
     WaitState 1
     SetMessage [_ "Saving file '%s'" $file]...
 
+    RamDebugger::VCS::ManageAutoSaveDo
+
     set filetype [GiveFileType $currentfile]
     
     if { $options(spaces_to_tabs) || $filetype eq "Makefile" } {
@@ -4581,7 +4597,7 @@ proc RamDebugger::SaveFileF { args } {
 	}
     }
     ManagePositionsImages
-    RamDebugger::CVS::indicator_update
+    RamDebugger::VCS::indicator_update
     WaitState 0
     SetMessage [_ "Saved file '%s'" $file]
 }
@@ -5643,7 +5659,7 @@ proc RamDebugger::TextMotion { X Y x y } {
     variable IsInStop
     variable TextMotionAfterId
 
-    RamDebugger::CVS::SetUserActivity
+    RamDebugger::VCS::SetUserActivity
 
     set err [catch { lindex [after info $TextMotionAfterId] 0 } cmd]
     if { !$err && $cmd ne "" }  {
@@ -6995,37 +7011,33 @@ proc RamDebugger::CheckText { command args } {
 proc RamDebugger::SearchBraces_xml { x y } {
     variable text
 
-    set rex {<\s*?(/?)\s*?([^>/\s]+?)(?:\s[^>]*?[^>/])?(/?)\s*?>}
+    set rex {<\s*?(?:(!--.*?-->)|(/?)\s*?([^!>/\s]+?)(?:\s[^>]*?[^>/])?(/?)\s*?>)}
     set sel [$text get insert-1c]
     set state normal
     while { $state eq "normal" && $sel eq ">" } {
 	set idx [$text search -backwards -regexp -nolinestop -count ::count0 $rex insert 1.0]
 	if { $idx eq "" } { break }
-	regexp $rex [$text get $idx "$idx+$::count0 chars"] {} is_end tag is_start_end
+	regexp $rex [$text get $idx "$idx+$::count0 chars"] {} is_comment is_end tag is_start_end
 	set idx_ini $idx
-	set idx_end insert
+	set idx_end [$text index insert]
 	set state found
     }
     set sel [$text get insert]
     while { $state eq "normal" && $sel eq "<" } {
 	set idx [$text search -regexp -nolinestop -count ::count0 $rex insert end]
 	if { $idx eq "" } { break }
-	regexp $rex [$text get $idx "$idx+$::count0 chars"] {} is_end tag is_start_end
+	regexp $rex [$text get $idx "$idx+$::count0 chars"] {} is_comment is_end tag is_start_end
 	set idx_ini insert
 	set idx_end "$idx+$::count0 chars"
 	set state found
     }
     if { $state ne "found" } {
-	if { $x >= 0 } {
-	    set ::tkPriv(selectMode) word ;# tcl8.3
-	    catch { set ::tk::Priv(selectMode) word } ;# tcl8.4
-	    tkTextSelectTo $text $x $y
-	    catch { $text mark set insert sel.last}
-	    catch { $text mark set anchor sel.first}
-	}
+	set openL [list "\[" "\{" "("]
+	set closeL [list "\]" "\}" ")"]
+	_search_braces_and_select $openL $closeL $x $y
 	return
     }
-    if { $is_start_end ne "" } {
+    if { $is_start_end ne "" || $is_comment ne "" } {
 	$text tag remove sel 0.0 end
 	$text tag add sel $idx "$idx+$::count0 chars"
 	$text mark set insert $idx
@@ -7038,8 +7050,8 @@ proc RamDebugger::SearchBraces_xml { x y } {
 	set idx_new [$text search -backwards -regexp -nolinestop -count ::count $rex $idx 1.0]
 	if { $idx_new eq "" } { break }
 	regexp $rex [$text get $idx_new "$idx_new+$::count chars"] \
-	    {} is_end_new tag_new is_start_end_new
-	if { $is_start_end_new ne "" } {
+	    {} is_comment_new is_end_new tag_new is_start_end_new
+	if { $is_start_end_new ne "" || $is_comment_new ne "" } {
 	    # nothing
 	} elseif { $is_end_new ne "" } {
 	    incr counter
@@ -7057,8 +7069,8 @@ proc RamDebugger::SearchBraces_xml { x y } {
 	set idx_new [$text search -regexp -nolinestop -count ::count $rex $idx end]
 	if { $idx_new eq "" } { break }
 	regexp $rex [$text get $idx_new "$idx_new+$::count chars"] \
-	    {} is_end_new tag_new is_start_end_new
-	if { $is_start_end_new ne "" } {
+	    {} is_comment_new is_end_new tag_new is_start_end_new
+	if { $is_start_end_new ne "" || $is_comment_new ne "" } {
 	    # nothing
 	} elseif { $is_end_new eq "" } {
 	    incr counter
@@ -7071,15 +7083,24 @@ proc RamDebugger::SearchBraces_xml { x y } {
 	}
 	set idx "$idx_new+$::count chars"
     }
+#     if { $state eq "normal" } {
+#         if { $x >= 0 } {
+#             set ::tkPriv(selectMode) word ;# tcl8.3
+#             catch { set ::tk::Priv(selectMode) word } ;# tcl8.4
+#             tkTextSelectTo $text $x $y
+#             catch { $text mark set insert sel.last}
+#             catch { $text mark set anchor sel.first}
+#         }
+#         return
+#     }
     if { $state eq "normal" } {
-	if { $x >= 0 } {
-	    set ::tkPriv(selectMode) word ;# tcl8.3
-	    catch { set ::tk::Priv(selectMode) word } ;# tcl8.4
-	    tkTextSelectTo $text $x $y
-	    catch { $text mark set insert sel.last}
-	    catch { $text mark set anchor sel.first}
+	# it is better to select up to the point where the problems begin
+	if { [$text compare $idx < $idx_ini] } {
+	    set idx_ini $idx
+	} elseif { [$text compare $idx > $idx_end] } {
+	    set idx_end $idx
 	}
-	return
+	set idx_see $idx
     }
     $text tag remove sel 0.0 end
     $text tag add sel $idx_ini $idx_end
@@ -7174,6 +7195,140 @@ proc RamDebugger::SearchBraces_cpp_defines { x y } {
     return 1
 }
 
+proc RamDebugger::_search_braces_and_select { openL closeL x y } {
+    variable text
+    
+    set allL [concat $openL $closeL]
+    set rex "\[\\[join $allL "\\"]\]"
+
+    if { [regexp "$rex{1}\\s*\$" [$text get "insert linestart" insert] ret] } {
+	set numA [string length $ret]
+    } else {
+	set numA -1
+    }
+    if { [regexp "^\\s*$rex{1}" [$text get insert "insert lineend"] ret] } {
+	set numB [string length $ret]
+    } else {
+	set numB -1
+    }
+    if { $numA > 0 && ($numB==-1 || $numA <= $numB) } {
+	set idx [$text index "insert -$numA c"]
+    } elseif { $numB > 0 } {
+	set idx [$text index "insert +[expr {$numB-1}] c"]
+    } else {
+	set idx -1
+    }
+    if { $idx == -1 || [$text get "$idx -1c"] == "\\" } {
+	# when not doing it by mouse, use x=-1
+	if { $x >= 0 } {
+	    set ::tkPriv(selectMode) word ;# tcl8.3
+	    catch { set ::tk::Priv(selectMode) word } ;# tcl8.4
+	    tkTextSelectTo $text $x $y
+	    catch { $text mark set insert sel.last}
+	    catch { $text mark set anchor sel.first}
+	}
+	return
+    }
+    set sel [$text get $idx]
+    $text tag remove sel 0.0 end
+    $text tag add sel $idx "$idx+1c"
+
+    if { $sel in $openL } {
+	set dir -forwards
+	set stopindex [$text index end]
+	set idx [$text index sel.last]
+	set incr +1
+	$text mark set insert sel.first
+    } else {
+	set dir -backwards
+	set stopindex 1.0
+	set idx [$text index sel.first]
+	set incr -1
+	$text mark set insert sel.last
+	lassign [list $openL $closeL] closeL openL
+    }
+    set open $sel
+    set close [lindex $closeL [lsearch -exact $openL $open]]
+    
+    lassign [list 0 0 0 0 ""] error found level level_alt idx_alt
+    while { [set idx2 [$text search $dir -regexp -- $rex $idx $stopindex]] != "" } {
+	set ret [$text search -backwards -regexp -count ::nppar {\\+} $idx2 "$idx2 linestart"]
+	if { $ret eq "" || [$text compare "$ret+${::nppar}c" != $idx2] } {
+	    set ::nppar 0
+	}
+	if { $::nppar%2 == 1 } {
+	    if { $dir == "-forwards" } {
+		set idx [$text index $idx2+1c]
+	    } else {
+		set idx $idx2
+	    }
+	    continue
+	}
+	set newsel [$text get $idx2]
+	
+	if { $newsel eq $open } {
+	    incr level
+	} elseif { $newsel eq $close } {
+	    incr level -1
+	    if { $level < 0 } {
+		#                         if { $level_alt > 0 } {
+		    #                             set error 1
+		    #                             set idx2 $idx_alt
+		    #                             break
+		    #                         }
+		set found 1
+		break
+	    }
+	} elseif { $newsel in $openL } {
+	    incr level_alt
+	    set idx_alt $idx2
+	} elseif { $newsel in $closeL } {
+	    incr level_alt -1
+	    if { $level_alt < 0 } {
+		set level_alt 0
+		set error 1
+		break
+	    }
+	}
+	if { $dir == "-forwards" } {
+	    set idx [$text index $idx2+1c]
+	} else {
+	    set idx $idx2
+	}
+    }
+    if { $level_alt != 0 } {
+	set error 1
+    }
+    if { $idx2 eq "" } {
+	set error 1
+	set idx2 $stopindex
+    }
+    if { $error } { bell }
+    $text tag remove sel 1.0 end
+    
+    if { $dir == "-forwards" } {
+	set idxA insert
+	set idxB $idx2+1c
+    } else {
+	set idxA $idx2
+	set idxB insert
+    }
+    if { $error } { SetMessage [_ "Error: braces not OK"] }
+    
+    # when not doing it by mouse, use x=-1
+    if { $x >= 0 } {
+	$text tag add sel $idxA $idxB
+	catch { $text mark set insert $idx2 }
+	$text see $idx2
+    } else {
+	$text tag add tempmarker $idxA $idxB
+	$text tag conf tempmarker -background [$text tag cget sel -background] \
+	    -foreground [$text tag cget sel -foreground]
+	if { $error } { $text tag conf tempmarker -background red }
+	after 1000 $text tag remove tempmarker 1.0 end
+    }
+}
+
 proc RamDebugger::SearchBraces { x y } {
     variable text
     variable currentfile
@@ -7194,126 +7349,10 @@ proc RamDebugger::SearchBraces { x y } {
 	if { $found } { return }
     }
 
-    set sel [$text get insert-1c]
-    set selm1 [$text get insert-2c]
-    $text tag remove sel 0.0 end
-    $text tag add sel insert-1c insert
-    if { [lsearch -exact [list \[ \] \{ \}] $sel] == -1 || $selm1 == "\\" } {
-	set sel [$text get insert]
-	set selm1 [$text get insert-1c]
-	$text tag remove sel 0.0 end
-	$text tag add sel insert insert+1c
-	$text mark set insert insert+1c
-    }
-    if {[lsearch -exact [list \[ \] \{ \}] $sel] == -1  || $selm1 == "\\" } {
-	# when not doing it by mouse, use x=-1
-	if { $x >= 0 } {
-	    set ::tkPriv(selectMode) word ;# tcl8.3
-	    catch { set ::tk::Priv(selectMode) word } ;# tcl8.4
-	    tkTextSelectTo $text $x $y
-	    catch { $text mark set insert sel.last}
-	    catch { $text mark set anchor sel.first}
-	}
-    } else {
-	if { $sel == "\[" || $sel == "\{" } {
-	    set dir -forwards
-	    set stopindex [$text index end]
-	    set idx [$text index sel.last]
-	    set incr +1
-	    $text mark set insert insert-1c
-	} else {
-	    set dir -backwards
-	    set stopindex 1.0
-	    set idx [$text index sel.first]
-	    set incr -1
-	    #$text mark set insert insert+1c
-	}
-	switch $sel {
-	    "\{" { set open "\{" ; set close "\}" ; set openalt "\[" ; set closealt "\]" }
-	    "\[" { set open "\[" ; set close "\]" ; set openalt "\{" ; set closealt "\}" }
-	    "\}" { set open "\}" ; set close "\{" ; set openalt "\]" ; set closealt "\[" }
-	    "\]" { set open "\]" ; set close "\[" ; set openalt "\}" ; set closealt "\{" }
-	}
-	set error 0
-	set found 0
-	set level 0
-	set level_alt 0
-	set idx_alt ""
-	while { [set idx2 [$text search $dir -regexp -- {\{|\}|\[|\]} $idx $stopindex]] != "" } {
-	    set ret [$text search -backwards -regexp -count ::nppar {\\+} $idx2 "$idx2 linestart"]
-	    if { $ret eq "" || [$text compare "$ret+${::nppar}c" != $idx2] } {
-		set ::nppar 0
-	    }
-	    if { $::nppar%2 == 1 } {
-		if { $dir == "-forwards" } {
-		    set idx [$text index $idx2+1c]
-		} else { set idx $idx2 }
-		continue
-	    }
-	    set newsel [$text get $idx2]
-	    switch $newsel \
-		$open { incr level } \
-		$openalt {
-		    incr level_alt
-		    set idx_alt $idx2
-		} \
-		$close {
-		    incr level -1
-		    if { $level < 0 } {
-		        #                         if { $level_alt > 0 } {
-		        #                             set error 1
-		        #                             set idx2 $idx_alt
-		        #                             break
-		        #                         }
-		        set found 1
-		        break
-		    }
-		} \
-		$closealt {
-		    incr level_alt -1
-		    if { $level_alt < 0 } {
-		        set level_alt 0
-		        set error 1
-		        break
-		    }
-		}
-	    if { $dir == "-forwards" } {
-		set idx [$text index $idx2+1c]
-	    } else { set idx $idx2 }
-	}
-	if { $level_alt != 0 } {
-	    set error 1
-	}
-	if { $idx2 == "" } {
-	    set error 1
-	    set idx2 $stopindex
-	}
-	if { $error } { bell }
-	$text tag remove sel 1.0 end
-	
-	if { $dir == "-forwards" } {
-	    set idxA insert
-	    set idxB $idx2+1c
-	} else {
-	    set idxA $idx2
-	    set idxB insert
-	}
-	
-	if { $error } { SetMessage [_ "Error: braces not OK"] }
-	
-	  # when not doing it by mouse, use x=-1
-	if { $x >= 0 } {
-	    $text tag add sel $idxA $idxB
-	    catch { $text mark set insert $idx2 }
-	    $text see $idx2
-	} else {
-	    $text tag add tempmarker $idxA $idxB
-	    $text tag conf tempmarker -background [$text tag cget sel -background] \
-		-foreground [$text tag cget sel -foreground]
-	    if { $error } { $text tag conf tempmarker -background red }
-	    after 1000 $text tag remove tempmarker 1.0 end
-	}
-    }
+    set openL [list "\[" "\{" "("]
+    set closeL [list "\]" "\}" ")"]
+    
+    _search_braces_and_select $openL $closeL $x $y
 }
 
 proc RamDebugger::CenterDisplay {} {
@@ -7508,14 +7547,14 @@ proc RamDebugger::UpdateLineNum { command args } {
     variable text
     variable currentfileIsModified
 
-    RamDebugger::CVS::SetUserActivity
+    RamDebugger::VCS::SetUserActivity
 
     if { [regexp {index|bbox|get} $command] } { return }
     if { [regexp {^(ins|del)} $command] } { CheckText $command $args }
 
     if { [regexp {^(ins|del)} $command] && !$currentfileIsModified } {
 	wm title [winfo toplevel $text] [wm title [winfo toplevel $text]]*
-	set currentfileIsModified 1
+	incr currentfileIsModified
     }
     UpdateLineNumDo
 }
@@ -7526,7 +7565,7 @@ proc RamDebugger::SetIsModified {} {
 
     if { !$currentfileIsModified } {
 	wm title [winfo toplevel $text] [wm title [winfo toplevel $text]]*
-	set currentfileIsModified 1
+	incr currentfileIsModified
     }
     UpdateLineNumDo
 }
@@ -7741,7 +7780,6 @@ proc RamDebugger::InitOptions {} {
     #      option add *Entry*background thistle
     #      option add *DisabledForeground grey60
     #      option add *HighlightBackground AntiqueWhite3
-    
 
     if { $::tcl_platform(platform) != "windows" } {
 	option add *selectBackground \#48c96f
@@ -8084,7 +8122,7 @@ proc RamDebugger::RegisterExtension {} {
     }
 
     if { $val(1) eq $rval(1) && $val(2) eq $rval(2) && $val(3) eq $rval(3) } {
-	dialogwin_snit $text._ask -title [_ "Unassociate extension"]
+	dialogwin_snit $text._ask -title [_ "Unassociate extension"] -class RamDebugger
 	set f [$text._ask giveframe]
 	label $f.l1 -text [_ "Do you want to unassociate command 'RamDebugger from extension .tcl?"]
 	set smallfontsize [expr {[font actual [$f.l1 cget -font] -size]-1}]
@@ -8106,7 +8144,7 @@ proc RamDebugger::RegisterExtension {} {
 	}
 	return
     }
-    dialogwin_snit $text._ask -title [_ "Associate extension"]
+    dialogwin_snit $text._ask -title [_ "Associate extension"] -class RamDebugger
     set f [$text._ask giveframe]
     label $f.l1 -text [_ "Do you want to associate command 'RamDebugger to extension .tcl?"]
     set smallfontsize [expr {[font actual [$f.l1 cget -font] -size]-1}]
@@ -8291,6 +8329,13 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     variable pane3
     variable iswince
     variable big_icons
+    variable inside_gid
+
+    if { [ info exists ::GIDDEFAULT]} {
+	set inside_gid 1
+    } else {
+	set inside_gid 0
+    }
 
     if { !$iswince } {
 	proc ::bgerror { errstring } {
@@ -8314,7 +8359,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     #require BWidgetR, a BWidget with some modifications, marked with RAMSAN
     #inside the GiD scripts BWidget is really BWidgetR, to avoid duplicate it
     if { [catch {package require BWidgetR}] } {
-	puts "could not load package BWidgetR. Loading package BWidget. Some problems with accelerators may appear, specially on MacOSX"
+	#puts "could not load package BWidgetR. Loading package BWidget. Some problems with accelerators may appear, specially on MacOSX"
 	package require BWidget
     }
    
@@ -8325,7 +8370,8 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     package require dialogwin
     package require textutil
     package require tooltip
-    package require img::png
+    #kike: catch porque no se porque da error tcl al arrancar desde GiD que ya tiene img::png interno
+    catch {package require img::png}
     
     if { ![catch { package vcompare [package provide Tk] 8.5 } ret] && $ret < 0} {
 	interp alias "" ttk::style "" style
@@ -8337,21 +8383,24 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     } else {
 	set ispocket 0
     }
-    if { [tk windowingsystem] eq "x11" || $ispocket } {
-	ttk::style theme use clam
-	ttk::style theme settings clam {
-	    ttk::style configure TButton -padding 1
-	    ttk::style configure TMenubutton -padding 1
-	    ttk::style map Toolbutton -background "focus grey [ttk::style map Toolbutton -background]"
-	}
 	
-    } else {
-	catch {
-	    ttk::style theme settings winnative {
-		ttk::style configure Toolbutton -padding 1
+    if { !$inside_gid } {
+	if { [tk windowingsystem] eq "x11" || $ispocket } {
+	    ttk::style theme use clam
+	    ttk::style theme settings clam {
+		ttk::style configure TButton -padding 1
+		ttk::style configure TMenubutton -padding 1
+		ttk::style map Toolbutton -background "focus grey [ttk::style map Toolbutton -background]"
+	    }
+	    
+	} else {
+	    catch {
+		ttk::style theme settings winnative {
+		    ttk::style configure Toolbutton -padding 1
+		}
 	    }
 	}
-    }
+    } ;# if !inside_gid
     #needed a catch for wince
     catch { package require tkdnd } ;# only if it is compiled
     package require fulltktree
@@ -8427,13 +8476,13 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		separator \
 		[list cascad &[_ "Revisions"] {} revisions 0 [list \
 		[list command &[_ "Save revision"] {} [_ "Saves a revision of the file"] "ShiftCtrl s" \
-		        -command "RamDebugger::CVS::SaveRevision"] \
+		        -command "RamDebugger::VCS::SaveRevision"] \
 		[list command &[_ "Open revisions list"] {} [_ "Open revisions list for current file"] "" \
-		        -command "RamDebugger::CVS::OpenRevisions"] \
+		        -command "RamDebugger::VCS::OpenRevisions"] \
 		separator \
 		[list command &[_ "View revised files"] {} \
 		     [_ "View all files under revision control"] "" \
-		     -command "RamDebugger::CVS::ShowAllFiles"] \
+		     -command "RamDebugger::VCS::ShowAllFiles"] \
 		                                             ]] \
 		[list cascad &[_ "Recent files"] {} recentfiles 0 {}] \
 		separator \
@@ -8476,6 +8525,10 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		        -command "RamDebugger::PositionsStack go"] \
 		    [list command &[_ "Display positions stack"] {} [_ "Display positions stack"] "Ctrl F2" \
 		        -command "RamDebugger::DisplayPositionsStack"] \
+		    separator \
+		    [list command &[_ "Go to proc"] {} \
+		        [_ "Go to proc definition in current file"] "ShiftCtrl g" \
+		        -command "RamDebugger::go_to_proc"] \
 		   ] \
 		] \
 		[list cascad &[_ "Macros"] {} macros 0 [list \
@@ -8608,7 +8661,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		    -command "RamDebugger::OpenProgram tkcvs"] \
 		    [list command [_ "Version control system"]... {} \
 		    [_ "Open Version control system window with cvs or fossil"] "Ctrl 7" \
-		   -command "RamDebugger::CVS::update_recursive . last"] \
+		   -command "RamDebugger::VCS::update_recursive . last"] \
 		separator \
 	       [list cascad [_ "File type"] {} filetype 0 [list \
 		    [list radiobutton [_ "Automatic"] filetype [_ "Selection is made based on extension"] "" \
@@ -8670,6 +8723,8 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		-command "RamDebugger::ViewInstrumentedFile gdb"] \
 		[list command &[_ "Count LOC"] {} [_ "Count number of lines of code"] "" \
 		-command "RamDebugger::CountLOCInFiles $w"] \
+	    [list command &[_ "Show processes"] {} [_ "Show running processes in the computer"] "" \
+		-command "RamDebugger::show_processes_window"] \
 		separator \
 		[list command &[_ "Windows hierarchy"] {} [_ "View windows hierarchy"] "" \
 		-command "RamDebugger::DisplayWindowsHierarchy"] \
@@ -8738,7 +8793,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     
     set cvs_indicator_frame [$mainframe addindicator -width 10 \
 	    -anchor e -padx 3]
-    RamDebugger::CVS::indicator_init $cvs_indicator_frame
+    RamDebugger::VCS::indicator_init $cvs_indicator_frame
     
     set label [$mainframe addindicator -textvariable RamDebugger::debuggerstate -width 6 \
 	    -anchor e -padx 3]
@@ -9292,6 +9347,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     bind $text <$::control-Key-6> "RamDebugger::CommentSelection toggle"
     bind $text <$::control-Key-9> "[list tk::TextInsert $text {()}];$c"
     bind $text <$::control-plus> "[list tk::TextInsert $text {[]}];$c"
+    bind $text <$::control-bracketright> "[list tk::TextInsert $text {[]}];$c"
     bind $text <$::control-Shift-plus> [list RamDebugger::insert_translation_cmd]
     bind $text <$::control-asterisk> [list RamDebugger::insert_translation_cmd]
     bind $text <$::control-ccedilla> "[list tk::TextInsert $text {{}}];$c"
@@ -9320,7 +9376,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     bind $text <FocusIn> [list RamDebugger::SearchWindow -auto_close 1]
     bind $text <$::control-I> [list RamDebugger::Search $w iforward_get_insert]
     bind $text <Escape><i> "[list RamDebugger::Search $w iforward_get_insert] ;break"
-    bind $w <$::control-slash> [list RamDebugger::CVS::update_recursive . current] ;# control-shift-7
+    bind $w <$::control-slash> [list RamDebugger::VCS::update_recursive . current] ;# control-shift-7
 
     set menu [$mainframe getmenu edit]
     $menu entryconfigure [_ "Isearch forward selected"] -acc "Ctrl+Shift+I"
@@ -9529,7 +9585,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     # if we do it at the beginning, an ugly update is made
     if { $::tcl_platform(platform) ne "windows" } {
 	set img [image create photo -file [file join $topdir addons ramdebugger.png]]
-	wm iconphoto $w $img
+	wm iconphoto $w -default $img
 	#wm iconbitmap $w @$topdir/addons/ramdebugger.xbm
     } elseif { !$iswince } {
 	wm iconbitmap $w $topdir/addons/ramdebugger.ico
@@ -9538,7 +9594,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 	}
     }
     if { !$iswince } {
-	RamDebugger::CVS::ManageAutoSave
+	RamDebugger::VCS::ManageAutoSave
     }
     update idletasks
 

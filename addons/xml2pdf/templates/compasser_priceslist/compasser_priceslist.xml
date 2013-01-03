@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?><!-- -*- coding: utf-8;-*- -->
+<lognoter_pdf_template>
+  <p n="papersize" v="A4"/>
+  <boxList>
+    <box boxtype="image" pagetype="all" dimensions="73.6% 4.72% 92.7% 12.5%" group="">
+      <p n="imagename" v="../compass_logo300-4cm.png"/>
+      <p n="substitutions" v=""/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="7.05% 12.5% 92.7% 12.5%" group="">
+      <p n="fillcolor" v="black"/>
+      <p n="outlinecolor" v="#8ba3cf"/>
+      <p n="outlinewidth" v="1"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="text" pagetype="firstpage" dimensions="7.05% 14.8% 92.7% 17.2%" group="">
+      <p n="font" v="Helvetica-Bold"/>
+      <p n="fontsize" v="14"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="n"/>
+      <p n="justify" v="left"/>
+      <p n="text">
+        <wordwidget>
+          <para>[xpath "/compasser_priceslist/tabletitle"]</para>
+          <para>[xpath "/compasser_priceslist/tablesubtitle"]</para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="1"/>
+    </box>
+    <box boxtype="colorbox" pagetype="all" dimensions="7.05% 92.3% 92.7% 92.3%" group="">
+      <p n="fillcolor" v="black"/>
+      <p n="outlinecolor" v="#8ba3cf"/>
+      <p n="outlinewidth" v="1"/>
+      <p n="bordercolor" v=""/>
+    </box>
+    <box boxtype="text" pagetype="all" dimensions="32.6% 92.7% 67.6% 95.2%" group="">
+      <p n="font" v="Helvetica"/>
+      <p n="fontsize" v="6"/>
+      <p n="fontfg" v="black"/>
+      <p n="fontbg" v="white"/>
+      <p n="anchor" v="n"/>
+      <p n="justify" v="left"/>
+      <p n="text">
+        <wordwidget>
+          <para>
+            <emphasis role="strong">COMPASS Ingeniería y Sistemas S.A.</emphasis>
+          </para>
+          <para>c/ Tuset, 8 7-2. 08006 Barcelona</para>
+          <para>Tel: +34 93 218 19 89 Fax: +34 93 396 97 46</para>
+          <para>Email: info@compassis.com</para>
+        </wordwidget>
+      </p>
+      <p n="substitutions" v="0"/>
+    </box>
+    <box boxtype="mainbox" pagetype="nofirstpage" dimensions="7.05% 13.9% 92.7% 90.2%" group="">
+      <p n="flownumber" v="1"/>
+    </box>
+    <box boxtype="mainbox" pagetype="firstpage" dimensions="7.05% 18.7% 92.7% 90.2%" group="">
+      <p n="flownumber" v="1"/>
+    </box>
+  </boxList>
+  <container n="state"/>
+  <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+    <xsl:output method="xml" indent="yes"/>
+    <xsl:template match="items">
+      <table relativesizes="- 30 15 55" cols_justify="left center justify" tabstyle="plainlines">
+        <row cols_justify="center center center">
+          <entry>
+            <emphasis role="strong">
+              <xsl:value-of select="/compasser_priceslist/itemheaders/product"/>
+            </emphasis>
+          </entry>
+          <entry>
+            <emphasis role="strong">
+              <xsl:value-of select="/compasser_priceslist/itemheaders/price"/>
+            </emphasis>
+          </entry>
+          <entry>
+            <emphasis role="strong">
+              <xsl:value-of select="/compasser_priceslist/itemheaders/characteristics"/>
+            </emphasis>
+          </entry>
+        </row>
+        <xsl:for-each select="item">
+          <row>
+            <entry>
+              <xsl:value-of select="product"/>
+            </entry>
+            <entry>
+              <xsl:value-of select="price"/>
+            </entry>
+            <entry>
+              <xsl:value-of select="characteristics"/>
+            </entry>
+          </row>
+        </xsl:for-each>
+      </table>
+    </xsl:template>
+    <xsl:template match="conditions">
+      <xsl:copy-of select="./*"/>
+    </xsl:template>
+    <xsl:template match="modulesinfo">
+      <xsl:copy-of select="./*"/>
+    </xsl:template>
+    <xsl:template match="validity">
+      <para>
+        <xsl:value-of select="prefix"/>
+        <emphasis role="strong">
+          <xsl:value-of select="date"/>
+        </emphasis>
+      </para>
+    </xsl:template>
+    <xsl:template match="/compasser_priceslist">
+      <xsl:copy select=".">
+        <xsl:apply-templates select="*"/>
+      </xsl:copy>
+    </xsl:template>
+    <xsl:template match="*">
+      <xsl:copy-of select="."/>
+    </xsl:template>
+  </xsl:stylesheet>
+</lognoter_pdf_template>
+

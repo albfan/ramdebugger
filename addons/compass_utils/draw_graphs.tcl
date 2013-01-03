@@ -9,12 +9,11 @@ namespace import -force tooltip::tooltip
 
 namespace eval cu {
     variable topdir [file dirname [info script]]
+    variable topdir0 [file normalize $topdir/..]
+
+    cu::get_images_add_dir [file join $topdir0 compass_utils images]
 }
 
-set topdir [file normalize [file dirname [info script]]]
-set topdir0 [file normalize $topdir/..]
-
-cu::get_images_add_dir [file join $topdir0 compass_utils images]
 
 # for tclIndex to work 
 proc cu::draw_graphs { args } {}
@@ -74,7 +73,7 @@ snit::widgetadaptor cu::draw_graphs {
     delegate option * to hull
       
     constructor args {
-	canvas $self -bg white -width 400 -height 350 \
+	canvas $self -background white -width 400 -height 350 \
 	    -bd 0 -highlightthickness 0 -relief raised                 
 	
 	installhull $self      
@@ -395,7 +394,7 @@ snit::widgetadaptor cu::draw_graphs {
 	if {$typearea eq "areabetweenfunct" || $typearea eq "areaenclosedregion"} {
 	    grid $funct.gxl $funct.gx -sticky ew -padx 2 -pady 2
 	}
-	ttk::label $fcalc.units -justify left -anchor n -text [_ "u²"]
+	ttk::label $fcalc.units -justify left -anchor n -text [_ "u\u00b2"] ; # square u
 	
 	grid $fcalc.lcalc $fcalc.earea $fcalc.units -sticky ew -padx 2 -pady 2                      
       
@@ -1330,14 +1329,14 @@ snit::widgetadaptor cu::draw_graphs {
 	set slant [font actual $font -slant]
 	set a middle
 	       
-	append svg "<text font-family='[xml [font actual $font -family]]' " \
+	append svg "<text font-family='[xml_map [font actual $font -family]]' " \
 	    "font-size='$fsize' fill='$fillcolor' " \
 	    "font-weight='[font actual $font -weight]' " \
 	    "font-style='$slant' text-anchor='$a'"
 	foreach n [list x y] {
 	    append svg " $n='[set $n]'"
 	}
-	append svg ">[xml $txt]</text>"               
+	append svg ">[xml_map $txt]</text>"               
 	
 	return $svg
     }
@@ -1414,7 +1413,7 @@ snit::widgetadaptor cu::draw_graphs {
 	    }                                 
 	}
 	
-	$canvas configure -bg $options(-backgroundcolor)  
+	$canvas configure -background $options(-backgroundcolor)  
 	set fg $options(-foregroundcolor)  
 	
 	set numfunctions 1
@@ -1558,7 +1557,7 @@ snit::widgetadaptor cu::draw_graphs {
 	}                
 	if {$options(-showtitle)} {
 	    set fam [font actual $options(-fonttitle) -family]
-	    set tsize [expr [font actual $options(-fonttitle) -size]*2]   
+	    set tsize [expr {round([font actual $options(-fonttitle) -size]*1.8)}]   
 	    $canvas create text [expr $xmax/2.0] 6 -anchor n -justify center \
 		-text $options(-title) -font [list $fam $tsize] -fill $fg -tags titletext                
 	    append xml [$canvas drawtext_svg [list $fam $tsize] $fg [expr $xmax/2.0] 6 $options(-title)] 
@@ -1587,7 +1586,7 @@ snit::widgetadaptor cu::draw_graphs {
 	} else {
 	    set ylabeltext "$options(-ylabel)"
 	}      
-	$canvas create text 6 6 -anchor nw -justify left \
+	$canvas create text 6 20 -anchor nw -justify left \
 	    -text $ylabeltext -font $options(-font) -fill $fg -tags axistext                        
 	append xml [$canvas drawtext_svg $options(-font) $fg 6 6 $ylabeltext]        
 	
@@ -2042,7 +2041,7 @@ snit::widgetadaptor cu::draw_graphs {
 	wm iconname $w [_ "colors"]
 	
 	set msgbg [ttk::label $f.msgbg -text [_ "Background color view"]]                     
-	set lbg [label $f.lbg -text "  " -relief solid -bd 1 -width 3 -bg $options(-backgroundcolor)]
+	set lbg [label $f.lbg -text "  " -relief solid -bd 1 -width 3 -background $options(-backgroundcolor)]
 	tooltip::tooltip $lbg [_ "Color view"]        
 	set bbg [cu::menubutton_button $f.bbg -command [mymethod setcolor $w background background $lbg] -image [cu::get_image colors-16] -menu $f.bbg.m]
 	tooltip::tooltip $bbg [_ "Color selection"]
@@ -2054,7 +2053,7 @@ snit::widgetadaptor cu::draw_graphs {
 	    [formulae::create_give_image_color $options(-backgroundcolor)] -compound left
 	
 	set msgfg [ttk::label $f.msgfg -text [_ "Foreground color view"]]                     
-	set lfg [label $f.lfg -text "  " -relief solid -bd 1 -width 3 -bg $options(-foregroundcolor)]
+	set lfg [label $f.lfg -text "  " -relief solid -bd 1 -width 3 -background $options(-foregroundcolor)]
 	tooltip::tooltip $lfg [_ "Color view"]        
 	set bfg [cu::menubutton_button $f.bfg -command [mymethod setcolor $w background foreground $lfg] \
 		-image [cu::get_image colors-16] -menu $f.bfg.m]
@@ -2070,7 +2069,7 @@ snit::widgetadaptor cu::draw_graphs {
 	cu::combobox $f.fx -textvariable [$w give_uservar fx] \
 	    -values $options(-functionnames) -width 20 -state readonly 
 	tooltip::tooltip $f.fx [_ "Selected functions"]                 
-	set lfg2 [label $f.lfg2 -text "  " -relief solid -bd 1 -width 3 -bg [lindex $options(-colorset) 0]]
+	set lfg2 [label $f.lfg2 -text "  " -relief solid -bd 1 -width 3 -background [lindex $options(-colorset) 0]]
 	tooltip::tooltip $lfg2 [_ "Color view"]        
 	set bfg2 [cu::menubutton_button $f.bfg2 -command [mymethod setcolor $w background function $lfg2] \
 		-image [cu::get_image colors-16] -menu $f.bfg2.m]
@@ -2083,7 +2082,7 @@ snit::widgetadaptor cu::draw_graphs {
 	    -variable [$w give_uservar addgridlines]     
 		
 	tooltip::tooltip $f.cb [_ "To control the presence and appearance of grid lines on the graph"]         
-	set lfg1 [label $f.lfg1 -text "  " -relief solid -bd 1 -width 3 -bg $options(-gridlinescolor)]
+	set lfg1 [label $f.lfg1 -text "  " -relief solid -bd 1 -width 3 -background $options(-gridlinescolor)]
 	tooltip::tooltip $lfg1 [_ "Color view"]        
 	set bfg1 [cu::menubutton_button $f.bfg1 -command [mymethod setcolor $w background grid $lfg1] \
 		-image [cu::get_image colors-16] \

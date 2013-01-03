@@ -10,12 +10,15 @@
 
 set cmd ""
 lappend cmd [list source [file join $dir compass_utils.tcl]]
+lappend cmd [list source [file join $dir formulae.tcl]]
+lappend cmd [list source [file join $dir html2tdom.tcl]]
 lappend cmd [list lappend ::auto_path $dir]
 
-package ifneeded compass_utils 1.10 [join $cmd ";"]
+# NOTE: in the near future, auto_path will not be used anymore here
+package ifneeded compass_utils 1.12 [join $cmd ";"]
 
 proc load_compass_utils_library { dir basename } {
-    if { $::tcl_platform(pointerSize) == 8} {
+    if { $::tcl_platform(pointerSize) == 8 } {
 	set bits 64
     } else {
 	set bits 32
@@ -24,14 +27,22 @@ proc load_compass_utils_library { dir basename } {
     load [file normalize [file join $dir $library]] $basename
 }
 
-package ifneeded compass_utils::c 1.10 [list load_compass_utils_library $dir compass_utils]
+package ifneeded compass_utils::c 1.12 [list load_compass_utils_library $dir compass_utils]
 package ifneeded compass_utils::math 1.5 [list source [file join $dir math.tcl]]
 
 set cmd ""
 lappend cmd [list source [file join $dir tk_utils.tcl]]
+lappend cmd [list source [file join $dir draw_graphs.tcl]]
+lappend cmd [list source [file join $dir megawidgets.tcl]]
 lappend cmd [list load_compass_utils_library $dir compass_utils_tk]
 
-package ifneeded compass_utils::img 1.10 [join $cmd ";"]
+package ifneeded compass_utils::img 1.12 [join $cmd ";"]
+
+set cmd ""
+lappend cmd [list source [file join $dir compass_client.tcl]]
+lappend cmd [list source [file join $dir compass_server.tcl]]
+package ifneeded compass_utils::client_server 1.12 [join $cmd ";"]
+
 
 package ifneeded compass_utils::fcgi 1.0 {
     package require compass_utils::c

@@ -128,6 +128,10 @@ proc ::TreeCtrl::FullTkTreeButton1 {T x y} {
 		        break
 		    }
 		}
+		# ramsan
+		if { [$T item state get $item disabled] } {
+		    set ok 0
+		}
 		if {$ok} {
 		    set Priv(drag,motion) 0
 		    set Priv(drag,click,x) $x
@@ -156,7 +160,9 @@ proc ::TreeCtrl::FullTkTreeButton1 {T x y} {
 
 		    # ramsan
 		    if { ![info exists Priv(dragimage,$T)] || \
-		        $Priv(dragimage,$T) eq "" } { return }
+		        $Priv(dragimage,$T) eq "" } {
+		        return
+		    }
 
 		    # Click selected item to drag
 		    if {[$T selection includes $item]} {
