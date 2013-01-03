@@ -1,7 +1,7 @@
 #!/bin/sh
 # the next line restarts using wish \
 exec wish "$0" "$@"
-# RamDebugger  -*- TCL -*- Created: ramsan Jul-2002, Modified: ramsan Feb-2007
+# RamDebugger  -*- TCL -*- Created: ramsan Jul-2002, Modified: ramsan Dec-2009
 
 package require Tcl 8.5
 package require Tk 8.5
@@ -61,7 +61,7 @@ namespace eval RamDebugger {
     #    RamDebugger version
     ################################################################################
 
-    set Version 7.5
+    set Version 7.6
 
     ################################################################################
     #    Non GUI commands
@@ -212,6 +212,39 @@ proc RamDebugger::Init { _readwriteprefs { registerasremote 1 } } {
 	set AppDataDir [file join $::env(HOME) .RamDebugger]
     }
     set exe [file join $AppDataDir exe]
+
+    if { $::tcl_platform(platform) eq "windows" && !$iswince } {
+	if { ![info exists ::env(PATH)] } {
+	    set list ""
+	} else {
+	    set list [split $::env(PATH) \;]
+	}
+	set shortname [file native [file attributes $exe -shortname]]
+	if { [set ipos [lsearch -exact $list $shortname]] != 0 } {
+	    if { $ipos != -1 } {
+		set list [lreplace $list $ipos $ipos]
+	    }
+	    set list [linsert $list 0 $shortname]
+	    set ::env(PATH) [join $list \;]
+	    # this is a variable from the TCL library
+	    array unset ::auto_execs
+	}
+    } elseif { $::tcl_platform(os) eq "Darwin" } {
+	if { ![info exists ::env(PATH)] } {
+	    set list ""
+	} else {
+	    set list [split $::env(PATH) ":"]
+	}
+	if { [set ipos [lsearch -exact $list $exe]] != 0 } {
+	    if { $ipos != -1 } {
+		set list [lreplace $list $ipos $ipos]
+	    }
+	    set list [linsert $list 0 $exe]
+	    set ::env(PATH) [join $list ":"]
+	    # this is a variable from the TCL library
+	    array unset ::auto_execs
+	}
+    }
     if { [auto_execok cvs] eq "" || [auto_execok diff] eq "" } {
 	if { $::tcl_platform(platform) eq "windows" && !$iswince } {
 	    set exeList [list cat.exe cvs.exe diff.exe grep.exe kill.exe tlist.exe]
@@ -224,41 +257,7 @@ proc RamDebugger::Init { _readwriteprefs { registerasremote 1 } } {
 	    file mkdir $exe
 	}
 	foreach i $exeList {
-	    file copy [file join $topdir addons exe $i] $exe
-	}
-    }
-    if { [file exists $exe] } {
-	if { $::tcl_platform(platform) eq "windows" && !$iswince } {
-	    if { ![info exists ::env(PATH)] } {
-		set list ""
-	    } else {
-		set list [split $::env(PATH) \;]
-	    }
-	    set shortname [file native [file attributes $exe -shortname]]
-	    if { [set ipos [lsearch -exact $list $shortname]] != 0 } {
-		if { $ipos != -1 } {
-		    set list [lreplace $list $ipos $ipos]
-		}
-		set list [linsert $list 0 $shortname]
-		set ::env(PATH) [join $list \;]
-		# this is a variable from the TCL library
-		array unset ::auto_execs
-	    }
-	} elseif { $::tcl_platform(os) eq "Darwin" } {
-	    if { ![info exists ::env(PATH)] } {
-		set list ""
-	    } else {
-		set list [split $::env(PATH) ":"]
-	    }
-	    if { [set ipos [lsearch -exact $list $exe]] != 0 } {
-		if { $ipos != -1 } {
-		    set list [lreplace $list $ipos $ipos]
-		}
-		set list [linsert $list 0 $exe]
-		set ::env(PATH) [join $list ":"]
-		# this is a variable from the TCL library
-		array unset ::auto_execs
-	    }
+	    file copy -force [file join $topdir addons exe $i] $exe
 	}
     }
     set dirs ""
