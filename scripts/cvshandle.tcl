@@ -524,7 +524,7 @@ proc RamDebugger::CVS::ShowAllFiles {} {
 proc RamDebugger::CVS::indicator_init { f } {
     variable cvs_indicator_frame
 
-    if { [auto_execok cvs] eq "" } { return }
+    if { [auto_execok cvs] eq "" && [auto_execok fossil] eq "" } { return }
 
     set cvs_indicator_frame $f
     ttk::label $f.l1 -text VCS:
@@ -561,7 +561,7 @@ proc RamDebugger::CVS::indicator_update {} {
     
     set currentfile $RamDebugger::currentfile
     
-    if { [auto_execok cvs] eq "" && [auto_execok fossil] eq "" } { return }
+    if { ![info exists cvs_indicator_frame] } { return }
     
     set f $cvs_indicator_frame
     if { [regexp {^\*.*\*$} $currentfile] } {
@@ -898,7 +898,7 @@ proc RamDebugger::CVS::update_recursive_accept { what dir tree itemP { item "" }
 		set item [$tree insert end [list $dir] $itemP]
 	    }
 	    set i [$tree insert end [list "$line"] $item]
-	    if { ![regexp {(\w+)\s+(.*)} $line {} mode file] || $mode eq "UNCHANGED" } {
+	    if { ![regexp {^(\w+)\s+(.*)} $line {} mode file] || $mode eq "UNCHANGED" } {
 		$tree item configure $i -visible 0
 	    }
 	    update
@@ -934,8 +934,10 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 		set txt [$tree item text $item 0]
 		if { [regexp {^\s*(\w)\s+} $txt] } {
 		    set has_cvs 1
+		    set cvs_active 1
 		} elseif  { [regexp {^\s*\w{2,}\s*} $txt] } {
 		    set has_fossil 1
+		    set fossil_active 1
 		} elseif { [regexp {^\s*\?\s+} $txt] } {
 		    set can_be_added 1
 		}
@@ -1255,9 +1257,17 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 		    RamDebugger::OpenProgram tkcvs -dir [$w give_uservar_value dir]
 		}
 		fossil_ui {
+		    set dirs ""
+		    foreach item $sel_ids {
+		        lappend dirs [$tree item text [$tree item parent $item] 0]
+		    }
 		    set pwd [pwd]
-		    cd [$w give_uservar_value dir]
-		    exec fossil ui &
+		    foreach dir $dirs {
+		        cd $dir
+		        if { [catch { exec fossil info }] } { continue }
+		        exec fossil ui &
+		        break
+		    }
 		    cd $pwd
 		}
 	    }
