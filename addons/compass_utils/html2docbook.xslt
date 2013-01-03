@@ -29,9 +29,9 @@
   </xsl:template>
 
   <xsl:template match="body">
-    <wordwidget>
+    <lognoter>
       <xsl:apply-templates/>
-    </wordwidget>
+    </lognoter>
   </xsl:template>
 
 <!-- ******************************************************************************** -->
@@ -44,12 +44,14 @@
   </xsl:template>
 
   <xsl:template match="h1|h2|h3|h4">
-    <emphasis role="header">
-      <xsl:apply-templates/>
-    </emphasis>
+    <para>
+      <emphasis role="header">
+	<xsl:apply-templates/>
+      </emphasis>
+    </para>
   </xsl:template>
 
-  <xsl:template match="p|div">
+  <xsl:template match="p|div[not(@svg)]">
     <para>
       <xsl:apply-templates/>
     </para>
@@ -175,16 +177,18 @@
   <xsl:template match="img">
     <mediaobject>
       <imageobject>
-	<imagedata>
-	  <xsl:attribute name="width">
-	    <xsl:value-of select="@width"/>
-	  </xsl:attribute>
-	  <xsl:apply-templates/>
-	  <xsl:attribute name="fileref">
-	    <xsl:value-of select="@src"/>
-	  </xsl:attribute>
-	  <xsl:apply-templates/>
-	</imagedata>
+	      <imagedata>
+		      <xsl:attribute name="width">
+		        <xsl:value-of select="@width"/>
+		      </xsl:attribute>
+	        <xsl:apply-templates/>
+	        <xsl:attribute name="align">
+	          <xsl:value-of select="@align"/>
+	        </xsl:attribute>
+		      <xsl:apply-templates/>
+		      <xsl:attribute name="fileref">local://<xsl:value-of select="substring-after(@src,'img/')"/></xsl:attribute>
+		      <xsl:apply-templates/>
+	      </imagedata>
       </imageobject>
     </mediaobject>
   </xsl:template>

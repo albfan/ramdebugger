@@ -824,3 +824,4 @@ selected usando la fórmula de Simpson.}
 ::msgcat::mcset es {Connected to server '%s' Professional version} {Conectado al servidor '%s'.Versión profesional}
 ::msgcat::mcset es {Not connected to server} {No conectado al servidor}
 ::msgcat::mcset es {Error retrieving server_platform (%s)} {Error al recuperar servidor_plataforma (%s)}
+::msgcat::mcset es today hoy

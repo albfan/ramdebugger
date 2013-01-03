@@ -1,7 +1,6 @@
 package require snit
 package require compass_utils
 package require dialogwin
-package require xml2pdf
 package require tooltip
 package require msgcat
 
@@ -292,6 +291,12 @@ snit::widgetadaptor cu::draw_graphs {
     }
     method save_as_svg {} {
 	variable xml
+	       
+	set err [catch { package require xml2pdf }]            
+	if {$err} {
+	    snit_messageBox -message [_ "The package 'xml2pdf' is required for the proper functioning of the tool. It could not be found in the files associated with the program."] 
+	    return
+	}
 	
 	if {$options(-svgfile) == ""}  {     
 	    set options(-svgfile) [tk_getSaveFile -parent $self -defaultextension .svg \

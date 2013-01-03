@@ -126,11 +126,11 @@ snit::widget fulltktree {
 	$tree state define readonly
 
 	bind $win <FocusIn> [mymethod focus -only_if_win %W]
-	grid $win.t $win.sv -sticky ns
-	grid $win.sh -sticky ew
+	grid $win.t $win.sv -sticky ns -row 1
+	grid $win.sh -sticky ew -row 2
 	grid configure $win.t -sticky nsew
 	grid columnconfigure $win 0 -weight 1
-	grid rowconfigure $win 0 -weight 1
+	grid rowconfigure $win 1 -weight 1
 	
 	$tree element create e_folder_image image -image \
 	    {folder-open {open} folder-closed {}}
@@ -364,9 +364,9 @@ snit::widget fulltktree {
 	if { $options(-have_vscrollbar) == 0 } {
 	    grid remove $win.sv
 	} elseif { $options(-have_vscrollbar) == 1 } {
-	    grid $win.sv
+	    grid $win.sv -row 1 -column 1 -sticky ns
 	} else {
-	    grid $win.sv
+	    grid $win.sv -row 1 -column 1 -sticky ns
 	    autoscroll::autoscroll $win.sv
 	}
     }
@@ -384,7 +384,7 @@ snit::widget fulltktree {
 	    tooltip::tooltip $win.search [_ "Search in tree"]
 	    
 	    grid $win.t -row 1 -column 0 -rowspan 2
-	    grid $searchbutton -row 0 -column 1 -rowspan 2
+	    grid $searchbutton -row 1 -column 1 -rowspan 1
 	    grid $win.sv -row 2 -column 1 -sticky nse
 	    grid $win.sh -row 3 -column 0
 	    grid rowconfigure $win 0 -weight 0
@@ -401,11 +401,11 @@ snit::widget fulltktree {
 	    destroy $searchbutton
 	    unset searchbutton
 	    
-	    grid $win.t -row 0 -column 0 -rowspan 1
-	    grid $win.sv -row 0 -column 1
-	    grid $win.sh -row 1 -column 0
-	    grid rowconfigure $win 0 -weight 1
-	    grid rowconfigure $win 1 -weight 0
+	    grid $win.t -row 1 -column 0 -rowspan 1
+	    grid $win.sv -row 1 -column 1
+	    grid $win.sh -row 2 -column 0
+	    grid rowconfigure $win 0 -weight 0
+	    grid rowconfigure $win 1 -weight 1
 	    grid rowconfigure $win 2 -weight 0
 	}
     }
@@ -722,9 +722,11 @@ snit::widget fulltktree {
 	if { $f0 != 0 || $f1 != 1 } {
 	    #$tree yview moveto 0
 	    if { [info exists searchbutton] } {
-		grid $searchbutton
+		grid $searchbutton -row 1 -column 1
+		grid $win.sv -row 2 -column 1 -sticky nsw
+	    } else {
+		grid $win.sv -row 1 -column 1
 	    }
-	    grid $win.sv
 	    set last_end_item [$tree index end]
 	} elseif { [$tree index end] ne $last_end_item } {
 #             if { [info exists searchbutton] } {
@@ -1943,9 +1945,13 @@ snit::widget fulltktree {
 	if { $options(-selecthandler2) ne "" } {
 	    set execute_select_pressed ""
 	    after idle $options(-selecthandler2) [list $tree $ids]
+	    return
 	} elseif { $ch ne "" } {
 	    set ret [$self edit_item $id0 [dict get $id column]]
 	    if { $ret } { return }
+	}
+	if { $selecthandler_active && $options(-selecthandler) ne "" } {
+	    uplevel #0 $options(-selecthandler) [list $tree $ids]
 	}
     }
     method give_item_path_text { name_path { col "" } } {
@@ -2042,7 +2048,12 @@ snit::widget fulltktree {
     }
     method item_window_configure { item widget_cmd args } {
 	
-	set w [$widget_cmd $tree.item$item {*}$args]
+	lassign [list $tree.item$item $tree.item$item 0] w0 w idx
+	while { [winfo exists $w] } {
+	    set w $w0$idx
+	    incr idx
+	}
+       $widget_cmd $w {*}$args
 	
 	$tree item style set $item 0 window
 	$tree item element configure $item 0 e_window -destroy 1 \
@@ -2057,6 +2068,7 @@ snit::widget fulltktree {
 	    { -compound compound "" }
 	    { -font font "" }
 	    { -command cmd "" }
+	    { -column col 0 }
 	}
 	set compulsory "item"
 	parse_args $optional $compulsory $args
@@ -2072,14 +2084,20 @@ snit::widget fulltktree {
 	    set font [list {*}$font -underline 1 -size $size]
 	    set compoundL [expr {($compound eq "")?"":[list -compound $compound]}]
 	}
-	set b [button $tree.item$item -font $font -text $text \
-		-image $image {*}$compoundL \
-		-foreground blue -background white -bd 0 -cursor hand2 \
-		-highlightthickness 0 \
-		-command $command]
-	$tree item style set $item 0 window
-	$tree item element configure $item 0 e_window -destroy 1 \
+	lassign [list $tree.item$item $tree.item$item 0] b0 b idx
+	while { [winfo exists $b] } {
+	    set b $b0$idx
+	    incr idx
+	}
+	button $b -font $font -text $text \
+	    -image $image {*}$compoundL \
+	    -foreground blue -background white -bd 0 -cursor hand2 \
+	    -highlightthickness 0 \
+	    -command $command
+	$tree item style set $item $column window
+	$tree item element configure $item $column e_window -destroy 1 \
 	    -window $b
+	return $b
     }
     method set_uservar_value { key newvalue } {
 	set uservar($key) $newvalue

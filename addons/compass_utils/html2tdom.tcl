@@ -460,6 +460,7 @@ proc docbook2txt::go { args } {
     set optional {
 	{ -output_style text|wiki text }
 	{ -debug "" 0 }
+	{ -title title "" }
     }
     set compulsory "xml"
     parse_args $optional $compulsory $args
@@ -476,12 +477,18 @@ proc docbook2txt::go { args } {
 	    set file docbook2wiki.xslt
 	}
     }
+    
+    if { [$doc selectNodes {//emphasis}] eq "" } {
+	set xml_title "<para><emphasis role='header'>[lindex [split $title >] end]</emphasis></para>"
+	::dom::domNode::appendFirstXML [$doc firstChild] $xml_title
+    }    
 
     if { ![info exists xsltcmd] } {
 	set filename [file join $topdir $file]
 	set xsltdoc [cu::dom::parse [tDOM::xmlReadFile $filename]]
 	set xsltcmd [$xsltdoc toXSLTcmd]
     }
+    
     set newdoc [$xsltcmd $doc]
     $doc delete
     set txt [$newdoc asText]
@@ -493,6 +500,7 @@ proc docbook2txt::go { args } {
 
     # this is a dirty trick because tdom XSLT does not work
     # well when there is only space inside <xsl:text>
+    regsub -all {[\n]} $txt {} txt
     regsub -all -- {---NEWLINE---} $txt "\n" txt
     $newdoc delete
     return $txt
@@ -545,7 +553,7 @@ proc docbook2txt::_wiki2docbook_para { txt } {
 	
 	if { [lindex $ret 1 0] != -1 } {
 	    set link [string range $txt {*}[lindex $ret 1]]
-	    if { [regexp {^(File|Localfile|Indexterm|Image|ImageFile):(.*)} $link {} lt link] } {
+	    if { [regexp {^(File|Localfile|Indexterm|Image|ImageFile):([^|]+)} $link {} lt _link] } {
 		switch $lt {
 		    File { set linktype file }
 		    Localfile { set linktype localfile }
@@ -556,15 +564,29 @@ proc docbook2txt::_wiki2docbook_para { txt } {
 	    } else {
 		set linktype local
 	    }
-	    if { ![regexp {(.*)\|(.*)} $link {} link text] } {
-		set text ""
+	    
+	    #In order to preserve the original size of the linked object
+	    #if { ![regexp {(Align):([^\s]+)} $link {} attr align] } { set align "" }
+	    #if { ![regexp {(Width):([^\s]+)} $link {} attr width] } { set width "" }
+	    set width ""
+	    set align ""
+	    if { [llength [split $link |]] == 2 } {
+	       set width [lindex [split $link |] end]
+	    } else {
+	       set width [lindex [split $link |] 1]
+	       set align [lindex [split $link |] 2]
+	       if { $align eq "middle" } { set align "center" }
 	    }
-	    set link [string map $map $link]
+	    
+	    if { ![regexp {(.*)\|(.*)} $_link {} _link text] } { set text "" }
+	    set link [string map $map $_link]
 	    set text [string map $map $text]
 	    if { $linktype in "image imagefile" } {
 		if { $linktype eq "image" } { set link "local://$link" }
 		append _ "<mediaobject><imageobject>"
-		append _ [format_xml "<imagedata fileref='%s'/></imageobject>" $link]
+		#append _ [format_xml "<imagedata fileref='%s'/></imageobject>" $link]
+		append _ [format_xml "<imagedata fileref='%s' align='%s' \
+		        width='%s'/></imageobject>" $link $align $width]
 		if { $text ne "" } {
 		    append _ "<caption>[xml_map1 $text]</caption>"
 		}
@@ -605,6 +627,7 @@ proc docbook2txt::_wiki2docbook_para { txt } {
 	}
 	set txt [string range $txt $i1+1 end]
     }
+    regsub -all {[\s]*$} $txt {} txt
     append _ [xml_map1 $txt]
 	
     if { $lType eq "header" } {
@@ -615,6 +638,7 @@ proc docbook2txt::_wiki2docbook_para { txt } {
     } else {
 	append _ "</para>"  
     }
+
     return $_
 }
 
@@ -634,14 +658,14 @@ proc docbook2txt::wiki2docbook { args } {
 	set _ ""
     }
     
-    lassign "" last_txt listStack
+    lassign "" last_txt last_para listStack
     
     foreach line [split $txt \n] {
-	if { [string trim $line] eq "" } {
+	if { [string trim $line] eq "" && ![regexp {^\s*==.*==} $last_para]} {
 	    set ispara 1
 	} elseif { [regexp {^\s*\*} $line] } {
 	    set ispara 1
-	}  elseif { [regexp {^\s*==.*==} $line] } {
+	} elseif { [regexp {^\s*==.*==} $line] } {
 	    set ispara 1
 	} else {
 	    set ispara 0
@@ -650,20 +674,50 @@ proc docbook2txt::wiki2docbook { args } {
 	    if { $last_txt ne "" } { append last_txt " " }
 	    append last_txt [string trim $line]
 	    append _ [_wiki2docbook_para $last_txt]
+	    set last_para $last_txt
 	    set last_txt ""
 	} else {
+	    set last_para ""
 	    set last_txt $line
 	}
     }
+
     append _ [_wiki2docbook_para $last_txt]
 
     if { $include_main_node } {
 	append _ "</lognoter>"
     }
-    return $_
+
+     return $_
 }
 
 
+#This is probably also a dirty trick intended to preserve relation of spaces between 
+#wiki text and html text
+
+proc docbook2txt::wiki-html_spaces { dom } {
+    
+    set prevent_space 0
+    foreach node [$dom selectNodes {//para}] {
+	if { $node eq [lindex [$dom selectNodes {//para}] 0] } { continue }
+	if { ![$node hasChildNodes] && ![[$node previousSibling] hasChildNodes] } {
+	    if { !$prevent_space } {
+		set prevent_space 1
+		$node delete
+	    } else {
+		set prevent_space 0
+	    }
+	} else {
+	    set prevent_space 0
+	}    
+     }
+     set last_node [lindex [$dom selectNodes {//para}] end]
+     if { ![$last_node hasChildNodes]} {
+	$last_node delete
+     }
+    
+     return $dom   
+}
 
 
 

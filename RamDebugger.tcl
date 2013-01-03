@@ -61,7 +61,7 @@ namespace eval RamDebugger {
     #    RamDebugger version
     ################################################################################
 
-    set Version 8.1
+    set Version 8.2
 
     ################################################################################
     #    Non GUI commands
@@ -9339,6 +9339,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     bind $text <Return> "[bind Text <Return>] ; RamDebugger::IndentLine {} ; break"
 
     set c [list $text mark set insert "insert-1c"]
+    append c ";break"
     #bind $text <$::control-Key-2> "[list tk::TextInsert $text {""}];$c"
 
     bind $text <$::control-Key-1> [list RamDebugger::PositionsStack save]

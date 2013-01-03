@@ -72,8 +72,8 @@ proc cu::init_tile_styles { args } {
 	    set color_darker #818486
 	    
 	    foreach i [list TLabel TCheckbutton TRadiobutton \
-			   TCombobox TFrame TLabelframe TNotebook \
-			   TLabelframe.Label TSizegrip Toolbutton] {
+		           TCombobox TFrame TLabelframe TNotebook \
+		           TLabelframe.Label TSizegrip Toolbutton] {
 		ttk::style configure $i -background $color
 		ttk::style map $i -background [list disabled $color]
 	    }
@@ -88,6 +88,7 @@ proc cu::init_tile_styles { args } {
 	    }
 	    option add *Menu*Background $color
 	    option add *Menu*activeForeground $color_darker
+	    option add *Menu*selectColor $color_darker
 	}
     } ;# !inside_gid
     image create photo wntoolbar_toolbar_bg -file [file join $topdir images wntoolbar_toolbar_bg.gif]
@@ -107,7 +108,8 @@ proc cu::init_tile_styles { args } {
     catch { ttk::style configure WNtoolbar -padding "14 1 1 1" }
     
     ttk::style element create WNbutton.background image \
-	[list wntoolbar_button_bg active wntoolbar_button_bg_pressed pressed wntoolbar_button_bg_pressed] \
+	[list wntoolbar_button_bg active wntoolbar_button_bg_pressed pressed wntoolbar_button_bg_pressed \
+	    selected wntoolbar_button_bg_pressed] \
 	-sticky nsew -width 0 -height 0 -border "2 0 2 0"
     
     # if { [ tk windowingsystem] eq "x11" } {
@@ -365,6 +367,9 @@ proc cu::add_down_arrow_to_image { args } {
     set compulsory "img"
     parse_args $optional $compulsory $args
 
+    if {![info exists add_down_arrow_to_image_delta] } {
+	set add_down_arrow_to_image_delta 7
+    }
     if { $img ne "" } {
 	set width [image width $img]
 	set height [image height $img]
@@ -632,8 +637,8 @@ proc cu::text_entry_bindings { w } {
 		            bar | at @ numbersign # asciitilde ~ EuroSign €] {
 	    # they are class bindings so as search in text widgets can continue working
 	    bind Text <$ev> "[list tk::TextInsert %W $k]; break"
-	    bind TEntry <$ev> "[list tk::TextInsert %W $k]; break"
-	    bind Entry <$ev> "[list tk::TextInsert %W $k]; break"
+	    bind TEntry <$ev> "[list ttk::entry::Insert %W $k]; break"
+	    bind Entry <$ev> "[list tk::EntryInsert %W $k]; break"
 	}
     }
 }
@@ -793,7 +798,12 @@ proc cu::tooltip { what w txt } {
 ################################################################################
 
 proc cu::give_window_geometry { w } {
-
+    
+    if { [wm state $w] eq "zoomed" } {
+	return "zoomed"
+    } elseif { ![catch { wm attributes $w -zoomed } ret] && $ret } {
+	return "zoomed"
+    }
     regexp {(\d+)x(\d+)([-+])([-\d]\d*)([-+])([-\d]+)} [wm geometry $w] {} width height m1 x m2 y
     if { $::tcl_platform(platform) eq "unix" } {
 	# note: this work in ubuntu 9.04 (disconnected to make it work in kubuntu and others)
@@ -804,6 +814,15 @@ proc cu::give_window_geometry { w } {
 }
 
 proc cu::set_window_geometry { w geometry } {
+    
+    if { $geometry eq "zoomed" } {
+	if { $::tcl_platform(platform) eq "windows" } {
+	    wm state $w zoomed
+	} else {
+	    catch { wm attributes $w -zoomed 1 }
+	}
+	return
+    }
 
     if { ![regexp {(\d+)x(\d+)([-+])([-\d]\d*)([-+])([-\d]+)} $geometry {} width height m1 x m2 y] } {
 	if { [regexp {(\d+)x(\d+)} $geometry {} width height] } {

@@ -479,6 +479,7 @@ snit::widgetadaptor cu::combobox {
 
 snit::widgetadaptor cu::nicelabel {
     option -link_callback ""
+    option -link_color ""
 
     delegate method _insert to hull as insert
     delegate method _delete to hull as delete
@@ -486,7 +487,8 @@ snit::widgetadaptor cu::nicelabel {
     delegate option * to hull
 
     variable underlinefont
-
+    variable underlinefontbold
+    
     constructor args {
 	if { [lsearch -exact [font names] TkDefaultFont] != -1 } {
 	    set font TkDefaultFont
@@ -519,7 +521,8 @@ snit::widgetadaptor cu::nicelabel {
 	set boldfont [lreplace $boldfont $ipos $ipos bold]
 	
 	set underlinefont [list {*}[font actual [$self cget -font]] -underline 1]
-	
+	set underlinefontbold [list {*}[font actual [$self cget -font]] -underline 1 -weight bold]
+
 	$self tag configure subscript -font $font -offset -3
 	$self tag configure superscript -font $font -offset 3
 	$self tag configure bold -font $boldfont
@@ -539,21 +542,37 @@ snit::widgetadaptor cu::nicelabel {
 	$self _insert $index $txt $tagList
 	$self configure -state disabled
     }
-    method insert_link { index txt link title } {
+    method insert_link { args } {
 	
-	if { $index ne "end" } {
+	set optional {
+	    { -tags tagList "" }
+	}
+	set compulsory "index txt link title"
+	parse_args $optional $compulsory $args
+
+	if { [string is integer $index] } {
 	    set index 1.$index
-	} else {
+	} elseif { $index eq "end" } {
 	    set index end-1c
 	}
 	set index [$self index $index]
 	set tag link$index
-	$self tag configure $tag -foreground blue -font $underlinefont
+	lappend tags $tag
+	if { $options(-link_color) ne "" } {
+	    set color $options(-link_color)
+	} else {
+	    set color blue
+	}
+	if { "bold" in $tags } {
+	    $self tag configure $tag -foreground $color -font $underlinefontbold
+	} else {
+	    $self tag configure $tag -foreground $color -font $underlinefont
+	}
 	if { $title ne "" } {
 	    tooltip::tooltip $self -tag $tag $title
 	}
 	$self configure -state normal
-	$self _insert $index $txt [list $tag]
+	$self _insert $index $txt $tags
 	$self configure -state disabled
 	
 	$self tag bind $tag <1> [mymethod _eval_link $link]
@@ -755,7 +774,7 @@ snit::widgetadaptor cu::combobox_tree {
 		bind $popdown.l.t <Deactivate> { ttk::combobox::LBCancel [winfo parent %W] }
 	    }
 	}
-	bind $win.popdown <Map> [mymethod begin_post]
+	bind $win.popdown <Map> [mymethod begin_post %W]
 	bind $win.popdown <Unmap> [mymethod end_post %W]
 	
 	set internal_textvariable ""
@@ -837,7 +856,7 @@ snit::widgetadaptor cu::combobox_tree {
 	    return
 	}
 	#set internal_textvariable [$popdown.l item text $item 0]
-	set internal_textvariable [lindex  [$self cget -values] $item-1]
+	set internal_textvariable [lindex [$self cget -values] $item-1]
 	
 	update idletasks
 	$self icursor end
@@ -999,10 +1018,11 @@ snit::widgetadaptor cu::combobox_tree {
 	return ""
     }
     variable _begin_post_handler
-    method begin_post {} {
+    method begin_post { w } {
+	if { $w ne [winfo toplevel $popdown] && [winfo height $popdown] >= 50 } { return }
 	if { [info exists _begin_post_handler] } { return }
 	$self _begin_post_after
-	set _begin_post_handler [after 200 [mymethod begin_post_unset]]
+	set _begin_post_handler [after 400 [mymethod begin_post_unset]]
     }
     method begin_post_unset {} {
 	unset -nocomplain _begin_post_handler
@@ -1020,6 +1040,9 @@ snit::widgetadaptor cu::combobox_tree {
 	}
 	set y [winfo rooty $popdown]
 	set height [winfo height $popdown]
+	if { $height < 50 } {
+	    set height 50
+	}
 	
 	if { $options(-popup_width) == 0 } {
 	    set delta 40
@@ -2335,7 +2358,7 @@ snit::widget cu::dater_entry {
 	    -command [mymethod post_dater_toggle]
 	
 	if { $options(-addtodaybutton) } {
-	    ttk::button $win.b2 -text [_ Today] -command [mymethod set_today] -style Toolbutton
+	    ttk::button $win.b2 -text [_ "Today"] -command [mymethod set_today] -style Toolbutton
 	}
 
 	bindtags $entry [concat $win [bindtags $entry]]
@@ -2352,7 +2375,7 @@ snit::widget cu::dater_entry {
 	bind $win <FocusIn> [list focus $entry]
 
 	if { $options(-prefertodayword) } {
-	    set today [_ "Today"]
+	    set today [_ "today"]
 	} else {
 	    set today [clock format [clock seconds] -format "%Y-%m-%d"]
 	}
@@ -3245,6 +3268,7 @@ snit::widgetadaptor cu::menubutton_frame {
 	    $win state !pressed
 	}
 	grab release $mymenu
+	$win state !active
 
 	catch { grab $save_grab }
 	catch { focus $save_focus }
@@ -3438,7 +3462,7 @@ snit::widget cu::_menubutton_tree_helper {
 	}
 	if { $y+$h+10 > [winfo screenheight $win] } {
 	    set h [expr {[winfo screenheight $win]-$y-10}]
-	}        
+	}
 	wm geometry $win ${wi}x$h+$x+$y
 	update
 	wm deiconify $win

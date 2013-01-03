@@ -43,8 +43,8 @@ proc tktablet::_init_input_panel_lib {} {
     } else {
 	set bits 32
     }
-    uplevel #0 [list load [file join $topdir tktablet_$bits.dll] tktablet]
-    if { ![tktablet::IsTabletpc] } { return -1 }
+    uplevel #0 [list catch [list load [file join $topdir tktablet_$bits.dll] tktablet]]
+    if { [info command ::tktablet::IsTabletpc] eq "" || ![tktablet::IsTabletpc] } { return -1 }
     
     if { ![info exists textinputpanel] } {
 	

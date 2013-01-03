@@ -1875,7 +1875,7 @@ snit::widget dialogwin_snit {
 	    lassign [list 0 0 [winfo screenwidth $top] [winfo screenheight $top]] \
 		scr_x scr_y scr_w scr_h
 	}
-	if { $options(-geometry) ne "" } {
+	if { $options(-geometry) ne "" && $options(-geometry) ne "zoomed" } {
 	    if { ![regexp {(\d+)x(\d+)(?:\+([-\d]+)\+([-\d]+))?} \
 		$options(-geometry) {} width height x y] } {
 		regexp {^\+([-\d]+)\+([-\d]+)$} \
