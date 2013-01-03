@@ -61,7 +61,7 @@ namespace eval RamDebugger {
     #    RamDebugger version
     ################################################################################
 
-    set Version 7.6
+    set Version 7.7.1
 
     ################################################################################
     #    Non GUI commands
@@ -177,6 +177,8 @@ proc RamDebugger::Init { _readwriteprefs { registerasremote 1 } } {
     variable info_script
     variable usecommR
 
+    set info_script [info script]
+    
     if { ![file isdirectory [file join $topdir_external addons]] } {
 	set text [_ "Error: bad installation. Directory 'addons' could not be found in '%s'" $topdir_external]
 	puts $text
@@ -212,7 +214,9 @@ proc RamDebugger::Init { _readwriteprefs { registerasremote 1 } } {
 	set AppDataDir [file join $::env(HOME) .RamDebugger]
     }
     set exe [file join $AppDataDir exe]
-
+    if { ![file exists $exe] } {
+	file mkdir $exe
+    }
     if { $::tcl_platform(platform) eq "windows" && !$iswince } {
 	if { ![info exists ::env(PATH)] } {
 	    set list ""
@@ -512,6 +516,7 @@ proc RamDebugger::rdebug { args } {
     variable options
     variable initialcommands
     variable usecommR
+    variable tclsh_default_dirs
 
     set usagestring {usage: rdebug ?switches? ?program?
 	-h:             displays usage
@@ -622,8 +627,29 @@ proc RamDebugger::rdebug { args } {
 		    lappend ::auto_path $i
 		}
 	    }
+	    foreach "n v" [array get env TCL*_TM_PATH] {
+		foreach i [split $v ":;"] {
+		    ::tcl::tm::path add $i
+		}
+	    }
 	}
-
+	if { ![info exists tclsh_default_dirs] } {
+	    set tclsh_default_dirs [list "" ""]
+	    set err [catch { exec tclsh << {puts [set auto_path]}} ret]
+	    if { !$err } {
+		lset tclsh_default_dirs 0 $ret
+	    }
+	    set err [catch { exec tclsh << {puts [::tcl::tm::path list]}} ret]
+	    if { !$err } {
+		lset tclsh_default_dirs 1 $ret
+	    }
+	}
+	if { [llength [lindex $tclsh_default_dirs 0]] } {
+	    local eval lappend :auto_path [lindex $tclsh_default_dirs 0]
+	}
+	if { [llength [lindex $tclsh_default_dirs 1]] } {
+	    local eval ::tcl::tm::path add [lindex $tclsh_default_dirs 1]
+	}
 	set filetodebug $currentfile
 	set LocalDebuggingType tk
 	if { [info exists options(LocalDebuggingType)] } {
@@ -1012,6 +1038,9 @@ proc RamDebugger::rdebug { args } {
 	append remotecomm "set breakpoint pending on\n"
 	append remotecomm "set print elements 2000\n"
 	lassign $opts(program) cmd dir args
+	if { [file exists $dir] } {
+	    append remotecomm "cd \"$dir\"\n"
+	}
 	if { [string is integer $cmd] } {
 	    append remotecomm "attach $cmd\n"
 	} else {
@@ -8325,7 +8354,8 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		-command "RamDebugger::OpenProgram tkdiff"] \
 		[list command [_ "Open Tkcvs"] {} [_ "Open Tkcvs"] "" \
 		    -command "RamDebugger::OpenProgram tkcvs"] \
-	       [list command [_ "Version control system"]... {} [_ "Open Version control system window with cvs or fossil"] "" \
+		    [list command [_ "Version control system"]... {} \
+		    [_ "Open Version control system window with cvs or fossil"] "Ctrl 7" \
 		   -command "RamDebugger::CVS::update_recursive . last"] \
 		separator \
 	       [list cascad [_ "File type"] {} filetype 0 [list \
@@ -9179,7 +9209,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 #     }
 
     # if we do it at the beginning, an ugly update is made
-    if { $::tcl_platform(platform) != "windows" } {
+    if { $::tcl_platform(platform) ne "windows" } {
 	set img [image create photo -file [file join $topdir addons ramdebugger.png]]
 	wm iconphoto $w $img
 	#wm iconbitmap $w @$topdir/addons/ramdebugger.xbm
@@ -9291,7 +9321,7 @@ proc RamDebugger::OpenFileInNewWindow { args } {
     $ip eval [list source $info_script]
     $ip eval [list array set RamDebugger::options [array get options]]
     if { $ask_for_file } {
-	$ip eval [list after 1 [list RamDebugger::OpenFile]]
+	$ip eval [list after 100 [list RamDebugger::OpenFile]]
     }
     return $ip
 }

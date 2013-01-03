@@ -33,7 +33,7 @@ if { [info commands tkButtonInvoke] == "" } {
     #::tk::unsupported::ExposePrivateCommand tkButtonInvoke
 }
 
-package provide dialogwin 1.7
+package provide dialogwin 1.8
 
 ################################################################################
 #  This software is copyrighted by Ramon Ribó (RAMSAN) ramsan@cimne.upc.es.
@@ -1592,6 +1592,28 @@ snit::widget dialogwin_snit {
 		grid remove $b
 	    }
 	}
+    }
+    method tooltip_button { num args } {
+	
+	package require tooltip
+	if { $num == 0 } {
+	    set  b $win.buts.cancel
+	} elseif { $num == 1 } {
+	    set b $win.buts.ok
+	} else {
+	    foreach i [winfo children $win.buts] {
+		if { [regexp "\\m$num\\M" [$i cget -command]] } {
+		    set b $i
+		    break
+		}
+	    }
+	}
+	if { [llength $args] == 1 } {
+	    tooltip::tooltip $b [lindex $args 0]
+	} elseif { [llength $args] > 1 } {
+	    error "error in tooltip_button arguments"
+	}
+	return [tooltip::tooltip $b]
     }
     method createwindow {} {
 	$self createwindownowait

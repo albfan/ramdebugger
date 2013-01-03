@@ -757,7 +757,7 @@ proc ::TreeCtrl::ReleaseGrabAndFocus { oldGrab grabStatus } {
 }
 
 # Like EntryOpen, but Entry widget expands/shrinks during typing
-proc ::TreeCtrl::EntryExpanderOpen {T item column element} {
+proc ::TreeCtrl::EntryExpanderOpen {T item column element { text - } } {
 
     variable Priv
 
@@ -787,8 +787,9 @@ proc ::TreeCtrl::EntryExpanderOpen {T item column element} {
     set Priv(entry,$T,font) $font
 
     # Get the text used by the Element. Could check master Element too.
-    set text [$T item element cget $item $column $element -text]
-
+    if { $text eq "-" } {
+	set text [$T item element cget $item $column $element -text]
+    }
     # Create the Entry widget if needed
     if {[winfo exists $T.entry]} {
 	$T.entry delete 0 end
@@ -1004,7 +1005,7 @@ proc ::TreeCtrl::TextOpen {T item column element {width 0} {height 0}} {
 }
 
 # Like TextOpen, but Text widget expands/shrinks during typing
-proc ::TreeCtrl::TextExpanderOpen {T item column element width} {
+proc ::TreeCtrl::TextExpanderOpen {T item column element width { text - } } {
 
     variable Priv
 
@@ -1031,8 +1032,9 @@ proc ::TreeCtrl::TextExpanderOpen {T item column element width} {
     }
 
     # Get the text used by the Element. Could check master Element too.
-    set text [$T item element cget $item $column $element -text]
-
+    if { $text eq "-" } {
+	set text [$T item element cget $item $column $element -text]
+    }
     set justify [$T element cget $element -justify]
     if {$justify eq ""} {
 	set justify left

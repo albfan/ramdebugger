@@ -1656,9 +1656,9 @@ proc RamDebugger::AboutWindow {} {
     label $w.l -text RamDebugger -font "-family {new century schoolbook} -size 24 -weight bold" \
 	    -fg \#d3513d
 
-    set tt [_ "Author: %s\n" "Ramon Ribó (RAMSAN)"]
+    set tt [_ "Author: %s\n" "Ramon Ribo (RAMSAN)"]
     append tt "ramsan@compassis.com\nhttp://www.gidhome.com/ramsan\n"
-    append tt "http://www2.compassis.com/ramdebugger"
+    append tt "http://www.compassis.com/ramdebugger"
 
     text $w.l2 -bd 0 -bg [$w cget -bg] -width 10 -height 4 \
 	    -highlightthickness 0 
@@ -1689,7 +1689,8 @@ proc RamDebugger::AboutWindow {} {
     grid columnconfigure $w 0 -weight 1
     grid rowconfigure $w 3 -weight 1
 
-    ttk::button $w.close -text [_ "Close"] -width 10
+    ttk::button $w.close -text [_ "Close"] -width 10 -command \
+	[list RamDebugger::AboutWindow_close $w]
     
     wm withdraw $w
     update idletasks
@@ -1704,8 +1705,6 @@ proc RamDebugger::AboutWindow {} {
     wm transient $w $par
 
     bind $w.close <Enter> "RamDebugger::MotionInAbout $w.close ; break"
-    bind $w.close <ButtonPress-1> "WarnWin [list {Congratulations, you got it!!!}] ; destroy $w; break"
-
 
     $w.c create text 0 0 -anchor n -font "-family {new century schoolbook} -size 16 -weight bold"\
 	    -fill \#d3513d -text "Version $RamDebugger::Version" -tags text
@@ -1732,6 +1731,10 @@ proc RamDebugger::AboutWindow {} {
     foreach "pack author lic mod" $data {
 	$w.lf insert end [list $pack $author $lic $mod]
     }
+}
+
+proc RamDebugger::AboutWindow_close { w } {
+    destroy $w
 }
 
 proc RamDebugger::AboutMoveCanvas { c t } {

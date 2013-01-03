@@ -729,6 +729,13 @@ proc RamDebugger::CVS::update_recursive_do0 { directory current_or_last } {
     set w [dialogwin_snit ._ask -title [_ "VCS management"] \
 	    -okname [_ View] -morebuttons [list [_ "Update"]] \
 	    -cancelname [_ Close] -grab 0 -callback [list update_recursive_do1]]
+    
+    if { $::tcl_platform(platform) ne "windows" } {
+	catch {
+	    set img [image create photo -file [file join $::RamDebugger::topdir addons ramdebugger.png]]
+	    wm iconphoto $w $img
+	}
+    }
     set f [$w giveframe]
     
     ttk::label $f.l0 -text [_ "Select origin directory for CVS or fossil update recursive, then use the contextual menu on the files:"] \
@@ -934,8 +941,13 @@ proc RamDebugger::CVS::update_recursive_do0 { directory current_or_last } {
     
     bind $w <Control-d> [list "update_recursive_cmd" $w open_program tkdiff $f.toctree ""]
     bind $w <Control-i> [list "update_recursive_cmd" $w commit $f.toctree ""]
+    bind $w <Control-e> [list $w invokeok]
+    bind $w <Control-u> [list $w invokebutton 2]
     bind $f.e2 <Control-i> "[bind $w <Control-i>];break"
 
+    $w tooltip_button 1 [_ "View modified files and file to be updated from repository Ctrl-e"]
+    $w tooltip_button 2 [_ "Update files from repository Ctrl-u"]
+    
     tk::TabToWindow $f.e1
     bind $w <Return> [list $w invokeok]
     $w createwindow
@@ -995,6 +1007,14 @@ proc RamDebugger::CVS::messages_menu { w menu entry } {
 	foreach file $files {
 	    for { set i 0 } { $i < [llength [file split $file]] } { incr i } {
 		set f [file join {*}[lrange [file split $file] 0 $i]]
+		if { $f in $insertedList } { continue }
+		set txt "$f: "
+		$menu add command -label [_ "Insert '%s'" $txt] -command  \
+		    [namespace code [list insert_in_entry $w $entry $txt]] 
+		lappend insertedList $f
+	    }
+	    if { [llength [file split $file]] > 1 } {
+		set f [file tail $file]
 		if { $f in $insertedList } { continue }
 		set txt "$f: "
 		$menu add command -label [_ "Insert '%s'" $txt] -command  \
@@ -1154,6 +1174,12 @@ proc RamDebugger::CVS::update_recursive_accept { w what dir tree itemP { item ""
 	    if { [clock scan $date] >= [clock scan "2009-12-18"] } {
 		set fossil_version 1
 	    }
+	}
+	# this is to avoid problems with update
+	if { ![winfo exists $tree] } {
+	    cd $olddir    
+	    waitstate $w off
+	    return
 	}
 	cd $dirLocal
 	if { $item eq "" || [$tree item text $item 0] ne $dirLocal } {

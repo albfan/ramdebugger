@@ -1315,18 +1315,25 @@ snit::widget fulltktree {
 		    set w ""
 		    switch [lindex $ret 0] {
 		        1 - entry {
+		            set text "-"
+		            if {[llength $ret] > 1 } {
+		                set text [lindex $ret 1]
+		            }
 		            $self _correct_xview $item $icol
 		            #set w [::TreeCtrl::EntryOpen $tree $item $icol e_text_sel]
-		            set w [::TreeCtrl::EntryExpanderOpen $tree $item $icol e_text_sel]
+		            set w [::TreeCtrl::EntryExpanderOpen $tree $item $icol e_text_sel $text]
 		        }
 		        text {
+		            set text "-"
+		            if {[llength $ret] > 1 } {
+		                set text [lindex $ret 1]
+		            }
 		            $self _correct_xview $item $icol
-		            set w [::TreeCtrl::TextExpanderOpen $tree $item $icol e_text_sel 500]
+		            set w [::TreeCtrl::TextExpanderOpen $tree $item $icol e_text_sel 500 $text]
 		        }
 		        combo {
 		            $self _correct_xview $item $icol
-		            foreach "editable values dict" [list "" "" ""] break
-		            foreach "editable values dict" [lrange $ret 1 end] break
+		            lassign [lrange $ret 1 end] editable values dict
 		            set w [::TreeCtrl::ComboOpen $tree $item $icol e_text_sel \
 		                    $editable $values -NONE- $dict]
 		        }
