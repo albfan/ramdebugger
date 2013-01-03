@@ -43,6 +43,37 @@ bind FullTreeCtrl <ButtonRelease-1> {
     TreeCtrl::FullTkTreeRelease1 %W %x %y
 }
 
+# MouseWheel
+if {[string equal "x11" [tk windowingsystem]]} {
+    # Support for mousewheels on Linux/Unix commonly comes through mapping
+    # the wheel to the extended buttons.  If you have a mousewheel, find
+    # Linux configuration info at:
+    #        http://www.inria.fr/koala/colas/mouse-wheel-scroll/
+    bind FullTreeCtrl <4> {
+	if {!$tk_strictMotif} {
+	    %W yview scroll -3 units
+	}
+	break
+    }
+    bind FullTreeCtrl <5> {
+	if {!$tk_strictMotif} {
+	    %W yview scroll 3 units
+	}
+	break
+    }
+} elseif {[string equal [tk windowingsystem] "aqua"]} {
+    bind FullTreeCtrl <MouseWheel> {
+	%W yview scroll [expr {- (%D)}] units
+	break
+    }
+} else {
+    bind FullTreeCtrl <MouseWheel> {
+	%W yview scroll [expr {- (%D / 120) * 3}] units
+	break
+    }
+}
+
+
 namespace eval TreeCtrl {
     variable Priv
     set Priv(edit,delay) 500
@@ -585,9 +616,9 @@ proc ::TreeCtrl::SetEditable { T args } {
 	    if {[lsearch -exact [$T element names] $element] == -1} {
 		error "element \"$element\" doesn't exist"
 	    }
-	    if {[$T element type $element] ne "text"} {
-		error "element \"$element\" is not of type \"text\""
-	    }
+#             if {[$T element type $element] ne "text"} {
+#                 error "element \"$element\" is not of type \"text\""
+#             }
 	}
     }
     set Priv(edit,$T) $listOfLists
@@ -1729,8 +1760,8 @@ proc ::TreeCtrl::AnyWidgetOpen {T item column element widget } {
     # Get window coords of the Element
     scan [$T item bbox $item $column $element] "%d %d" x y
     
-    set font [$T item element actual $item $column $element -font]
-    if { $font eq "" } { set font TkDefaultFont }
+    set err [catch { $T item element actual $item $column $element -font } font]
+    if { $err || $font eq "" } { set font TkDefaultFont }
     
     # Accept edit when we lose the focus
     
@@ -1744,6 +1775,9 @@ proc ::TreeCtrl::AnyWidgetOpen {T item column element widget } {
 	    }
 	    set T $TreeCtrl::Priv(anywidget,T)
 	    set fw [focus]
+	    if { $fw eq "" } {
+		return
+	    }
 	    set found 0
 	    while { $fw ne "." && $fw ne "" } {
 		if { $fw eq $T } {
@@ -1815,9 +1849,13 @@ proc ::TreeCtrl::AnyWidgetOpen {T item column element widget } {
     }
 
     set width [winfo width $widget]
-    set width2 [font measure $font [$T item element cget $item $column $element -text]]
-    if { $width2 > $width } { set width $width2 }
-
+    if { $width == 1 } {
+	set width [winfo reqwidth $widget]
+    }
+    if { [$T item style set active $column] in "text s_text" } {
+	set width2 [font measure $font [$T item element cget $item $column $element -text]]
+	if { $width2 > $width } { set width $width2 }
+    }
     set width [expr {$width +16+ ($ebw + 1) * 2}]
     scan [$T contentbox] "%d %d %d %d" left top right bottom
     if {$ex + $width > $right} {
@@ -1838,7 +1876,13 @@ proc ::TreeCtrl::AnyWidgetClose {T accept} {
     variable Priv
 
     set widget $Priv(anywidget,widget)
-    set text [$widget get_text]
+    set column $Priv(anywidget,$T,column)
+
+    if { [$T item style set active $column]  in "text s_text" } {
+	set text [$widget get_text]
+    } else {
+	set text ""   
+    }
     destroy $widget
     #place forget $widget
     #grab release $widget

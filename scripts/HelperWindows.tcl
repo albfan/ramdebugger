@@ -1066,7 +1066,7 @@ proc RamDebugger::PreferencesWindow {} {
     $nb add $fd -text [_ Directories] -sticky nsew
 
     set sw [ScrolledWindow $fd.lf -relief sunken -borderwidth 0]
-    listbox $sw.lb -listvariable DialogWin::user(executable_dirs) -selectmode extended
+    listbox $sw.lb -listvariable [$w give_uservar executable_dirs] -selectmode extended
     $sw setwidget $sw.lb
     
     ttk::frame $fd.bbox1
@@ -1088,6 +1088,8 @@ proc RamDebugger::PreferencesWindow {} {
 
     set tt [_ "Include here all directories where RamDebugger should find executables\n\
 	    This is primary useful in Windows to describe where mingw is installed"]
+    append tt "\n[_ "These directories are also added to the 'auto_path' variable. So they will be used to find TCL packages"]"
+
     tooltip::tooltip $sw.lb $tt
 
     grid $fd.lf -sticky nsew
@@ -1689,7 +1691,8 @@ proc RamDebugger::AboutWindow {} {
     grid columnconfigure $w 0 -weight 1
     grid rowconfigure $w 3 -weight 1
 
-    ttk::button $w.close -text [_ "Close"] -width 10
+    ttk::button $w.close -text [_ "Close"] -width 10 -command \
+	[list RamDebugger::AboutWindow_close $w]
     
     wm withdraw $w
     update idletasks
@@ -1704,8 +1707,6 @@ proc RamDebugger::AboutWindow {} {
     wm transient $w $par
 
     bind $w.close <Enter> "RamDebugger::MotionInAbout $w.close ; break"
-    bind $w.close <ButtonPress-1> "WarnWin [list {Congratulations, you got it!!!}] ; destroy $w; break"
-
 
     $w.c create text 0 0 -anchor n -font "-family {new century schoolbook} -size 16 -weight bold"\
 	    -fill \#d3513d -text "Version $RamDebugger::Version" -tags text
@@ -1732,6 +1733,10 @@ proc RamDebugger::AboutWindow {} {
     foreach "pack author lic mod" $data {
 	$w.lf insert end [list $pack $author $lic $mod]
     }
+}
+
+proc RamDebugger::AboutWindow_close { w } {
+    destroy $w
 }
 
 proc RamDebugger::AboutMoveCanvas { c t } {
@@ -3171,7 +3176,7 @@ proc RamDebugger::OpenProgram { args } {
 	visualregexp { set file [file join $topdir addons visualregexp visual_regexp.tcl] }
 	tkcvs {
 	    set file [file join $topdir addons tkcvs bin tkcvs.tcl]
-	    if {  [llength $args] == 0 && [file isdirectory [file dirname $currentfile]] } {
+	    if {  [llength $argv] == 0 && [file isdirectory [file dirname $currentfile]] } {
 		lappend argv -dir [file dirname $currentfile]
 	    }
 	}

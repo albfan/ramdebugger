@@ -24,6 +24,31 @@ if { [info commands _] eq "" } {
     }
 }
 
+if { [info procs GetImage] == "" || ![info exists ::GIDDEFAULT] } {
+    #using without GiD GetImage not exists, then return always dialogwinquestionhead
+    image create photo dialogwinquestionhead -data {
+	R0lGODlhKAAoAKUAAPHY8+y9+dmX1bxLt7EMprATqsIXtsE0tdaGz+bK2s94yt4UxeUNzNgK
+	wcgEscQLsbEDocQjtOElzfEb2PMW1OQczMF5uuOr2dssyfw06vUk3M1ZvsScwMWrttFIwaw2
+	qfY86tG4vvLW1uHV1NrExrSSpMw+uPhH79GYwftV+t8zyPXj5bRqqPxo/NxcyPos5cBYsN6j
+	zuG42Nw+xMSivNx4xOxC3L8rr8xkvORM0MlrueBkyLxDtP///////////yH+FUNyZWF0ZWQg
+	d2l0aCBUaGUgR0lNUAAh+QQBCgA/ACwAAAAAKAAoAAAG/sCfcEgsGo/IpHLJbDqf0Kj0CAhY
+	AdOmYEDodguGAyKRNSoM6IWa0Wg4HhDIgFwORAwSyYRSoTAmDAtsDnEWWRcGGBkaExIbFhwd
+	HRwKHoJuEB9SFxEgIIwbIQkJIiMiCSQhJSaDmVAJEScnjCgAIre4uAkdA36EA08mJymMCj+3
+	tremuCMdGL4QKE0IICkZFCorK8srCSGiuQkse24ETSotJ3sux7c/CR4YGBbbuBwU+A0QhkoC
+	Jy0v8JngtkLFHgoe2t0KwcfPgwJLPLRIMWHPBBgdQpDYgK8iB4UrYuDLB0GGkhktQByk0EiF
+	HnwqaKzI9aMGvj4MHhhDksAG/sCOI4N6IDET1w8ZfW5SWAAjiYx/GlgmnephxExTK37EkDBy
+	T4UFB5IIANGiItCREhIUdYfA4p+RFW4kiWGDGL4/XhEqFFEzKEu8GsIikfGCIsuVe3D8WPbj
+	wsGkBzW8SIgEQIQUATu+pTBjGd8ciC1SeJFBcZJOLyoyYMmaAguNJFBM6NMHUMcXIAQo0YH7
+	8J7NfDBwDWpxjwZPWZ0aWNS14h5Hlab+vZ2C3ZIDkn8fZKCiAwkSNFgk9U1Bw7ALTGQ8YGT2
+	sG5lHUxMP1xthxMcDczirWBVl46OFhVmAxZOfJBfaxOEsNYKONhW0QuyoAfFDQ6s9tYGCWC1
+	AiOHTkGYmxQr8FAhAyRSsEFGMczQkWQZqCDhFAgQ0EaJwFXEiAcElrGCDg840EYDbJC4QAMe
+	xFDGERfocMAdBdywAQI5HinllFRWaeWVWB4RBAA7
+    }
+    proc GetImage { filename } {        
+	return dialogwinquestionhead        
+    }   
+}
+
 if { [info commands tkTabToWindow] == "" } {
     interp alias "" tkTabToWindow "" tk::TabToWindow
     #::tk::unsupported::ExposePrivateCommand tkTabToWindow
@@ -33,7 +58,7 @@ if { [info commands tkButtonInvoke] == "" } {
     #::tk::unsupported::ExposePrivateCommand tkButtonInvoke
 }
 
-package provide dialogwin 1.8
+package provide dialogwin 1.12
 
 ################################################################################
 #  This software is copyrighted by Ramon Ribó (RAMSAN) ramsan@cimne.upc.es.
@@ -130,6 +155,9 @@ proc DialogWin::Init { winparent title style { morebuttons "" } { OKname "" } { 
 #         set w $winparent.__dialogwin$i
 #     }
     toplevel $w
+    if { $::tcl_platform(platform) == "windows" } {       
+	wm attributes $w -toolwindow 1
+    }
     wm title $w $title
     wm withdraw $w
 
@@ -450,6 +478,9 @@ proc DialogWinTop::Init { winparent title style commands { morebuttons "" } { OK
 	set w $winparent.${nameprefix}dialogwintop$i
     }
     toplevel $w
+    if { $::tcl_platform(platform) == "windows" } {
+	wm attributes $w -toolwindow 1
+    }
     wm title $w $title
 
     switch $style {
@@ -774,7 +805,7 @@ proc DialogWinTop::CreateWindow { f { geom "" } { minwidth "" } { minheight "" }
 #     }
 #     CopyNamespace ::DialogWin ::DialogWin2
 
-#     array set opts [list -default "" -icon info -message "" -parent . -title "" \
+#     array set opts [list -default "" -icon question-32.png -message "" -parent . -title "" \
 #         -type ok]
 
 #     for { set i 0 } { $i < [llength $args] } { incr i } {
@@ -820,7 +851,7 @@ proc DialogWinTop::CreateWindow { f { geom "" } { minwidth "" } { minheight "" }
 #     set f [DialogWin2::Init $opts(-parent) $opts(-title) separator $buts - -]
 #     set w [winfo toplevel $f]
 
-#     label $f.l1 -image dialogwinquestionhead -grid 0
+#     label $f.l1 -image [GetImage question-32.png] -grid 0
 #     label $f.msg -justify left -text $opts(-message) -wraplength 3i -grid "1 px5 py5"
 
 #     supergrid::go $f
@@ -864,13 +895,13 @@ proc DialogWinTop::messageBox { args } {
     return [eval snit_messageBox $args]
 }
 
-proc MessageWin { text title {image dialogwinquestionhead} {parent .} } {
+proc MessageWin { text title {image question-32.png} {parent .} } {
     if { $parent eq "." } { set parent "" }
     set w [dialogwin_snit $parent.%AUTO% -title $title -okname \
 	       [_ "Ok"] -cancelname "-"]
     set f [$w giveframe]
 
-    label $f.l1 -image $image
+    label $f.l1 -image [GetImage $image]
     label $f.msg -justify left -text $text -wraplength 3i
 
     grid $f.l1 $f.msg -sticky nw
@@ -881,7 +912,7 @@ proc MessageWin { text title {image dialogwinquestionhead} {parent .} } {
 }
 
 proc WarnWin { text {parent .} } {
-    MessageWin $text [_ "Warning"] dialogwinquestionhead $parent
+    MessageWin $text [_ "Warning"] question-32.png $parent
 }
 
 proc WarnWin_hideerror { text errordata { parent .} } {
@@ -890,7 +921,7 @@ proc WarnWin_hideerror { text errordata { parent .} } {
 	       -cancelname -]
     set f [$w giveframe]
 
-    label $f.l1 -image dialogwinquestionhead
+    label $f.l1 -image [GetImage question-32.png]
     label $f.msg -justify left -text $text -wraplength 3i
 
     grid $f.l1 $f.msg -sticky nw
@@ -904,7 +935,7 @@ proc WarnWin_hideerror { text errordata { parent .} } {
 
 proc snit_messageBox { args } {
 
-    array set opts [list -default "" -icon info -message "" -parent . -title "" \
+    array set opts [list -default "" -icon question-32.png -message "" -parent . -title "" \
 	    -type ok -do_not_ask_again 0 -do_not_ask_again_key ""]
 
     for { set i 0 } { $i < [llength $args] } { incr i } {
@@ -975,11 +1006,7 @@ proc snit_messageBox { args } {
 	       -okname - -cancelname - -transient 1]
     set f [$w giveframe]
 
-    if { $opts(-icon) == "info" || [lsearch -exact [image names] $opts(-icon)] == -1 } {
-	set opts(-icon) dialogwinquestionhead
-    }
-
-    ttk::label $f.l1 -image $opts(-icon)
+    ttk::label $f.l1 -image [GetImage $opts(-icon)]
     if { [winfo screenwidth .] < 300 } {
 	set wraplength 1.5i
     } else {
@@ -1110,6 +1137,8 @@ snit::widget dialogwin_snit {
 
     option -repeat_answer_check 0
     option -frame_grid_cmd ""
+    option -toplevel_cmd ""
+    option -show_frame_toplevel_toggle 1
     option -frame_toplevel toplevel
 
     hulltype toplevel
@@ -1152,7 +1181,7 @@ snit::widget dialogwin_snit {
 	    set radiobutton_cmd ttk::radiobutton
 	}
 	set current_row -1
-	if { $options(-frame_grid_cmd) ne "" } {
+	if { $options(-show_frame_toplevel_toggle) && $options(-frame_grid_cmd) ne "" } {
 	    frame $win.f0 -bg #880000 -bd 1 -relief solid -height 4 \
 		-cursor hand2
 	    grid $win.f0 -sticky ew -padx 2 -pady 2
@@ -1726,6 +1755,9 @@ snit::widget dialogwin_snit {
 	    }
 	}
 	update
+	if { ![winfo exists $win] } {
+	    return
+	}
 	wm deiconify $win
 	update idletasks
 	wm geometry $win [wm geometry $win]
@@ -1741,10 +1773,14 @@ snit::widget dialogwin_snit {
 	    set oldGrab ""
 	}
 	update
+	if { ![winfo exists $win] } { return }
 	set focus [focus -lastfor $win]
 	if { $focus ne "" } { tk::TabToWindow $focus }
 	if { $focus eq "" } { set focus $win }
 	focus -force $focus
+	if { $options(-toplevel_cmd) ne "" } {
+	    uplevel #0 $options(-toplevel_cmd)
+	}
     }
     method _applyaction { value } {
 	set action $value
@@ -2049,26 +2085,6 @@ snit::widget dialogwin_snit {
 	lappend destroy_handlers $cmd
     }
 }
-
-image create photo dialogwinquestionhead -data {
-    R0lGODlhKAAoAKUAAPHY8+y9+dmX1bxLt7EMprATqsIXtsE0tdaGz+bK2s94yt4UxeUNzNgK
-    wcgEscQLsbEDocQjtOElzfEb2PMW1OQczMF5uuOr2dssyfw06vUk3M1ZvsScwMWrttFIwaw2
-    qfY86tG4vvLW1uHV1NrExrSSpMw+uPhH79GYwftV+t8zyPXj5bRqqPxo/NxcyPos5cBYsN6j
-    zuG42Nw+xMSivNx4xOxC3L8rr8xkvORM0MlrueBkyLxDtP///////////yH+FUNyZWF0ZWQg
-    d2l0aCBUaGUgR0lNUAAh+QQBCgA/ACwAAAAAKAAoAAAG/sCfcEgsGo/IpHLJbDqf0Kj0CAhY
-    AdOmYEDodguGAyKRNSoM6IWa0Wg4HhDIgFwORAwSyYRSoTAmDAtsDnEWWRcGGBkaExIbFhwd
-    HRwKHoJuEB9SFxEgIIwbIQkJIiMiCSQhJSaDmVAJEScnjCgAIre4uAkdA36EA08mJymMCj+3
-    tremuCMdGL4QKE0IICkZFCorK8srCSGiuQkse24ETSotJ3sux7c/CR4YGBbbuBwU+A0QhkoC
-    Jy0v8JngtkLFHgoe2t0KwcfPgwJLPLRIMWHPBBgdQpDYgK8iB4UrYuDLB0GGkhktQByk0EiF
-    HnwqaKzI9aMGvj4MHhhDksAG/sCOI4N6IDET1w8ZfW5SWAAjiYx/GlgmnephxExTK37EkDBy
-    T4UFB5IIANGiItCREhIUdYfA4p+RFW4kiWGDGL4/XhEqFFEzKEu8GsIikfGCIsuVe3D8WPbj
-    wsGkBzW8SIgEQIQUATu+pTBjGd8ciC1SeJFBcZJOLyoyYMmaAguNJFBM6NMHUMcXIAQo0YH7
-    8J7NfDBwDWpxjwZPWZ0aWNS14h5Hlab+vZ2C3ZIDkn8fZKCiAwkSNFgk9U1Bw7ALTGQ8YGT2
-    sG5lHUxMP1xthxMcDczirWBVl46OFhVmAxZOfJBfaxOEsNYKONhW0QuyoAfFDQ6s9tYGCWC1
-    AiOHTkGYmxQr8FAhAyRSsEFGMczQkWQZqCDhFAgQ0EaJwFXEiAcElrGCDg840EYDbJC4QAMe
-    xFDGERfocMAdBdywAQI5HinllFRWaeWVWB4RBAA7
-}
-
 
 
 #--------------------------------------------------------------------------------

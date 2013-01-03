@@ -2378,14 +2378,18 @@ proc RamDebugger::DebugCplusPlusWindowAttach {} {
     package require fulltktree
     fulltktree $f1.tree -selecthandler2 \
 	"[list $w invokeok];#" \
+	-contextualhandler_menu [list RamDebugger::DebugCplusPlusWindowAttach_contextual $w] \
 	-columns $columns -expand 1 \
 	-selectmode browse -showlines 0 -indent 0 -width 650
     $w set_uservar_value tree $f1.tree
+
+    set searchList [RamDebugger::GetPreference debug_cplus_attach_search_list]
     
-    ttk::entry $f1.e1 -textvariable [$w give_uservar search ""] -width 12
-    
+    $w set_uservar_value search [lindex $searchList 0]
+    ttk::combobox $f1.e1 -textvariable [$w give_uservar search] -width 12 -values $searchList
+	
     $w add_trace_to_uservar search [list RamDebugger::DebugCplusPlusWindowAttach_search $w]
-    
+       
     ttk::button $f1.b1 -image actcross16 -style Toolbutton \
 	-command "[list $w set_uservar_value search ""] ; [list focus $f1.e1]"
     
@@ -2417,11 +2421,28 @@ proc RamDebugger::DebugCplusPlusWindowAttach {} {
 	if { [llength $item] == 1 } {
 	    lassign [$f1.tree item text $item] cmd pid
 	    rdebug -debugcplusplus [list  $pid "" $cmd]
+	    set search [string trim [$w give_uservar_value search]]
+	    if { $search ne "" } {
+		set searchList [linsert0 -max_len 10 $searchList $search]
+		RamDebugger::SetPreference debug_cplus_attach_search_list $searchList
+	    }
 	    break
 	}
 	set action [$w waitforwindow]
     }
     destroy $w
+}
+
+proc RamDebugger::DebugCplusPlusWindowAttach_contextual { w tree menu item itemList } {
+
+    set pid [$tree item text $item 1]
+    $menu add command -label [_ "Kill process"] -command \
+	[list RamDebugger::DebugCplusPlusWindowAttach_kill $w $pid]
+}
+
+proc RamDebugger::DebugCplusPlusWindowAttach_kill { w pid } {
+    cu::kill $pid
+    DebugCplusPlusWindowAttach_update $w
 }
 
 proc RamDebugger::DebugCplusPlusWindowAttach_update { w } {

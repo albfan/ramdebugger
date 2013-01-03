@@ -1293,6 +1293,9 @@ proc HelpViewer::HelpWindow { file { base .help} { geom "" } { title "" } { tocf
 	if { ![winfo exists $base] } return ;# windows disabled || usemorewindows == 0
     } else {
 	toplevel $base
+	if { $::tcl_platform(platform) == "windows" } {	   
+	    wm attributes $base -toolwindow 1
+	}
 	wm title $base $title
     }
     wm withdraw $base

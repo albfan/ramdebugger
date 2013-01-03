@@ -6,8 +6,8 @@ exec wish "$0" "$@"
 package require Tcl 8.5
 package require Tk 8.5
 
-# package require compass_utils
-# mylog::init -view_binding <Control-L> debug
+#package require compass_utils
+#mylog::init -view_binding <Control-L> debug
 
 if { [info exists ::starkit::topdir] } {
     # This is for the starkit in UNIX to start graphically
@@ -61,7 +61,7 @@ namespace eval RamDebugger {
     #    RamDebugger version
     ################################################################################
 
-    set Version 7.7
+    set Version 7.8
 
     ################################################################################
     #    Non GUI commands
@@ -177,6 +177,8 @@ proc RamDebugger::Init { _readwriteprefs { registerasremote 1 } } {
     variable info_script
     variable usecommR
 
+    set info_script [info script]
+    
     if { ![file isdirectory [file join $topdir_external addons]] } {
 	set text [_ "Error: bad installation. Directory 'addons' could not be found in '%s'" $topdir_external]
 	puts $text
@@ -259,7 +261,9 @@ proc RamDebugger::Init { _readwriteprefs { registerasremote 1 } } {
 	    file mkdir $exe
 	}
 	foreach i $exeList {
-	    file copy -force [file join $topdir addons exe $i] $exe
+	    if { [file exists [file join $topdir addons exe $i]] } {
+		file copy -force [file join $topdir addons exe $i] $exe
+	    }
 	}
     }
     set dirs ""
@@ -465,6 +469,16 @@ proc RamDebugger::UpdateExecDirs {} {
 	# this is a variable from the TCL library
 	array unset ::auto_execs
     }
+    
+    set dirs ""
+    foreach i $options(executable_dirs) {
+	if { $i ni $::auto_path } {
+	    lappend dirs $i
+	}
+    }
+    if { [llength $dirs] } {
+	set ::auto_path [linsert $::auto_path 0 {*}$dirs]
+    }
 }
 
 ################################################################################
@@ -485,7 +499,7 @@ proc RamDebugger::rhelp { args } {
 
     if { $opts(command) != "" } {
 	if { [info commands $opts(command)] == "" } {
-	    error [_ "command '%s' does not exists" $opts(command)]\n$usagestring
+	    error [_ "command '%s' does not exist" $opts(command)]\n$usagestring
 	}
 	catch { $opts(command) -h } string
 	return $string
@@ -1784,6 +1798,11 @@ proc RamDebugger::rlist { args } {
 	    }
 	}
 	if { $filetype == "XML" } {
+	    set err [catch { dom parset $files($currentfile) } doc]
+	    if { !$err } {
+		set files($currentfile) [$doc asXML]
+		$doc delete
+	    }
 	    set err [catch { Instrumenter::DoWorkForXML $files($currentfile) instrumentedfilesInfo($currentfile) } errstring]
 	    if { $err } {
 		set einfo $::errorInfo
@@ -2737,6 +2756,7 @@ proc RamDebugger::RecieveFromGdb {} {
     variable fileslist
     variable ExpressionResult
     variable options
+    variable WindowFilesList
 
     foreach "fid program state" $remoteserver break
 
@@ -2811,7 +2831,7 @@ proc RamDebugger::RecieveFromGdb {} {
 	}
 	next - step {
 	    if { ![regexp {at\s+([^:]+):([0-9]+)} $aa {} file line] } {
-		if { [regexp {^\s*([0-9]+)} $aa {} line] } {
+		if { [regexp {^\s*([0-9]+)\s} $aa {} line] } {
 		    set file $currentfile
 		} else {
 		    set line ""
@@ -2826,15 +2846,23 @@ proc RamDebugger::RecieveFromGdb {} {
 		        
 		    }
 		}
+		if { [file pathtype $file] eq "relative" } {
+		    foreach i $WindowFilesList {
+		        if { [file tail $i] eq $file } {
+		            set file $i
+		            break
+		        }
+		    }
+		}
 		if { [file exists $file] } {
 		    set file [filenormalize $file]
 		}
 	    }
-	    if { $line != "" } {
+	    if { $line ne "" } {
 		set remoteserver [lreplace $remoteserver 2 2 ""]
 		set filenum [lsearch -exact $fileslist $file]
 		if { $filenum == -1 } {
-		    set err [catch {OpenFileF $file} errstring]
+		    set err [catch {OpenFileF -raise_error 1 $file} errstring]
 		    if { $err } {
 		        WarnWin [_ "Could not open file '%s' for stopping program" $file]
 		        return
@@ -2920,6 +2948,14 @@ proc RamDebugger::RecieveFromGdb {} {
 		set file [file join [file dirname $cproject::project] $file]
 	    }
 	}
+	if { [file pathtype $file] eq "relative" } {
+	    foreach i $WindowFilesList {
+		if { [file tail $i] eq $file } {
+		    set file $i
+		    break
+		}
+	    }
+	}
 	if { [file pathtype $file] == "volumerelative" } {
 	    set drive [string trim [lindex [file split [pwd]] 0] /]
 	    set file $drive$file
@@ -2927,7 +2963,7 @@ proc RamDebugger::RecieveFromGdb {} {
 	set file [filenormalize $file]
 	set filenum [lsearch -exact $fileslist $file]
 	if { $filenum == -1 } {
-	    set err [catch {OpenFileF $file} errstring]
+	    set err [catch {OpenFileF -raise_error 1 $file} errstring]
 	    if { $err } {
 		WarnWin [_ "Could not open file '%s' for stopping program" $file]
 		return
@@ -3266,7 +3302,7 @@ proc RamDebugger::ViewOnlyTextOrAll { args } {
 	    set x [winfo x $t]
 	}
 	if { !$view_all_simple } {
-	    wm geometry $t [winfo width $fulltext]x[winfo height $t]+$x+[winfo y $t]
+	    cu::set_window_geometry $t [winfo width $fulltext]x[winfo height $t]+$x+[winfo y $t]
 	}
 	set options(ViewOnlyTextOrAll) OnlyText
     } else {
@@ -3295,14 +3331,14 @@ proc RamDebugger::ViewOnlyTextOrAll { args } {
 	
 	incr width [expr {$delta+$delta_ext}]
 	if { !$view_all_simple } {
-	    wm geometry $t ${width}x[winfo height $t]+$x+[winfo y $t]
+	    cu::set_window_geometry $t ${width}x[winfo height $t]+$x+[winfo y $t]
 	}
 	set options(ViewOnlyTextOrAll) All
     }
     set geomkey maingeometry_$options(ViewOnlyTextOrAll)
     if { [info exists options($geomkey)] && !$view_all_simple } {
 	if { $options($geomkey) eq "zoomed" } {
-	    wm geom $w 800x600+0+0
+	    cu::set_window_geometry $w 800x600+0+0
 	    if { $::tcl_platform(platform) eq "windows" } {
 		wm state $w zoomed
 	    } else {
@@ -3551,6 +3587,19 @@ proc RamDebugger::SavePreferences { { raise_error 0 } } {
 	    WarnWin [_ "Could not save preferences: %s" $errstring]
 	}
     }
+}
+
+proc RamDebugger::SetPreference { name value } {
+    variable options
+    set options($name) $value
+}
+
+proc RamDebugger::GetPreference { name { default "" } } {
+    variable options
+    if { [info exists options($name)] } {
+	return $options($name)
+    }
+    return $default
 }
 
 proc RamDebugger::ApplyColorPrefs { t } {
@@ -3853,6 +3902,7 @@ proc RamDebugger::OpenFileF { args } {
 	{ -force boolean 0 }
 	{ -user_num_line line -1 }
 	{ -no_history boolean 0 }
+	{ -raise_error boolean 0 }
     }
     set compulsory "file"
     parse_args $optional $compulsory $args  
@@ -3903,8 +3953,13 @@ proc RamDebugger::OpenFileF { args } {
 	set currentfile $currentfile_save
 	set currentfile_endline $currentfile_endline_save
 	WaitState 0
-	WarnWin [lindex [split $errstring \n] 0]
-	return 1
+	
+	if { $raise_error } {
+	    error [lindex [split $errstring \n] 0]
+	} else {
+	    WarnWin [lindex [split $errstring \n] 0]
+	    return 1
+	}
     }
 
     $marker delete arrow
@@ -4769,8 +4824,13 @@ proc RamDebugger::ActualizeActivePrograms { menu { force 0 } } {
 }
 
 proc RamDebugger::DisconnectStop {} {
+    variable mainframe
+    
     if { [catch [list RamDebugger::rdebug -disconnect] errstring] } {
-	WarnWin $errstring
+	set w [winfo toplevel $mainframe]
+	set menu1 $w.actualizeprogramsmenu
+	tk_popup $menu1 [winfo pointerx .] [winfo pointery .]
+	#WarnWin $errstring
     }
 }
 
@@ -4820,7 +4880,7 @@ proc RamDebugger::ChooseViewFile { what args } {
     set w $text
 
     if { [winfo exists $w._choosevf] } {
-	wm geometry $w._choosevf [wm geometry $w._choosevf]
+	cu::set_window_geometry $w._choosevf [wm geometry $w._choosevf]
     }
 
     set entrylen 16
@@ -6318,18 +6378,21 @@ proc RamDebugger::StackDouble1 { textstack idx } {
     variable currentfile
     variable options
 
+    set idx [$textstack index $idx]
     set data [$textstack get "$idx linestart" "$idx lineend"]
     set rex {^\#([0-9]+)}
-    if { ![regexp $rex $data] && [$textstack compare "$idx linestart" > 1.0] } {
+    while { ![regexp $rex $data] && [$textstack compare "$idx linestart" > 1.0] } {
 	set prevline [$textstack get "$idx -1 line linestart" "$idx -1 line lineend"]
-	if { ![regexp $rex $prevline] } {
-	    set data "$prevline $data"
-	}
+	set data "$prevline $data"
+	set idx [$textstack index "$idx -1 line linestart"]
     }
-    if { [regexp $rex $data] && [$textstack compare "$idx lineend" < "end-1l"] } {
+    while { [regexp $rex $data] && [$textstack compare "$idx lineend" < "end-1l"] } {
 	set nextline [$textstack get "$idx +1 line linestart" "$idx +1 line lineend"]
 	if { ![regexp $rex $nextline] } {
 	    set data "$data $nextline"
+	    set idx [$textstack index "$idx +1 line linestart"]
+	} else {
+	    break
 	}
     }
     foreach pattern [list {((?:[a-zA-Z]:/)?[-/\w.]+):([0-9]+)} \
@@ -6758,8 +6821,16 @@ proc RamDebugger::CheckText { command args } {
 
     if { ![info exists instrumentedfilesInfo($currentfile)] } { return }
 
-    while { $l1_old > 1 && [lindex [lindex $instrumentedfilesInfo($currentfile) \
-		                        [expr $l1_old-1]] 1] != "n" } {
+    while { $l1_old > 1 } {
+	if { [lindex $instrumentedfilesInfo($currentfile) $l1_old-1 1] eq "n" } {
+	    set found 1
+	} else {
+	    set found 0
+	}
+	if { $filetype eq "C/C++" && [regexp {^\s*(#|//|/\*)} [$text get $l1_old.0 "$l1_old.0 lineend"]] } {
+	    set found 0
+	}
+	if { $found } { break }
 	incr l1_new -1
 	incr l1_old -1
     }
@@ -8121,6 +8192,10 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     
     set tktablet_ok [expr {![catch { package require tktablet }]}]
 
+    if { $::tcl_platform(os) eq "Darwin" } {
+	set tktablet_ok 0 
+    }
+    
     if { !$iswince && $tktablet_ok && [info commands ::tktablet::init_input_panel] ne "" } {
 	tktablet::init_input_panel
 	tktablet::init_input_panel_text
@@ -8675,10 +8750,12 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 	event add <<Contextual>> <ButtonRelease-3>
 	event add <<Contextual>> <App>
 	set ::control Control
+	set ::control_txt Ctrl
     } elseif { [tk windowingsystem] eq "aqua" } {
 	event add <<ContextualPress>> <ButtonPress-2>
 	event add <<Contextual>> <ButtonRelease-2>
 	set ::control Command
+	set ::control_txt Command
 	
 	foreach ev [bind Text] {
 	    if { [regsub {Control} $ev {Command} evC] } {
@@ -8689,6 +8766,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 	event add <<ContextualPress>> <ButtonPress-3>
 	event add <<Contextual>> <ButtonRelease-3>
 	set ::control Control
+	set ::control_txt Ctrl
     }
     bind $marker <<Contextual>> [list RamDebugger::MarkerContextualSubmenu %W %x %y %X %Y]
     
@@ -8762,7 +8840,11 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 	catch { destroy $f.m }
 	menu $f.m
 	switch $page {
-	    stacktrace {
+	    stacktrace { 
+		set xt [expr {$x-[winfo rootx $f]}]
+		set yt [expr {$y-[winfo rooty $f]}]
+		$f.m add command -label [_ "Activate stack level"] -command \
+		    [list RamDebugger::StackDouble1 $f @$xt,$yt]
 		$f.m add checkbutton -label [_ "Auto raise stack trace"] -variable \
 		    RamDebugger::options(auto_raise_stack_trace)
 	    }
@@ -8924,7 +9006,8 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		}
 	    }
 	    regsub -all {(?q)$units} $comm $units comm
-	    bind all <$but> $comm
+	    bind Text <Button-$but> ""
+	    bind all <Button-$but> $comm
 	}
     } else {
 	bind Text <MouseWheel> ""
@@ -9100,7 +9183,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 	if { [regexp {(\d+)x(\d+)[+]([-\d]+)[+]([-\d]+)} $options($geomkey) {} wi he xpos ypos] } {
 	    incr xpos 20
 	    incr ypos 20
-	    wm geometry $w ${wi}x$he+$xpos+$ypos
+	    cu::set_window_geometry $w ${wi}x$he+$xpos+$ypos
 	    if { [info exists options(currentfile)] && \
 		     [AreFilesEqual $options(currentfile) \
 		          [sendmaster set ::RamDebugger::currentfile]] } {
@@ -9124,7 +9207,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 	    }
 	    wm geometry $w 800x600+0+0
 	} else {
-	    wm geometry $w $options($geomkey)
+	    cu::set_window_geometry $w $options($geomkey)
 	}
     }
 
@@ -9134,10 +9217,13 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 	::etcl::autofit $w
 	bind $w <ConfigureRequest> {::etcl::autofit %W}
     }
-
+    
     set menu [$mainframe getmenu activeprograms]
-    $menu configure -postcommand [list RamDebugger::ActualizeActivePrograms $menu 1]
-    #ActualizeActivePrograms $menu
+    if { [ tk windowingsystem] eq "aqua" } {
+	ActualizeActivePrograms $menu
+    } else {
+	$menu configure -postcommand [list RamDebugger::ActualizeActivePrograms $menu 1]
+    }
 
     set menu [$mainframe getmenu macros]
     AddActiveMacrosToMenu $mainframe $menu
@@ -9256,10 +9342,34 @@ proc RamDebugger::insert_translation_cmd {} {
     } else {
 	set i [$text index insert]
 	lassign [list $i $i] s1 s2
+	set s1_save $s1
+	while { [$text compare $s1 > "$s1 linestart"] && [regexp {[\w\s\"%]} [$text get "$s1-1c"]] } {
+	    if { $s1 ne $s1_save && [$text get $s1] eq {"} } { break }
+	    set s1 [$text index "$s1-1c"]
+	}
+	if { [$text get "$s1"] ne {"} } {
+		set s1 $s1_save
+		while { [$text compare $s1 > "$s1 linestart"] && [regexp {[\w\"%]} [$text get "$s1-1c"]] } {
+		    set s1 [$text index "$s1-1c"]
+		}
+		set rex {[\w%]}
+	    } else {
+		set rex {[\w\s%\"]}
+	    }
+	    while { [$text compare $s2 < "$s2 lineend"] && [regexp $rex [$text get "$s2+1c"]] } {
+	    if { [$text get $s2] eq {"} } { break }
+	    set s2 [$text index "$s2+1c"]
+	}
     }
     if { [$text get "$s1"] ne {"} } {
 	$text insert $s1 {"}
 	set s2 [$text index "$s2+1c"]
+    } elseif { [regexp {\[([_=])\s+} [$text get "$s1-3c" $s1] {} cmd] } {
+	switch -- $cmd {
+	    "_" { $text replace "$s1-2c" "$s1-1c" "=" }
+	    "=" { $text replace "$s1-2c" "$s1-1c" "_" }
+	}
+	return
     }
     $text insert $s1 "\[_ "
     set s2 [$text index "$s2+3c"]
@@ -9319,7 +9429,7 @@ proc RamDebugger::OpenFileInNewWindow { args } {
     $ip eval [list source $info_script]
     $ip eval [list array set RamDebugger::options [array get options]]
     if { $ask_for_file } {
-	$ip eval [list after 1 [list RamDebugger::OpenFile]]
+	$ip eval [list after 100 [list RamDebugger::OpenFile]]
     }
     return $ip
 }
