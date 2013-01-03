@@ -61,7 +61,7 @@ namespace eval RamDebugger {
     #    RamDebugger version
     ################################################################################
 
-    set Version 7.7.1
+    set Version 7.7
 
     ################################################################################
     #    Non GUI commands
@@ -177,8 +177,6 @@ proc RamDebugger::Init { _readwriteprefs { registerasremote 1 } } {
     variable info_script
     variable usecommR
 
-    set info_script [info script]
-    
     if { ![file isdirectory [file join $topdir_external addons]] } {
 	set text [_ "Error: bad installation. Directory 'addons' could not be found in '%s'" $topdir_external]
 	puts $text
@@ -9321,7 +9319,7 @@ proc RamDebugger::OpenFileInNewWindow { args } {
     $ip eval [list source $info_script]
     $ip eval [list array set RamDebugger::options [array get options]]
     if { $ask_for_file } {
-	$ip eval [list after 100 [list RamDebugger::OpenFile]]
+	$ip eval [list after 1 [list RamDebugger::OpenFile]]
     }
     return $ip
 }

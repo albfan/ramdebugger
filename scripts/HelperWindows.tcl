@@ -1689,8 +1689,7 @@ proc RamDebugger::AboutWindow {} {
     grid columnconfigure $w 0 -weight 1
     grid rowconfigure $w 3 -weight 1
 
-    ttk::button $w.close -text [_ "Close"] -width 10 -command \
-	[list RamDebugger::AboutWindow_close $w]
+    ttk::button $w.close -text [_ "Close"] -width 10
     
     wm withdraw $w
     update idletasks
@@ -1705,6 +1704,8 @@ proc RamDebugger::AboutWindow {} {
     wm transient $w $par
 
     bind $w.close <Enter> "RamDebugger::MotionInAbout $w.close ; break"
+    bind $w.close <ButtonPress-1> "WarnWin [list {Congratulations, you got it!!!}] ; destroy $w; break"
+
 
     $w.c create text 0 0 -anchor n -font "-family {new century schoolbook} -size 16 -weight bold"\
 	    -fill \#d3513d -text "Version $RamDebugger::Version" -tags text
@@ -1731,10 +1732,6 @@ proc RamDebugger::AboutWindow {} {
     foreach "pack author lic mod" $data {
 	$w.lf insert end [list $pack $author $lic $mod]
     }
-}
-
-proc RamDebugger::AboutWindow_close { w } {
-    destroy $w
 }
 
 proc RamDebugger::AboutMoveCanvas { c t } {
