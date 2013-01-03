@@ -25,7 +25,7 @@ INSTALL
 
 To install the program:
 
-unzip RamDebugger-source7.2.1.zip
+unzip RamDebugger-source7.2.zip
 Install TCL and all the necessary TCL packages (NOTE: Check ActivestateTCL and teacup installer inside)
 
 EXECUTION
