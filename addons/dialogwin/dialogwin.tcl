@@ -1910,10 +1910,15 @@ snit::widget dialogwin_snit {
 		            default { $self disablebutton $w }
 		        }
 		    } else {
+		        set i_action disable
 		        if { [regexp {^([-+])(.*)} $w {} sign w] } {
-		           continue
+		            if { $sign eq "-" } {
+		                set i_action enable
+		            } else {
+		                continue
+		            }
 		        }
-		        $self _enable_disable_widget $w disable
+		        $self _enable_disable_widget $w $i_action
 		    }
 		}
 	    }

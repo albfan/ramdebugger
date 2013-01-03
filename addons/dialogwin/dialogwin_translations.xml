@@ -9,17 +9,17 @@
     <srcstrings>
         <src id="1">
             <base>OK</base>
-            <position>dialogwin.tcl:160;dialogwin.tcl:480;dialogwin.tcl:936;dialogwin.tcl:940;dialogwin.tcl:1012</position>
+            <position>dialogwin.tcl:160;dialogwin.tcl:480;dialogwin.tcl:938;dialogwin.tcl:942</position>
             <priority>0</priority>
         </src>
         <src id="2">
             <base>Close</base>
-            <position>dialogwin.tcl:165;dialogwin.tcl:485;dialogwin.tcl:1195</position>
+            <position>dialogwin.tcl:165;dialogwin.tcl:485;dialogwin.tcl:1197</position>
             <priority>0</priority>
         </src>
         <src id="3">
             <base>Cancel</base>
-            <position>dialogwin.tcl:167;dialogwin.tcl:487;dialogwin.tcl:940;dialogwin.tcl:944;dialogwin.tcl:952;dialogwin.tcl:1009;dialogwin.tcl:1192;dialogwin.tcl:2117</position>
+            <position>dialogwin.tcl:167;dialogwin.tcl:487;dialogwin.tcl:942;dialogwin.tcl:946;dialogwin.tcl:954;dialogwin.tcl:1011;dialogwin.tcl:1194;dialogwin.tcl:2138</position>
             <priority>0</priority>
         </src>
         <src id="4">
@@ -29,7 +29,7 @@
         </src>
         <src id="5">
             <base>Ok</base>
-            <position>dialogwin.tcl:870;dialogwin.tcl:890;dialogwin.tcl:1190</position>
+            <position>dialogwin.tcl:870;dialogwin.tcl:890;dialogwin.tcl:1192</position>
             <priority>0</priority>
         </src>
         <src id="6">
@@ -39,52 +39,52 @@
         </src>
         <src id="7">
             <base>Abort</base>
-            <position>dialogwin.tcl:932</position>
+            <position>dialogwin.tcl:934</position>
             <priority>0</priority>
         </src>
         <src id="8">
             <base>Retry</base>
-            <position>dialogwin.tcl:932;dialogwin.tcl:944</position>
+            <position>dialogwin.tcl:934;dialogwin.tcl:946</position>
             <priority>0</priority>
         </src>
         <src id="9">
             <base>Ignore</base>
-            <position>dialogwin.tcl:932</position>
+            <position>dialogwin.tcl:934</position>
             <priority>0</priority>
         </src>
         <src id="10">
             <base>Yes</base>
-            <position>dialogwin.tcl:948;dialogwin.tcl:952</position>
+            <position>dialogwin.tcl:950;dialogwin.tcl:954</position>
             <priority>0</priority>
         </src>
         <src id="11">
             <base>No</base>
-            <position>dialogwin.tcl:948;dialogwin.tcl:952;dialogwin.tcl:2068</position>
+            <position>dialogwin.tcl:950;dialogwin.tcl:954;dialogwin.tcl:2089</position>
             <priority>0</priority>
         </src>
         <src id="12">
             <base>unknown type: '%s' in snit_messageBox</base>
-            <position>dialogwin.tcl:955</position>
+            <position>dialogwin.tcl:957</position>
             <priority>0</priority>
         </src>
         <src id="13">
             <base>bad default option: '%s' in snit_messageBox</base>
-            <position>dialogwin.tcl:963</position>
+            <position>dialogwin.tcl:965</position>
             <priority>0</priority>
         </src>
         <src id="14">
             <base>Action</base>
-            <position>dialogwin.tcl:2034</position>
+            <position>dialogwin.tcl:2055</position>
             <priority>0</priority>
         </src>
         <src id="15">
             <base>New password</base>
-            <position>dialogwin.tcl:2034</position>
+            <position>dialogwin.tcl:2055</position>
             <priority>0</priority>
         </src>
         <src id="16">
             <base>Uncrypt</base>
-            <position>dialogwin.tcl:2034</position>
+            <position>dialogwin.tcl:2055</position>
             <priority>0</priority>
         </src>
         <src id="17">
@@ -93,7 +93,7 @@
         </src>
         <src id="18">
             <base>Enter password</base>
-            <position>dialogwin.tcl:2048</position>
+            <position>dialogwin.tcl:2069</position>
             <priority>0</priority>
         </src>
         <src id="19">
@@ -106,77 +106,77 @@
         </src>
         <src id="21">
             <base>Password must have at least 4 characters</base>
-            <position>dialogwin.tcl:2057</position>
+            <position>dialogwin.tcl:2078</position>
             <priority>0</priority>
         </src>
         <src id="22">
             <base>Change page type</base>
-            <position>dialogwin.tcl:2068</position>
+            <position>dialogwin.tcl:2089</position>
             <priority>0</priority>
         </src>
         <src id="23">
             <base>Choose a new page type for page '%s'</base>
-            <position>dialogwin.tcl:2068</position>
+            <position>dialogwin.tcl:2089</position>
             <priority>0</priority>
         </src>
         <src id="24">
             <base>Current type: %s</base>
-            <position>dialogwin.tcl:2072</position>
+            <position>dialogwin.tcl:2093</position>
             <priority>0</priority>
         </src>
         <src id="25">
             <base>New type:</base>
-            <position>dialogwin.tcl:2073</position>
+            <position>dialogwin.tcl:2094</position>
             <priority>0</priority>
         </src>
         <src id="26">
             <base>Yes to all</base>
-            <position>dialogwin.tcl:2068</position>
+            <position>dialogwin.tcl:2089</position>
             <priority>0</priority>
         </src>
         <src id="27">
             <base>No to all</base>
-            <position>dialogwin.tcl:2068</position>
+            <position>dialogwin.tcl:2089</position>
             <priority>0</priority>
         </src>
         <src id="28">
             <base>Do not show again for this session</base>
-            <position>dialogwin.tcl:993</position>
+            <position>dialogwin.tcl:995</position>
             <priority>0</priority>
         </src>
         <src id="29">
             <base>Repeat my answer</base>
-            <position>dialogwin.tcl:1290</position>
+            <position>dialogwin.tcl:1292</position>
             <priority>0</priority>
         </src>
         <src id="30">
             <base>Choose action to perform</base>
-            <position>dialogwin.tcl:2034</position>
+            <position>dialogwin.tcl:2055</position>
             <priority>0</priority>
         </src>
         <src id="31">
             <base>Password</base>
-            <position>dialogwin.tcl:2048</position>
+            <position>dialogwin.tcl:2069</position>
             <priority>0</priority>
         </src>
         <src id="32">
             <base>Enter password to encrypt</base>
-            <position>dialogwin.tcl:2048</position>
+            <position>dialogwin.tcl:2069</position>
             <priority>0</priority>
         </src>
         <src id="33">
             <base>Previous</base>
-            <position>dialogwin.tcl:2117</position>
+            <position>dialogwin.tcl:2138</position>
             <priority>0</priority>
         </src>
         <src id="34">
             <base>Next</base>
-            <position>dialogwin.tcl:2117</position>
+            <position>dialogwin.tcl:2138</position>
             <priority>0</priority>
         </src>
         <src id="35">
             <base>Finish</base>
-            <position>dialogwin.tcl:2117</position>
+            <position>dialogwin.tcl:2138</position>
             <priority>0</priority>
         </src>
     </srcstrings>
@@ -369,17 +369,17 @@
         <user id="6">escolano</user>
         <user id="7">paqui</user>
         <user id="8">ollu</user>
-        <user id="9">Programmer</user>
-        <user id="10">Translator</user>
-        <user id="11">Abel</user>
-        <user id="12">Mizuho</user>
-        <user id="13">ada</user>
-        <user id="14">b.vacquier</user>
-        <user id="15">miguel</user>
-        <user id="16">Fritz</user>
-        <user id="17">Gerardo Socorro</user>
-        <user id="18">Laur</user>
-        <user id="19">Dani Sá</user>
+        <user id="9">Dani Sá</user>
+        <user id="10">Programmer</user>
+        <user id="11">Translator</user>
+        <user id="12">Abel</user>
+        <user id="13">Mizuho</user>
+        <user id="14">ada</user>
+        <user id="15">b.vacquier</user>
+        <user id="16">miguel</user>
+        <user id="17">Fritz</user>
+        <user id="18">Gerardo Socorro</user>
+        <user id="19">Laur</user>
         <user id="20">Paqui</user>
         <user id="21">Joaquim</user>
         <user id="22">joaquim</user>
@@ -396,7 +396,7 @@
     </users>
     <abbrevs/>
     <options>
-        <option name="defaultexportdir" value="C:/Users/ramsan/Documents/GiD Project/scripts/dialogwin/msgs"/>
-        <option name="TranslationProgram" value="dialogwin {{C:/Users/ramsan/Documents/GiD Project/scripts/dialogwin}} .tcl 0"/>
+        <option name="defaultexportdir" value="/home/ramsan/mytcltk/dialogwin/msgs"/>
+        <option name="TranslationProgram" value="dialogwin {{C:/Users/ramsan/Documents/GiD Project/scripts/dialogwin} /home/ramsan/mytcltk/dialogwin} .tcl 0"/>
     </options>
 </ramtranslator>

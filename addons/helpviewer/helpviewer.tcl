@@ -791,7 +791,7 @@ proc HelpViewer::LoadFile {w name { enterinhistory 1 } { tag "" } } {
 
     if { [file isdir $name] } {
 	set files [glob -dir $name *]
-	if { [llength $files] == 1 } {
+	if { [llength $files] == 1 && ![file isdirectory [lindex $files 0]] } {
 	    set name [lindex $files 0]
 	} else {
 	    set rex {(?i)(index|contents|_toc)\.(htm|html)$}
