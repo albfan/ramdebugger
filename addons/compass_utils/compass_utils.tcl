@@ -1228,6 +1228,33 @@ proc cu::file::sha1 { file } {
     return $ret
 }
 
+proc cu::file::get { file } {
+    set fin [open $file rb]
+    set data [read $fin]
+    close $fin
+    return $data
+}
+
+proc cu::file::sqlite_uri { args } {
+    
+    set optional {
+	{ -vfs vfsname "" }
+    }
+    set compulsory "filename"
+    parse_args $optional $compulsory $args
+
+    set filename [string map [list "?" "%3f" "#" "%23" "\\" "/"] $filename]
+    regsub -all {/{2,}} $filename {/} filename
+
+    if { $::tcl_platform(platform) eq "windows" } {
+	regsub {^[a-zA-Z]:} $filename {/&} filename
+    }
+    if { $vfs ne "" } {
+	append filename "?vfs=$vfs"
+    }
+    return "file:$filename"
+}
+
 proc cu::nice_time { args } {
     
     set optional {

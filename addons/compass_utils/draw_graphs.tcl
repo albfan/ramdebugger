@@ -29,28 +29,24 @@ snit::widgetadaptor cu::draw_graphs {
     option -functionnames "Function" 
     option -showlegend 0
     option -showtitle 1
-    option -scatterplot 0
-    option -multiplegraphs 0   
+    option -scatterplot 0     
     option -backgroundcolor white  
     option -foregroundcolor black
     option -xlabelunit ""
-    option -ylabelunit ""
-    option -colorset [list blueviolet aquamarine3 coral2 darkblue darkred darksalmon \
-	    chocolate4 grey DarkGreen salmon RoyalBlue "orange red" coral DarkKhaki \
-	    ivory2 gold maroon "sky blue"]     
+    option -ylabelunit ""  
     option -canvaswidthset ""
     option -canvasheightset ""
-    option -xaxismax "-1e10 -1e10"
-    option -xaxismin "1e10 1e10"
-    option -yaxismaxleft "-1e10 -1e10"
-    option -yaxisminleft "1e10 1e10"
-    option -yaxismaxright "-1e10 -1e10"
-    option -yaxisminright "1e10 1e10"
-    option -xyaxisauto 1
+    option -colorset ""    
+    option -xaxismax ""
+    option -xaxismin ""
+    option -yaxismaxleft ""
+    option -yaxisminleft ""
+    option -yaxismaxright ""
+    option -yaxisminright ""    
     option -xymovement "0.0 0.0" 
-    option -svgfile ""  
     option -addgridlines 0
     option -gridlinescolor "grey"
+    option -yaxisleftright 0
 	
     variable xfact ""
     variable xm ""
@@ -63,7 +59,11 @@ snit::widgetadaptor cu::draw_graphs {
     variable defaultdir $::env(HOME) 
     variable yaxis 
     variable idleid 
-    variable xml
+    variable xyaxisauto 1 
+    variable multiplegraphs 0
+    variable colorset [list blueviolet aquamarine coral darkblue darkred darksalmon \
+	    chocolate grey DarkGreen salmon RoyalBlue "orange red" coral DarkKhaki \
+	    ivory gold maroon "sky blue"]  
     
     delegate method _insert to hull as insert
     delegate method _delete to hull as delete
@@ -111,10 +111,7 @@ snit::widgetadaptor cu::draw_graphs {
     } 
     onconfigure -functionnames { value } {
 	set options(-functionnames) $value       
-    }   
-    onconfigure -multiplegraphs { value } {
-	set options(-multiplegraphs) $value      
-    }
+    }    
     onconfigure -title { value } {
 	set options(-title) $value     
     }
@@ -125,31 +122,28 @@ snit::widgetadaptor cu::draw_graphs {
 	set options(-ylabelunit) $value
     }
     onconfigure -xaxismax { value } {
-	set options(-xaxismax) [lreplace $options(-xaxismax) 1 1 $value]
+	set options(-xaxismax) "-1e10 $value"                    
+	set xyaxisauto 0
     }
     onconfigure -xaxismin { value } {
-	set options(-xaxismin) [lreplace $options(-xaxismin) 1 1 $value]
+	set options(-xaxismin) "1e10 $value"
+	set xyaxisauto 0
     }
     onconfigure -yaxismaxleft { value } {
-	set options(-yaxismaxleft) [lreplace $options(-yaxismaxleft) 1 1 $value]
+	set options(-yaxismaxleft) "-1e10 $value"
+	set xyaxisauto 0
     }
     onconfigure -yaxismaxright { value } {
-	set options(-yaxismaxright) [lreplace $options(-yaxismaxright) 1 1 $value]
+	set options(-yaxismaxright) "-1e10 $value"
+	set xyaxisauto 0
     }
     onconfigure -yaxisminleft { value } {
-	set options(-yaxisminleft) [lreplace $options(-yaxisminleft) 1 1 $value]
+	set options(-yaxisminleft) "1e10 $value"
+	set xyaxisauto 0
     }
     onconfigure -yaxisminright { value } {
-	set options(-yaxisminright) [lreplace $options(-yaxisminright) 1 1 $value]
-    }
-    onconfigure -xyaxisauto { value } {
-	set options(-xyaxisauto) $value 
-	set options(-xaxismax) [lreplace $options(-xaxismax) 0 0 -1e10]
-	set options(-xaxismin) [lreplace $options(-xaxismin) 0 0 1e10]
-	set options(-yaxismaxleft) [lreplace $options(-yaxismaxleft) 0 0 -1e10]
-	set options(-yaxismaxright) [lreplace $options(-yaxismaxright) 0 0 -1e10]
-	set options(-yaxisminleft) [lreplace $options(-yaxisminleft) 0 0 1e10]
-	set options(-yaxisminright) [lreplace $options(-yaxisminright) 0 0 1e10]           
+	set options(-yaxisminright) "1e10 $value"
+	set xyaxisauto 0
     }  
     onconfigure -backgroundcolor { value } {
 	set options(-backgroundcolor) $value
@@ -163,7 +157,13 @@ snit::widgetadaptor cu::draw_graphs {
     onconfigure -gridlinescolor { value } {
 	set options(-gridlinescolor) $value
     }
-    method contextual_submenu { x y } {    
+    onconfigure -colorset { value } {
+	set colorset $value
+	after idle [mymethod draw]
+    }  
+    method contextual_submenu { x y } { 
+	variable multiplegraphs
+	
 	destroy $win.menu    
 	
 	menu $win.menu     
@@ -206,7 +206,7 @@ snit::widgetadaptor cu::draw_graphs {
 	$win.menu.area add command -label [_ "Area under a function"] -compound left \
 	    -image [cu::get_image int-16] -command [mymethod area areaunderfunct]  
 	
-	if {$options(-multiplegraphs)} {            
+	if {$multiplegraphs} {            
 	    $win.menu.area add command -label [_ "Area between two functions"] -compound left \
 		-image [cu::get_image int-16] -command [mymethod area areabetweenfunct] 
 	    $win.menu.area add command -label [_ "Area of the region enclosed by two functions"] \
@@ -252,7 +252,7 @@ snit::widgetadaptor cu::draw_graphs {
 	
 	menu $win.menu.hide -tearoff 0 
 	
-	if {$options(-multiplegraphs)} {
+	if {$multiplegraphs} {
 	    $win.menu.hide add check -label [_ "Legend"] -compound left -image [cu::get_image view_sidetree-16] \
 		-command [mymethod drawingoptions showlegend] -variable options(-showlegend)                                 
 	}
@@ -260,7 +260,7 @@ snit::widgetadaptor cu::draw_graphs {
 	$win.menu.hide add check -label [_ "Title"] -compound left -image [cu::get_image text_top-16] \
 	    -command [mymethod drawingoptions showtitle] -variable options(-showtitle) 
 
-	if {$options(-multiplegraphs)} {
+	if {$multiplegraphs} {
 	    $win.menu.hide add cascade -label [_ "Functions"] -compound left \
 		-image [cu::get_image funct-16] -menu $win.menu.hide.functions -underline 0                 
 	    menu $win.menu.hide.functions -tearoff 0             
@@ -282,50 +282,47 @@ snit::widgetadaptor cu::draw_graphs {
 	tk_popup $win.menu $x $y            
     }     
     method svg {} {
-	variable xml
 	
-	set svg [linsert $xml 0 "<mediaobject><imageobject>"]
-	append svg "</imageobject></mediaobject>"  
+	update idletasks      
+	set xml [$self draw_do 1]
 	
-	return $svg
+	return "<mediaobject><imageobject>$xml</imageobject></mediaobject>" 
     }
-    method save_as_svg {} {
-	variable xml
+    method save_as_svg {} {       
 	       
 	set err [catch { package require xml2pdf }]            
 	if {$err} {
 	    snit_messageBox -message [_ "The package 'xml2pdf' is required for the proper functioning of the tool. It could not be found in the files associated with the program."] 
 	    return
 	}
-	
-	if {$options(-svgfile) == ""}  {     
-	    set options(-svgfile) [tk_getSaveFile -parent $self -defaultextension .svg \
-		    -filetypes [list [list [_ "SVG files"] {.svg}] \
-		        [list [_ "All files"] *]]]
-	}
-	if { $options(-svgfile) eq "" } { return }        
-	set err [catch {set fout [open $options(-svgfile) w]} errstring]
+	set c $self          
+	set svgfile [tk_getSaveFile -parent $self -defaultextension .svg \
+		-filetypes [list [list [_ "SVG files"] {.svg}] \
+		    [list [_ "All files"] *]]]        
+	if { $svgfile eq "" } { return }        
+	set err [catch {set fout [open $svgfile w]} errstring]
 	if { $err } {
 	    snit_messageBox -message $::errorInfo
 	    return
-	}        
-	fconfigure $fout -encoding utf-8  
+	}               
+	set xml [$self draw_do 1]
+	fconfigure $fout -encoding utf-8 
 	puts $fout $xml
-	close $fout                
+	close $fout 
     }       
     method area { typearea } { 
 	if {$typearea eq "areaunderfunct"} {
 	    set title [_ "Area between a function and the x-axis"]
 	    set tooltiptext [_ "Area of the region between the x axis, the fat lines labeled a and b, and the graph."]
-	    set area [image create photo area -file [file join $::topdir images area_under_function.png]]
+	    set area [cu::get_image area_under_function.png]
 	} elseif {$typearea == "areabetweenfunct"} {
 	    set title [_ "Area between two functions"] 
 	    set tooltiptext [_ "Area of the region between the x axis, the fat lines labeled a and b, and the graph."]
-	    set area [image create photo area -file [file join $::topdir images area_between_functions.png]]
+	    set area [cu::get_image area_between_functions.png] 
 	} elseif {$typearea == "areaenclosedregion"} {
 	    set title [_ "Area of the region enclosed by two functions"]
 	    set tooltiptext [_ "The limits of integration will be the intersection points of the two curves."]
-	    set area [image create photo area -file [file join $::topdir images area_between_functions.png]] 
+	    set area [cu::get_image area_between_functions.png]
 	}
 	
 	set w .area
@@ -338,7 +335,7 @@ snit::widgetadaptor cu::draw_graphs {
 		-relief groove -borderwidth 1] 
 	grid $farea -sticky news -padx 2 -pady 2         
 		
-	label $farea.areac -image area 
+	label $farea.areac -image $area 
 	grid $farea.areac -sticky nsew -padx 2 -pady 2  
 	grid configure $farea.areac -columnspan 2  
 	
@@ -483,7 +480,9 @@ snit::widgetadaptor cu::draw_graphs {
 		[$w give_uservar_value a] [$w give_uservar_value b]] areag      
 	$w set_uservar_value area [format %.5g [expr {abs($areaf) - abs($areag)}]]             
     }
-    method area_enclosed_region { w } {       
+    method area_enclosed_region { w } { 
+	variable multiplegraphs
+	
 	if {[$w give_uservar_value fx] == [$w give_uservar_value gx]} {
 	    snit_messageBox -message [_ "Function f(x) should be different than g(x)."] 
 	    return            
@@ -493,13 +492,13 @@ snit::widgetadaptor cu::draw_graphs {
 	# Loop in f(x) segments
 	for {set i 0} {$i < [llength $options(-functionnames)]} {incr i} {
 	    if {[lindex $options(-functionnames) $i] != [$w give_uservar_value fx]} { continue }                        
-	    if {$options(-multiplegraphs)} {
+	    if {$multiplegraphs} {
 		set numdivisions [llength [lindex $options(-xyvalues) $i]]
 	    } else {
 		set numdivisions [llength $options(-xyvalues)]
 	    }
 	    for {set j 0} {$j < [expr {$numdivisions-1}]} {incr j} {               
-		if {$options(-multiplegraphs)} {
+		if {$multiplegraphs} {
 		    lassign [lindex [lindex $options(-xyvalues) $i] $j] xvalf yvalf                    
 		    lassign [lindex [lindex $options(-xyvalues) $i] [expr {$j+1}]] xnextvalf ynextvalf
 		} else {
@@ -509,13 +508,13 @@ snit::widgetadaptor cu::draw_graphs {
 		# Loop in g(x) segments
 		for {set k 0} {$k < [llength $options(-functionnames)]} {incr k} {
 		    if {[lindex $options(-functionnames) $k] != [$w give_uservar_value gx]} { continue }                        
-		    if {$options(-multiplegraphs)} {
+		    if {$multiplegraphs} {
 		        set numdivisionsg [llength [lindex $options(-xyvalues) $k]]
 		    } else {
 		        set numdivisionsg [llength $options(-xyvalues)]
 		    }               
 		    for {set kk 0} {$kk < [expr {$numdivisionsg-1}]} {incr kk} {               
-		        if {$options(-multiplegraphs)} {
+		        if {$multiplegraphs} {
 		            lassign [lindex [lindex $options(-xyvalues) $k] $kk] xvalg yvalg  
 		            lassign [lindex [lindex $options(-xyvalues) $k] [expr {$kk+1}]] xnextvalg ynextvalg                                
 		        } else {
@@ -652,23 +651,25 @@ snit::widgetadaptor cu::draw_graphs {
 	}
     }
     method calc_area_interval { function a b } {         
+	variable multiplegraphs
+	
 	set area 0.0
 	for {set i 0} {$i < [llength $options(-functionnames)]} {incr i} {
 	    if {[lindex $options(-functionnames) $i] != $function} { continue }                        
-	    if {$options(-multiplegraphs)} {
+	    if {$multiplegraphs} {
 		set numdivisions [llength [lindex $options(-xyvalues) $i]]
 	    } else {
 		set numdivisions [llength $options(-xyvalues)]
 	    }           
 	    for {set j 0} {$j < [expr {$numdivisions-1}]} {incr j} {               
-		if {$options(-multiplegraphs)} {
+		if {$multiplegraphs} {
 		    lassign [lindex [lindex $options(-xyvalues) $i] $j] xval yval
 		    lassign [lindex [lindex $options(-xyvalues) $i] [expr {$j+1}]] xnextval ynextval
 		} else {
 		    lassign [lindex $options(-xyvalues) $j] xval yval
 		    lassign [lindex $options(-xyvalues) [expr {$j+1}]] xnextval ynextval
 		}  
-		if {$options(-multiplegraphs)} {
+		if {$multiplegraphs} {
 		    set xyval [join [lindex $options(-xyvalues) $i] { }] 
 		} else {
 		    set xyval [join $options(-xyvalues) { }]
@@ -827,6 +828,7 @@ snit::widgetadaptor cu::draw_graphs {
     }    
     method edit_axis_do { w } {
 	variable xyaxisdef
+	variable xyaxisauto
 	
 	set action [$w giveaction]
 	
@@ -846,13 +848,16 @@ snit::widgetadaptor cu::draw_graphs {
 		    }             
 		}   
 		set canvas $self                
-		$canvas configure -xaxismax [$w give_uservar_value xaxismax] \
-		    -xaxismin [$w give_uservar_value xaxismin] \
-		    -yaxismaxleft [$w give_uservar_value yaxismaxleft] \
-		    -yaxisminleft [$w give_uservar_value yaxisminleft] \
-		    -yaxismaxright [$w give_uservar_value yaxismaxright] \
-		    -yaxisminright [$w give_uservar_value yaxisminright] \
-		    -xyaxisauto [$w give_uservar_value xyaxisauto]                
+  
+		set xyaxisauto [$w give_uservar_value xyaxisauto] 
+		if {!$xyaxisauto} {
+		    $canvas configure -xaxismax [$w give_uservar_value xaxismax] \
+		        -xaxismin [$w give_uservar_value xaxismin] \
+		        -yaxismaxleft [$w give_uservar_value yaxismaxleft] \
+		        -yaxisminleft [$w give_uservar_value yaxisminleft] \
+		        -yaxismaxright [$w give_uservar_value yaxismaxright] \
+		        -yaxisminright [$w give_uservar_value yaxisminright]          
+		}
 		destroy $w                
 		catch { $self draw } errstring
 	    }            
@@ -862,6 +867,8 @@ snit::widgetadaptor cu::draw_graphs {
 	}        
     }
     method edit_axis {} {
+	variable xyaxisauto
+	
 	set w .editaxis
 	catch {destroy $w}
 	set w [dialogwin_snit $w -title [_ "Edit axis"] -callback [mymethod edit_axis_do] \
@@ -941,7 +948,7 @@ snit::widgetadaptor cu::draw_graphs {
 	grid columnconfigure $f.f1.note.xaxis 1 -weight 1 -uniform 1  
 	grid columnconfigure $f.f1.note.yaxis 1 -weight 1 -uniform 1  
 	
-	if {$options(-xyaxisauto)} {
+	if {$xyaxisauto} {
 	    foreach n [list xaxismax xaxismin yaxismaxleft yaxisminleft yaxismaxright yaxisminright xyaxisauto] \
 		v [list [format %.5g [lindex $options(-xaxismax) 0]] [format %.5g [lindex $options(-xaxismin) 0]] \
 		    [format %.5g [lindex $options(-yaxismaxleft) 0]] [format %.5g [lindex $options(-yaxisminleft) 0]] \
@@ -956,7 +963,7 @@ snit::widgetadaptor cu::draw_graphs {
 		$w set_uservar_value $n $v    
 	    }    
 	}
-	$w set_uservar_value xyaxisauto $options(-xyaxisauto) 
+	$w set_uservar_value xyaxisauto $xyaxisauto
 	
 	set cmd "[mymethod default_xyaxis $w $fl $f $fr];#"
 	trace add variable [$w give_uservar xyaxisauto] write $cmd
@@ -985,26 +992,28 @@ snit::widgetadaptor cu::draw_graphs {
 	$f.f1.note.xaxis.emax configure -state $state         
     } 
     method clipboard_copy { } {
+	variable multiplegraphs
+	
 	clipboard clear
 	
 	set dataList ""      
-	set colxylabel "$options(-xlabel) $options(-ylabel)"
-	set colxylabelunit "$options(-xlabelunit) $options(-ylabelunit)"                
-	
-	for {set i 0} {$i < [llength $options(-functionnames)]} {incr i} {           
+	    
+	for {set i 0} {$i < [llength $options(-functionnames)]} {incr i} {
+	    set colxylabel "$options(-xlabel) [lindex $options(-ylabel) $i]"
+	    set colxylabelunit "$options(-xlabelunit) [lindex $options(-ylabelunit) $i]"     
 	    if {$options(-functionnames) != "Function"} {
 		set functionname [string map [list \n " "] [lindex $options(-functionnames) $i]]
 		lappend dataList $functionname 
 	    }  
 	    lappend dataList [join $colxylabel \t]
 	    lappend dataList [join $colxylabelunit \t]
-	    if {$options(-multiplegraphs)} {
+	    if {$multiplegraphs} {
 		set numdivisions [llength [lindex $options(-xyvalues) $i]]
 	    } else {
 		set numdivisions [llength $options(-xyvalues)]
 	    }  
 	    for {set j 0} {$j < $numdivisions} {incr j} {
-		if {$options(-multiplegraphs)} {
+		if {$multiplegraphs} {
 		    lassign [lindex [lindex $options(-xyvalues) $i] $j] xval yval                   
 		} else {
 		    lassign [lindex $options(-xyvalues) $j] xval yval
@@ -1016,6 +1025,9 @@ snit::widgetadaptor cu::draw_graphs {
 	clipboard append [join $dataList \n]        
     } 
     method import_from_csv { } {       
+	variable xyaxisauto
+	variable multiplegraphs
+	
 	set c $self
 	
 	set file [tk_getOpenFile -defaultextension .csv -initialdir $defaultdir -filetypes \
@@ -1036,7 +1048,9 @@ snit::widgetadaptor cu::draw_graphs {
 	package require csv      
 	      
 	array set functionxy ""  
-	lassign "" "" "" xylabelList options(-functionnames) options(-title) 
+	lassign "" options(-functionnames) options(-title) \
+	    options(-xlabel) options(-ylabel) options(-xlabelunit) \
+	    options(-ylabelunit)        
 	
 	set icount 0    
 	while { [gets $fin line] != -1 } { 
@@ -1046,10 +1060,10 @@ snit::widgetadaptor cu::draw_graphs {
 		    set function $v  
 		    lappend options(-functionnames) $function
 		    set options(-$function) 0                     
-		} else {
-		    foreach xylab $v {
-		        lappend xylabelList $xylab
-		    }
+		} else {   
+		    lassign $v options(-xlabel) options(-xlabelunit) ylab ylabunit
+		    lappend options(-ylabel) $ylab
+		    lappend options(-ylabelunit) $ylabunit
 		}
 	    } else {
 		foreach i $v {
@@ -1067,23 +1081,24 @@ snit::widgetadaptor cu::draw_graphs {
 		lappend functval($ifunction) "$x $y" 
 	    }            
 	}                
-	$c configure -xyaxisauto 1        
-	lassign $xylabelList options(-xlabel) options(-ylabel) \
-	    options(-xlabelunit) options(-ylabelunit)       
+	set xyaxisauto 1        
 		       
 	if {[llength [array names functval]] > 1} {
-	    set options(-multiplegraphs) 1
+	    set multiplegraphs 1
 	    set options(-xyvalues) ""
 	    foreach ifunction $options(-functionnames) {        
 		lappend options(-xyvalues) $functval($ifunction)
 	    }         
 	} else {
-	    set options(-multiplegraphs) 0    
+	    set multiplegraphs 0    
 	    set options(-xyvalues) $functval($function)
 	}                   
 	$c draw
     }
     method import_from_excel { } {             
+	variable xyaxisauto
+	variable multiplegraphs
+	
 	set c $self                
 	      
 	set file [tk_getOpenFile -defaultextension .xls -filetypes [list [list \
@@ -1100,7 +1115,7 @@ snit::widgetadaptor cu::draw_graphs {
 	    error [_ "File '%s' does not exist"]
 	}
 	if { [file extension $file] ne ".xml"} {
-	    error [_ "File extension should be xml"]
+	    error [_ "File extension should be *.xml"]
 	}
 	set tmp_file $file
 	set xml [tDOM::xmlReadFile $tmp_file]
@@ -1114,23 +1129,25 @@ snit::widgetadaptor cu::draw_graphs {
 	set sname [$sheetNode @ss:Name N$sheetNum]
 	 
 	array set functionxy ""  
-	lassign "" "" "" xylabelList options(-functionnames) options(-title)      
+	lassign "" options(-functionnames) options(-title) \
+	    options(-ylabel) options(-ylabelunit)
 	      
 	foreach cndNode [$sheetNode selectNode -namespaces $ns {/*/e:Worksheet/e:Table}] {                          
 	    foreach rowNode [$cndNode selectNodes -namespaces $ns .//e:Row] {           
-		set cellNode [$rowNode selectNodes -namespaces $ns .//e:Cell/e:Data]
-		if {[llength $cellNode] == "1"} {
-		    set function [$cellNode text]  
-		    lappend options(-functionnames) $function
-		    set options(-$function) 0 
-		    set isfound 1
-		} else {
-		    foreach icell $cellNode {
-		        if {![string is double [$icell text]]} {
-		            lappend xylabelList [$icell text]                        
-		        } elseif {[$icell text] != ""} {                 
-		            lappend functionxy($function) [$icell text]                     
-		        } 
+		foreach cellNode [$rowNode selectNodes -namespaces $ns .//e:Cell/e:Data] {
+		    set celltext [$cellNode text]
+		    if {![string is double [lindex $celltext 0]]} { 
+		        lassign [$cellNode text] \
+		            functname options(-xlabel) options(-xlabelunit) ylab ylabunit 
+		        lappend options(-ylabel) $ylab
+		        lappend options(-ylabelunit) $ylabunit 
+		        lappend options(-functionnames) $functname                  
+		        set options(-$functname) 0                   
+		    } else {                                        
+		        foreach icell $cellNode {
+		            if {[$icell text] == ""} { continue }                
+		            lappend functionxy($functname) [$icell text]                                             
+		        }
 		    }
 		}
 	    }
@@ -1143,25 +1160,24 @@ snit::widgetadaptor cu::draw_graphs {
 	    }            
 	}
 		
-	$c configure -xyaxisauto 1
-	
-	lassign $xylabelList options(-xlabel) options(-ylabel) \
-	    options(-xlabelunit) options(-ylabelunit)       
-		       
+	set xyaxisauto 1     
+		               
 	if {[llength [array names functval]] > 1} {
-	    set options(-multiplegraphs) 1
+	    set multiplegraphs 1
 	    set options(-xyvalues) ""
 	    foreach ifunction $options(-functionnames) {        
 		lappend options(-xyvalues) $functval($ifunction)
 	    }         
 	} else {
-	    set options(-multiplegraphs) 0    
+	    set multiplegraphs 0    
 	    set options(-xyvalues) $functval($function)
 	}       
 	    
 	$c draw
     }  
-    method export_to_csv { } {              
+    method export_to_csv { } {
+	variable multiplegraphs
+	
 	set c $self
 	
 	set file [tk_getSaveFile -initialdir $defaultdir -filetypes \
@@ -1178,16 +1194,16 @@ snit::widgetadaptor cu::draw_graphs {
 	    } else {
 		puts $fout "Function"
 	    }                
-	    puts $fout [cu::string::csv_join "$options(-xlabel) $options(-ylabel)" ";"]                                     
-	    puts $fout [cu::string::csv_join "$options(-xlabelunit) $options(-ylabelunit)" ";"]             
+	    puts $fout [cu::string::csv_join "$options(-xlabel) $options(-xlabelunit) \
+		    [lindex $options(-ylabel) $i] [lindex $options(-ylabelunit) $i]" ";"]                                     
 	    
-	    if {$options(-multiplegraphs)} {
+	    if {$multiplegraphs} {
 		set numdivisions [llength [lindex $options(-xyvalues) $i]]
 	    } else {
 		set numdivisions [llength $options(-xyvalues)]
 	    }
 	    for {set j 0} {$j < $numdivisions} {incr j} {
-		if {$options(-multiplegraphs)} {
+		if {$multiplegraphs} {
 		    lassign [lindex [lindex $options(-xyvalues) $i] $j] xval yval                   
 		} else {
 		    lassign [lindex $options(-xyvalues) $j] xval yval
@@ -1198,10 +1214,12 @@ snit::widgetadaptor cu::draw_graphs {
 	close $fout        
     }
     method export_to_excel { } {
+	variable multiplegraphs
+	
 	set c $self
 	      
 	set filename [tk_getSaveFile  -defaultextension .xls -filetypes [list [list \
-		        [_ "Excel files"] ".xml" ".xls"] [list [_ "All files"] ".*"]] \
+		        [_ "Excel files"] ".xml" ".xls"]] \
 		-initialdir $defaultdir -parent $c \
 		-title [_ "Save graph as spreadsheet (Excel...)"]]
 	if { $filename == "" } { return }
@@ -1242,32 +1260,21 @@ snit::widgetadaptor cu::draw_graphs {
 	}                 
 	for {set i 0} {$i < [llength $options(-functionnames)]} {incr i} {                   
 	    if {$options(-functionnames) != "Function"} {
-		set functionname [string map [list \n " "] [lindex $options(-functionnames) $i]]
-		append _ "<Row><Cell ss:StyleID='s62'><Data ss:Type='String'>$functionname</Data></Cell></Row>"                        
+		set functionname [string map [list \n " "] [lindex $options(-functionnames) $i]]                                   
 	    } else {
-		set functionname [string map [list \n " "] [lindex $options(-functionnames) $i]]
-		append _ "<Row><Cell ss:StyleID='s62'><Data ss:Type='String'>$functionname</Data></Cell></Row>"   
-	    }                
-	       
-	    append _ "<Row>"
-	    foreach j "$options(-xlabel) $options(-ylabel)" {
-		append _ "<Cell ss:StyleID='s62'><Data ss:Type='String'>$j</Data></Cell>"
-	    }
-	    append _ "</Row>"
+		set functionname [string map [list \n " "] [lindex $options(-functionnames) $i]]               
+	    }                                                                
+	    append _ "<Row><Cell ss:StyleID='s62'><Data ss:Type='String'>[list $functionname] \
+		$options(-xlabel) $options(-xlabelunit) [lindex $options(-ylabel) $i] \
+		[lindex $options(-ylabelunit) $i]</Data></Cell></Row>"   
 	    
-	    append _ "<Row>"
-	    foreach j "$options(-xlabelunit) $options(-ylabelunit)" {
-		append _ "<Cell ss:StyleID='s62'><Data ss:Type='String'>$j</Data></Cell>"
-	    }
-	    append _ "</Row>"
-	    
-	    if {$options(-multiplegraphs)} {
+	    if {$multiplegraphs} {
 		set numdivisions [llength [lindex $options(-xyvalues) $i]]
 	    } else {
 		set numdivisions [llength $options(-xyvalues)]
 	    }
 	    for {set j 0} {$j < $numdivisions} {incr j} {
-		if {$options(-multiplegraphs)} {
+		if {$multiplegraphs} {
 		    lassign [lindex [lindex $options(-xyvalues) $i] $j] xval yval                   
 		} else {
 		    lassign [lindex $options(-xyvalues) $j] xval yval
@@ -1329,11 +1336,25 @@ snit::widgetadaptor cu::draw_graphs {
 	    fill='$fillcolor' stroke='$color' stroke-width='$lwidth'/>\n"    
 	return $svg
     }
-    method drawtext_svg { font fillcolor x y txt } {        
-	set fsize [expr {[font metrics $font -ascent]+int(.5*[font metrics $font -descent])}]
+    method drawtext_svg { font fillcolor x y txt i a } {        
+	set canvas $self
+	
+	set anchor [$canvas itemcget $i -anchor]
+	if { $anchor eq "center" } { set anchor "" }
+	
 	set slant [font actual $font -slant]
-	set a middle
-	       
+	if { $slant eq "roman" } { set slan normal }
+		
+	set fsize [expr {[font metrics $font -ascent]+int(.5*[font metrics $font -descent])}]     
+	set y [expr {$y+[font metrics $font -ascent]}]
+	if { [string first n $anchor] != -1 } {
+	    #nothing
+	} elseif { [string first s $anchor] != -1 } {
+	    set y [expr {$y-[font metrics $font -linespace]}]
+	} else {
+	    set y [expr {$y-.5*[font metrics $font -linespace]}]
+	}
+	   
 	append svg "<text font-family='[xml_map [font actual $font -family]]' " \
 	    "font-size='$fsize' fill='$fillcolor' " \
 	    "font-weight='[font actual $font -weight]' " \
@@ -1346,27 +1367,33 @@ snit::widgetadaptor cu::draw_graphs {
 	return $svg
     }
     method drawbox_svg { color lwidth x0 y0 x1 y1 } {
-	set pointsList [join "$x0 $y0 $x1 $y0 $x1 $y1 $x0 $y1" ,]
+	set pointsList [join "$x0 $y0 $x1 $y0 $x1 $y1 $x0 $y1 $x0 $y0" ,]
 	set svg "<polyline fill='none' stroke='$color' stroke-width='$lwidth' points='$pointsList'/>"
 	
 	return $svg
     }
-    method draw_do {} {                  
+    method draw_do { {drawsvg 0} } {                  
 	variable fg      
-	variable yaxis 
-	variable xml  
+	variable yaxis        
+	variable xyaxisauto 
+	variable multiplegraphs
+	variable colorset
 	
-	set canvas $self
+	set canvas $self  
 	
-	$canvas delete curve
-	$canvas delete axistext
-	$canvas delete titletext
-	$canvas delete legendbox       
-	$canvas delete zeroline       
-	$canvas delete curvepoint
-	$canvas delete curvecurrent
-	$canvas delete coords   
-	$canvas delete gridlines 
+	if {!$drawsvg} {                       
+	    $canvas delete curve
+	    $canvas delete axistext
+	    $canvas delete titletext
+	    $canvas delete legendbox                    
+	    $canvas delete zeroline       
+	    $canvas delete curvepoint
+	    $canvas delete curvecurrent
+	    $canvas delete coords   
+	    $canvas delete gridlines
+	    $canvas delete axisnumtext 
+	    $canvas delete axisordtext
+	}
 	
 	if {$options(-canvasheightset) != ""} {            
 	    set ymax $options(-canvasheightset)
@@ -1380,72 +1407,80 @@ snit::widgetadaptor cu::draw_graphs {
 	} 
 	
 	set xml ""
-	append xml "<svg xmlns='http://www.w3.org/2000/svg' " \
-	    "xmlns:xlink='http://www.w3.org/1999/xlink' " \
-	    "width='$xmax' height='$ymax' version='1.1' "\
-	    "viewBox='0.0 0.0 $xmax $ymax'>\n"              
-#         append xml {
-#             <defs>
-#             <marker id="Triangle1" viewBox="0 0 10 10" refX="0" refY="5" markerUnits="strokeWidth" markerWidth="4" markerHeight="3" orient="auto">
-#             <path d="M 10 0 L 0 5 L 10 10 z"/>
-#             </marker>
-#             <marker id="Triangle2" viewBox="0 0 10 10" refX="10" refY="5" markerUnits="strokeWidth" markerWidth="4" markerHeight="3" orient="auto">
-#             <path d="M 0 0 L 10 5 L 0 10 z"/>
-#             </marker>
-#             <marker id="Line1" viewBox="0 0 1 1" refX="1" refY=".5" markerUnits="strokeWidth" markerWidth=".5" markerHeight="1" orient="auto">
-#             <path d="M 0 0 L 0 1 L 1 1 L 1 0 z" stroke="none"/>
-#             </marker>
-#             <marker id="Line2" viewBox="0 0 1 1" refX="0" refY=".5" markerUnits="strokeWidth" markerWidth=".5" markerHeight="1" orient="auto">
-#             <path d="M 0 0 L 0 1 L 1 1 L 1 0 z" stroke="none"/>
-#             </marker>
-#             </defs>
-#         }                                        
-	
+	if {$drawsvg} {
+	    append xml "<svg xmlns='http://www.w3.org/2000/svg' " \
+		"xmlns:xlink='http://www.w3.org/1999/xlink' " \
+		"width='$xmax' height='$ymax' version='1.1' "\
+		"viewBox='0.0 0.0 $xmax $ymax'>\n"              
+	}
 	foreach i $options(-functionnames) {
 	    if {![info exists options(-$i)]} { set options(-$i) 0 }
 	    if {![info exists options(-move$i)]} { set options(-move$i) 0 }
 	}  
-
+     
+	if { [llength $options(-functionnames)] > 1} {
+	    set multiplegraphs 1
+	} else {
+	    set multiplegraphs 0
+	}
 	array set yaxis [list leftside "" rightside ""]                     
 	for {set i 0} {$i < [llength $options(-functionnames)]} {incr i} {
-	    if {$options(-[lindex $options(-functionnames) $i])} { continue }   
+	    if {$options(-[lindex $options(-functionnames) $i])} { continue }                        
+	    if {[llength $options(-functionnames)] == 1 || [llength $options(-functionnames)] > 2} {                
+		set options(-yaxisleftright) 0
+	    }           
 	    set ifunction [lindex $options(-functionnames) $i]
-	    if {$yaxis(leftside) == "" || [lsearch -exact $yaxis(leftside) $ifunction] != -1 || \
-		$yaxis(rightside) != "" || [llength $options(-functionnames)] > 2} {
-		lappend yaxis(leftside) $ifunction
+	    if {!$options(-yaxisleftright)} {
+		lappend yaxis(leftside) $ifunction 
 	    } else {
-		lappend yaxis(rightside) $ifunction 
-	    }                                 
+		if { $yaxis(leftside) == "" || [lsearch -exact $yaxis(leftside) $ifunction] != -1} {
+		    lappend yaxis(leftside) $ifunction  
+		} else {
+		    lappend yaxis(rightside) $ifunction 
+		}
+	    }                        
 	}
 	
 	$canvas configure -background $options(-backgroundcolor)  
 	set fg $options(-foregroundcolor)  
 	
 	set numfunctions 1
-	if {$options(-multiplegraphs)} {            
+	if {$multiplegraphs} {            
 	    set numfunctions [llength $options(-xyvalues)] 
 	}                                                       
 	
-	if {$options(-xyaxisauto)} {  
-	    $canvas configure -xyaxisauto 1
-	    if {$options(-includeyzero)} {                       
-		set options(-yaxisminleft) [lreplace $options(-yaxisminleft) 0 0 0.0]            
-		if {$yaxis(rightside) != ""} {   
-		    set options(-yaxisminright) [lreplace $options(-yaxisminright) 0 0 0.0]
-		}
+	if {$xyaxisauto} {
+	    set options(-xaxismax) "-1e10 -1e10"
+	    set options(-xaxismin) "1e10 1e10"
+	    set options(-yaxismaxleft) "-1e10 -1e10"
+	    set options(-yaxisminleft) "1e10 1e10"
+	    set options(-yaxismaxright) "-1e10 -1e10"
+	    set options(-yaxisminright) "1e10 1e10"                            
+	} else {
+	    if {$options(-xaxismax) == ""} { set options(-xaxismax) "-1e10 -1e10" }
+	    if {$options(-xaxismin) == ""} { set options(-xaxismin) "1e10 1e10" }
+	    if {$options(-yaxismaxleft) == ""} { set options(-yaxismaxleft) "-1e10 -1e10"}
+	    if {$options(-yaxisminleft) == ""} { set options(-yaxisminleft) "1e10 1e10"}
+	    if {$options(-yaxismaxright) == ""} { set options(-yaxismaxright) "-1e10 -1e10"}
+	    if {$options(-yaxisminright) == ""} { set options(-yaxisminright) "1e10 1e10"}
+	}
+	if {$options(-includeyzero)} {                       
+	    set options(-yaxisminleft) [lreplace $options(-yaxisminleft) 0 0 0.0]            
+	    if {$yaxis(rightside) != ""} {   
+		set options(-yaxisminright) [lreplace $options(-yaxisminright) 0 0 0.0]
 	    }
 	}
 		   
 	for {set i 0} {$i < [llength $options(-functionnames)]} {incr i} {
 	    if {$options(-[lindex $options(-functionnames) $i])} { continue }             
 	    set ifunction [lindex $options(-functionnames) $i]
-	    if {$options(-multiplegraphs)} {
+	    if {$multiplegraphs} {
 		set numdivisions [llength [lindex $options(-xyvalues) $i]]
 	    } else {
 		set numdivisions [llength $options(-xyvalues)]
 	    }
 	    for {set j 0} {$j < $numdivisions} {incr j} {               
-		if {$options(-multiplegraphs)} {
+		if {$multiplegraphs} {
 		    lassign [lindex [lindex $options(-xyvalues) $i] $j] xval yval
 		} else {
 		    lassign [lindex $options(-xyvalues) $j] xval yval
@@ -1454,7 +1489,7 @@ snit::widgetadaptor cu::draw_graphs {
 		    set xval [expr {$xval + [lindex $options(-xymovement) 0]}]
 		    set yval [expr {$yval + [lindex $options(-xymovement) 1]}]
 		} 
-		if {$options(-xyaxisauto)} {    
+		if {$xyaxisauto} {    
 		    if { $xval < [lindex $options(-xaxismin) 0] } { 
 		        set options(-xaxismin) [lreplace $options(-xaxismin) 0 0 $xval] 
 		    }
@@ -1491,7 +1526,7 @@ snit::widgetadaptor cu::draw_graphs {
 		set options(-yaxismaxright) [lreplace $options(-yaxismaxright) 0 0 [expr {[lindex $options(-yaxismaxright) 0]+1}]] 
 	    }  
 	}        
-	if {$options(-xyaxisauto)} {  
+	if {$xyaxisauto} {  
 	    foreach v [list xaxismin xaxismax yaxisminleft yaxismaxleft yaxisminright yaxismaxright] \
 		n [list [lindex $options(-xaxismin) 0] [lindex $options(-xaxismax) 0] \
 		    [lindex $options(-yaxisminleft) 0] [lindex $options(-yaxismaxleft) 0] \
@@ -1544,68 +1579,111 @@ snit::widgetadaptor cu::draw_graphs {
 		set textheight [font metrics $options(-font) -linespace]                 
 		$canvas create line $xlegendmin [expr $ypos+$textheight/2.0] \
 		    [expr $xlegendmin+10.0] [expr $ypos+$textheight/2.0] -width 2 \
-		    -fill [lindex $options(-colorset) $i] -tags legendbox                     
-		append xml [$canvas drawline_svg $xlegendmin [expr $ypos+$textheight/2.0] \
-		        [expr $xlegendmin+10.0] [expr $ypos+$textheight/2.0] [lindex $options(-colorset) $i] \
-		        1 [lindex $options(-colorset) $i]]            
+		    -fill [lindex $colorset $i] -tags legendbox 
 		$canvas create text [expr $xlegendmin+15.0] $ypos -anchor nw -justify left \
-		    -text [lindex $options(-functionnames) $i] -font $options(-font) -fill $fg -tags legendbox                                   
-		append xml [$canvas drawtext_svg $options(-font) $fg [expr $xlegendmin+15.0] $ypos [lindex $options(-functionnames) $i]]                           
-		set ypos [expr $ypos+$textheight]                          
+		    -text [lindex $options(-functionnames) $i] -font $options(-font) -fill $fg -tags legendbox    
+		if {$drawsvg} {                
+		    set ii [$canvas find withtag legendbox]
+		    append xml [$canvas drawline_svg $xlegendmin [expr $ypos+$textheight/2.0] \
+		            [expr $xlegendmin+10.0] [expr $ypos+$textheight/2.0] [lindex $colorset $i] \
+		            1 [lindex $colorset $i]]                           
+		    append xml [$canvas drawtext_svg $options(-font) $fg [expr $xlegendmin+15.0] \
+		            [expr $ypos+$textheight/2.0] [lindex $options(-functionnames) $i] $ii start]                                                                  
+		}
+		if {$i == "0"} { set ypos0 $ypos} 
+		set ypos [expr $ypos+$textheight]              
 	    }
 	    if {$xlegendmin < 1e10} {
-		$canvas create rectangle [expr $xlegendmin-3.0] [expr $ypos+2.0] $xlegendmax 2 -width 1 \
-		    -tags legendbox -outline $fg                      
-		append xml [$canvas drawbox_svg $fg 1.0 [expr $xlegendmin-3.0] [expr $ypos+2.0] \
-		        $xlegendmax 2]           
+		$canvas create rectangle [expr $xlegendmin-3.0] [expr $ypos+2.0] $xlegendmax $ypos0 -width 1 \
+		    -tags legendbox -outline $fg 
+		if {$drawsvg} {                
+		    append xml [$canvas drawbox_svg $fg 1.0 [expr $xlegendmin-3.0] [expr $ypos+2.0] \
+		            [expr $xlegendmax+5] $ypos0]       
+		}    
 	    }
 	}                
 	if {$options(-showtitle)} {
 	    set fam [font actual $options(-fonttitle) -family]
 	    set tsize [expr {round([font actual $options(-fonttitle) -size]*1.8)}]   
-	    $canvas create text [expr $xmax/2.0] 6 -anchor n -justify center \
+	    $canvas create text [expr $xmax/2.0] [expr $ym-10.0] -anchor n -justify center \
 		-text $options(-title) -font [list $fam $tsize] -fill $fg -tags titletext                
-	    append xml [$canvas drawtext_svg [list $fam $tsize] $fg [expr $xmax/2.0] 6 $options(-title)] 
+	    if {$drawsvg} {
+		set ii [$canvas find withtag titletext]
+		append xml [$canvas drawtext_svg [list $fam $tsize] $fg \
+		        [expr $xmax/2.0] [expr $ym-10.0] $options(-title) $ii middle] 
+	    }
 	}
 		        
 	if {$yaxis(rightside) != ""} {
 	    $canvas create line [expr $xmax-$xm] [expr $ymax-$ym] [expr $xmax-$xm] \
 		[expr $ym-6.0] -arrow last -fill $fg -tags axistext
-	    append xml [$canvas drawline_svg [expr $xmax-$xm] [expr $ymax-$ym] [expr $xmax-$xm] \
-		    [expr $ym-6.0] $fg 1 $fg]  
 	    $canvas create line $xm [expr $ymax-$ym] $xm [expr $ym-6.0] -arrow last -fill $fg -tags axistext
-	    append xml [$canvas drawline_svg $xm [expr $ymax-$ym] $xm [expr $ym-6.0] $fg 1 $fg]
 	    $canvas create line $xm [expr $ymax-$ym] [expr $xmax-$xm] [expr $ymax-$ym] \
-		-fill $fg -tags axistext   
-	    append xml [$canvas drawline_svg $xm [expr $ymax-$ym] [expr $xmax-$xm] [expr $ymax-$ym] $fg 1 $fg] 
+		-fill $fg -tags axistext  
+	    if {$drawsvg} {
+		append xml [$canvas drawline_svg [expr $xmax-$xm] [expr $ymax-$ym] [expr $xmax-$xm] \
+		        [expr $ym-6.0] $fg 1 $fg]           
+		append xml [$canvas drawline_svg $xm [expr $ymax-$ym] $xm [expr $ym-6.0] $fg 1 $fg]           
+		append xml [$canvas drawline_svg $xm [expr $ymax-$ym] [expr $xmax-$xm] [expr $ymax-$ym] $fg 1 $fg] 
+	    }
 	} else {
 	    $canvas create line $xm [expr $ymax-$ym] $xm [expr $ym-6.0] -arrow last -fill $fg -tags axistext  
-	    append xml [$canvas drawline_svg $xm [expr $ymax-$ym] $xm [expr $ym-6.0] $fg 1 $fg] 
 	    $canvas create line $xm [expr $ymax-$ym] [expr $xmax-$xm] [expr $ymax-$ym] \
 		-arrow last -fill $fg -tags axistext   
-	    append xml [$canvas drawline_svg $xm [expr $ymax-$ym] [expr $xmax-$xm] [expr $ymax-$ym] $fg 1 $fg] 
+	    if {$drawsvg} {
+		append xml [$canvas drawline_svg $xm [expr $ymax-$ym] $xm [expr $ym-6.0] $fg 1 $fg]            
+		append xml [$canvas drawline_svg $xm [expr $ymax-$ym] [expr $xmax-$xm] [expr $ymax-$ym] $fg 1 $fg] 
+	    }
 	}
-	 
-	if {$options(-ylabelunit) != ""} {
-	    set ylabeltext "$options(-ylabel) ($options(-ylabelunit))"
-	} else {
-	    set ylabeltext "$options(-ylabel)"
-	}      
-	$canvas create text 6 20 -anchor nw -justify left \
-	    -text $ylabeltext -font $options(-font) -fill $fg -tags axistext                        
-	append xml [$canvas drawtext_svg $options(-font) $fg 6 6 $ylabeltext]        
-	
+	       
+	if {$options(-yaxisleftright)} {
+	    if {$options(-ylabelunit) != ""} {
+		set ylabellefttext "[lindex $options(-ylabel) 0] ([lindex $options(-ylabelunit) 0])"
+		set ylabelrighttext "[lindex $options(-ylabel) 1] ([lindex $options(-ylabelunit) 1])"
+	    } else {
+		set ylabellefttext "[lindex $options(-ylabel) 0]"
+		set ylabelrighttext "[lindex $options(-ylabel) 1]"
+	    }   
+	    $canvas create text [expr $xm+6] [expr $ym-6] -anchor nw -justify left \
+		-text $ylabellefttext -font $options(-font) -fill $fg -tags axistext 
+	    $canvas create text [expr $xmax-40.0] [expr $ym-6] -anchor nw -justify left \
+		-text $ylabelrighttext -font $options(-font) -fill $fg -tags axistext 
+	    if {$drawsvg} {
+		set ii [$canvas find withtag axistext]
+		append xml [$canvas drawtext_svg $options(-font) $fg \
+		        $xm [expr $ym-6] $ylabellefttext $ii end]        
+		append xml [$canvas drawtext_svg $options(-font) $fg \
+		        [expr $xmax-20.0] [expr $ym-6] $ylabelrighttext $ii middle]   
+	    }
+	} else {                 
+	    if {$options(-ylabelunit) != ""} {
+		set ylabellefttext "$options(-ylabel) ($options(-ylabelunit))"
+	    } else {
+		set ylabellefttext "$options(-ylabel)"
+	    }      
+	    $canvas create text [expr $xm+2.0] [expr $ym-20.0] -anchor nw -justify left \
+		-text $ylabellefttext -font $options(-font) -fill $fg -tags axistext 
+	    if {$drawsvg} {
+		set ii [$canvas find withtag axistext]
+		append xml [$canvas drawtext_svg $options(-font) $fg [expr $xm+2.0] \
+		        [expr $ym-20.0] $ylabellefttext $ii start]                       
+	    }
+	}           
 	if {$options(-xlabelunit) != ""} {
 	    set xlabeltext "$options(-xlabel) ($options(-xlabelunit))"
 	} else {
 	    set xlabeltext "$options(-xlabel)"
-	}
+	}       
 	set textwidthlabel [font measure $options(-font) $xlabeltext]
 	
 	$canvas create text [expr $xmax-$textwidthlabel-10.0] [expr $ymax-$ym+$textheight] \
-	    -anchor nw -justify left -text $xlabeltext -font $options(-font) -fill $fg -tags axistext 
-	append xml [$canvas drawtext_svg $options(-font) $fg [expr $xmax-$textwidthlabel-10.0] [expr $ymax-$ym+$textheight] \
-		$xlabeltext]
+	    -anchor nw -justify left -text $xlabeltext -font $options(-font) -fill $fg -tags axistext
+	if {$drawsvg} { 
+	    set ii [$canvas find withtag axistext]
+	    append xml [$canvas drawtext_svg $options(-font) $fg \
+		    [expr $xmax-$textwidthlabel-10.0] [expr $ymax-$ym+6.0+$textheight] \
+		    $xlabeltext $ii middle]
+	}
 	
 	set xfact [expr ($xmax-2.0*$xm)/double($xaxismax-$xaxismin)]
 	
@@ -1614,7 +1692,9 @@ snit::widgetadaptor cu::draw_graphs {
 	if { $yvalleft > $ym && $yvalleft <= [expr $ymax-$ym] } {
 	    $canvas create line $xm $yvalleft [expr $xmax-$xm] $yvalleft -fill $fg \
 		-tags zeroline -dash -.-
-	    append xml [$canvas drawline_svg $xm $yvalleft [expr $xmax-$xm] $yvalleft $fg 1 $fg] 
+	    if {$drawsvg} {
+		append xml [$canvas drawline_svg $xm $yvalleft [expr $xmax-$xm] $yvalleft $fg 1 $fg] 
+	    }
 	}
 	if {$yaxis(rightside) != ""} {        
 	    set yfactright [expr ($ymax-2.0*$ym)/double($yaxismaxright-$yaxisminright)]
@@ -1622,7 +1702,9 @@ snit::widgetadaptor cu::draw_graphs {
 	    if { $yvalright > $ym && $yvalright <= [expr $ymax-$ym] } {
 		$canvas create line $xm $yvalright [expr $xmax-$xm] $yvalright -fill $fg \
 		    -tags zeroline -dash -.-
-		append xml [$canvas drawline_svg $xm $yvalright [expr $xmax-$xm] $yvalright $fg 1 $fg] 
+		if {$drawsvg} {
+		    append xml [$canvas drawline_svg $xm $yvalright [expr $xmax-$xm] $yvalright $fg 1 $fg] 
+		}
 	    }
 	}                                              
 	set m [expr {abs($xaxismax)>abs($xaxismin)?abs($xaxismax):abs($xaxismin)}]
@@ -1641,14 +1723,26 @@ snit::widgetadaptor cu::draw_graphs {
 	    }            
 	    set xval [expr $xm+($x-$xaxismin)*$xfact]           
 	    if {$options(-addgridlines)} { 
-		$canvas create line $xval $ym $xval [expr {$ymax-$ym}] -fill $options(-gridlinescolor) -tags gridlines
+		$canvas create line $xval $ym $xval [expr {$ymax-$ym}] \
+		    -fill $options(-gridlinescolor) -tags gridlines
 	    }
 	    $canvas create line $xval [expr {$ymax-$ym+2}] $xval [expr {$ymax-$ym}] -fill $fg \
-		-tags axistext 
-	    append xml [$canvas drawline_svg $xval [expr {$ymax-$ym+2}] $xval [expr $ymax-$ym] $fg 1 $fg] 
+		-tags axistext
 	    $canvas create text $xval [expr {$ymax-$ym+2}] -anchor n -justify center \
-		-text [format %.3g $x] -font $options(-font) -fill $fg -tags axistext
-	    append xml [$canvas drawtext_svg $options(-font) $fg $xval [expr {$ymax-$ym+2}] [format %.3g $x]] 
+		-text [format %.3g $x] -font $options(-font) -fill $fg -tags axisnumtext  
+	    if {$drawsvg} {
+		set ii [$canvas find withtag axisnumtext]
+		append xml [$canvas drawline_svg $xval [expr {$ymax-$ym+2}] \
+		        $xval [expr $ymax-$ym] $fg 1 $fg] 
+		append xml [$canvas drawtext_svg $options(-font) $fg $xval \
+		        [expr {$ymax-$ym+10}] [format %.3g $x] $ii middle] 
+		if {$options(-addgridlines)} {
+		    set ii [$canvas find withtag gridlines]
+		    append xml [$canvas drawline_svg $xval $ym \
+		            $xval [expr $ymax-$ym] $fg 1 $fg]                   
+		}
+      
+	    }                 
 	    set xprev $x
 	}
 	
@@ -1669,11 +1763,18 @@ snit::widgetadaptor cu::draw_graphs {
 	    if {$options(-addgridlines)} { 
 		$canvas create line $xm $yval [expr {$xmax-$xm}] $yval -fill $options(-gridlinescolor) -tags gridlines                        
 	    }
-	    $canvas create line [expr {$xm-2}] $yval $xm $yval -fill $fg -tags axistext
-	    append xml [$canvas drawline_svg [expr {$xm-2}] $yval $xm $yval $fg 1 $fg] 
+	    $canvas create line [expr {$xm-2}] $yval $xm $yval -fill $fg -tags axistext     
 	    $canvas create text [expr {$xm-3}] $yval -anchor e -justify right \
-		-text [format %g $y] -font $options(-font) -fill $fg -tags axistext                     
-	    append xml [$canvas drawtext_svg $options(-font) $fg [expr {$xm-3}] $yval [format %g $y]] 
+		-text [format %g $y] -font $options(-font) -fill $fg -tags axisordtext
+	    if {$drawsvg} { 
+		set ii [$canvas find withtag axisordtext]           
+		append xml [$canvas drawline_svg [expr {$xm-2}] $yval $xm $yval $fg 1 $fg] 
+		append xml [$canvas drawtext_svg $options(-font) $fg [expr {$xm-3}] $yval [format %g $y] $ii end] 
+		if {$options(-addgridlines)} { 
+		    append xml [$canvas drawline_svg $xm $yval [expr {$xmax-$xm}] $yval \
+		            $options(-gridlinescolor) 1 $options(-gridlinescolor)]                       
+		}
+	    }
 	    set yprev $y
 	}                
 	if {$yaxis(rightside) != ""} {   
@@ -1692,10 +1793,13 @@ snit::widgetadaptor cu::draw_graphs {
 		}                
 		set yval [expr {$ymax-$ym-($y-$yaxisminright)*$yfactright}]
 		$canvas create line [expr {$xmax-$xm-2}] $yval [expr {$xmax-$xm}] $yval -fill $fg -tags axistext
-		append xml [$canvas drawline_svg [expr {$xmax-$xm-2}] $yval [expr {$xmax-$xm}] $yval $fg 1 $fg] 
 		$canvas create text [expr {$xmax-$xm-3}] $yval -anchor e -justify right \
 		    -text [format %g $y] -font $options(-font) -fill $fg -tags axistext
-		append xml [$canvas drawtext_svg $options(-font) $fg [expr {$xmax-$xm-3}] $yval [format %g $y]] 
+		if {$drawsvg} { 
+		    set ii [$canvas find withtag axistext]
+		    append xml [$canvas drawline_svg [expr {$xmax-$xm-2}] $yval [expr {$xmax-$xm}] $yval $fg 1 $fg]              
+		    append xml [$canvas drawtext_svg $options(-font) $fg [expr {$xmax-$xm-3}] $yval [format %g $y] $ii end] 
+		}
 		set yprevr $y
 	    }     
 	}       
@@ -1703,13 +1807,13 @@ snit::widgetadaptor cu::draw_graphs {
 	for {set i 0} {$i < [llength $options(-functionnames)]} {incr i} {
 	    if {$options(-[lindex $options(-functionnames) $i])} { continue }             
 	    set ifunction [lindex $options(-functionnames) $i]                     
-	    if {$options(-multiplegraphs)} {
+	    if {$multiplegraphs} {
 		set numdivisions [expr [llength [lindex $options(-xyvalues) $i]]-1]
 	    } else {
 		set numdivisions [expr [llength $options(-xyvalues)]-1]
 	    }
 	    for {set j 0} {$j <= $numdivisions} {incr j} {
-		if {$options(-multiplegraphs)} {
+		if {$multiplegraphs} {
 		    lassign [lindex [lindex $options(-xyvalues) $i] $j] xval yval
 		} else {
 		    lassign [lindex $options(-xyvalues) $j] xval yval
@@ -1718,11 +1822,11 @@ snit::widgetadaptor cu::draw_graphs {
 		    set xval [expr {$xval + [lindex $options(-xymovement) 0]}]
 		    set yval [expr {$yval + [lindex $options(-xymovement) 1]}]         
 		}
-		if {!$options(-xyaxisauto)} {                              
+		if {!$xyaxisauto} {                              
 		    if {$j == 0} {                                            
 		        continue 
 		    } else {
-		        if {$options(-multiplegraphs)} {
+		        if {$multiplegraphs} {
 		            lassign [lindex [lindex $options(-xyvalues) $i] [expr {$j-1}]] prevxval prevyval
 		        } else {
 		            lassign [lindex $options(-xyvalues) [expr {$j-1}]] prevxval prevyval
@@ -1785,22 +1889,26 @@ snit::widgetadaptor cu::draw_graphs {
 		                    if {!$options(-scatterplot)} {
 		                        $canvas create line $x0val $y0val $x1val $y1val \
 		                            -tags "curve yaxisside=$yaxisside function=$i" -width 3 \
-		                            -fill [lindex $options(-colorset) $i]
-		                        append xml [$canvas drawline_svg $x0val $y0val $x1val $y1val \
-		                                [lindex $options(-colorset) $i] 1 [lindex $options(-colorset) $i]]                                         
+		                            -fill [lindex $colorset $i]
+		                        if {$drawsvg} { 
+		                            append xml [$canvas drawline_svg $x0val $y0val $x1val $y1val \
+		                                    [lindex $colorset $i] 1 [lindex $colorset $i]]                                         
+		                        }
 		                    } else {                                      
 		                        $canvas create oval [expr $x0val-2.8] [expr $y0val-2.8] \
 		                            [expr $x0val+2.8] [expr $y0val+2.8] -width 1 \
-		                            -outline darkblue -fill [lindex $options(-colorset) $i] \
+		                            -outline darkblue -fill [lindex $colorset $i] \
 		                            -tags "curvepoint curve yaxisside=$yaxisside function=$i"
-		                        append xml [$canvas drawcircle_svg $x0val $y0val 2.5 \
-		                                [lindex $options(-colorset) $i] 1 [lindex $options(-colorset) $i]]                                                 
 		                        $canvas create oval [expr $x1val-2.8] [expr $y1val-2.8] \
 		                            [expr $x1val+2.8] [expr $y1val+2.8] -width 1 \
-		                            -outline darkblue -fill [lindex $options(-colorset) $i] \
+		                            -outline darkblue -fill [lindex $colorset $i] \
 		                            -tags "curvepoint curve yaxisside=$yaxisside function=$i"
-		                        append xml [$canvas drawcircle_svg $x1val $y1val 2.5 \
-		                                [lindex $options(-colorset) $i] 1 [lindex $options(-colorset) $i]]
+		                        if {$drawsvg} { 
+		                            append xml [$canvas drawcircle_svg $x0val $y0val 2.5 \
+		                                    [lindex $colorset $i] 1 [lindex $colorset $i]]                                                                                      
+		                            append xml [$canvas drawcircle_svg $x1val $y1val 2.5 \
+		                                    [lindex $colorset $i] 1 [lindex $colorset $i]]
+		                        }
 		                    }                                     
 		                }                               
 		            }                              
@@ -1819,45 +1927,54 @@ snit::widgetadaptor cu::draw_graphs {
 		        if {!$options(-scatterplot)} {
 		            $canvas create line $prevxval $prevyval $xval $yval \
 		                -tags "curve yaxisside=$yaxisside function=$i" -width 3 \
-		                -fill [lindex $options(-colorset) $i]
-		            append xml [$canvas drawline_svg $prevxval $prevyval $xval $yval \
-		                    [lindex $options(-colorset) $i] 1 [lindex $options(-colorset) $i]]   
+		                -fill [lindex $colorset $i]
+		            if {$drawsvg} {
+		                append xml [$canvas drawline_svg $prevxval $prevyval $xval $yval \
+		                        [lindex $colorset $i] 1 [lindex $colorset $i]]   
+		            }
 		        } else {                           
 		            $canvas create oval [expr $prevxval-2.8] [expr $prevyval-2.8] \
 		                [expr $prevxval+2.8] [expr $prevyval+2.8] -width 1 \
-		                -outline darkblue -fill [lindex $options(-colorset) $i] \
+		                -outline darkblue -fill [lindex $colorset $i] \
 		                -tags "curvepoint curve yaxisside=$yaxisside function=$i"
-		            append xml [$canvas drawcircle_svg $prevxval $prevyval 2.5 \
-		                    [lindex $options(-colorset) $i] 1 [lindex $options(-colorset) $i]]
 		            $canvas create oval [expr $xval-2.8] [expr $yval-2.8] \
 		                [expr $xval+2.8] [expr $yval+2.8] -width 1 \
-		                -outline darkblue -fill [lindex $options(-colorset) $i] \
-		                -tags "curvepoint curve yaxisside=$yaxisside function=$i"
-		            append xml [$canvas drawcircle_svg $xval $yval 2.5 \
-		                    [lindex $options(-colorset) $i] 1 [lindex $options(-colorset) $i]]
+		                -outline darkblue -fill [lindex $colorset $i] \
+		                -tags "curvepoint curve yaxisside=$yaxisside function=$i"    
+		            if {$drawsvg} {
+		                append xml [$canvas drawcircle_svg $prevxval $prevyval 2.5 \
+		                        [lindex $colorset $i] 1 [lindex $colorset $i]]
+		                append xml [$canvas drawcircle_svg $xval $yval 2.5 \
+		                        [lindex $colorset $i] 1 [lindex $colorset $i]]
+		            }                                               
 		        }
 		    } 
 		    if { $j == $numdivisions && $options(-scatterplot) } {                      
 		        $canvas create oval [expr $xval-2.8] [expr $yval-2.8] \
 		            [expr $xval+2.8] [expr $yval+2.8] -width 1 \
-		            -outline darkblue -fill [lindex $options(-colorset) $i] \
+		            -outline darkblue -fill [lindex $colorset $i] \
 		            -tags "curvepoint curve yaxisside=$yaxisside function=$i"
-		        append xml [$canvas drawcircle_svg $xval $yval 2.5 \
-		                [lindex $options(-colorset) $i] 1 [lindex $options(-colorset) $i]]
+		        if {$drawsvg} {
+		            append xml [$canvas drawcircle_svg $xval $yval 2.5 \
+		                    [lindex $colorset $i] 1 [lindex $colorset $i]]
+		        }
 		    }  
 
 		    set prevxval $xval               
 		    set prevyval $yval
 		}                
 	    }
-	}      
-	append xml "</svg>"
-
-	$canvas bind curve <ButtonPress-1> [mymethod draw_graph_coords %x %y]        
-	$canvas bind curvepoint <ButtonPress-1> [mymethod draw_graph_coords %x %y] 
-	
-	$canvas bind legendbox <ButtonPress-1> [mymethod move_entity legendbox BP1 %x %y]        
-	$canvas bind legendbox <B1-Motion> [mymethod move_entity legendbox BM1 %x %y]                   
+	} 
+	if {$drawsvg} {     
+	    append xml "</svg>"
+	    return $xml
+	} else {
+	    $canvas bind curve <ButtonPress-1> [mymethod draw_graph_coords %x %y]        
+	    $canvas bind curvepoint <ButtonPress-1> [mymethod draw_graph_coords %x %y] 
+	    
+	    $canvas bind legendbox <ButtonPress-1> [mymethod move_entity legendbox BP1 %x %y]        
+	    $canvas bind legendbox <B1-Motion> [mymethod move_entity legendbox BM1 %x %y]                   
+	}
     }  
     
     method isinbox { x y xaxismin xaxismax yaxismin yaxismax } {
@@ -1952,6 +2069,8 @@ snit::widgetadaptor cu::draw_graphs {
 	return [list $minpx $minpy]
     }       
     method draw_graph_coords { x y } {
+	variable xyaxisauto
+	
 	set c $self
 	
 	$c delete coords
@@ -1980,7 +2099,7 @@ snit::widgetadaptor cu::draw_graphs {
 	$c create oval [expr $xcurve-2.5] [expr $ycurve-2.5] [expr $xcurve+2.5] [expr $ycurve+2.5] \
 	    -fill red -outline darkblue -width 1 -tags "curvecurrent"
 	
-	if {$options(-xyaxisauto)} {
+	if {$xyaxisauto} {
 	    set xtext [expr ($xcurve-$xm)/double($xfact)+[lindex $options(-xaxismin) 0]]
 	} else {
 	    set xtext [expr ($xcurve-$xm)/double($xfact)+[lindex $options(-xaxismin) 1]]
@@ -1988,13 +2107,13 @@ snit::widgetadaptor cu::draw_graphs {
 	regsub {e([+-])00} $xtext {e\10} xtext
 	
 	if {$yaxisside == "right"} {
-	    if {$options(-xyaxisauto)} {
+	    if {$xyaxisauto} {
 		set ytext [expr ($ymax-$ym-$ycurve)/double($yfactright)+[lindex $options(-yaxisminright) 0]]            
 	    } else {
 		set ytext [expr ($ymax-$ym-$ycurve)/double($yfactright)+[lindex $options(-yaxisminright) 1]]  
 	    }
 	} elseif {$yaxisside == "left"} {
-	    if {$options(-xyaxisauto)} {
+	    if {$xyaxisauto} {
 		set ytext [expr ($ymax-$ym-$ycurve)/double($yfactleft)+[lindex $options(-yaxisminleft) 0]]
 	    } else {
 		set ytext [expr ($ymax-$ym-$ycurve)/double($yfactleft)+[lindex $options(-yaxisminleft) 1]]
@@ -2007,7 +2126,7 @@ snit::widgetadaptor cu::draw_graphs {
 		[format "%s: %.4g %s" $options(-xlabel) $xtext $options(-xlabelunit)]]        
 	set xtextwidth2 [font measure $options(-font) \
 		[format "%s: %.4g %s" $options(-ylabel) $ytext $options(-ylabelunit)]]  
-	if {$options(-multiplegraphs)} {
+	if {$multiplegraphs} {
 	    set xtextwidth3 [font measure $options(-font) \
 		    [format "%s %s %.4g" $functionname $options(-xlabel) $xtext]]          
 	} else {
@@ -2022,14 +2141,15 @@ snit::widgetadaptor cu::draw_graphs {
 	    [expr $xcurve+$xtextwidth/2.0+3.5] [expr $ycurve-3.0*$textheight-4.0] \
 	    -fill "LightYellow" -width 1 -tags coords -outline black              
 		 
-	if {$options(-multiplegraphs)} {
+	if {$multiplegraphs} {
 	    $c create text $xcurve [expr $ycurve-3*$textheight-2.5] -anchor n -font $options(-font) \
-		-text [format "%s\n%s: %.4g %s\n %s: %.4g %s" \
+		-text [format "%s\n%s: %.4g %s\n%s: %.4g %s" \
 		    $functionname $options(-xlabel) \
-		    $xtext $options(-xlabelunit) [lindex $options(-functionnames) $numfunction] $ytext $options(-ylabelunit)] -justify left -tags coords    
+		    $xtext $options(-xlabelunit) [lindex $options(-ylabel) $numfunction] \
+		    $ytext [lindex $options(-ylabelunit) $numfunction]] -justify left -tags coords    
 	} else {
 	    $c create text $xcurve [expr $ycurve-3*$textheight-2.5] -anchor n -font $options(-font) \
-		-text [format "%s\n%s: %.4g %s\n %s: %.4g %s" \
+		-text [format "%s\n%s: %.4g %s\n%s: %.4g %s" \
 		    $options(-title) $options(-xlabel) $xtext $options(-xlabelunit) $options(-ylabel) \
 		    $ytext $options(-ylabelunit)] -justify left -tags coords  
 	}
@@ -2037,6 +2157,8 @@ snit::widgetadaptor cu::draw_graphs {
 	$c bind curve <ButtonRelease-1> "$c delete coords coordpoint curvecurrent; $c bind curve <B1-Motion> {}"                
     }   
     method colorchoose {} {
+	variable colorset 
+	
 	set w .backgroundcolor
 	catch {destroy $w}
 	set w [dialogwin_snit $w -title [_ "Graphical appearance"] \
@@ -2074,7 +2196,7 @@ snit::widgetadaptor cu::draw_graphs {
 	cu::combobox $f.fx -textvariable [$w give_uservar fx] \
 	    -values $options(-functionnames) -width 20 -state readonly 
 	tooltip::tooltip $f.fx [_ "Selected functions"]                 
-	set lfg2 [label $f.lfg2 -text "  " -relief solid -bd 1 -width 3 -background [lindex $options(-colorset) 0]]
+	set lfg2 [label $f.lfg2 -text "  " -relief solid -bd 1 -width 3 -background [lindex $colorset 0]]
 	tooltip::tooltip $lfg2 [_ "Color view"]        
 	set bfg2 [cu::menubutton_button $f.bfg2 -command [mymethod setcolor $w background function $lfg2] \
 		-image [cu::get_image colors-16] -menu $f.bfg2.m]
@@ -2109,7 +2231,7 @@ snit::widgetadaptor cu::draw_graphs {
 	
 	$w set_uservar_value addgridlines $options(-addgridlines)
 	$w set_uservar_value fx [lindex $options(-functionnames) 0] 
-	$w set_uservar_value colorset $options(-colorset)
+	$w set_uservar_value colorset $colorset
 	
 	set cmd_fx "[namespace code [mymethod updatecolor $w $lfg2]];#"
 	trace add variable [$w give_uservar fx] write $cmd_fx
@@ -2120,6 +2242,8 @@ snit::widgetadaptor cu::draw_graphs {
 	$w createwindow
     }
     method updatecolor { w label } {
+	variable colorset 
+	
 	set fx [$w give_uservar_value fx]
 	set colorset [$w give_uservar_value colorset]
 	set ipos [lsearch -exact $options(-functionnames) $fx]
@@ -2128,7 +2252,9 @@ snit::widgetadaptor cu::draw_graphs {
     method initialcolor { w name label } {        
 	$label config -background $options(-$name)                   
     }
-    method setcolor { w intname name label } {       
+    method setcolor { w intname name label } { 
+	variable colorset
+	
 	set c $self
 	
 	set f [$w giveframe]
@@ -2148,7 +2274,9 @@ snit::widgetadaptor cu::draw_graphs {
 	}
 	grab release $w                        
     }
-    method colorchoose_do { w  } {
+    method colorchoose_do { w } {
+	set colorset
+	
 	set action [$w giveaction]
 	
 	set f [$w giveframe]
@@ -2159,7 +2287,7 @@ snit::widgetadaptor cu::draw_graphs {
 		set options(-foregroundcolor) [$f.lfg cget -background]
 		set options(-addgridlines) [$w give_uservar_value addgridlines]
 		set options(-gridlinescolor) [$f.lfg1 cget -background]  
-		set options(-colorset) [$w give_uservar_value colorset]            
+		set colorset [$w give_uservar_value colorset]            
 		destroy $w                
 		catch { $self draw } errstring
 	    }            
@@ -2170,48 +2298,53 @@ snit::widgetadaptor cu::draw_graphs {
     }   
 }
     
-if 0 {   
+if 1 {   
     # interp alias "" _ "" msgcat::mc
 
 #     pack [cu::draw_graphs .d -xyvalues [list "1 1" "2 1.02" "3 1.05" "4 0.99" "5 0.96" \
 #                 "6 6" "7 7" "8 8"] \
-#             -xlabel t -ylabel f -title "My function" -xlabelunit "s" -ylabelunit "N"] -fill both -expand 1  
-    
+#             -xlabel t -ylabel f -title "My function" -xlabelunit "s" -ylabelunit "N"] -fill both -expand 1      
+#     
 #     pack [cu::draw_graphs .d -xyvalues [list "1 1" "2 5" "3 3" "4 2" "5 7" \
 #                 "6 6" "7 7" "8 8"] \
-#             -xlabel t -ylabel f -title "My function" -xlabelunit "s" -ylabelunit "N"] -fill both -expand 1   
-
+#             -xlabel t -ylabel f -title "My function" -xlabelunit "s" -ylabelunit "N"] -fill both -expand 1       
+# 
 #     pack [cu::draw_graphs .d -xyvalues [list "-10 2" "1 3" "2 4" "3 5" "4 6" \
 #                 "5 7" "8 15" "9 8" "10 9"] \
 #             -xlabel t -ylabel f -title "My function" -xlabelunit "s" -ylabelunit "N"] -fill both -expand 1   
-
+# 
 #     pack [cu::draw_graphs .d -xyvalues [list "0 20"] -xlabel "t" -ylabel "f" -title "My point" \
 #             -functionnames "Function" -scatterplot 1] -fill both -expand 1   
-    
+#     
 #     pack [cu::draw_graphs .d -xyvalues [list "0.0 -1.0e-20" "0.1 1.0e+20 0.2 -1.0e-20"] -xlabel "t" -ylabel "f" -title "My point" \
 #             -functionnames "Function" -scatterplot 1] -fill both -expand 1
- 
+#  
 #     pack [cu::draw_graphs .d -xyvalues [list [list "-5 2" "-4 -1" "2 -3" "3 2" "4 -2.5"] \
 #                 [list "-5 -2" "-4 3" "0.5 -1" "5 4"] [list "-5 -2" "-4 3" "5 -1" "5 4"]] -xlabel "time" -ylabel "f" -title "My functions" \
-#             -functionnames [list "Function 1" "Function 2" "Function 3"] -multiplegraphs 1 \
-#         -showlegend 1 -xlabelunit "s" -ylabelunit "m" ] -fill both -expand 1   
-      
+#             -functionnames [list "Function 1" "Function 2" "Function 3"] \
+#             -showlegend 1 -xlabelunit "s" -ylabelunit "m" ] -fill both -expand 1   
+#       
 #     pack [cu::draw_graphs .d -xyvalues [list [list {1.0 0.0} {2.0 2.0} {4.0 2.0} {5.0 0.0}] \
 #                 [list {0 1} {3 1} {6 1}]] -xlabel "time" -ylabel "f" -title "My functions" \
-#             -functionnames [list "Function 1" "Function 2"] -multiplegraphs 1 \
+#             -functionnames [list "Function 1" "Function 2"] \
 #             -showlegend 1 -xlabelunit "s" -ylabelunit "m" ] -fill both -expand 1     
 #     
 #     pack [cu::draw_graphs .d -xyvalues [list [list "0 1" "2 3" "5 7"] \
-#                 [list "0 4" "2 6" "3 5"]] -xlabel "s" -functionnames [list "\u0192" "\u019F"] -multiplegraphs 1 \
+#                 [list "0 4" "2 6" "3 5"]] -xlabel "s" -ylabel [list N] -functionnames [list "\u0192" "\u019F"] \
 #             -backgroundcolor white -showlegend 1 -colorset [list "medium slate blue" oliveDrab1] \
-#             -canvaswidthset ""] -fill both -expand 1 
+#             -canvaswidthset "" -yaxisleftright 0] -fill both -expand 1 
+#     
+#     pack [cu::draw_graphs .d -xyvalues [list [list "0 1" "2 3" "5 7"] \
+#                 [list "0 4" "2 6" "3 5"]] -xlabel "s" -ylabel [list N m] -functionnames [list "\u0192" "\u019F"] \
+#             -backgroundcolor white -showlegend 1 -colorset [list "medium slate blue" oliveDrab1] \
+#             -canvaswidthset "" -yaxisleftright 1] -fill both -expand 1 
 #     
 #     pack [cu::draw_graphs .d -xyvalues {{{1 4.733341e-13} {2 9.466683e-13} {3 1.420002e-12} {4 1.893337e-12} \
 #                 {5 2.366671e-12} {6 2.840005e-12} {7 3.313339e-12} {8 3.786673e-12} {9 4.260007e-12} {10 4.733341e-12}}} \
-#             -xlabel "X" -ylabel "Y" -title "" -functionnames [list "Steps vs Desp-X"] -multiplegraphs 1 -showlegend 1] -fill both -expand 1
- 
+#             -xlabel "X" -ylabel "Y" -title "" -functionnames [list "Steps vs Desp-X"] -showlegend 1] -fill both -expand 1
+#
 #     pack [cu::draw_graphs .d -xyvalues [list [list {0.0 0.0} {0.1 0.010000000000000002} {0.2 0.04000000000000001} {0.30000000000000004 0.09000000000000002} {0.4 0.16000000000000003} {0.5 0.25} {0.6 0.36} {0.7 0.48999999999999994} {0.7999999999999999 0.6399999999999999} {0.8999999999999999 0.8099999999999998} {0.9999999999999999 0.9999999999999998} {1.0999999999999999 1.2099999999999997} {1.2 1.44} {1.3 1.6900000000000002} {1.4000000000000001 1.9600000000000004} {1.5000000000000002 2.250000000000001} {1.6000000000000003 2.560000000000001} {1.7000000000000004 2.8900000000000015} {1.8000000000000005 3.2400000000000015} {1.9000000000000006 3.610000000000002} {2.0000000000000004 4.000000000000002} {2.1000000000000005 4.410000000000002} {2.2000000000000006 4.8400000000000025} {2.3000000000000007 5.290000000000004} {2.400000000000001 5.760000000000004} {2.500000000000001 6.250000000000004}] \
 #                 [list {0.0 0.0} {0.1 0.31622776601683794} {0.2 0.4472135954999579} {0.30000000000000004 0.5477225575051662} {0.4 0.6324555320336759} {0.5 0.7071067811865476} {0.6 0.7745966692414834} {0.7 0.8366600265340756} {0.7999999999999999 0.8944271909999159} {0.8999999999999999 0.9486832980505138} {0.9999999999999999 0.9999999999999999} {1.0999999999999999 1.0488088481701514} {1.2 1.0954451150103321} {1.3 1.140175425099138} {1.4000000000000001 1.1832159566199232} {1.5000000000000002 1.2247448713915892} {1.6000000000000003 1.2649110640673518} {1.7000000000000004 1.30384048104053} {1.8000000000000005 1.341640786499874} {1.9000000000000006 1.3784048752090223} {2.0000000000000004 1.4142135623730951} {2.1000000000000005 1.449137674618944} {2.2000000000000006 1.4832396974191329} {2.3000000000000007 1.5165750888103104} {2.400000000000001 1.549193338482967} {2.500000000000001 1.58113883008419} ]] -xlabel "time" -ylabel "f" -title "My functions" \
-#             -functionnames [list "Function 1" "Function 2"] -multiplegraphs 1 \
-#             -showlegend 1 -xlabelunit "s" -ylabelunit "m" ] -fill both -expand 1    
+#             -functionnames [list "Function 1" "Function 2"] -showlegend 1 -xlabel "t" \
+#             -ylabel [list f1 f2] -xlabelunit "s" -ylabelunit [list m N] -yaxisleftright 1] -fill both -expand 1    
 }

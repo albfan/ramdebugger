@@ -1,6 +1,7 @@
 
 package require Tcl 8.5
 package require Tk 8.5
+package require img::png
 
 # to auto load from GiD
 catch {
@@ -58,6 +59,17 @@ if { [info command img::ok-16] eq "" } {
 	OC4gQWxsIHJpZ2h0cyByZXNlcnZlZC4NCmh0dHA6Ly93d3cuZGV2ZWxjb3IuY29tADs=
     }
 }
+
+if { [info command img::ok-close-16] eq "" } {
+    image create photo img::ok-close-16 -data {
+	iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A
+	/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGBQg0Je+LBW4AAACcSURBVDjL
+	xZAxDoMwDEWdyIfoYO6CqpyMkyGUU7AwhGOguEOTyjJugDL0S5ayvOfvAPwzMUe+BeOEfAvG4QeB
+	hPF5UaBh9EIQc2xWOoYn/HqXhoOE0RfjgKakuflI0txc4uojeOSxB4A6NeN7lvkB3bo6CScibjdR
+	tSVQ384659OibN/y5jSo2+wkwdsfloh4V/1MEpF5whWB2eYFGiqYk9fFXzQAAAAASUVORK5CYII=
+    }
+}
+
 if { [info command img::fileclose16] eq "" } {
     image create photo img::fileclose16 -data {
 	R0lGODlhEAAQAIQAAPwCBCQiJBwaHAQCBDQyNDw6PFxaXFRSVERGRCwqLAwODGRiZHx6fPz+/Gxq
@@ -1083,6 +1095,7 @@ proc snit_messageBox { args } {
 	    error [_ "unknown type: '%s' in snit_messageBox" $opts(-type)]
 	}
     }
+
     if { $opts(-default) == "" } {
 	set opts(-defaultpos) 0
     } else {
@@ -1290,6 +1303,14 @@ snit::widget dialogwin_snit {
 	    set checkbutton_cmd ttk::checkbutton
 	    set radiobutton_cmd ttk::radiobutton
 	}
+	if { $options(-okname) eq "" } { set options(-okname) [_ "Ok"] }
+	if { $options(-cancelname) eq "" } {
+	    set options(-cancelname) [_ "Cancel"]
+	
+	    if { $options(-okname) eq "-" && $options(-morebuttons) eq "" } {
+		set options(-cancelname) [_ "Close"]
+	    }
+	}
 	set current_row -1
 	if { $options(-show_frame_toplevel_toggle) && $options(-frame_grid_cmd) ne "" } {
 	    ttk::frame $win.f0
@@ -1311,7 +1332,14 @@ snit::widget dialogwin_snit {
 		    grid $win.f0.buts.b1 -row 0 -column $col
 		    incr col
 		}
-		if { [llength $options(-morebuttons)] } {
+		if { [llength $options(-morebuttons)] == 1 } {
+		    $win.f0.buts.b1 configure -image img::ok-close-16
+		    ttk::button $win.f0.buts.b2 -image img::ok-16 -command [mymethod _applyaction 2] \
+		        -style Toolbutton
+		    tooltip::tooltip $win.f0.buts.b2 [lindex $options(-morebuttons) 0]
+		    grid $win.f0.buts.b2 -row 0 -column $col
+		    incr col
+		} elseif { [llength $options(-morebuttons)] } {
 		    ttk::menubutton $win.f0.buts.b2 -image img::nav1downarrow16 -menu $win.f0.buts.b2.m \
 		        -style Toolbutton
 		    menu $win.f0.buts.b2.m -tearoff 0
@@ -1367,14 +1395,6 @@ snit::widget dialogwin_snit {
 	grid columnconfigure $win 0 -weight 1
 	grid rowconfigure $win $current_row -weight 1
 
-	if { $options(-okname) eq "" } { set options(-okname) [_ "Ok"] }
-	if { $options(-cancelname) eq "" } {
-	    set options(-cancelname) [_ "Cancel"]
-	
-	    if { $options(-okname) eq "-" && $options(-morebuttons) eq "" } {
-		set options(-cancelname) [_ "Close"]
-	    }
-	}
 	set butwidth 7
 	if { [string length $options(-okname)] > $butwidth } {
 	    set butwidth [string length $options(-okname)]
@@ -2075,7 +2095,7 @@ snit::widget dialogwin_snit {
 	}
     }
     method unset_uservar { key } {
-	unset uservar($key)
+	unset -nocomplain uservar($key)
     }
     typemethod exists_typeuservar { key } {
 	return [info exists typeuservar($key)]

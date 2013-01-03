@@ -1125,18 +1125,23 @@ namespace eval cu::icons_contents {}
 
 proc cu::init_icons_lib { dbfile program_name } {
     variable icons_lib_db
-
+    
     set dbfile [file normalize $dbfile]
-    if { [lindex [file system $dbfile] 0] ne "native" } {
-	set nfile [file join [cu::file::appdatadir $program_name] \
-		[file tail $dbfile]]
-	if { ![file exists $nfile] || [file mtime $nfile] < [file mtime $dbfile] } {
-	    file copy -force $dbfile $nfile
-	}
-	set dbfile $nfile
-    }
+    
     package require sqlite3
-
+    if { [info command ::memvfs::create] ne "" } {
+	memvfs::create [file tail $dbfile] [cu::file::get $dbfile]
+	set dbfile "file:[file tail $dbfile]?vfs=memvfs"
+    } else {
+	if { [lindex [file system $dbfile] 0] ne "native" } {
+	    set nfile [file join [cu::file::appdatadir $program_name] \
+		    [file tail $dbfile]]
+	    if { ![file exists $nfile] || [file mtime $nfile] < [file mtime $dbfile] } {
+		file copy -force $dbfile $nfile
+	    }
+	    set dbfile $nfile
+	}
+    }
     set idx 1
     while { [info command ::cu::icons_lib_db$idx] ne "" } { incr idx }
     set icons_lib_db ::cu::icons_lib_db$idx
@@ -1279,7 +1284,6 @@ proc cu::get_image_name_from_fullpath { file } {
     return ""
 }
 
-
 proc cu::get_image_or_icon { args } {
     
     set optional {
@@ -1307,6 +1311,22 @@ proc cu::get_image_selected { name } {
     ::cu::images::$name_sel copy ::cu::images::$name
     imagetint ::cu::images::$name_sel $fulltktree::SystemHighlight 128
     return ::cu::images::$name_sel
+}
+
+proc cu::get_image_color { color } {
+    
+    set name color_$color
+    if { [info command ::cu::images::$name] ne "" } {
+	return ::cu::images::$name
+    }
+    set img [image create photo ::cu::images::$name -width 16 -height 8]
+    $img put $color -to 0 0 15 7
+    $img put black -to 0 0 15 1
+    $img put black -to 0 6 15 7
+    $img put black -to 0 0 1 7
+    $img put black -to 14 0 15 7
+
+    return ::cu::images::$name
 }
 
 proc cu::reset_images_cache {} {

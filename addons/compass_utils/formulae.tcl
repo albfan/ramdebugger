@@ -406,17 +406,18 @@ proc formulae::create_images {} {
 }
 
 proc formulae::create_give_image_color { color } {
-    variable images
-    if { ![dict exists $images color_$color] } {
-	set img [image create photo -width 16 -height 8]
-	$img put $color -to 0 0 15 7
-	$img put black -to 0 0 15 1
-	$img put black -to 0 6 15 7
-	$img put black -to 0 0 1 7
-	$img put black -to 14 0 15 7
-	dict set images color_$color $img
-    }
-    return [dict get $images color_$color]
+    return [cu::get_image_color $color]
+#     variable images
+#     if { ![dict exists $images color_$color] } {
+#         set img [image create photo -width 16 -height 8]
+#         $img put $color -to 0 0 15 7
+#         $img put black -to 0 0 15 1
+#         $img put black -to 0 6 15 7
+#         $img put black -to 0 0 1 7
+#         $img put black -to 14 0 15 7
+#         dict set images color_$color $img
+#     }
+#     return [dict get $images color_$color]
 }
 
 proc formulae::header_contextual_menu { key wp x y } {
@@ -3893,35 +3894,66 @@ proc formulae::reset_has_changes { key } {
     dict set values $key reset_has_changes 1
 }
 
-proc formulae::has_changes_in_values { key } {
+proc formulae::has_changes_in_values { args } {
     variable values
     
+    set optional {
+	{ -close_apps boolean 1 }
+	{ -only_important_changes "" 0 }
+    }
+    set compulsory "key"
+    parse_args $optional $compulsory $args
+
     if { [dict_getd $values $key reset_has_changes 0] == 1 } {
 	return 0
     }
     if { ![dict exists $values $key notebook_widget] } { return 0 }
     set nb [dict get $values $key notebook_widget]
 
-    dict for "n file" [dict_getd $values $key reload_file ""] {
-	if { $file eq "" || [file isdirectory $file] } { continue }
-	set mtime_last [dict get $values $key reload_mtime $n]
+    set ret 0
+    foreach n [dict keys [dict get $values $key reload]] {
+	set d [dict get $values $key reload $n]
+	
+	if { [dict get $d cmd_quit] ne "" } {
+	    if { $close_apps } {
+		uplevel #0 [dict get $d cmd_quit]
+		set d [dict get $values $key reload $n]
+	    } else {
+		set ret 2
+	    }
+	}
+	set file [dict get $d file]
+	if { [dict get $d file_save_type] eq "memory" || $file eq "" || [file isdirectory $file] } { continue }
+
+	if { [dict get $d file_save_type] eq "temp" } {
+	    set sfile [file tail $file]
+	} else {
+	    set sfile $file
+	}
 	set mtime_file [cu::file::mtime_recursive $file]
-	if { $mtime_file ne "" && $mtime_file > $mtime_last } {
+	if { $mtime_file ne "" && $mtime_file > [dict get $d mtime] } {
 	    set message0 "Do you want to reload file '%s'?"
-	    set message [_ "Do you want to reload file '%s'?" $file]
-	    set retval [snit_messageBox -default ok -icon question -message $message \
+	    set message [_ "Do you want to reload file '%s'?" $sfile]
+	    set retval [snit_messageBox -default yes -icon question -message $message \
 		    -type yesnocancel -parent $nb -do_not_ask_again 1 -do_not_ask_again_key $message0]
 	    if { $retval eq "cancel" } { error "" }
 	    if { $retval eq "yes" } {
-		lassign [dict get $values $key reload_menu_pos $n] menu idx
-		$menu invoke $idx
+		uplevel #0 [dict get $d cmd]
+		set ret 2
 	    }
 	}
     }
     if { [info exists message0] } {
 	dialogwin_snit clear_do_not_ask_again $message0
-    }    
-    return [$nb manage_database check_has_changes_only]
+    }
+    set retL [$nb manage_database check_has_changes_only]
+    if { $retL > $ret } {
+	set ret $retL
+    }
+    if { $only_important_changes && $ret == 1 } {
+	set ret 0
+    }
+    return $ret
 }
 
 proc formulae::update_sub_tree { key node_tree } {
@@ -6147,11 +6179,11 @@ snit::widgetadaptor snit_notebook {
 	    }
 	    give_selection {
 		if { [llength [$db_list item children 0]] && [$db_list item style set 1 0] eq "window" } {
-		    return ""
+		   return ""
 		}
 		set ids ""
 		foreach item [$db_list selection get] {
-		    lappend ids [$db_list item text $item 0]
+		   lappend ids [$db_list item text $item 0]
 		}
 		return $ids
 	    }
@@ -6303,6 +6335,7 @@ snit::widgetadaptor snit_notebook {
 proc formulae::identity { arg } { return $arg }
 
 proc formulae::_create_interp { key lognoter lognoter_db snit_notebook database page } {
+
     set idx 0
     while { [interp exists formulae$idx] } { incr idx }
     set f_interp [interp create formulae$idx]
@@ -6338,7 +6371,7 @@ proc formulae::_create_interp { key lognoter lognoter_db snit_notebook database 
 	interp alias $f_interp sql "" $lognoter_db sql
 	interp alias $f_interp connect_to_mysql "" formulae::connect_to_mysql
 	interp alias $f_interp sql_mysql "" formulae::sql_mysql
-	interp alias $f_interp ask_for_period "" formulae::ask_for_period $key -interp $f_interp
+	#interp alias $f_interp ask_for_period "" formulae::ask_for_period $key -interp $f_interp
 	interp alias $f_interp query_manager "" formulae::query_manager $key
 	interp alias $f_interp source_page "" formulae::source_page $key $page
 	interp alias $f_interp edit_page_xml "" formulae::edit_page_xml $key
@@ -6352,15 +6385,19 @@ proc formulae::_create_interp { key lognoter lognoter_db snit_notebook database 
 	interp alias $f_interp give_value_field "" formulae::give_value_field $lognoter_db \
 	    $snit_notebook $database $page
 	interp alias $f_interp update_database_table_xml "" formulae::create_update_database_table_xml $lognoter_db      
-	interp alias $f_interp exporttofile "" $lognoter_db exporttofile     
 	interp alias $f_interp give_user "" $lognoter_db give_user
 	
 	if { $snit_notebook ne "" } {
 	    interp alias $f_interp refresh "" $snit_notebook manage_database update
 	    interp alias $f_interp give_selection "" $snit_notebook manage_database give_selection
+	    interp alias $f_interp exporttofile "" $lognoter_db exporttofile
+	    interp alias $f_interp ask_for_period "" formulae::ask_for_period $key -interp $f_interp 
 	} else {
 	    $f_interp eval [list proc refresh { args } {}]
-	    $f_interp eval [list proc give_selection {} {}]
+	    $f_interp eval [list proc give_selection {} {global idx_db; return $idx_db}]
+	    interp alias $f_interp messageBox "" formulae::web_messageBox $f_interp
+	    interp alias $f_interp exporttofile "" $lognoter_db exporttofile -from_web 1
+	    interp alias $f_interp ask_for_period "" formulae::web_ask_for_period -key $key 
 	}
     }
     if { $lognoter ne "" } {
@@ -6681,6 +6718,103 @@ proc formulae::source_pageIL { interp lognoter_db page args } {
 	$interp eval [$tclNode text]
     }
     $doc delete
+}
+
+
+proc formulae::web_ask_for_period_update { args } {
+    variable values
+    
+    set optional {
+	{ -lognoter_db db "" }
+    }
+    set compulsory "key doc values_dict"
+    parse_args $optional $compulsory $args
+    
+    dict for "n v" $values_dict {
+	if { [regexp {^p_d_(.*)} $n {} n] } {
+	    dict set valuesP_dict $n $v
+	}
+    }
+    
+    set year [dict_getd $valuesP_dict year ""]
+    set period_type_user [dict get $valuesP_dict period_type]
+    set start_date [dict get $valuesP_dict start_date]
+    set end_date [dict get $valuesP_dict end_date]
+    
+    set period_types_dict [list \
+	    "1 quarter" [_ "First quarter"] \
+	    "2 quarter" [_ "Second quarter"] \
+	    "3 quarter" [_ "Third quarter"] \
+	    "4 quarter" [_ "Forth quarter"] \
+	    "year" [_ "Full year"] \
+	    "user_defined" [_ "User defined"] \
+	    "full_range" [_ "Full range"] \
+	    ]
+    
+    set period_type [lindex $period_types_dict [lsearch $period_types_dict $period_type_user]-1]
+
+    if { $year eq "" } {
+	if { $period_type eq "full_range" } {
+	    #ask_for_period_set_full_years_range $w
+	    return [list ""]
+	} elseif { $period_type eq "user_defined" } {
+	    return [list ""]
+	} else {
+	    set err [catch { clock format [clock scan $end_date] -format %Y } year]
+	    if { $err } { set year 2011 }
+	    set year $year
+	}
+    }
+    set idx 1
+    foreach i [list 0 3 6 9] {
+	set start($idx) [clock format [clock add [clock scan $year-01-01] $i month] -format %Y-%m-%d]
+	set end($idx) [clock format [clock add [clock scan $year-01-01] [expr {$i+3}] month \
+		    -1 day] -format %Y-%m-%d]
+	incr idx
+    }
+    set start($idx) $start(1)
+    set end($idx) $end(4)
+    
+    switch $period_type {
+		"1 quarter" { set idx 1 }
+		"2 quarter" { set idx 2 }
+		"3 quarter" { set idx 3 } 
+		"4 quarter" { set idx 4 }
+		"year" { set idx 5 }
+		"user_defined" { set idx 0 }
+		"full_range" { set idx -1 }
+     }
+     if { $idx == -1 } {
+	 #ask_for_period_set_full_years_range $w
+	 set start_date $year-01-01
+	 set end_date $year-12-31
+     } elseif { $idx == 0 } {
+	 set err [catch { clock format [clock scan $start_date] -format $year-%m-%d } start_date]
+	 if { $err } {
+	     set start_date $year-01-01
+	 }
+	 set err [catch { clock format [clock scan $end_date] -format $year-%m-%d } end_date]
+	 if { $err } {
+	     set end_date $year-12-31
+	 }
+	 set cond_year "true"
+     } else {
+	 set start_date $start($idx)
+	 set end_date $end($idx)
+     }
+    
+     if { ![info exists cond_year] } {
+	 set cond_year "false"
+     }
+
+     dict set condition_values d_start_date false $start_date date
+     dict set condition_values d_end_date false $end_date date
+     dict set condition_values d_year $cond_year $year "options non-editable"
+     dict set condition_values d_period_type false \
+	[list [lindex $period_types_dict [lsearch $period_types_dict $period_type]+1]] \
+	"options non-editable"
+
+     return [list $condition_values]
 }
 
 proc formulae::_ask_for_period_update { w what } {
@@ -7352,6 +7486,106 @@ proc formulae::query_manager { key } {
     ask_for_period $key -callback - -default_template "" \
 	-has_where_clause 1 -unique_window 0 \
 	-table_definitionList $table_definitionList -title [_ "Query manager"] "query_manager"
+} 
+
+
+proc formulae::web_ask_for_period { args } {
+    variable values
+
+    set optional {
+	{ -default_dates datesList "" }
+	{ -callback proc "" }
+	{ -key key "" }
+	{ -title title "" }
+    }
+    set compulsory "modetype"
+    parse_args $optional $compulsory $args
+    
+    set dialog_doc [dict_getd $values $key dialog_doc ""]
+    
+    if { $title eq "" } {
+	dict set values $key title [_ "Enter time period"]
+    }
+    
+    if { $dialog_doc ne "" } {
+       return [list $dialog_doc]
+    }
+
+    set period_types_dict [list \
+	    "1 quarter" [_ "First quarter"] \
+	    "2 quarter" [_ "Second quarter"] \
+	    "3 quarter" [_ "Third quarter"] \
+	    "4 quarter" [_ "Forth quarter"] \
+	    "year" [_ "Full year"] \
+	    "user_defined" [_ "User defined"] \
+	    "full_range" [_ "Full range"] \
+	    ]
+    
+    set xml "<formulae></formulae>"
+
+    set doc [dom parse $xml]
+
+    set newContainer [$doc createElement container]
+    $newContainer setAttribute n "ask_for_period"
+    $newContainer setAttribute pn [_ "Time period"]
+    $newContainer setAttribute key $key
+    set newParam [$doc createElement param]
+    $newParam setAttribute n d_period_type
+    $newParam setAttribute pn [_ "Period"]
+    $newParam setAttribute field_type "options non-editable"
+    $newParam setAttribute values [list_to_comma_field [dict values $period_types_dict]]
+    $newParam setAttribute value [_ "User defined"]
+    $newParam setAttribute dialog "dialog"
+    $newContainer appendChild $newParam
+    set newParam [$doc createElement param]
+    $newParam setAttribute n d_year
+    $newParam setAttribute pn [_ "Year"]
+    $newParam setAttribute field_type "options non-editable"
+    $newParam setAttribute values "2005,2006,2007,2008,2009,2010,2011,2012"
+    $newParam setAttribute value "2012"
+    $newParam setAttribute condition "true"
+    $newParam setAttribute dialog "dialog"
+    $newParam setAttribute location "same_line"
+    $newContainer appendChild $newParam
+    set newParam [$doc createElement param]
+    $newParam setAttribute n d_start_date
+    $newParam setAttribute pn [_ "From"]
+    $newParam setAttribute field_type "date"
+    $newParam setAttribute value [lindex $default_dates 0]
+    $newParam setAttribute dialog "dialog"
+    $newContainer appendChild $newParam
+    set newParam [$doc createElement param]
+    $newParam setAttribute n d_end_date
+    $newParam setAttribute pn [_ "To"]
+    $newParam setAttribute field_type "date"
+    $newParam setAttribute value [lindex $default_dates 1]
+    $newParam setAttribute dialog "dialog"
+    $newParam setAttribute location "same_line"
+    $newContainer appendChild $newParam
+
+    [$doc selectNodes //formulae] appendChild $newContainer
+    
+    set newContainer [$doc createElement container]
+    $newContainer setAttribute n "control_buttons"
+    set newParam [$doc createElement param]
+    $newParam setAttribute n accept_response
+    $newParam setAttribute pn [_ "Accept"]
+    $newParam setAttribute field_type button
+    set args [list start_date end_date]
+    $newParam setAttribute command "$callback $args"
+    $newContainer appendChild $newParam
+    set newParam [$doc createElement param]
+    $newParam setAttribute n cancel_response
+    $newParam setAttribute pn [_ "Cancel"]
+    $newParam setAttribute field_type button
+    $newParam setAttribute location "same_line"
+    $newContainer appendChild $newParam
+    
+    [$doc selectNodes //formulae] appendChild $newContainer
+    
+    set dialog_doc $doc
+    
+    return [list $dialog_doc]
 }
 
 proc formulae::ask_for_period { key args } {
@@ -7359,6 +7593,7 @@ proc formulae::ask_for_period { key args } {
     
     set optional {
 	{ -only_date boolean 0 }
+	{ -no_date boolean 0 }
 	{ -default_is_detailed boolean "" }
 	{ -default_template template "" }
 	{ -default_dates datesList "" }
@@ -7546,7 +7781,9 @@ proc formulae::ask_for_period { key args } {
 	grid columnconfigure $f5 1 -weight 1
     }
     
-    grid $f1 -sticky nsew
+    if { !$no_date } {
+	grid $f1 -sticky nsew
+    }
     if { $default_template ne "" } {
 	grid $f2 -sticky nsew
     }
@@ -7593,7 +7830,7 @@ proc formulae::ask_for_period { key args } {
 		[lindex [dict_getd $user_list values ""] 0]]
     $w set_uservar_value interp $interp
     
-    foreach i [list only_date default_template callback default_is_detailed has_where_clause modetype] {
+    foreach i [list only_date no_date default_template callback default_is_detailed has_where_clause modetype] {
 	$w set_uservar_value $i [set $i]
     }
     
@@ -7630,13 +7867,14 @@ proc formulae::ask_for_period_save_preferences { w } {
 
     set lognoter_db [$w give_uservar_value lognoter_db]
     
-    foreach i [list only_date default_template callback default_is_detailed has_where_clause modetype] {
+    foreach i [list only_date no_date default_template callback default_is_detailed has_where_clause modetype] {
 	set $i [$w give_uservar_value $i]
     }
     foreach i [list template is_detailed start_date end_date sql_where] {
 	if { $default_template eq "" && $i eq "template" } { continue }
 	if { $default_is_detailed eq "" && $i eq "is_detailed" } { continue }
 	if { $only_date && $i eq "start_date" } { continue }
+	if { $no_date && $i in "start_date end_date" } { continue }
 	if { !$has_where_clause && $i eq "sql_where" } { continue }
 	$lognoter_db addpreference ${modetype}_$i [$w give_uservar_value $i]
     }
@@ -7654,7 +7892,7 @@ proc formulae::ask_for_period_accept { w } {
     set interp [$w give_uservar_value interp]
     set lognoter_db [$w give_uservar_value lognoter_db]
 
-    foreach i [list only_date default_template callback default_is_detailed has_where_clause modetype] {
+    foreach i [list only_date no_date default_template callback default_is_detailed has_where_clause modetype] {
 	set $i [$w give_uservar_value $i]
     }
     if { $action <= 0 } {
@@ -7669,12 +7907,12 @@ proc formulae::ask_for_period_accept { w } {
 	}
 	return [list 0 ""]
     }
-    if { !$only_date } {
+    if { !$only_date && !$no_date } {
 	set err [catch { clock scan [$w give_uservar_value start_date] }]
     } else {
 	set err 0
     }
-    if { !$err } {
+    if { !$err && !$no_date } {
 	set err [catch { clock scan [$w give_uservar_value end_date] }]
     }
     if { $err } {
@@ -7684,7 +7922,8 @@ proc formulae::ask_for_period_accept { w } {
 	ask_for_period_save_preferences $w
 	
 	set ret [list [$w give_uservar_value start_date] \
-		[$w give_uservar_value end_date] [$w give_uservar_value template] \
+		[$w give_uservar_value end_date] \
+		[$w give_uservar_value template] \
 		[$w give_uservar_value is_detailed] \
 		[$w give_uservar_value sql_where] \
 		[$w give_uservar_value user_defined]]
@@ -7896,7 +8135,7 @@ proc formulae::create_windowD_do { args } {
     set current_set(name,$key) ""
     array unset uvalues $key,*
     
-    foreach n [list update_stack svg_stack uvalues_moredata nicer_name validate_cmd] {
+    foreach n [list update_stack svg_stack uvalues_moredata nicer_name validate_cmd reload] {
 	dict set values $key $n ""
     }
     foreach n [list use_scrollbarsH use_scrollbarsV] {
@@ -7912,6 +8151,9 @@ proc formulae::create_windowD_do { args } {
 	    dict set values $key $i [set $i]
 	}
     }
+    
+    dict set values $key reset_has_changes 0
+    
     set active_tab 0
     if { [winfo exists $wp.n] } {
 	catch { $wp.n index current } active_tab
@@ -8880,69 +9122,28 @@ proc formulae::process_window_container { key w containerNode numContainer } {
 		lappend wList $e $l $b
 	    } elseif { $field_type eq "file" } {
 		set f [ttk::frame $w.f[incr idxw]]
-		set e [ttk::entry $f.e -textvariable \
-		        [namespace current]::uvalues($key,[$node @n])]
-		set b [cu::menubutton_button $f.b \
-		        -image [cu::get_icon filenew-16] -style Toolbutton]
-		grid $e $b -sticky w
-		$b configure -menu $b.m -command [namespace code [list fieldtype_file_ops \
-		            $w "$e $b" open_browser $key $node]]
-		menu $b.m -tearoff 0
-		$b.m configure -font $font
-		$b.m add command -image [cu::get_icon filenew-16] -label [_ "Select file"] \
-		    -command [namespace code [list fieldtype_file_ops \
-		            $w "$e $b" open_browser $key $node]] -compound left
+		set e [ttk::menubutton $f.e -width 15 -textvariable \
+		        [namespace current]::uvalues($key,print,[$node @n]) \
+		        -image [cu::get_icon filenew-16] -compound left -menu $f.e.m]
+		grid $e -sticky w
 		
-		if { [$node @examples_dir ""] ne "" } {
-		    set dir [$node @examples_dir]
-		    $b.m add command -image [cu::get_icon filenew-16] -label [_ "Select file (examples directory)"] \
-		        -command [namespace code [list fieldtype_file_ops \
-		                $w "$e $b" open_browser $key $node -importdir $dir]] -compound left
-		}
-		$b.m add command -label [_ "View/execute"] \
-		    -command [namespace code [list fieldtype_file_ops \
-		            $w "$e $b" execute $key $node]]
-		$b.m add separator
+		set m [menu $e.m -tearoff 0 -postcommand \
+		        [namespace code [list fieldtype_file_ops $w "$e" fill_menu $key $node $e.m]] \
+		        -font $font]
 		
-		$b.m add command -image [cu::get_icon remove-16] -label [_ "Clear"] \
-		    -command [namespace code [list fieldtype_file_ops \
-		            $w "$e $b" clear $key $node]] -compound left
+		#dict set values $key reload_file [$node @n] ""
 
-		$b.m add separator
-		
-		$b.m add command -label [_ "Reload"] \
-		    -command [namespace code [list fieldtype_file_ops \
-		            $w "$e $b" reload $key $node ""]] -state disabled
-		dict set values $key reload_file [$node @n] ""
-		dict set values $key reload_menu_pos [$node @n] [list $b.m [$b.m index end]]
-		
-		set dirs [cu::file::give_standard_dirs]
-		set tmpdir [cu::file::tempdir]
-
-		foreach dir $dirs {
-		    regsub {([\\/]).*([\\/])} $dir {\1...\2} dir_nice
-		    $b.m add command -label [_ "Extract in '%s'" $dir_nice] \
-		        -command [namespace code [list fieldtype_file_ops \
-		                $w "$e $b" extract $key $node $dir]]
-		}
-		$b.m add command -label [_ "Extract in ..."] \
-		    -command [namespace code [list fieldtype_file_ops \
-		            $w "$e $b" extract $key $node ""]]
-		# Ramviewer option has been removed temporarily
-#                 $b.m add separator
-#                 $b.m add command -label [_ "Ramviewer"] \
-#                     -command [namespace code [list fieldtype_file_ops \
-		            $w "$e $b" ramviewer $key $node]]
 		if { [info command dnd] ne "" } {
-		    foreach i [list $e $b] {
+		    foreach i [list $e] {
 		        dnd bindtarget $i text/uri-list <Drop> [namespace code [list fieldtype_file_ops \
-		                    $w "$e $b" open_files $key $node %D]]
+		                    $w "$e" open_files $key $node %D]]
 		    }
 		}
 		bind $e <<Paste>> [namespace code [list fieldtype_file_ops \
-		            $w "$e $b" paste $key $node $e]]
+		            $w "$e" paste $key $node $e]]
 		lappend gridList $f
-		lappend wList $e $b
+		lappend wList $e
+		#lappend wList $e $b
 
 		set cmd [namespace code [list fieldtype_file_ops $w $wList update_tooltip \
 		            $key $node]]
@@ -8971,8 +9172,8 @@ proc formulae::process_window_container { key w containerNode numContainer } {
 		    -command [namespace code [list fieldtype_file_ops \
 		            $w "$e $b" clear $key $node]] -compound left 
 		
-		dict set values $key reload_file [$node @n] ""
-		dict set values $key reload_menu_pos [$node @n] ""
+		#dict set values $key reload_file [$node @n] ""
+		#dict set values $key reload_menu_pos [$node @n] ""
 		    
 		if { [info command dnd] ne "" } {
 		    foreach i [list $e $b] {
@@ -10532,6 +10733,96 @@ proc formulae::fieldtype_file_ops { w wList what key node args } {
     set lognoter [dict_getd $values $key lognoter ""]
 
     switch $what {
+	fill_menu {
+	    lassign $args m
+	    $m delete 0 end
+	    
+	    set file $uvalues($key,[$node @n])
+	    if { [string trim $file] ne "" } {
+		set view_state normal
+	    } else {
+		set view_state disabled
+	    }
+	    $m add command -label [_ "View"] -image [cu::get_icon exec2-16] \
+		-compound left -command [namespace code [list fieldtype_file_ops \
+		        $w $wList execute $key $node]] -state $view_state
+	    $m add separator
+	    
+	    if { [$node @file_type ""] ne "" } {
+		$m add command -image [cu::get_icon filenew-16] -label [_ "New file"] \
+		    -command [namespace code [list fieldtype_file_ops \
+		            $w $wList new_file $key $node]] -compound left
+	    }
+	    $m add command -image [cu::get_icon fileopen16] -label [_ "Select file"] \
+		-command [namespace code [list fieldtype_file_ops \
+		        $w $wList open_browser $key $node]] -compound left
+	    
+	    if { [$node @examples_dir ""] ne "" } {
+		set dir [$node @examples_dir]
+		$m add command -image [cu::get_icon fileopen16] -label [_ "Select file (examples directory)"] \
+		    -command [namespace code [list fieldtype_file_ops \
+		            $w $wList open_browser $key $node -importdir $dir]] -compound left
+	    }
+	    
+	    set state disabled
+	    if { [dict exists $values $key reload [$node @n]] } {
+		set file [dict get $values $key reload [$node @n] file]
+		set file_save_type [dict get $values $key reload [$node @n] file_save_type]
+		if { $file_save_type ne "memory" } {
+		    set mtime [dict get $values $key reload [$node @n] mtime]
+		    if { [file exists $file] && [file mtime $file] > $mtime } {
+		        set state normal
+		    }
+		}
+	    }
+	    $m add command -label [_ "Reload"] \
+		-image [cu::get_icon edit-undo-16] -compound left \
+		-command [namespace code [list fieldtype_file_ops \
+		        $w $wList reload $key $node ""]] -state $state
+	    
+	    $m add separator
+	    
+	    set dirs [cu::file::give_standard_dirs]
+	    set tmpdir [cu::file::tempdir]
+	    
+	    foreach dir $dirs {
+		regsub {([\\/]).*([\\/])} $dir {\1...\2} dir_nice
+		$m add command -label [_ "Extract in '%s'" $dir_nice] \
+		    -image [cu::get_icon filesave16] -compound left \
+		    -command [namespace code [list fieldtype_file_ops \
+		            $w $wList extract $key $node $dir]]  -state $view_state
+	    }
+	    $m add command -label [_ "Extract in ..."] \
+		-image [cu::get_icon filesave16] -compound left \
+		-command [namespace code [list fieldtype_file_ops \
+		        $w $wList extract $key $node ""]]  -state $view_state
+	    # Ramviewer option has been removed temporarily
+	    #                 $m add separator
+	    #                 $m add command -label [_ "Ramviewer"] \
+		#                     -command [namespace code [list fieldtype_file_ops \
+		$w "$e $b" ramviewer $key $node]]
+	    
+	    $m add separator
+	    
+	    $m add command -image [cu::get_icon fileclose16] -label [_ "Clear"] \
+		-command [namespace code [list fieldtype_file_ops \
+		        $w $wList clear $key $node]] -compound left  -state $view_state
+	}
+	new_file {
+	    if { [$node @file_type ""] eq "" } {
+		error "error fieldtype_file_ops"
+	    }
+	    set now [date_tcl2sql [clock seconds]]
+	    set uvalues($key,[$node @n]) [$node @pn [$node @n]].wnl
+	    dict set values $key uvalues_moredata [$node @n] type [$node @file_type]
+	    dict set values $key uvalues_moredata [$node @n] size 0
+	    dict set values $key uvalues_moredata [$node @n] contents ""
+	    dict set values $key uvalues_moredata [$node @n] path ""
+	    dict set values $key uvalues_moredata [$node @n] cdate $now
+	    dict set values $key uvalues_moredata [$node @n] mdate $now
+	    
+	    fieldtype_file_ops $w $wList execute $key $node
+	}
 	open_browser {
 	    set optional {
 		{ -importdir name "" }
@@ -10552,6 +10843,17 @@ proc formulae::fieldtype_file_ops { w wList what key node args } {
 		}
 	    }
 	    set exts ""
+	    if { [$node @file_type ""] ne "" } {
+		switch -- [$node @file_type] {
+		    "wnl" {
+		        set n [_ "Lognoter files"]
+		    }
+		    default {
+		        set n [$node @file_type]
+		    }
+		}
+		lappend exts [list $n "*.[$node @file_type]"]
+	    }
 	    foreach "n v" [split [$node @extensions ""] ","] {
 		lappend exts [list [_ $n] $v]
 	    }
@@ -10607,8 +10909,15 @@ proc formulae::fieldtype_file_ops { w wList what key node args } {
 	    focus -force [focus -lastfor $w]
 	    image delete $img
 	}
-	open {
-	    set file [lindex $args 0]
+	open - reload {
+	    switch $what {
+		open {
+		    set file [lindex $args 0]
+		}
+		reload {
+		    set file [dict get $values $key reload [$node @n] file]
+		}
+	    }
 	    set path $file
 	    set filename [file tail $file]
 	    set can_delete 0
@@ -10627,9 +10936,9 @@ proc formulae::fieldtype_file_ops { w wList what key node args } {
 		}
 	    }
 	    if { $file eq "-data" } {
-		foreach "data type file" [lrange $args 1 3] break
+		lassign [lrange $args 1 3] data type file
 		set now [date_tcl2sql [clock seconds]]
-		foreach "cdate mdate" [list $now $now] break
+		lassign [list $now $now] cdate mdate
 		set size [string length $data]
 		set contents [cu::deflate -level 9 $data]
 		set uvalues($key,[$node @n]) $file
@@ -10677,20 +10986,41 @@ proc formulae::fieldtype_file_ops { w wList what key node args } {
 		set cdate [date_tcl2sql [dict get $stat_dict ctime]]
 		set mdate [date_tcl2sql [dict get $stat_dict mtime]]
 	    }
-
-	    foreach i [list contents cdate mdate type size path] {
+	    
+	    switch $what {
+		open {
+		    set fields [list contents cdate mdate type size path]
+		}
+		reload {
+		    set fields [list contents mdate size path]
+		}
+	    }
+	    foreach i $fields {
 		dict set values $key uvalues_moredata [$node @n] $i [set $i]
 	    }
 	    if { $can_delete } {
 		file delete $file
 	    }
 	    if { $path ne "-data" && [file exists $path] } {
-		dict set values $key reload_file [$node @n] [file normalize $path]
-		dict set values $key reload_mtime [$node @n] [file mtime $path]               
-		lassign [dict get $values $key reload_menu_pos [$node @n]] menu idx
-		if {$idx != ""} { $menu entryconfigure $idx -state normal }               
+		if { ![dict exists $values $key reload [$node @n]] } {
+		    dict set values $key reload [$node @n] file_save_type disk
+		    dict set values $key reload [$node @n] cmd [namespace code \
+		            [list fieldtype_file_ops $w $wList reload $key $node]]
+		    dict set values $key reload [$node @n] cmd_quit ""
+		}
+		dict set values $key reload [$node @n] file [file normalize $path]
+		dict set values $key reload [$node @n] mtime [file mtime $path]
 	    }           
-	    fieldtype_file_ops $w $wList update_tooltip $key $node         
+	    fieldtype_file_ops $w $wList widget_update_message $key $node
+	}
+	widget_update_message {
+	    set wp [lindex $wList 0]
+	    destroy $wp.l
+	    ttk::label $wp.l -text [_ "Updated contents from file"]
+	    place $wp.l -x 0 -y 0 -anchor nw -relwidth 1 -relheight 1
+	    after 2000 [list catch [list destroy $wp.l]]
+	    bind $wp.l <1> [list destroy $wp.l]
+	    fieldtype_file_ops $w $wList update_tooltip $key $node
 	}
 	clear {
 	    set uvalues($key,[$node @n]) ""
@@ -10699,6 +11029,12 @@ proc formulae::fieldtype_file_ops { w wList what key node args } {
 	}
 	update_tooltip {
 	    set file [string trim $uvalues($key,[$node @n])]
+	    set v $file
+	    if { $v eq "" } {
+		set v [_ "(no file)"]
+	    }
+	    set uvalues($key,print,[$node @n]) $v
+
 	    if { $file ne "" } {
 		if {![file isdirectory $file]} {                    
 		    set txt [_ "File: %s\n" $file]
@@ -10723,12 +11059,17 @@ proc formulae::fieldtype_file_ops { w wList what key node args } {
 	}
 	execute - extract {
 	    set lognoter_db [dict get $values $key lognoter_db]
-	    set size [dict_getd $values $key uvalues_moredata [$node @n] size ""]
-	    if { $size eq "" } {
-		snit_messageBox -message [_ "There is no file to extract"] \
-		    -parent $w
-		return
-	    }
+#             set size [dict_getd $values $key uvalues_moredata [$node @n] size ""]
+#             if { $size eq "" } {
+#                 if { $what eq "extract" } {
+#                     snit_messageBox -message [_ "There is no file to extract"] \
+#                         -parent $w
+#                 } else {
+#                     snit_messageBox -message [_ "There is no file to view"] \
+#                         -parent $w
+#                 }
+#                 return
+#             }
 	    set dir [lindex $args 0]
 	    set file $uvalues($key,[$node @n])
 	    if { [string trim $file] eq "" } {
@@ -10769,28 +11110,40 @@ proc formulae::fieldtype_file_ops { w wList what key node args } {
 		    set retval [snit_messageBox -default ok -icon question \
 		            -message $txt -parent $w \
 		            -type okcancel]
-		    if { $retval == "cancel" } { return }
+		    if { $retval eq "cancel" } { return }
 		}
-		file delete -force $file
+		set err [catch { file delete -force $file } ret]
+		if { $err } {
+		    snit_messageBox -message [_ "It is not possible to extract file. File could be used by anoter application"] \
+		        -parent $w
+		    return
+		}
 		cu::unzipfile -o $zipfile
 		cd $pwd
-		file delete -force $zipfile                
-	    } else {
-		if { [$node @store_internally 1] == 1 } { 
-		    if { $dir ne [cu::file::tempdir] && [file exists $fullfile] } {
-		        set txt [_ "File '%s' exists. Overwrite?" $file]
-		        set retval [snit_messageBox -default ok -icon question \
-		                -message $txt -parent $w \
-		                -type okcancel]
-		        if { $retval == "cancel" } { return }
-		    }
-		    file delete -force $fullfile
-		    set fout [open $fullfile w]
-		    fconfigure $fout -translation binary
-		    set c [dict get $values $key uvalues_moredata [$node @n] contents]
+		file delete -force $zipfile
+	    } elseif { $what eq "execute" && $type eq "wnl" } {
+		# nothing here
+	    } elseif { [$node @store_internally 1] == 1 } {
+		if { $dir ne [cu::file::tempdir] && [file exists $fullfile] } {
+		    set txt [_ "File '%s' exists. Overwrite?" $file]
+		    set retval [snit_messageBox -default ok -icon question \
+		            -message $txt -parent $w \
+		            -type okcancel]
+		    if { $retval eq "cancel" } { return }
+		}
+		set err [catch { file delete -force $fullfile } ret]
+		if { $err } {
+		    snit_messageBox -message [_ "It is not possible to extract file. File could be used by anoter application"] \
+		        -parent $w
+		    return
+		}
+		set fout [open $fullfile w]
+		fconfigure $fout -translation binary
+		set c [dict get $values $key uvalues_moredata [$node @n] contents]
+		if { $c ne "" } {
 		    puts -nonewline $fout [cu::inflate $c]
-		    close $fout
-		} 
+		}
+		close $fout
 	    }
 	    set export_filter [$node @export_filter ""]
 	    if { $export_filter ne "" } {
@@ -10815,7 +11168,36 @@ proc formulae::fieldtype_file_ops { w wList what key node args } {
 		} else {
 		    set etype gid
 		}
-		set err [catch { $lognoter_db executefile $etype $fullfile } errstring]
+		set done 0
+		set cmd_quit ""
+		set is_memvfs 0
+		if { $type eq "wnl" } {
+		    set fullfile formulae/[file tail $fullfile]
+		    set memfile [cu::file::sqlite_uri -vfs memvfs $fullfile]
+		    set c [dict get $values $key uvalues_moredata [$node @n] contents]
+		    if { $c ne "" } {
+		        set c [cu::inflate $c]
+		    }
+		    memvfs::create $fullfile $c
+		    memvfs::callback add [namespace code [list fieldtype_file_ops $w $wList \
+		                memvfs_callback $key $node $fullfile]]
+		    
+		    dict set values $key reload [$node @n] file $fullfile
+		    dict set values $key reload [$node @n] file_save_type memory
+		    
+		    set err [catch { $lognoter_db open_lognoter -open_pages_list 1 \
+		                sqlite $memfile [_ "Edit lognoter database"] } ret]
+		    if { $err } {
+		        set errstring $ret
+		    } else {
+		        set cmd_quit [list interp eval {*}$ret process quit -raise_error_on_cancel]
+		        set is_memvfs 1
+		    }
+		    set done 1
+		}
+		if { !$done } {
+		    set err [catch { $lognoter_db executefile $etype $fullfile } errstring]
+		}
 		if { $err } {
 		    snit_messageBox -message [_ "error: %s" $errstring] -parent $w
 		    return
@@ -10823,16 +11205,46 @@ proc formulae::fieldtype_file_ops { w wList what key node args } {
 	    } else {
 		snit_messageBox -message [_ "Saved file in '%s'" $fullfile] -parent $w
 	    }
-	    if { $what eq "extract" && [file exists $fullfile] } {
-		dict set values $key reload_file [$node @n] [file normalize $fullfile]
-		dict set values $key reload_mtime [$node @n] [file mtime $fullfile]
-		lassign [dict get $values $key reload_menu_pos [$node @n]] menu idx
-		$menu entryconfigure $idx -state normal
+	    if { $is_memvfs || [file exists $fullfile] } {
+		if { !$is_memvfs } {
+		    dict set values $key reload [$node @n] file [file normalize $fullfile]
+		    if { $what eq "execute" } {
+		        dict set values $key reload [$node @n] file_save_type temp
+		    } else {
+		        dict set values $key reload [$node @n] file_save_type disk
+		    }
+		    dict set values $key reload [$node @n] mtime [file mtime $fullfile]
+		    dict set values $key reload [$node @n] cmd [namespace code \
+		            [list fieldtype_file_ops $w $wList reload $key $node]]
+		}
+		dict set values $key reload [$node @n] cmd_quit $cmd_quit
 	    }
 	}
-	reload {
-	    set file [dict get $values $key reload_file [$node @n]]
-	    return [fieldtype_file_ops $w $wList open $key $node $file]
+	memvfs_callback {
+	    lassign $args fullfile mem_what file contents
+	    if { $file ne $fullfile } {
+		return
+	    }
+	    switch $mem_what {
+		update {
+		    if { ![dict exists $values $key reload [$node @n]] } {
+		        snit_messageBox -message [_ "Lognoter data out of sync. Use file->Copy to save information"] \
+		            -parent $w
+		        return
+		    }
+		    dict set values $key uvalues_moredata [$node @n] mdate [date_tcl2sql [clock seconds]]
+		    dict set values $key uvalues_moredata [$node @n] size [string length $contents]
+		    dict set values $key uvalues_moredata [$node @n] contents [cu::deflate -level 9 $contents]
+
+		    fieldtype_file_ops $w $wList widget_update_message $key $node
+		}
+		close {
+		    memvfs::callback remove [namespace code [list fieldtype_file_ops $w $wList \
+		                memvfs_callback $key $node $fullfile]]
+		    dict unset values $key reload [$node @n]
+		    memvfs::delete $fullfile
+		}
+	    }
 	}
     }
 }
@@ -12230,7 +12642,7 @@ proc formulae::_edit_database_row { args } {
 
     set optional {
     }
-    set compulsory "db table values values_moredata primary_key root"
+    set compulsory "db table values values_moredata primary_key id root"
     parse_args $optional $compulsory $args
 
     set cols [$db sql column_names $table]
@@ -12292,8 +12704,12 @@ proc formulae::_edit_database_row { args } {
 	    append cmd ",[$db sql fs0 $n]=''"
 	}
     }
-    set ipos [lsearch -exact $cols_r $primary_key]
-    append cmd " where [$db sql fs0 $primary_key]=[lindex $valuesList $ipos]"
+    if { $id eq "" } {
+       set ipos [lsearch -exact $cols_r $primary_key]
+       append cmd " where [$db sql fs0 $primary_key]=[lindex $valuesList $ipos]"
+    } else {
+       append cmd " where [$db sql fs0 id]=[$db sql vs0 $id]"
+    }
     $db sql exec $cmd
 }
 
@@ -12364,14 +12780,12 @@ proc formulae::give_entries_from_database { args } {
     set table [$root @database]
     set vList ""
        
-    set cmd "select distinct [$lognoter_db sql fs0 $edit_choose_name] from [$lognoter_db sql fs0 $table] 
-	order by [$lognoter_db sql fs0 $edit_choose_name]"
-    foreach v [$lognoter_db sql sel $cmd] {
-       if { $v eq "" } { continue }
-       lappend vList $v
-    } 
+    set cmd "select [$lognoter_db sql fs0 id $edit_choose_name] from [$lognoter_db sql fs0 $table] \
+	order by [$lognoter_db sql fs0 id]"
 
-    return [list $vList]   
+    lappend vList [$lognoter_db sql sel $cmd]
+
+    return $vList   
 }    
 
 proc formulae::load_values_from_database { args } {
@@ -12379,28 +12793,31 @@ proc formulae::load_values_from_database { args } {
     set optional {
 	{ -lognoter_db db "" }
     }
-    set compulsory "doc edit_choose_name edit_choose_value"
+    set compulsory "doc edit_choose_name edit_choose_id"
     parse_args $optional $compulsory $args
     
     set root [$doc selectNodes //formulae]
     set table [$root @database]
     
-    set valuesList [$lognoter_db sql sel "select * from [$lognoter_db sql fs0 $table] where \
-	    [$lognoter_db sql fs0 $edit_choose_name]=[$lognoter_db sql vs0 $edit_choose_value]"]
+    #set valuesList [$lognoter_db sql sel "select * from [$lognoter_db sql fs0 $table] where \
+    #        [$lognoter_db sql fs0 $edit_choose_name]=[$lognoter_db sql vs0 $edit_choose_value]"]
 
-    set values [lrange $valuesList 3 end]
+    set vList [$lognoter_db sql sel "select * from [$lognoter_db sql fs0 $table] where \
+	[$lognoter_db sql fs0 id]=[$lognoter_db sql vs0 $edit_choose_id]"]
+
+    set values_db [lrange $vList 3 end]
     
     foreach node [$doc selectNodes //param] {
 	if { [$node @field_type ""] eq "file" } { 
-	   set param_name [$node @n]
-	   set param_value [lindex $values 0]
+	   set param_name p_[$node @n]
+	   set param_value [lindex $values_db 0]
 	   dict set loaded_values $param_name $param_value
-	   set values [lreplace $values 0 6] 
+	   set values_db [lreplace $values_db 0 6] 
 	} else {
-	   set param_name [$node @n]
-	   set param_value [lindex $values 0]
+	   set param_name p_[$node @n]
+	   set param_value [lindex $values_db 0]
 	   dict set loaded_values $param_name $param_value
-	   set values [lreplace $values 0 0]
+	   set values_db [lreplace $values_db 0 0]
 	}  
     }
 
@@ -12412,14 +12829,16 @@ proc formulae::delete_values_in_database { args } {
     set optional {
 	{ -lognoter_db db "" }
     }
-    set compulsory "doc edit_choose_name edit_choose_value"
+    set compulsory "doc edit_choose_name edit_choose_id"
     parse_args $optional $compulsory $args
     
     set root [$doc selectNodes //formulae]
     set table [$root @database]
-    foreach value [split $edit_choose_value ,] {
+    foreach value [split $edit_choose_id ,] {
+	#$lognoter_db sql sel "delete from [$lognoter_db sql fs0 $table] where \
+	#   [$lognoter_db sql fs0 $edit_choose_name]=[$lognoter_db sql vs0 $value]"
 	$lognoter_db sql sel "delete from [$lognoter_db sql fs0 $table] where \
-		[$lognoter_db sql fs0 $edit_choose_name]=[$lognoter_db sql vs0 $value]"
+	    [$lognoter_db sql fs0 id]=[$lognoter_db sql vs0 $value]"
     }
 }
 
@@ -12449,6 +12868,18 @@ proc formulae::web_update { args } {
     }    
     
     set err [catch {$interp eval $page_tcl_code}]
+
+    set edit_choose_name [dict_getd $values_dict edit_choose_name ""]
+    set edit_choose_value [dict_getd $values_dict edit_choose_value ""]
+    if { $edit_choose_name ne "" && ![dict exists $values_dict p_$edit_choose_name] } {
+       dict set values_dict p_$edit_choose_name $edit_choose_value
+    }
+    
+    dict for "n v" $values_dict {
+	if { [regexp {^p_(.*)} $n {} n] } {
+	    $interp eval [list set ::$n $v]
+	}
+    }
 
     set condition_values [dict create]
     set field_names [list]
@@ -12567,7 +12998,7 @@ proc formulae::web_update { args } {
 	     set value [list ERROR $txt]
 	  }  
        } else {
-	  set value $v
+	  set value [list $v]
        }
 	
        #Keep in mind for condition attributes in param tags: 
@@ -12701,7 +13132,8 @@ proc formulae::web_update { args } {
     }    
     
     interp delete $interp
-    dict set values $key ""
+    #dict set values $key ""
+    dict remove $values $key
 
     #condition_values is a list that has the following format:
     #[ node_name { node_condition node_value *optional: node_text_to_print* } node_type ]
@@ -12771,14 +13203,43 @@ proc formulae::print_formulas { key node value v } {
        return [list $txt]  
 }
 
+proc formulae::web_messageBox { args } {
+    variable values
+    global message
+    
+    set interp [lindex $args 0]
+    
+    array set opts [list -message ""]
+    
+    for { set i 1 } { $i < [llength $args] } { incr i } {
+	set opt [lindex $args $i]
+	incr i
+	set message [lindex $args $i]
+    }
+    
+    $interp eval [list set message $message]
+}    
+
 proc formulae::button_respond { args } { 
     variable values
+    global message 
+    
     set optional {
 	{ -lognoter_db db "" }
 	{ -page page "" }
+	{ -key key "" }
+	{ -mode mode "" }
     }
-    set compulsory "doc button_name values_dict "
+    set compulsory "doc button_name values_dict"
     parse_args $optional $compulsory $args
+
+    if { $mode eq "cancel" } {
+	set interp [dict get $values $key interp]
+	interp delete $interp
+	#dict set values $key ""
+	dict remove $values $key
+	return [list "" ""] 
+    }    
 
     set page_tcl_code ""
     foreach node [$doc selectNodes //tcl] {
@@ -12787,28 +13248,23 @@ proc formulae::button_respond { args } {
     
     set root [$doc selectNodes //formulae]    
     
-    set key [unique_key]
-    set interp [_create_interp $key "" $lognoter_db "" [$root @database ""] $page]
+    if { $key eq "" } {
+       set key [unique_key]
+       set interp [_create_interp $key "" $lognoter_db "" [$root @database ""] $page]
     
-    dict set values $key doc $doc
-    dict set values $key interp $interp
-    if { $lognoter_db ne "" } {
-	dict set values $key lognoter_db $lognoter_db
-    }    
+       dict set values $key doc $doc
+       dict set values $key interp $interp
+       if { $lognoter_db ne "" } {
+	   dict set values $key lognoter_db $lognoter_db
+       }
 
-    set valuesP_dict ""
-    set count 1
-    dict for "n v" $values_dict {
-	if { [regexp {^p_(.*)} $n {} n] } {
-	    $interp eval [list set ::$n $v]
-	    dict set valuesP_dict $n $v
-	}
-	if { $count } {
-	   set idx [lindex [$lognoter_db sql sel "select * from \
-		    [$lognoter_db sql fs0 [$root @database]] where \
-		    [$lognoter_db sql fs0 $n]=[$lognoter_db sql vs0 $v]"] 0]
-	   set count 0
-	}
+       set idx_db [dict_getd $values_dict edit_choose_id ""]
+       dict set values $key idx_db $idx_db
+       $interp eval [list set idx_db $idx_db]
+    } else {
+       set interp [dict get $values $key interp]
+       set lognoter_db [dict get $values $key lognoter_db]
+       set idx_db [dict get $values $key idx_db] 
     }
     
     foreach node [$doc selectNodes //param] {
@@ -12817,25 +13273,56 @@ proc formulae::button_respond { args } {
 	} 
     }
 
-    set err [catch { $interp eval $page_tcl_code }]
-    if {!$err} {
-	$interp eval [list set ::webserver 1]
-	if { $idx ne "" } {
-	   $interp eval [list set ::selection $idx]
-	} else {
-	   $interp eval [list set ::selection 1]
+    dict for "n v" $values_dict {
+	if { [regexp {^p_(.*)} $n {} n] } {
+	    regexp {^d_(.*)} $n {} n
+	    $interp eval [list set $n $v]
+	    if { [llength $command] > 1 } {
+	       set id [lsearch $command $n]
+		if { $id != -1 } { set command [lreplace $command $id $id $v] }
+	    }
 	}
-	$interp eval [list set ::current_values $valuesP_dict]
     }
+
+    set err [catch { $interp eval $page_tcl_code }]
+    
+    set interp_alive 1
+    
+    set message ""
+    set title ""
 
     if {!$err} {
-	set err [catch { lassign [$interp eval $command] file }]
-	if {$err} { set file "ERROR"}
+	set err [catch { lassign [list [$interp eval $command]] respond } errstring]
+	if { $err } { 
+	   set respond "--ERROR--$errstring"
+	   set interp_alive 0
+	} elseif { $respond eq "" && $message ne ""} {
+	   set respond "--MESSAGE--$message"
+	   set interp_alive 0
+	}
     } else {
-       set file "ERROR"
+       set respond "--ERROR--"
+       set interp_alive 0
     }
 
-    return [file tail $file] 
+    if { [regexp {^domDoc[\w]{8}(\D|$)} $respond] } {
+       set dialog_doc $respond
+       dict set values $key dialog_doc $dialog_doc 
+       set title [dict_getd $values $key title "RESULTS"]   
+    }
+    
+    if { [file isfile $respond] } {
+       set interp_alive 0
+       set respond [file tail $respond]
+    }
+    
+    if { !$interp_alive } {
+       interp delete $interp
+       #dict set values $key ""
+       dict remove $values $key
+    }
+
+    return [list $respond $title]
 }    
 
 proc formulae::give_exported_file { args } {
@@ -12883,7 +13370,7 @@ proc formulae::give_exported_file { args } {
     return [list $contents $cdate $mdate $content_type $size]
 }
 
-proc formulae::init_values { args } {
+proc formulae::previous_values { args } {
     variable values
     set optional {
 	{ -lognoter_db db "" }
@@ -12985,7 +13472,7 @@ proc formulae::calc_and_update_tree { args } {
 		}
 	    } 
 	}
-    } elseif { $load_database && [regexp new $values_dict] } {
+    } elseif { $load_database && [dict exists $values_dict new] } {
 	set table [$root @database]
 	set vList ""
 	set edit_choose_name [dict_getd $values_dict edit_choose_name ""]
@@ -13004,6 +13491,13 @@ proc formulae::calc_and_update_tree { args } {
 	}
 	set edit_choose_name ""
 	set edit_choose_value ""
+    } elseif { $load_database && [dict exists $values_dict edit] } {
+	set edit_choose_name [dict_getd $values_dict edit_choose_name ""]
+	set edit_choose_value [dict_getd $values_dict edit_choose_value ""]
+	set edit_choose_id [dict_getd $values_dict edit_choose_id ""]
+	if { $edit_choose_value eq "" } {
+	   set edit_choose_value [dict_getd $values_dict p_edit_choose_value ""]
+	}
     } else {
 	set edit_choose_name [dict_getd $values_dict edit_choose_name ""]
 	set edit_choose_value [dict_getd $values_dict edit_choose_value ""]
@@ -13157,7 +13651,7 @@ proc formulae::calc_and_update_tree { args } {
 		    set v [$node @value]
 		}
 	    }
-	    if { [lsearch [list "text"] [$node @field_type ""]] == -1 } {
+	    if { [$node @field_type ""] == "numeric" } {
 		set err [catch { expr {$v*1.0} } newvalue]
 		if { !$err } { set v $newvalue }
 	    }
@@ -13219,10 +13713,6 @@ proc formulae::calc_and_update_tree { args } {
 		       $node setAttribute values $vs
 		       $node setAttribute label_values $labelvs
 		   }  
-		}
-		set valuesList [comma_field_to_list $vs]
-		if { $valuesList eq "0 1" || $valuesList eq "1 0" } {
-		   set v [expr {int($v)}]
 		}
 	    }
 		    
@@ -13296,10 +13786,15 @@ proc formulae::calc_and_update_tree { args } {
 		    lappend lcolumn_justify [get_table_columns_attribute $column justify]
 		    lappend lcolumn_expand [get_table_columns_attribute $column expand]
 		    lappend lcolumn_type [get_table_columns_attribute $column field_type]
-		    lappend lcolumn_editable [get_table_columns_attribute $column state]
-		    if { [get_table_columns_attribute $column state] eq "false" } {
-		       lappend lcolumn_color "grey"
+		    if { !$is_response } {
+		       lappend lcolumn_editable [get_table_columns_attribute $column state]
+		       if { [get_table_columns_attribute $column state] eq "false" } {
+		          lappend lcolumn_color "grey"
+		       } else {
+		          lappend lcolumn_color "black"
+		       }
 		    } else {
+		       lappend lcolumn_editable "false"
 		       lappend lcolumn_color "black"
 		    }
 		}
@@ -13546,14 +14041,20 @@ proc formulae::calc_and_update_tree { args } {
 	    _add_row_to_database $lognoter_db [$root @database] $valuesP_dict $valuesPfile_dict $root
 	} elseif { [dict exists $values_dict edit] } {
 	    if { [dict exists $valuesP_dict $edit_choose_name] } {
-		_edit_database_row $lognoter_db [$root @database] $valuesP_dict $valuesPfile_dict \
-		    $edit_choose_name $root
+		if { [dict exists $values_dict edit_choose_id] } {
+		   _edit_database_row $lognoter_db [$root @database] $valuesP_dict $valuesPfile_dict \
+		       $edit_choose_name $edit_choose_id $root
+		} else {
+		   _edit_database_row $lognoter_db [$root @database] $valuesP_dict $valuesPfile_dict \
+		       $edit_choose_name "" $root
+		} 
 	    }
 	}
     }
 
     interp delete $interp
-    dict set values $key ""
+    #dict set values $key ""
+    dict remove $values $key
 }
 
 ################################################################################
