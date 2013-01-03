@@ -1,0 +1,107 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: image</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d0530">DESCRIPTION</a> · <a href="#SECTid81d05d0">OPTIONS</a> · <a href="#SECTid81d0d50">IMAGE STRETCHING</a> · <a href="#SECTid81d0e90">EXAMPLE</a> · <a href="#SECTid81d0f08">SEE ALSO</a> · <a href="#SECTid81d0f80">KEYWORDS</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">image - </b><br>Define an element based on an image</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>style create element</b> <i class="m">name</i> <b>image</b> <i class="m">imageName</i> ?<i class="m">options</i>?
+</pre>
+<h2><a name="SECTid81d0530">DESCRIPTION</a></h2><p>The <i>image</i> element factory creates a new element
+in the current theme whose visual appearance is determined
+by a Tk image.
+</p>
+<h2><a name="SECTid81d05d0">OPTIONS</a></h2><p>Valid  <i>options</i> are:
+</p><dl>
+
+<dt>
+<b>-border</b> <i class="m">padding</i>
+</dt>
+<dd>
+<i>padding</i> is a list of up to four integers, specifying
+the left, top, right, and bottom borders, respectively.
+See <a href="#SECTid81d0d50">IMAGE STRETCHING</a>, below.
+</dd>
+
+
+<dt>
+<b>-height</b> <i class="m">height</i>
+</dt>
+<dd>Specifies a minimum height for the element.
+If less than zero, the base image's height is used as a default.
+</dd>
+
+
+<dt>
+<b>-map {</b> <i class="m">statespec</i> <i class="m">image</i>.. }</dt>
+<dd>Specifies auxilliary images to use in different states.
+Each <i>statespec</i> is a list of state names optionally
+prefixed by an exclamation point, as in <b>style map</b>.
+Each <i>imageName</i> is the name of a Tk image 
+defined with <b>image create ...</b>.
+When the element is displayed, each <i>statespec</i> is
+tested in order, and the <i>image</i> corresponding to
+the first matching <i>statespec</i> is used.  
+If none match, the base <i>imageName</i> is used.
+</dd>
+
+
+<dt>
+<b>-padding</b> <i class="m">padding</i>
+</dt>
+<dd>Specifies the element's interior padding.  Defaults to 
+<i>-border</i> if not specified.
+</dd>
+
+
+<dt>
+<b>-sticky</b> <i class="m">spec</i>
+</dt>
+<dd>Specifies how the image is placed within the final parcel.
+<i>spec</i> contains zero or more characters "n", "s", "w", or "e".
+</dd>
+
+
+<dt>
+<b>-width</b> <i class="m">width</i>
+</dt>
+<dd>Specifies a minimum width for the element.
+If less than zero, the base image's width is used as a default.
+
+</dd>
+
+</dl>
+<h2><a name="SECTid81d0d50">IMAGE STRETCHING</a></h2><p>If the element's allocated parcel is larger than the image, 
+the image will be placed in the parcel based on the <b>-sticky</b> option.
+If the image needs to stretch horizontally (i.e., <b>-sticky ew</b>)
+or vertically (<b>-sticky ns</b>),
+subregions of the image are replicated to fill the parcel
+based on the <b>-border</b> option.
+The <b>-border</b> divides the image into 9 regions: 
+four fixed corners, top and left edges (which may be tiled horizontally),
+left and right edges (which may be tiled vertically),
+and the central area (which may be tiled in both directions).
+</p>
+<h2><a name="SECTid81d0e90">EXAMPLE</a></h2><pre class="example">
+set button(normal) [image create photo -file button.png]
+set button(pressed) [image create photo -file button-pressed.png]
+style element create Button.button image $button(normal) \
+   -border {2 4} -map [list pressed $button(pressed)] -sticky nswe
+</pre>
+<h2><a name="SECTid81d0f08">SEE ALSO</a></h2><p class="seealso">image(n), photo(n)</p>
+<h2><a name="SECTid81d0f80">KEYWORDS</a></h2><p class="keywords">
+<a class="keyword" href="keyword-index.html#KW-pixmaptheme">pixmap theme</a>, <a class="keyword" href="keyword-index.html#KW-image">image</a>
+</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

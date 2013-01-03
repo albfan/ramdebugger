@@ -1,0 +1,28 @@
+<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_SignalId manual page</TITLE></HEAD><BODY>
+<H3><A NAME="M2">NAME</A></H3>
+Tcl_SignalId, Tcl_SignalMsg - Convert signal codes
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tcl.h&gt;</B><BR>
+const char *<BR>
+<B>Tcl_SignalId</B>(<I>sig</I>)<BR>
+const char *<BR>
+<B>Tcl_SignalMsg</B>(<I>sig</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL>
+<DT>int <B>sig</B> (in)<DD>
+A POSIX signal number such as <B>SIGPIPE</B>.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tcl_SignalId</B> and <B>Tcl_SignalMsg</B> return a string
+representation of the provided signal number (<I>sig</I>).
+<B>Tcl_SignalId</B> returns a machine-readable textual identifier such
+as &quot;SIGPIPE&quot;. <B>Tcl_SignalMsg</B> returns a human-readable string such
+as &quot;bus error&quot;.  The strings returned by these functions are
+statically allocated and the caller must not free or modify them.
+
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/S.htm#signals">signals</A>, <A href="../Keywords/S.htm#signal numbers">signal numbers</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 2001 ActiveState Tool Corp.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

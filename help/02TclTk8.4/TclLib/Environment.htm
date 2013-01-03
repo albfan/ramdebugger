@@ -1,0 +1,27 @@
+<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_PutEnv manual page</TITLE></HEAD><BODY>
+<H3><A NAME="M2">NAME</A></H3>
+Tcl_PutEnv - procedures to manipulate the environment
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tcl.h&gt;</B><BR>
+int<BR>
+<B>Tcl_PutEnv</B>(<I>string</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL>
+<P><DT>CONST char <B>*string</B> (in)<DD>
+Info about environment variable in the form NAME=value. The string is
+in native format.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tcl_PutEnv</B> sets an environment variable. The information is
+passed in a single string of the form NAME=value.  This procedure is
+intended to be a stand-in for the UNIX <B>putenv</B> system call. All
+tcl-based applications using <B>putenv</B> should redefine it to
+<B>Tcl_PutEnv</B> so that they will interface properly to the Tcl
+runtime.
+
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/E.htm#environment">environment</A>, <A href="../Keywords/V.htm#variable">variable</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 1997-1998 Sun Microsystems, Inc.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

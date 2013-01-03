@@ -1,0 +1,221 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: scrollbar</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d04e0">STANDARD OPTIONS</a> · <a href="#SECTid81d05f8">WIDGET-SPECIFIC OPTIONS</a> · <a href="#SECTid81d08f0">DESCRIPTION</a> · <a href="#SECTid81d0990">WIDGET COMMAND</a> · <a href="#SECTid81d1160">INTERNAL COMMANDS</a> · <a href="#SECTid81d16d8">SCROLLING COMMANDS</a> · <a href="#SECTid81d1c50">WIDGET STATES</a> · <a href="#SECTid81d1d40">EXAMPLE</a> · <a href="#SECTid81d1db8">KEYWORDS</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">scrollbar - </b><br>Control the viewport of a scrollable widget</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>ttk::scrollbar</b> <i class="m">pathName</i> ?<i class="m">options...</i>?
+</pre>
+<h2><a name="SECTid81d04e0">STANDARD OPTIONS</a></h2><div class="menu"><table class="menu" width="100%"><tr>
+<td width="25%"><a href="widget.html#stdopt_-class">-class</a></td><td width="25%"><a href="widget.html#stdopt_-cursor">-cursor</a></td><td width="25%"><a href="widget.html#stdopt_-style">-style</a></td><td width="25%"><a href="widget.html#stdopt_-takefocus">-takefocus</a></td>
+</tr></table></div>
+<h2><a name="SECTid81d05f8">WIDGET-SPECIFIC OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-command">-command</a></td><td width="40%" align="left">command</td><td width="40%" align="left">Command</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">A Tcl script prefix to evaluate 
+to change the view in the widget associated with the scrollbar.
+Additional arguments are appended to the value of this option,
+as described in <a href="#SECTid81d16d8">SCROLLING COMMANDS</a> below,
+whenever the user requests a view change by manipulating the scrollbar.
+<br>This option typically consists of a two-element list,
+containing the name of a scrollable widget followed by
+either <b>xview</b> (for horizontal scrollbars)
+or <b>yview</b> (for vertical scrollbars).
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-orient">-orient</a></td><td width="40%" align="left">orient</td><td width="40%" align="left">Orient</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">One of <b>horizontal</b> or <b>vertical</b>.
+Specifies the orientation of the scrollbar.
+</td>
+</tr>
+</table></div>
+
+
+<h2><a name="SECTid81d08f0">DESCRIPTION</a></h2><p>Scrollbar widgets are typically linked to an associated window
+that displays a document of some sort,
+such as a file being edited or a drawing.
+A scrollbar displays a <i>thumb</i> in the 
+middle portion of the scrollbar,
+whose position and size provides information 
+about the portion of the document visible in
+the associated window.
+The thumb may be dragged by the user to control the
+visible region.
+Depending on the theme, two or more arrow buttons may also be present;
+these are used to scroll the visible region in discrete units.
+</p>
+<h2><a name="SECTid81d0990">WIDGET COMMAND</a></h2><dl>
+
+<dt>
+<i class="m">pathName</i> <b>cget</b> <i class="m">option</i>
+</dt>
+<dd>Returns the current value of the specified <i>option</i>; see <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>configure</b> ?<i class="m">option</i>? ?<i class="m">value option value ...</i>?</dt>
+<dd>Modify or query widget options; see <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>get</b>
+</dt>
+<dd>Returns the scrollbar settings in the form of a list whose
+elements are the arguments to the most recent <b>set</b> widget command.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>instate</b> <i class="m">statespec</i> ?<i class="m">script</i>?</dt>
+<dd>Test the widget state; see <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>set</b> <i class="m">first last</i>
+</dt>
+<dd>This command is normally invoked by the scrollbar's associated widget 
+from an <b>-xscrollcommand</b> or <b>-yscrollcommand</b> callback.
+Specifies the visible range to be displayed.
+<i>first</i> and <i>last</i> are real fractions between 0 and 1.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>state</b> ?<i class="m">stateSpec</i>?</dt>
+<dd>Modify or query the widget state; see <i>widget(n)</i>.
+</dd>
+
+</dl>
+<h2><a name="SECTid81d1160">INTERNAL COMMANDS</a></h2><p>The following widget commands are used internally
+by the TScrollbar widget class bindings.
+</p><dl>
+
+<dt>
+<i class="m">pathName</i> <b>delta</b> <i class="m">deltaX deltaY</i>
+</dt>
+<dd>Returns a real number indicating the fractional change in
+the scrollbar setting that corresponds to a given change
+in thumb position.  For example, if the scrollbar is horizontal,
+the result indicates how much the scrollbar setting must change
+to move the thumb <i>deltaX</i> pixels to the right (<i>deltaY</i> is
+ignored in this case).
+If the scrollbar is vertical, the result indicates how much the
+scrollbar setting must change to move the thumb <i>deltaY</i> pixels
+down.  The arguments and the result may be zero or negative.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>fraction</b> <i class="m">x y</i>
+</dt>
+<dd>Returns a real number between 0 and 1 indicating where the point
+given by <i>x</i> and <i>y</i> lies in the trough area of the scrollbar,
+where 0.0 corresponds to the top or left of the trough
+and 1.0 corresponds to the bottom or right.
+<i>X</i> and <i>y</i> are pixel coordinates relative to the scrollbar
+widget.
+If <i>x</i> and <i>y</i> refer to a point outside the trough, the closest
+point in the trough is used.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>identify</b> <i class="m">x y</i>
+</dt>
+<dd>Returns the name of the element under the point given 
+by <i>x</i> and <i>y</i>, or an empty string if the point does
+not lie in any element of the scrollbar.
+<i>X</i> and <i>y</i> are pixel coordinates relative to the scrollbar widget.
+</dd>
+
+</dl>
+<h2><a name="SECTid81d16d8">SCROLLING COMMANDS</a></h2><p>When the user interacts with the scrollbar, for example by dragging
+the thumb, the scrollbar notifies the associated widget that it
+must change its view.
+The scrollbar makes the notification by evaluating a Tcl command
+generated from the scrollbar's <b>-command</b> option.
+The command may take any of the following forms.
+In each case, <i>prefix</i> is the contents of the
+<b>-command</b> option, which usually has a form like <b>.t yview</b>
+</p><dl>
+
+<dt>
+<i class="m">prefix</i> <b>moveto</b> <i class="m">fraction</i>
+</dt>
+<dd>
+<i>Fraction</i> is a real number between 0 and 1.
+The widget should adjust its view so that the point given
+by <i>fraction</i> appears at the beginning of the widget.
+If <i>fraction</i> is 0 it refers to the beginning of the
+document.  1.0 refers to the end of the document, 0.333
+refers to a point one-third of the way through the document,
+and so on.
+</dd>
+
+
+<dt>
+<i class="m">prefix</i> <b>scroll</b> <i class="m">number</i> <b>units</b>
+</dt>
+<dd>The widget should adjust its view by <i>number</i> units.
+The units are defined in whatever way makes sense for the widget,
+such as characters or lines in a text widget.
+<i>Number</i> is either 1, which means one unit should scroll off
+the top or left of the window, or -1, which means that one unit
+should scroll off the bottom or right of the window.
+</dd>
+
+
+<dt>
+<i class="m">prefix</i> <b>scroll</b> <i class="m">number</i> <b>pages</b>
+</dt>
+<dd>The widget should adjust its view by <i>number</i> pages.
+It is up to the widget to define the meaning of a page;  typically
+it is slightly less than what fits in the window, so that there
+is a slight overlap between the old and new views.
+<i>Number</i> is either 1, which means the next page should
+become visible, or -1, which means that the previous page should
+become visible.
+</dd>
+
+</dl>
+<h2><a name="SECTid81d1c50">WIDGET STATES</a></h2><p>The scrollbar automatically sets the <b>disabled</b> state bit.
+when the entire range is visible (range is 0.0 to 1.0),
+and clears it otherwise.
+It also sets the <b>active</b> and <b>pressed</b> state flags
+of individual elements, based on the position and state of the mouse pointer.
+</p>
+<h2><a name="SECTid81d1d40">EXAMPLE</a></h2><pre class="example">
+set f [frame .f]
+ttk::scrollbar $f.hsb -orient horizontal -command [list $f.t xview]
+ttk::scrollbar $f.vsb -orient vertical -command [list $f.t yview]
+text $f.t -xscrollcommand [list $f.hsb set] -yscrollcommand [list $f.vsb set] 
+grid $f.t -row 0 -column 0 -sticky nsew
+grid $f.vsb -row 0 -column 1 -sticky nsew
+grid $f.hsb -row 1 -column 0 -sticky nsew
+grid columnconfigure $f 0 -weight 1
+grid rowconfigure $f 0 -weight 1
+</pre>
+<h2><a name="SECTid81d1db8">KEYWORDS</a></h2><p class="keywords">
+<a class="keyword" href="keyword-index.html#KW-scrollbar">scrollbar</a>, <a class="keyword" href="keyword-index.html#KW-widget">widget</a>
+</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+
+converting.txt,v 1.5 2004/12/28 21:00:35 jenglish Exp
+
+[14 Feb 2004]
+
+~ Converting existing applications to use the Tile widgets
+
+Note that the Tile widget set is not a 100%-compatible drop-in
+replacement for the standard Tk widgets.  The main difference
+is that all the state-dependent options like -activebackground,
+-disabledforeground, and -overrelief are not present, replaced by the
+general-purpose style mechanism.  Many appearance-related options
+like -borderwidth and -background are also missing.
+
+Applications that rely on the option database for customization
+will be easier to adapt than those that set resources on
+widgets directly.  In the 0.3 release all options supported
+in Tk 8.4 are present, so they can be set and queried without
+raising an error, but their values will be ignored.
+
+If you're feeling adventurous, you can try:
+
+    namespace import ttk::*
+
+in your application's namespace(s) to locally override all
+the widget construction commands (button, scrollbar, etc).
+Or, you can switch on a widget-by-widget basis by using
+"ttk::button" for "button", "ttk::scrollbar" for "scrollbar", and
+so forth.
+
+IMPORTANT NOTE: Previous versions of this document suggested
+using 'namespace import -force ttk::*' at global scope, for the
+really adventurous.  This is now considered a Really Bad Idea:
+it will cause many things to break, and will cause more things
+to break in the future.  So don't do that anymore.
+
+
+Other differences: 
+
+The -state option has also been replaced by "state"
+and "instate" widget commands (see widget.n).  Some
+widgets do have a "-state" option for compatibility
+purposes, although only "-state normal" and "-state disabled"
+are supported, and it's a "write-only" option -- if
+you disable a widget with [$w state disabled], that
+won't be reflected by [$w cget -state].
+
+The -padx and -pady options have been merged into a 
+single "-padding" option, which may be a list of
+up to four values specifying padding on the left, top,
+right, and bottom.
+
+Some widget subcommands are not implemented yet,
+and others (like [scrollbar identify]) work differently.
+
+The -indicatoron option for checkbuttons and radiobuttons
+is no longer supported.  For toolbar-style buttons, 
+use "-style Toolbar" instead.  (See demos/toolbutton.tcl
+for an explanation.)
+
+The tile [menubutton] widget is *not* designed to be used
+inside a menubar by default, only as a standalone widget.  
+If you're still using menubuttons in a frame to build menubars, 
+switch to Tk [menu]s, or use a custom style.
+
+The -container option for frames is gone.  This will eventually
+be replaced with a special-purpose container widget,
+which uses the XEmbed protocol.  Similarly, the -in option 
+on toplevels will be replaced with a special-purpose "embeddable" 
+widget.
+
+The -colormap and -visual frame options are gone.  (If anyone
+really needs these, please let me know.  It will make *everything*
+a lot simpler if these can be eliminated altogether.)
+
+The -anchor option for checkbuttons, radiobuttons, and buttons
+is ignored.  Again, if anyone has a use for anything other than 
+"-anchor w" for checkbuttons or "-anchor center" for buttons, 
+please let me know.
+
+There are probably some important widget options and commands
+still unimplemented.  (Known cases: select, deselect, and toggle 
+for checkbuttons, a few others).
+
+For buttons, labels, etc., the '-width' option always specifies
+the width in characters to allocate for the text string.
+(In Tk, it's either a width in characters, or in screen units,
+depending on the value of '-compound', for the entire button.)
+Additionally: negative widths specify a minimum size on all
+platforms, not just Windows.
+
+Two new values for the "-compound" option are available:
+"text" (display text only) and "image" (display image only).
+This is useful for configuring toolbars.
+
+The -bitmap option is not supported.  Use -image instead.
+

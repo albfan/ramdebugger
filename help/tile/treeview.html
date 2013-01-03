@@ -1,0 +1,533 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: treeview</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d04e0">DESCRIPTION</a> · <a href="#SECTid81d06c0">STANDARD OPTIONS</a> · <a href="#SECTid81d0800">WIDGET OPTIONS</a> · <a href="#SECTid81d0f30">WIDGET COMMAND</a> · <a href="#SECTid81aeb10">ITEM OPTIONS</a> · <a href="#SECTid81aefc0">COLUMN IDENTIFIERS</a> · <a href="#SECTid81af448">VIRTUAL EVENTS</a> · <a href="#SECTid81af740">SEE ALSO</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">treeview - </b><br>hierarchical multicolumn data display widget</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>ttk::treeview</b> <i class="m">pathname</i> ?<i class="m">options</i>?
+</pre>
+<h2><a name="SECTid81d04e0">DESCRIPTION</a></h2><p>The treeview widget displays a hierarchical collection of items.
+Each item has a textual label, an optional image, 
+and an optional list of data values.
+The data values are displayed in successive columns after
+the tree label.
+</p><p>The order in which data values are displayed may be controlled
+by setting the <b>-displaycolumns</b> widget option.  
+The tree widget can also display column headings.
+Columns may be accessed by number or by symbolic names 
+listed in the <b>-columns</b> widget option;
+see <a href="#SECTid81aefc0">COLUMN IDENTIFIERS</a>.
+</p><p>Each item is identified by a unique name.
+The widget will generate item IDs if they are not supplied by the caller.
+There is a distinguished root item, named <b>{}</b>.
+The root item itself is not displayed;
+its children appear at the top level of the hierarchy.
+</p><p>Treeview widgets support vertical scrolling with the
+standard <b>-yscrollcommand</b> option and <b>yview</b> widget command.
+They probably ought to support horizontal scrolling as well.
+</p>
+<h2><a name="SECTid81d06c0">STANDARD OPTIONS</a></h2><div class="menu"><table class="menu" width="100%">
+<tr>
+<td width="25%"><a href="widget.html#stdopt_-class">-class</a></td><td width="25%"><a href="widget.html#stdopt_-cursor">-cursor</a></td><td width="25%"><a href="widget.html#stdopt_-style">-style</a></td><td width="25%"><a href="widget.html#stdopt_-takefocus">-takefocus</a></td>
+</tr><tr><td width="25%"><a href="widget.html#stdopt_-yscrollcommand">-yscrollcommand</a></td></tr>
+</table></div>
+<h2><a name="SECTid81d0800">WIDGET OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-columns">-columns</a></td><td width="40%" align="left">columns</td><td width="40%" align="left">Columns</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">A list of column identifiers, 
+specifying the number of columns and their names.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-displaycolumns">-displaycolumns</a></td><td width="40%" align="left">displayColumns</td><td width="40%" align="left">DisplayColumns</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">A list of column identifiers 
+(either symbolic names or integer indices)
+specifying which data columns are displayed 
+and the order in which they appear.
+<br>If empty (the default), all columns are shown in the order given.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-height">-height</a></td><td width="40%" align="left">height</td><td width="40%" align="left">Height</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the number of rows which should be visible.
+Note:
+the requested width is determined from the sum of the column widths.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-padding">-padding</a></td><td width="40%" align="left">padding</td><td width="40%" align="left">Padding</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the internal padding for the widget.
+The padding is a list of up to four length specifications;
+see <b>Ttk_GetPaddingFromObj()</b> for details.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-show">-show</a></td><td width="40%" align="left">show</td><td width="40%" align="left">Show</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">A list containing zero or more of the following values, specifying
+which elements of the tree to display.
+<dl>
+
+<dt><b>tree</b></dt>
+<dd>Display tree labels in column #0.  
+</dd>
+
+
+<dt><b>headings</b></dt>
+<dd>Display the heading row.
+</dd>
+
+</dl><p>The default is <b>tree headings</b>, i.e., show all elements.
+</p><p>
+<b>NOTE:</b> Column #0 always refers to the tree column,
+even if <b>-show tree</b> is not specified.
+</p>
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d0f30">WIDGET COMMAND</a></h2><dl>
+
+<dt>
+<i class="m">pathname</i> <b>cget</b> <i class="m">option</i>
+</dt>
+<dd>Returns the current value of the specified <i>option</i>; see <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>children</b> <i class="m">item</i> ?<i class="m">newchildren</i>?</dt>
+<dd>If <i>newchildren</i> is not specified,
+returns the list of children belonging to <i>item</i>.
+<p>If <i>newchildren</i> is specified, replaces <i>item</i>'s child list
+with <i>newchildren</i>.  
+Items in the old child list not present in the new child list
+are detached from the tree.
+None of the items in <i>newchildren</i> may be an ancestor
+of <i>item</i>.
+</p>
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>column</b> <i class="m">column</i> ?<i class="m">-option</i> ?<i class="m">value -option value...</i>?</dt>
+<dd>Query or modify the options for the specified <i>column</i>.
+If no <i>-option</i> is specified,
+returns a dictionary of option/value pairs.
+If a single <i>-option</i> is specified, 
+returns the value of that option.
+Otherwise, the options are updated with the specified values.
+The following options may be set on each column:
+<dl>
+
+<dt>
+<b>-id</b> <i class="m">name</i>
+</dt>
+<dd>The column name.  This is a read-only option.
+For example, [<i>$pathname</i> <b>column #</b><i>n</i> <b>-id</b>] 
+returns the data column associated with data column #<i>n</i>. 
+</dd>
+
+
+<dt><b>-anchor</b></dt>
+<dd>Specifies how the text in this column should be aligned
+with respect to the cell. One of
+<b>n</b>, <b>ne</b>, <b>e</b>, <b>se</b>,
+<b>s</b>, <b>sw</b>, <b>w</b>, <b>nw</b>, or <b>center</b>.
+</dd>
+
+
+<dt>
+<b>-width</b> <i class="m">w</i>
+</dt>
+<dd>The width of the column in pixels.  Default is something reasonable,
+probably 200 or so.
+</dd>
+
+</dl><p>Use <i>pathname column #0</i> to configure the tree column.
+</p>
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>configure</b> ?<i class="m">option</i>? ?<i class="m">value option value ...</i>?</dt>
+<dd>Modify or query widget options; see <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>delete</b> <i class="m">items</i>
+</dt>
+<dd>Deletes each of the <i>items</i> and all of their descendants.
+The root item may not be deleted.
+See also: <b>detach</b>.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>detach</b> <i class="m">items</i>
+</dt>
+<dd>Unlinks all of the specified <i>items</i> from the tree.
+The items and all of their descendants are still present
+and may be reinserted at another point in the tree
+but will not be displayed.
+The root item may not be detached.
+See also: <b>delete</b>.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>exists</b> <i class="m">item</i>
+</dt>
+<dd>Returns 1 if the specified <i>item</i> is present in the tree,
+0 otherwise.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>focus</b> ?<i class="m">item</i>?</dt>
+<dd>If <i>item</i> is specified, sets the focus item to <i>item</i>.
+Otherwise, returns the current focus item, or <b>{}</b> if there is none.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>heading</b> <i class="m">column</i> ?<i class="m">-option</i> ?<i class="m">value -option value...</i>?</dt>
+<dd>Query or modify the heading options for the specified <i>column</i>.
+Valid options are:
+<dl>
+
+<dt>
+<b>-text</b> <i class="m">text</i>
+</dt>
+<dd>The text to display in the column heading.
+</dd>
+
+
+<dt>
+<b>-image</b> <i class="m">imageName</i>
+</dt>
+<dd>Specifies an image to display to the right of the column heading.
+</dd>
+
+
+<dt>
+<b>-command</b> <i class="m">script</i>
+</dt>
+<dd>A script to evaluate when the heading label is pressed.
+</dd>
+
+</dl><p>Use <i>pathname heading #0</i> to configure the tree column heading.
+</p>
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>identify</b> <i class="m">x y</i>
+</dt>
+<dd>Returns a description of the widget component under the point given by
+<i>x</i> and <i>y</i>.  The return value is a list with one of the 
+following forms:
+<dl>
+
+<dt>
+<b>heading</b> #<i class="m">n</i>
+</dt>
+<dd>The column heading for display column <i>#n</i>.
+</dd>
+
+
+<dt>
+<b>separator</b> #<i class="m">n</i>
+</dt>
+<dd>The border to the right of display column <i>#n</i>.
+</dd>
+
+
+<dt>
+<b>cell</b> <i class="m">itemid</i> <b>#</b><i class="m">n</i>
+</dt>
+<dd>The data value for item <i>itemid</i> in display column <i>#n</i>.
+</dd>
+
+
+<dt>
+<b>item</b> <i class="m">itemid</i> <i class="m">element</i>
+</dt>
+<dd>The tree label for item <i>itemid</i>; <i>element</i> is one
+of <b>text</b>, <b>image</b>, or <b>indicator</b>, or another element name
+depending on the style.
+</dd>
+
+
+<dt>
+<b>row</b> <i class="m">itemid</i>
+</dt>
+<dd>The <i>y</i> position is over the <i>item</i> but 
+<i>x</i> does not identify any element or displayed data value.
+</dd>
+
+
+<dt><b>nothing</b></dt>
+<dd>The coordinates are not over any identifiable object.
+</dd>
+
+</dl><p>See <a href="#SECTid81aefc0">COLUMN IDENTIFIERS</a> for a discussion of display columns
+and data columns.
+</p>
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>index</b> <i class="m">item</i>
+</dt>
+<dd>Returns the integer index of <i>item</i> within its parent's list of children.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>insert</b> <i class="m">parent</i> <i class="m">index</i> ?<b>-id</b> <i class="m">id</i>? <i class="m">options...</i>
+</dt>
+<dd>Creates a new item.  
+<i>parent</i> is the item ID of the parent item,
+or the empty string <b>{}</b>
+to create a new top-level item.
+<i>index</i> is an integer, or the value <b>end</b>, specifying where in the
+list of <i>parent</i>'s children to insert the new item.
+If <i>index</i> is less than or equal to zero, 
+the new node is inserted at the beginning;
+if <i>index</i> is greater than or equal to the current number of children,
+it is inserted at the end.
+If <b>-id</b> is specified, it is used as the item identifier;
+<i>id</i> must not already exist in the tree.
+Otherwise, a new unique identifier is generated.
+<p>
+<i>pathname</i> <b>insert</b> returns the item identifier of the
+newly created item.
+See <a href="#SECTid81aeb10">ITEM OPTIONS</a> for the list of available options.
+</p>
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>instate</b> <i class="m">statespec</i> ?<i class="m">script</i>?</dt>
+<dd>Test the widget state; see <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>item</b> <i class="m">item</i> ?<i class="m">-option</i> ?<i class="m">value -option value...</i>?</dt>
+<dd>Query or modify the options for the specified <i>item</i>.
+If no <i>-option</i> is specified, 
+returns a dictionary of option/value pairs.
+If a single <i>-option</i> is specified, 
+returns the value of that option.
+Otherwise, the item's options are updated with the specified values.
+See <a href="#SECTid81aeb10">ITEM OPTIONS</a> for the list of available options.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>move</b> <i class="m">item parent index</i>
+</dt>
+<dd>Moves <i>item</i> to position <i>index</i> in <i>parent</i>'s list of children.
+It is illegal to move an item under one of its descendants.
+<p>If <i>index</i> is less than or equal to zero, <i>item</i> is moved
+to the beginning; if greater than or equal to the number of children,
+it's moved to the end.
+</p>
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>next</b> <i class="m">item</i>
+</dt>
+<dd>Returns the identifier of <i>item</i>'s next sibling,
+or <b>{}</b> if <i>item</i> is the last child of its parent.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>parent</b> <i class="m">item</i>
+</dt>
+<dd>Returns the ID of the parent of <i>item</i>,
+or <b>{}</b> if <i>item</i> is at the top level of the hierarchy.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>prev</b> <i class="m">item</i>
+</dt>
+<dd>Returns the identifier of <i>item</i>'s previous sibling,
+or <b>{}</b> if <i>item</i> is the first child of its parent.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>see</b> <i class="m">item</i>
+</dt>
+<dd>Ensure that <i>item</i> is visible:
+sets all of <i>item</i>'s ancestors to <b>-open true</b>,
+and scrolls the widget if necessary so that <i>item</i> is 
+within the visible portion of the tree.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>selection</b> ?<i class="m">selop</i> <i class="m">items</i>?</dt>
+<dd>If <i>selop</i> is not specified, returns the list of selected items.
+Otherwise, <i>selop</i> is one of the following:
+<dl class="commandlist">
+
+<dt>
+<i class="m">pathname</i> <b>selection set</b> <i class="m">items</i>
+</dt>
+<dd>
+<i>items</i> becomes the new selection.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>selection add</b> <i class="m">items</i>
+</dt>
+<dd>Add <i>items</i> to the selection
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>selection remove</b> <i class="m">items</i>
+</dt>
+<dd>Remove <i>items</i> from the selection
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>selection toggle</b> <i class="m">items</i>
+</dt>
+<dd>Toggle the selection state of each item in <i>items</i>.
+</dd>
+
+</dl>
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>set</b> <i class="m">item</i> ?<i class="m">column</i> ?<i class="m">value</i>??</dt>
+<dd>With one argument, returns a dictionary of column/value pairs
+for the specified <i>item</i>.  
+With two arguments, returns the current value of the specified <i>column</i>.
+With three arguments, sets the value of column <i>column</i>
+in item <i>item</i> to the specified <i>value</i>.
+See also <a href="#SECTid81aefc0">COLUMN IDENTIFIERS</a>.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>state</b> ?<i class="m">stateSpec</i>?</dt>
+<dd>Modify or query the widget state; see <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>yview</b> <i class="m">args</i>
+</dt>
+<dd>Standard command for vertical scrolling; see <i>widget(n)</i>.
+</dd>
+
+</dl>
+<h2><a name="SECTid81aeb10">ITEM OPTIONS</a></h2><p>The following item options may be specified for items
+in the <b>insert</b> and <b>item</b> widget commands.
+</p><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-text">-text</a></td><td width="40%" align="left">text</td><td width="40%" align="left">Text</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">The textual label to display for the item.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-image">-image</a></td><td width="40%" align="left">image</td><td width="40%" align="left">Image</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">A Tk image, displayed to the left of the label.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-values">-values</a></td><td width="40%" align="left">values</td><td width="40%" align="left">Values</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">The list of values associated with the item.
+<br>Each item should have the same number of values as
+the <b>-columns</b> widget option.
+If there are fewer values than columns,
+the remaining values are assumed empty.
+If there are more values than columns,
+the extra values are ignored.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-open">-open</a></td><td width="40%" align="left">open</td><td width="40%" align="left">Open</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">A boolean value indicating whether the items's children
+should be displayed (<b>-open true</b>) or hidden (<b>-open false</b>).
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81aefc0">COLUMN IDENTIFIERS</a></h2><p>Column identifiers take any of the following forms:
+</p><ul>
+<li>A symbolic name from the list of <b>-columns</b>.
+</li>
+<li>An integer <i>n</i>, specifying the <i>n</i>th data column.
+</li>
+<li>A string of the form <b>#</b><i>n</i>, where <i>n</i> is an integer,
+specifying the <i>n</i>th display column.
+</li>
+</ul><p>
+<b>NOTE:</b> 
+Item <b>-values</b> may be displayed in a different order than 
+the order in which they are stored.
+</p><p>
+<b>NOTE:</b> Column #0 always refers to the tree column,
+even if <b>-show tree</b> is not specified.
+</p><p>A <i>data column number</i> is an index into an item's <b>-values</b> list;
+a <i>display column number</i> is the column number in the tree
+where the values are displayed.  
+Tree labels are displayed in column #0.
+If <b>-displaycolumns</b> is not set,
+then data column <i>n</i> is displayed in display column <b>#</b><i>n+1</i>.
+Again, <b>column #0 always refers to the tree column</b>.
+</p>
+<h2><a name="SECTid81af448">VIRTUAL EVENTS</a></h2><p>The treeview widget generates the following virtual events.
+</p><dl>
+
+<dt>&lt;&lt;TreeviewSelect&gt;&gt;</dt>
+<dd>Generated whenever the selection changes.
+</dd>
+
+
+<dt>&lt;&lt;TreeviewOpen&gt;&gt;</dt>
+<dd>Generated just before setting the focus item to <b>-open true</b>.
+</dd>
+
+
+<dt>&lt;&lt;TreeviewClose&gt;&gt;</dt>
+<dd>Generated just after setting the focus item to <b>-open false</b>.
+</dd>
+
+</dl><p>The <b class="cmd">focus</b> and <b class="cmd">selection</b> widget commands can be used
+to determine the affected item or items.
+In Tk 8.5, the affected item is also passed as the <b>-detail</b> field
+of the virtual event.
+</p>
+<h2><a name="SECTid81af740">SEE ALSO</a></h2><p class="seealso">widget(n), listbox(n), image(n)</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

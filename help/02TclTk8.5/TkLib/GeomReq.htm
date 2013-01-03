@@ -1,0 +1,83 @@
+<HTML><HEAD><TITLE>Tk Library Procedures - Tk_GeometryRequest manual page</TITLE></HEAD><BODY>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_GeometryRequest, Tk_SetMinimumRequestSize, Tk_SetInternalBorder, Tk_SetInternalBorderEx - specify desired geometry or internal border for a window
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+<B>Tk_GeometryRequest</B>(<I>tkwin, reqWidth, reqHeight</I>)<BR>
+<B>Tk_SetMinimumRequestSize</B>(<I>tkwin, minWidth, minHeight</I>)<BR>
+<B>Tk_SetInternalBorder</B>(<I>tkwin, width</I>)<BR>
+<B>Tk_SetInternalBorderEx</B>(<I>tkwin, left, right, top, bottom</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL>
+<DT>Tk_Window <B>tkwin</B> (in)<DD>
+Window for which geometry is being requested.
+<P><DT>int <B>reqWidth</B> (in)<DD>
+Desired width for <I>tkwin</I>, in pixel units.
+<P><DT>int <B>reqHeight</B> (in)<DD>
+Desired height for <I>tkwin</I>, in pixel units.
+<P><DT>int <B>minWidth</B> (in)<DD>
+Desired minimum requested width for <I>tkwin</I>, in pixel units.
+<P><DT>int <B>minHeight</B> (in)<DD>
+Desired minimum requested height for <I>tkwin</I>, in pixel units.
+<P><DT>int <B>width</B> (in)<DD>
+Space to leave for internal border for <I>tkwin</I>, in pixel units.
+<P><DT>int <B>left</B> (in)<DD>
+Space to leave for left side of internal border for <I>tkwin</I>, in pixel units.
+<P><DT>int <B>right</B> (in)<DD>
+Space to leave for right side of internal border for <I>tkwin</I>, in pixel units.
+<P><DT>int <B>top</B> (in)<DD>
+Space to leave for top side of internal border for <I>tkwin</I>, in pixel units.
+<P><DT>int <B>bottom</B> (in)<DD>
+Space to leave for bottom side of internal border for <I>tkwin</I>, in pixel units.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_GeometryRequest</B> is called by widget code to indicate its
+preference for the dimensions of a particular window.  The arguments
+to <B>Tk_GeometryRequest</B> are made available to the geometry
+manager for the window, which then decides on the actual geometry
+for the window.  Although geometry managers generally try to satisfy
+requests made to <B>Tk_GeometryRequest</B>, there is no guarantee that
+this will always be possible.  Widget code should not assume that
+a geometry request will be satisfied until it receives a
+<B>ConfigureNotify</B> event indicating that the geometry change has
+occurred.  Widget code should never call procedures like
+<B><A HREF="../TkLib/ConfigWind.htm">Tk_ResizeWindow</A></B> directly.  Instead, it should invoke
+<B>Tk_GeometryRequest</B> and leave the final geometry decisions to
+the geometry manager.
+<P>
+If <I>tkwin</I> is a top-level window, then the geometry information
+will be passed to the window manager using the standard ICCCM protocol.
+<P>
+<B>Tk_SetInternalBorder</B> is called by widget code to indicate that
+the widget has an internal border.  This means that the widget draws
+a decorative border inside the window instead of using the standard
+X borders, which are external to the window's area.  For example,
+internal borders are used to draw 3-D effects.  <I>Width</I>
+specifies the width of the border in pixels.  Geometry managers will
+use this information to avoid placing any children of <I>tkwin</I>
+overlapping the outermost <I>width</I> pixels of <I>tkwin</I>'s area.
+<P>
+<B>Tk_SetInternalBorderEx</B> works like <B>Tk_SetInternalBorder</B>
+but lets you specify different widths for different sides of the window.
+<P>
+<B>Tk_SetMinimumRequestSize</B> is called by widget code to indicate
+that a geometry manager should request at least this size for the
+widget.  This allows a widget to have some control over its size when
+a propagating geometry manager is used inside it.
+<P>
+The information specified in calls to <B>Tk_GeometryRequest</B>,
+<B>Tk_SetMinimumRequestSize</B>, <B>Tk_SetInternalBorder</B> and
+<B>Tk_SetInternalBorderEx</B> can be retrieved using the macros
+<B><A HREF="../TkLib/WindowId.htm">Tk_ReqWidth</A></B>, <B><A HREF="../TkLib/WindowId.htm">Tk_ReqHeight</A></B>, <B><A HREF="../TkLib/WindowId.htm">Tk_MinReqWidth</A></B>,
+<B><A HREF="../TkLib/WindowId.htm">Tk_MinReqHeight</A></B>, <B><A HREF="../TkLib/WindowId.htm">Tk_MinReqWidth</A></B>, <B><A HREF="../TkLib/WindowId.htm">Tk_InternalBorderLeft</A></B>,
+<B><A HREF="../TkLib/WindowId.htm">Tk_InternalBorderRight</A></B>, <B><A HREF="../TkLib/WindowId.htm">Tk_InternalBorderTop</A></B> and
+<B><A HREF="../TkLib/WindowId.htm">Tk_InternalBorderBottom</A></B>.
+See the <B><A HREF="../TkLib/WindowId.htm">Tk_WindowId</A></B> manual entry for details.
+
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/G.htm#geometry">geometry</A>, <A href="../Keywords/R.htm#request">request</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 1990-1994 The Regents of the University of California.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

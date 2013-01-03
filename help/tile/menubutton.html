@@ -1,0 +1,63 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: menubutton</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d04e0">DESCRIPTION</a> · <a href="#SECTid81d0580">STANDARD OPTIONS</a> · <a href="#SECTid81d07b0">OPTIONS</a> · <a href="#SECTid81d0ad0">WIDGET COMMAND</a> · <a href="#SECTid81d0be8">SEE ALSO</a> · <a href="#SECTid81d0c88">KEYWORDS</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">menubutton - </b><br>Widget that pops down a menu when pressed</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>ttk::menubutton</b> <i class="m">pathName</i> ?<i class="m">options</i>?
+</pre>
+<h2><a name="SECTid81d04e0">DESCRIPTION</a></h2><p>A <b>menubutton</b> widget displays a textual label and/or image,
+and displays a menu when pressed.
+</p>
+<h2><a name="SECTid81d0580">STANDARD OPTIONS</a></h2><div class="menu"><table class="menu" width="100%">
+<tr>
+<td width="25%"><a href="widget.html#stdopt_-class">-class</a></td><td width="25%"><a href="widget.html#stdopt_-compound">-compound</a></td><td width="25%"><a href="widget.html#stdopt_-cursor">-cursor</a></td><td width="25%"><a href="widget.html#stdopt_-image">-image</a></td>
+</tr><tr>
+<td width="25%"><a href="widget.html#stdopt_-state">-state</a></td><td width="25%"><a href="widget.html#stdopt_-style">-style</a></td><td width="25%"><a href="widget.html#stdopt_-takefocus">-takefocus</a></td><td width="25%"><a href="widget.html#stdopt_-text">-text</a></td>
+</tr><tr>
+<td width="25%"><a href="widget.html#stdopt_-textvariable">-textvariable</a></td><td width="25%"><a href="widget.html#stdopt_-underline">-underline</a></td><td width="25%"><a href="widget.html#stdopt_-width">-width</a></td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d07b0">OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-direction">-direction</a></td><td width="40%" align="left">direction</td><td width="40%" align="left">Direction</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies where the menu is to be popped up relative 
+to the menubutton.  
+One of: <i>above</i>, <i>below</i>, <i>left</i>, <i>right</i>,
+or <i>flush</i>.  The default is <i>below</i>.  
+<i>flush</i> pops the menu up directly over the menubutton.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-menu">-menu</a></td><td width="40%" align="left">menu</td><td width="40%" align="left">Menu</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the path name of the menu associated with the menubutton.
+To be on the safe side, the menu ought to be a direct child of the
+menubutton.
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d0ad0">WIDGET COMMAND</a></h2><p>Menubutton widgets support the standard 
+<b>cget</b>, <b>configure</b>, <b>instate</b>, and <b>state</b> 
+methods.  No other widget methods are used.
+</p>
+<h2><a name="SECTid81d0be8">SEE ALSO</a></h2><p class="seealso">widget(n), keynav(n), menu(n)</p>
+<h2><a name="SECTid81d0c88">KEYWORDS</a></h2><p class="keywords">
+<a class="keyword" href="keyword-index.html#KW-widget">widget</a>, <a class="keyword" href="keyword-index.html#KW-button">button</a>, <a class="keyword" href="keyword-index.html#KW-menu">menu</a>
+</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

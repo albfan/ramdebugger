@@ -1,0 +1,59 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html">
+<title>Drag & Drop...</title>
+</head>
+
+<body bgcolor=#EEEEEE background="Images/grey_background.gif" link="#660000"
+vlink="#003399">
+<h1><a name="_top"></a>Drag & Drop</h1>
+<p>
+Drag and Drop is an interactive technique which allows transfer of 
+information through a simple metaphor: the user picks an object on 
+the display with the pointer, drags it across the screen while 
+maintaining the pointer button pressed, and drops the object on some 
+other place. Subsequently, the application where the object was 
+dropped usually does some data transfer corresponding to the object.
+</p><p>
+A Drag and Drop operation starts in a window called the source 
+window (or simply drag source).
+The client owner of this window is called the initiator 
+client. The drop operation occurs in a window called the destination 
+window (or drop target).
+The client owner of this window is called the receiver 
+client. A client can be both initiator and receiver for an operation. 
+A client can contain both the source and destination windows for an 
+operation. The source window may also be the destination window. 
+There are no particular requirements on what the client should do or 
+not do in those specific cases.
+</p><p>
+In many cases, the drop will occur on some area called a drop site, 
+for example a printer icon or a trash can icon. A drop site may be 
+drawn in its own window or may be simply drawn by the receiver 
+application in a larger window. The protocol does not require to have 
+one window per drop site.
+</p><p>
+During the drag, both the initiator client and the potential receiver 
+clients may want to provide visual feed back to the user. The feed 
+back provided by the initiator is called drag-over. The feed back 
+provided by a receiver is called drag-under: typically doing some 
+animation in the destination window under the drag icon.
+<p></p>
+The feedback may consist in:
+<ul>
+<li>an icon representing the data being dragged, called the source icon 
+<li>showing the existence of a drop site. Both initiator and receiver might
+want to provide feedback whether or not a drop is possible.
+For example, the receiver can be highlighting the drop site and the initiator
+showing a specific icon: the state icon.
+<li>a side effect icon indicating the side effect that would occur if a drop
+were made.
+<li>In the case where a drop is possible, both initiator and receiver may want
+to provide feedback indicating the validity of the operation for this 
+particular drop. For example, if it is known that the object being dragged
+cannot be processed by the receiver.
+</ul>
+<hr>
+<p> Part from an article for the Motif Drag &amp; Drop Protocol written by  Daniel
+Dardailler.</p>
+</html>

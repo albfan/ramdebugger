@@ -1,0 +1,95 @@
+<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_MacSetEventProc manual page</TITLE></HEAD><BODY>
+<H3><A NAME="M2">NAME</A></H3>
+Tcl_MacSetEventProc, Tcl_MacConvertTextResource, Tcl_MacEvalResource, Tcl_MacFindResource, Tcl_GetOSTypeFromObj, Tcl_SetOSTypeObj, Tcl_NewOSTypeObj - procedures to handle Macintosh resources and other Macintosh specifics
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tcl.h&gt;</B><BR>
+int<BR>
+<B>Tcl_MacEvalResource</B>(<I>interp, resourceName, resourceNumber, fileName</I>)<BR>
+char*<BR>
+<B>Tcl_MacConvertTextResource</B>(<I>resource</I>)<BR>
+Handle<BR>
+<B>Tcl_MacFindResource</B>(<I>interp, resourceType, resourceName, resourceNumber, resFileRef, releaseIt</I>)<BR>
+Tcl_Obj*<BR>
+<B>Tcl_NewOSTypeObj</B>(<I>newOSType</I>)<BR>
+void<BR>
+<B>Tcl_SetOSTypeObj</B>(<I>objPtr, newOSType</I>)<BR>
+int<BR>
+<B>Tcl_GetOSTypeFromObj</B>(<I>interp, objPtr, osTypePtr</I>)<BR>
+void<BR>
+<B>Tcl_MacSetEventProc</B>(<I>procPtr</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL>
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter to use for error reporting, or NULL if no error reporting is
+desired.
+<P><DT>CONST char <B>*resourceName</B> (in)<DD>
+Name of TEXT resource to source, NULL if number should be used.
+<P><DT>int <B>resourceNumber</B> (in)<DD>
+Resource id of source.
+<P><DT>CONST char <B>*fileName</B> (in)<DD>
+Name of file to process. NULL if application resource.
+<P><DT>Handle <B><A HREF="../TclCmd/resource.htm">resource</A></B> (in)<DD>
+Handle to TEXT resource.
+<P><DT>long <B>resourceType</B> (in)<DD>
+Type of resource to load.
+<P><DT>CONST char <B>*resFileRef</B> (in)<DD>
+Registered resource file reference, NULL if searching all open resource files.
+<P><DT>int <B>*releaseIt</B> (out)<DD>
+Should we release this resource when done.
+<P><DT>int <B>newOSType</B> (in)<DD>
+Int used to initialize the new object or set the object's value.
+<P><DT>Tcl_Obj <B>*objPtr</B> (in)<DD>
+Object whose internal representation is to be set or retrieved.
+<P><DT>osTypePtr <B>out</B> ()<DD>
+Place to store the resulting integer.
+<P><DT>Tcl_MacConvertEventPtr <B>procPtr</B> (in)<DD>
+Reference to the new function to handle all incoming Mac events.
+
+<P></DL>
+<H3><A NAME="M5">INTRODUCTION</A></H3>
+The described routines are used to implement the Macintosh specific
+<B><A HREF="../TclCmd/resource.htm">resource</A></B> command and the Mac specific notifier.. They manipulate
+or use Macintosh resources and provide administration for open
+resource file references.
+
+<H3><A NAME="M6">DESCRIPTION</A></H3>
+<B>Tcl_MacEvalResource</B> extends the <B><A HREF="../TclCmd/source.htm">source</A></B> command to
+Macintosh resources.  It sources Tcl code from a Text resource.
+Currently only sources the resource by name, file IDs may be supported
+at a later date.
+<P>
+<B>Tcl_MacConvertTextResource</B> converts a TEXT resource into a Tcl
+suitable string. It mallocs the returned memory, converts ``&#92;r'' to
+``&#92;n'', and appends a null. The caller has the responsibility for
+freeing the memory.
+<P>
+<B>Tcl_MacFindResource</B> provides a higher level interface for
+loading resources. It is used by <B>resource read</B>.
+<P>
+<B>Tcl_NewOSTypeObj</B> is used to create a new resource name type
+object. The object type is &quot;ostype&quot;.
+<P>
+<B>Tcl_SetOSTypeObj</B> modifies an object to be a resource type and to
+have the specified long value.
+<P>
+<B>Tcl_GetOSTypeFromObj</B> attempts to return an int from the Tcl
+object &quot;objPtr&quot;. If the object is not already an int, an attempt will
+be made to convert it to one.
+<P>
+<B>Tcl_MacSetEventProc</B> sets the event handling procedure for the
+application. This function will be passed all incoming Mac events.
+This function usually controls the console or some other entity like
+Tk.
+
+<H3><A NAME="M7">RESOURCE TYPES</A></H3>
+Resource types are 4-byte values used by the macintosh resource
+facility to tag parts of the resource fork in a file so that the OS
+knows how to handle them. As all 4 bytes are restricted to printable
+characters such a type can be interpreted as a 4 character string too.
+
+<H3><A NAME="M8">KEYWORDS</A></H3>
+<A href="../Keywords/M.htm#macintosh">macintosh</A>, <A href="../Keywords/M.htm#mac">mac</A>, <A href="../Keywords/R.htm#resource">resource</A>, <A href="../Keywords/N.htm#notifier">notifier</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 1997-1998 Sun Microsystems, Inc.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

@@ -1,0 +1,160 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: style</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d04e0">DEFINITIONS</a> · <a href="#SECTid81d05f8">DESCRIPTION</a> · <a href="#SECTid81d13e0">LAYOUTS</a> · <a href="#SECTid81d1818">STATE MAPS</a> · <a href="#SECTid81d18b8">SEE ALSO</a> · <a href="#SECTid81d1958">KEYWORDS</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">style - </b><br>Control overall look and feel of widgets</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>style</b> <i class="m">option</i> ?<i class="m">args</i>?
+</pre>
+<h2><a name="SECTid81d04e0">DEFINITIONS</a></h2><p>Each widget is assigned a <i>style</i>,
+which specifies the set of elements making up the widget
+and how they are arranged, along with dynamic and default
+settings for element resources.
+By default, the style name is the same as the widget's class;
+this may be overridden by the <b>-style</b> option. 
+</p><p>A <i>theme</i> is a collection of elements and styles 
+which controls the overall look and feel of an application.
+</p>
+<h2><a name="SECTid81d05f8">DESCRIPTION</a></h2><p>The <b>style</b> command takes the following arguments:
+</p><dl>
+
+<dt>
+<b>style configure</b> <i class="m">style</i> ?<i class="m">-option</i> ?<i class="m">value option value...</i>? ?</dt>
+<dd>Sets the default value of the specified option(s) in <i>style</i>.
+</dd>
+
+
+<dt>
+<b>style map</b> <i class="m">style</i> ?<i class="m">-option</i> { <i class="m">statespec value</i> } ... ?</dt>
+<dd>Sets dynamic values of the specified option(s) in <i>style</i>.
+See "<a href="#SECTid81d1818">STATE MAPS</a>", below.
+</dd>
+
+
+<dt>
+<b>style layout</b> <i class="m">style</i> ?<i class="m">layoutSpec</i>?</dt>
+<dd>Define the widget layout for style <i>style</i>.  
+See "<a href="#SECTid81d13e0">LAYOUTS</a>" below for the format of <i>layoutSpec</i>.
+If <i>layoutSpec</i> is omitted, return the layout specification
+for style <i>style</i>.
+</dd>
+
+
+<dt>
+<b>style element create</b> <i class="m">elementName</i> <i class="m">type</i> ?<i class="m">args...</i>?</dt>
+<dd>Creates a new element in the current theme of type <i>type</i>.
+The only built-in element type is <i>image</i> (see <i>image(n)</i>),
+although themes may define other element types 
+(see <b>Ttk_RegisterElementFactory</b>).
+</dd>
+
+
+<dt><b>style element names</b></dt>
+<dd>Returns the list of elements defined in the current theme.
+</dd>
+
+
+<dt>
+<b>style element options</b> <i class="m">element</i>
+</dt>
+<dd>Returns the list of <i>element</i>'s options.
+</dd>
+
+
+<dt>
+<b>style theme create</b> <i class="m">themeName</i> ?<b>-parent</b> <i class="m">basedon</i>? ?<b>-settings</b> <i class="m">script...</i> ?</dt>
+<dd>Creates a new theme.  It is an error if <i>themeName</i> already exists.
+If <i>-parent</i> is specified, the new theme will inherit
+styles, elements, and layouts from the parent theme <i>basedon</i><b>.
+If</b> <i>-settings</i> is present, <i>script</i> is evaluated in the
+context of the new theme as per <b>style theme settings</b>.
+</dd>
+
+
+<dt>
+<b>style theme settings</b> <i class="m">themeName</i> <i class="m">script</i>
+</dt>
+<dd>Temporarily sets the current theme to <i>themeName</i>, 
+evaluate <i>script</i>, then restore the previous theme.
+Typically <i>script</i> simply defines styles and elements,
+though arbitrary Tcl code may appear.
+</dd>
+
+
+<dt><b>style theme names</b></dt>
+<dd>Returns a list of the available themes.
+</dd>
+
+
+<dt>
+<b>style theme use</b> <i class="m">themeName</i>
+</dt>
+<dd>Sets the current theme to <i>themeName</i>, and refreshes all widgets.
+
+</dd>
+
+</dl>
+<h2><a name="SECTid81d13e0">LAYOUTS</a></h2><p>A <i>layout</i> specifies a list of elements, each followed
+by one or more options specifying how to arrange the element.
+The layout mechanism uses a simplified version of the <b class="cmd">pack</b>
+geometry manager: given an initial cavity,
+each element is allocated a parcel.
+Valid options are:
+</p><dl>
+
+<dt>
+<b>-side</b> <i class="m">side</i>
+</dt>
+<dd>Specifies which side of the cavity to place the element;
+one of <b>left</b>, <b>right</b>, <b>top</b>, or <b>bottom</b>.
+If omitted, the element occupies the entire cavity.
+</dd>
+
+
+<dt>
+<b>-sticky</b> <i class="m">[nswe]</i>
+</dt>
+<dd>Specifies where the element is placed inside its allocated parcel.
+</dd>
+
+
+<dt>
+<b>-children</b> <i class="m">{ sublayout... }</i>
+</dt>
+<dd>Specifies a list of elements to place inside the element.
+</dd>
+
+</dl><p>For example:
+</p><pre class="example">
+style layout Horizontal.TScrollbar {
+    Scrollbar.trough -children {
+        Scrollbar.leftarrow -side left
+        Scrollbar.rightarrow -side right
+        Horizontal.Scrollbar.thumb -side left -sticky ew
+    }
+}
+</pre>
+<h2><a name="SECTid81d1818">STATE MAPS</a></h2><p>
+<i>@@@ describe...</i>
+
+
+</p>
+<h2><a name="SECTid81d18b8">SEE ALSO</a></h2><p class="seealso">
+<a href="tile-intro.html">tile-intro</a>, widget, pixmap</p>
+<h2><a name="SECTid81d1958">KEYWORDS</a></h2><p class="keywords">
+<a class="keyword" href="keyword-index.html#KW-style">style</a>, <a class="keyword" href="keyword-index.html#KW-theme">theme</a>, <a class="keyword" href="keyword-index.html#KW-appearance">appearance</a>
+</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

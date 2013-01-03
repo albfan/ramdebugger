@@ -1,0 +1,27 @@
+<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_Init manual page</TITLE></HEAD><BODY>
+<H3><A NAME="M2">NAME</A></H3>
+Tcl_Init - find and source initialization script
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tcl.h&gt;</B><BR>
+int<BR>
+<B>Tcl_Init</B>(<I>interp</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL>
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter to initialize.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tcl_Init</B> is a helper procedure that finds and <B><A HREF="../TclCmd/source.htm">source</A></B>'s the
+<B>init.tcl</B> script, which should exist somewhere on the Tcl library
+path.
+<P>
+<B>Tcl_Init</B> is typically called from <B><A HREF="../TclLib/AppInit.htm">Tcl_AppInit</A></B> procedures.
+
+<H3><A NAME="M6">SEE ALSO</A></H3>
+<B><A HREF="../TclLib/AppInit.htm">Tcl_AppInit</A></B>, <B><A HREF="../TclLib/Tcl_Main.htm">Tcl_Main</A></B>
+<H3><A NAME="M7">KEYWORDS</A></H3>
+<A href="../Keywords/A.htm#application">application</A>, <A href="../Keywords/I.htm#initialization">initialization</A>, <A href="../Keywords/I.htm#interpreter">interpreter</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 1998-2000 by Scriptics Corporation.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

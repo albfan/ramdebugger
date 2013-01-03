@@ -1,0 +1,120 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: button</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d04e0">DESCRIPTION</a> · <a href="#SECTid81d0580">STANDARD OPTIONS</a> · <a href="#SECTid81d07b0">OPTIONS</a> · <a href="#SECTid81d0c10">WIDGET COMMAND</a> · <a href="#SECTid81d1188">COMPATIBILITY OPTIONS</a> · <a href="#SECTid81d1368">SEE ALSO</a> · <a href="#SECTid81d13e0">KEYWORDS</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">button - </b><br>Widget that issues a command when pressed</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>ttk::button</b> <i class="m">pathName</i> ?<i class="m">options</i>?
+</pre>
+<h2><a name="SECTid81d04e0">DESCRIPTION</a></h2><p>A <b>button</b> widget displays a textual label and/or image,
+and evaluates a command when pressed.
+</p>
+<h2><a name="SECTid81d0580">STANDARD OPTIONS</a></h2><div class="menu"><table class="menu" width="100%">
+<tr>
+<td width="25%"><a href="widget.html#stdopt_-class">-class</a></td><td width="25%"><a href="widget.html#stdopt_-compound">-compound</a></td><td width="25%"><a href="widget.html#stdopt_-cursor">-cursor</a></td><td width="25%"><a href="widget.html#stdopt_-image">-image</a></td>
+</tr><tr>
+<td width="25%"><a href="widget.html#stdopt_-state">-state</a></td><td width="25%"><a href="widget.html#stdopt_-style">-style</a></td><td width="25%"><a href="widget.html#stdopt_-takefocus">-takefocus</a></td><td width="25%"><a href="widget.html#stdopt_-text">-text</a></td>
+</tr><tr>
+<td width="25%"><a href="widget.html#stdopt_-textvariable">-textvariable</a></td><td width="25%"><a href="widget.html#stdopt_-underline">-underline</a></td><td width="25%"><a href="widget.html#stdopt_-width">-width</a></td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d07b0">OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-command">-command</a></td><td width="40%" align="left">command</td><td width="40%" align="left">Command</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">A script to evaluate when the widget is invoked.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-default">-default</a></td><td width="40%" align="left">default</td><td width="40%" align="left">Default</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">May be set to one of  <b>normal</b>, <b>active</b>, or <b>disabled</b>.
+In a dialog box, one button may be designated the "default" button
+(meaning, roughly, "the one that gets invoked when the user presses &lt;Enter&gt;").
+<b>active</b> indicates that this is currently the default button;
+<b>normal</b> means that it may become the default button, and
+<b>disabled</b> means that it is not defaultable.
+The default is <b>normal</b>.
+<br>Depending on the theme, the default button may be displayed 
+with an extra highlight ring, or with a different border color.
+See also: <i>keynav(n)</i>.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-width">-width</a></td><td width="40%" align="left">width</td><td width="40%" align="left">Width</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">If greater than zero, specifies how much space, in character widths, 
+to allocate for the text label.  
+If less than zero, specifies a minimum width.
+If zero or unspecified, the natural width of the text label is used.
+Note that some themes may specify a non-zero <b>-width</b>
+in the style.
+
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d0c10">WIDGET COMMAND</a></h2><dl>
+
+<dt>
+<i class="m">pathName</i> <b>invoke</b>
+</dt>
+<dd>Invokes the command associated with the button.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>cget</b> <i class="m">option</i>
+</dt>
+<dd></dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>configure</b> ?<i class="m">option</i>? ?<i class="m">value option value ...</i>?</dt>
+<dd></dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>instate</b> <i class="m">statespec</i> ?<i class="m">script</i>?</dt>
+<dd></dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>state</b> ?<i class="m">stateSpec</i>?</dt>
+<dd>See <i>widget(n)</i>
+
+</dd>
+
+</dl>
+<h2><a name="SECTid81d1188">COMPATIBILITY OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-state">-state</a></td><td width="40%" align="left">state</td><td width="40%" align="left">State</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">May be set to <b>normal</b> or <b>disabled</b>
+to control the <b>disabled</b> state bit.
+This is a ``write-only'' option: setting it changes the
+widget state, but the <b>state</b> widget command does
+not affect the state option.
+
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d1368">SEE ALSO</a></h2><p class="seealso">widget(n), keynav(n)</p>
+<h2><a name="SECTid81d13e0">KEYWORDS</a></h2><p class="keywords">
+<a class="keyword" href="keyword-index.html#KW-widget">widget</a>, <a class="keyword" href="keyword-index.html#KW-button">button</a>, <a class="keyword" href="keyword-index.html#KW-default">default</a>, <a class="keyword" href="keyword-index.html#KW-command">command</a>
+</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

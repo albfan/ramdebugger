@@ -1,0 +1,10 @@
+Package zlibtcl 1.2.3
+Meta as::author  {Jan Nijtmans}
+Meta as::origin  http://sourceforge.net/projects/tkimg
+Meta as::origin  http://sourceforge.net/projects/tkimg
+Meta description A variant of the libz system library made suitable for
+Meta description direct loading as a Tcl package.
+Meta license     BSD
+Meta platform    win32-ix86
+Meta require     {Tcl 8.4}
+Meta summary     zlib Support

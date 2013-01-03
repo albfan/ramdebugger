@@ -1,0 +1,196 @@
+<html>
+<head>
+<meta http-equiv=Content-Type content="text/html">
+<title>Tk Drag & Drop: tkdnd...</title>
+<style>
+p.normal
+  {font-size:12.0pt;
+   font-family:Arial;
+   margin-left:18.0pt;}
+</style>
+</head>
+
+<body bgcolor=#EEEEEE background="Images/grey_background.gif" link="#660000" vlink="#003399">
+<center><h1><a name="_top"></a>Tk Drag & Drop Extension (tkdnd)</h1>
+<h2>- Version 1.0b1 -</h2>
+</center>
+<p>&nbsp;</p>
+<a name="description"></a><h2>Description</h2>
+<p class=normal>
+<b>tkdnd</b> is an extension that adds native
+<a href="DND.html">drag &amp; drop</a> capabilities to the tk toolkit.
+It can be used with any tk version equal or greater to 8.3.3 and currently only
+the UNIX (X-Windows) and Microsoft Windows operating systems are supported.
+Under unix the drag &amp; drop protocol in use is the
+<a href="XDND_Protocol/xdnd.html">XDND</a>
+protocol version 4 (also used by the QT toolkit, KDE &amp; GNOME Desktops).
+Under Windows, the OLE drag &amp; drop interfaces are used.
+</p>
+<p class=normal>
+This extension is based on earlier work done by 
+<a href="http://bmrc.berkeley.edu/people/chaffee/index.html">Gordon Chaffee</a>
+(<a href="mailto:chaffee@bmrc.berkeley.edu">chaffee@bmrc.berkeley.edu</a>), 
+the author of the olednd extension that implemented OLE drag &amp; drop
+capabilities for tk under Microsoft Windows.
+Olednd can be found
+<a href="http://bmrc.berkeley.edu/people/chaffee/tcltk.html">here</a>
+(<a href="ftp://bmrc.berkeley.edu/pub/winnt/tcltk/tcltk8.0/olednd.zip">zip
+file</a>).
+</p>
+<p class=normal>
+Please understand that this software is beta quality. If you have problems
+with it, please post a message on the comp.lang.tcl newsgroup (preferably
+with the word "tkdnd" in its title) and provide a detailed description (if
+possible) of your problem.
+</p>
+<p class=normal>
+<font size=-1>Note: The Microsoft Windows version can be used with any tk
+version greater or equal to 8.1. The unix version can also be used with any tk
+version greater or equal to 8.1 but this requires a core patch. Currently
+there are no patches available. Of course my recomendation is
+to upgrade to the most recent tcl/tk version, even if characterised as
+"beta"...</font>
+</p>
+<p>&nbsp;</p>
+<a name="license"></a><h2>License Information</h2>
+<p class=normal>
+The author of <b>tkdnd</b> is
+<a href="http://www.iit.demokritos.gr/~petasis">George Petasis</a>
+(<a href="mailto:petasis@iit.demokritos.gr">petasis@iit.demokritos.gr</a>).
+<a href="mailto:laurent.riesterer@free.fr">Laurent Riesterer</a>
+was kind enough to revise the whole source code, to propose enchancments and
+to fix bugs.
+This code is based on a Microsoft Windows extension written by
+<a href="http://bmrc.berkeley.edu/people/chaffee/index.html">Gordon Chafee</a>,
+although the whole package was reimplemented from scratch for both windows
+&amp; unix.
+<b>tkdnd</b> contains an older version (0.3) of the 
+<a href="http://www.cs.man.ac.uk/~fellowsd/tcl/shapeidx.html#latest"><b>shape</b></a>
+extension, written by 
+<a href="mailto:fellowsd@cs.man.ac.uk">Donal K. Fellows</a>. This extension
+can change the shape of any tk window, according to images, and is used in
+order to provide the <b>"shape"</b> command.
+Also uses the Motif Dnd package, written by
+<a href="mailto:daniel@x.org">Daniel Dardailler</a>.
+</p>
+<p class=normal>
+The license of <b>tkdnd</b> is the same license that covers tcl/tk. Practically,
+this means that you can do whatever you want with this code (even embed it in
+a commercial application). More details can be found
+<a href="License.txt">here</a>.
+<p>&nbsp;</p>
+<a name="download"></a><h2>Download</h2>
+<p class=normal>
+Currently, the supported platforms are only Microsoft Windows &amp; Unix.
+There is a single distribution that contains anything you need in order to
+build the extension under any of the supported platforms:
+<ul style='margin-left:18.0pt'> <li>
+<a href="ftp://www.iit.demokritos.gr/pub/skel/petasis/tcl/tkdnd.tar.gz">
+Whole Distribution (Windows and Unix sources + Windows dll), ~327K</a>
+</li></ul></p>
+<p class=normal>
+This distribution also contains a pre-compiled, stubs enabled, dynamic library
+for use with the standart tk distribution under the Microsoft Windows
+platform. This library was build using the Microsoft Visual C++ compiler 
+(version 6.0)</p>
+<p>&nbsp;</p>
+<a name="installation"></a><h2>Installation</h2>
+<p class=normal>
+If your platform is <b>Microsoft Windows</b>, then allong with the distribution
+there is a stubs enabled dynamic library (dll) that was built
+against ActiveTcl 8.4.0.1b2, with the use of VC++ 6.0. If you cannot use the provided
+binary, then you can always create the required library by using the VC++
+project files located in the "win" directory of the tkDND distribution.
+In all other cases, you should create the library only from the files
+located in the directories "win" (*.cpp *.h) and "generic" (*.c *.h).
+You will need a C++ compiler for this.</p>
+<p class=normal>
+If your platform is <b>Unix</b> you can use the "standard" procedure, as
+<b>tkdnd</b> is TEA compliant: configure-make.
+<p>
+<p class=normal>
+Change your working director to the "unix" directory of the <b>tkdnd</b>
+distribution.
+Then run the "configure" script. This script will try to create suitable
+Makefiles for your opeating system. If you have problems running this script,
+try running the tcl script "tcl-conf".
+<p>
+<p class=normal>Finally type "make". This will create a dynamic library that
+can be loaded from a tk interpreter (i.e. wish). You can additionally try
+the default demo applications, by typing "make tests".</p>
+<p class=normal>If everything seems to work fine, you can install the
+extension by typing "make install". According to the parameters given to the
+configure script (especially --prefix), you may need super-user priviledges in
+order to complete this step. If the procedure for any reason fails, just copy
+the contents of the "lib" directory into a directory that tcl looks in order
+to load extensions.
+</p>
+<p>&nbsp;</p>
+<a name="documentation"></a><h2>Documentation</h2>
+<p class=normal>
+If the <b>tkdnd</b> extension has been properly installed, then can be
+loaded into a tk interpreter through a simple
+</p>
+<center><code>package require tkdnd</code></center>
+<p class=normal>
+tcl command. Doing so will register two new commands: "<b>dnd</b>" and
+"<b>shape</b>".
+</p>
+<p class=normal>
+The "<b>dnd</b>" command can be used in order to register existing tk
+windows as drag sources or drop targets. The same command can be used in order
+to query drag &amp; drop related information regarding registered widgets.
+</p>
+<p class=normal>
+The "<b>shape</b>" command can be used in order to change the shape of tk
+windows based on transparency information contained in a specified images.
+The main purpose of this command is the creation of non-rectanular windows
+for use as cursors during a drag &amp; drop operation. (Currently functional
+only under Unix.)
+</p>
+<p class=normal>
+Unfortunately, there is not an extensive manual right now. You should
+look the demo tcl programs that exist in the demo directory. There is only
+a small man page which can be accessed <a href="tkDND_Manual.html">here</a>.
+</p>
+<p class=normal>
+The <b>tkdnd</b> FAQ can be found <a href="FAQ.txt">here</a>.
+</p>
+<p>&nbsp;</p>
+<a name="bugs"></a><h2>Known Bugs</h2>
+<h3>Unix</h3>
+<p class=normal>
+<ul>
+<li>Motif drags are not supported yet.</li>
+<li>For Motif drops, only the "copy" action is currently supported.</li>
+<li>Currently, there is no way to modify the cursors used during a drag and
+drop operation. Full support for user-defined cursors is planned.</li>
+</ul>
+</p>
+<h3>Microsoft Windows</h3>
+<p class=normal>
+<ul>
+<li>The actions "ask" and "private" are not supported. If they are used, they
+are synonyms of the "copy" action, so as not to break scripts that use them.
+</li>
+<li>No support for transfering images.</li>
+<li>The "shape" command is also provided for unix compatibility. It is not
+functional though.</li>
+<li>Changing the active type that will be used in order to transfer the data
+is not possible to be changed with the use of events modifiers, as can be done
+under unix.</li>
+<li>Currently, there is no way to modify the cursors used during a drag and
+drop operation. Full support for user-defined cursors is also planned.</li>
+</ul>
+</ul>
+</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<hr SIZE=1 NOSHADE WIDTH="100%">
+<font size=-2><i><a href="http://www.iit.demokritos.gr/~petasis">
+Petasis George</a>,
+<a href="mailto:petasis@iit.demokritos.gr">petasis@iit.demokritos.gr</a>
+</i></font>
+</body>
+</html>

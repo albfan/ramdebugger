@@ -1,0 +1,29 @@
+<HTML><HEAD><TITLE>Tk Library Procedures - Tk_GetUserInactiveTime manual page</TITLE></HEAD><BODY>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_GetUserInactiveTime, Tk_ResetUserInactiveTime - discover user inactivity time
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+long<BR>
+<B>Tk_GetUserInactiveTime(</B><I>display</I><B>)</B><BR>
+<B>Tk_GetUserInactiveTime(</B><I>display</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL>
+<DT>Display <B>*display</B> (in)<DD>
+The display on which the user inactivity timer is to be queried or
+reset.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_GetUserInactiveTime</B> returns the number of milliseconds that
+have passed since the last user interaction (usually via keyboard or
+mouse) with the respective display. On systems and displays that don't
+support querying the user inactiviy time, <B>-1</B> is returned.
+<B>Tk_GetUserInactiveTime</B> resets the user inactivity timer of the
+given display to zero.  On windowing systems that don't support
+multiple displays <I>display</I> can be passed as <B>NULL</B>.
+
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/I.htm#idle">idle</A>, <A href="../Keywords/I.htm#inactive">inactive</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 1998-2000 by Scriptics Corporation.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

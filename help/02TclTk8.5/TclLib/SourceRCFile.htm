@@ -1,0 +1,26 @@
+<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_SourceRCFile manual page</TITLE></HEAD><BODY>
+<H3><A NAME="M2">NAME</A></H3>
+Tcl_SourceRCFile - source the Tcl rc file
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tcl.h&gt;</B><BR>
+void<BR>
+<B>Tcl_SourceRCFile</B>(<I>interp</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL>
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Tcl interpreter to source rc file into.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tcl_SourceRCFile</B> is used to source the Tcl rc file at startup.
+It is typically invoked by <A HREF="../TclLib/Tcl_Main.htm">Tcl_Main</A> or <A HREF="../TkLib/Tk_Main.htm">Tk_Main</A>.  The name of the file
+sourced is obtained from the global variable <B>tcl_rcFileName</B> in
+the interpreter given by <I>interp</I>.  If this variable is not
+defined, or if the file it indicates cannot be found, no action is
+taken.
+
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/A.htm#application-specific initialization">application-specific initialization</A>, <A href="../Keywords/M.htm#main program">main program</A>, <A href="../Keywords/R.htm#rc file">rc file</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 1998-2000 by Scriptics Corporation.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

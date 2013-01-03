@@ -1,0 +1,53 @@
+<html>
+
+<head>
+<title>Drag-And-Drop for files</title>
+</head>
+
+<body bgcolor="#F8F8F8" text="#000000" link="#0000E9" vlink="#000090" alink="#FF0000">
+<font face=verdana,arial,helvetica>
+
+<h1> Drag-And-Drop Protocol for the X Window System </h1>
+
+<img src="../gifs/line.blue.pure.gif" alt="--------" WIDTH=520 HEIGHT=6>
+
+<h3> Dragging files </h3>
+
+<p>
+The goal of Drag-And-Drop is to allow users to quickly and easily move data from one program to another.  This requires that all programs use the same protocol and the same data types.
+
+<p>
+An especially important data type is the <b>file</b>.  All programs should accept dropped files where ever possible in order to allow users to use a graphical file manager to access their data.
+
+<p>
+Since UNIX provides powerful networking support and X allows the user to display file managers from different machines on the same screen, one must actually use the full <b>URL</b>, <em>including the host name</em>, for each file that is dragged.  Simple programs can then reject files that are not available locally, while sophisticated programs can use a method such as ftp to retrieve them.  (The sample implementation includes code to convert between URL's and local file names.)
+
+<p>
+The data type of a URL or list of URL's is <a href="ftp://ftp.isi.edu/in-notes/iana/assignments/media-types/text/uri-list">text/uri-list</a>.  It is an error to not include the host name (the value returned by <tt>gethostname()</tt>) as part of the URL.  (Consider the case when the user drags a file to the trash.  Without the host name, this could delete a file from the wrong file system!)
+
+<p>
+In order for file managers to be able to communicate with each other, one also needs to be able to specify that the target perform particular actions on the dropped files.  The predefined actions XdndActionCopy, XdndActionMove, and XdndActionLink should be used for this purpose.  Targets other than file managers should respond with XdndActionPrivate to indicate that they will do something else with the files, e.g. search them, compile them, etc.  File managers should provide visual feedback in the cursor if the target accepts the requested action.  (e.g. display a small arrow if the target accepts XdndActionLink)
+
+<p>
+It is important to note that file managers will often have to block until receiving XdndFinished.  As an example, if the user drags a file from a local directory to a directory opened via ftp, then the user should not be allowed to delete or move the file until the ftp transfer is complete.  (Of course, the program should not block off more than these two directories.)
+
+<p>
+Dragging files to a trashcan is a special case that must be handled separately.  In this case, the most natural model is for the user to set the trashcan to either <b>store</b> or <b>incinerate</b> mode and then for the trashcan to accept text/uri-list or XdndActionAsk.  The former means "perform the action selected by the user," while the latter means "ask the user which action to perform in this case."  The best way for the trashcan to tell the user about its current setting is to change its appearance.
+<p>
+When dragging files from a file manager window, the default action should be XdndActionMove.
+
+<p>
+When dragging files from other programs (e.g. a list of files to search or compile), XdndActionPrivate should be the default because it isn't clear what the user intends to do.  File managers should treat this as <b>copy</b>, while trashcans should treat it as <b>move</b>.
+
+<p>
+<hr>
+
+<p>
+Last updated on February 22, 2000
+
+<p>
+Back to the <a href="xdnd.html">main page</a>.
+
+</body>
+
+</html>

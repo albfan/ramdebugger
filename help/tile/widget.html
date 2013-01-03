@@ -1,0 +1,323 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: widget</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">DESCRIPTION</a> · <a href="#SECTid81d0490">STANDARD OPTIONS</a> · <a href="#SECTid81d0c10">LABEL OPTIONS</a> · <a href="#SECTid81d1660">COMPATIBILITY OPTIONS</a> · <a href="#SECTid81d1840">COMMANDS</a> · <a href="#SECTid81d1fe8">WIDGET STATES</a> · <a href="#SECTid81d2650">EXAMPLES</a> · <a href="#SECTid81d26c8">SEE ALSO</a> · <a href="#SECTid81d2740">KEYWORDS</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">widget - </b><br>Standard options and commands supported by widgets</p>
+<h2><a name="SECTid81d0418">DESCRIPTION</a></h2><p>This manual describes common widget options and commands.
+</p>
+<h2><a name="SECTid81d0490">STANDARD OPTIONS</a></h2><p>The following options are supported by all Tile widgets:
+</p><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="stdopt_-class">-class</a></td><td width="40%" align="left">(N/A)</td><td width="40%" align="left">(N/A)</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the window class.
+The class is used when querying the option database 
+for the window's other options, to determine the default
+bindtags for the window, and to select the widget's default
+layout and style.
+This is a read-only option: 
+it may only be specified when the window is created,
+and may not be changed with the <b>configure</b> widget command.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="stdopt_-cursor">-cursor</a></td><td width="40%" align="left">cursor</td><td width="40%" align="left">Cursor</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the mouse cursor to be used for the widget.
+See <b class="fun">Tk_GetCursor</b> and <i>cursors(n)</i> in the Tk reference manual
+for the legal values.
+If set to the empty string (the default),
+the cursor is inherited from the parent widget.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="stdopt_-takefocus">-takefocus</a></td><td width="40%" align="left">takeFocus</td><td width="40%" align="left">TakeFocus</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Determines whether the window accepts the focus during keyboard traversal.  
+Either <b>0</b>, <b>1</b>, a command prefix (to which the widget path
+is appended, and which should return <b>0</b> or <b>1</b>), 
+or the empty string.
+See <i>options(n)</i> in the Tk reference manual for the full description.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="stdopt_-style">-style</a></td><td width="40%" align="left">style</td><td width="40%" align="left">Style</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">May be used to specify a custom widget style.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="stdopt_-xscrollcommand">-xscrollcommand</a></td><td width="40%" align="left">xScrollCommand</td><td width="40%" align="left">ScrollCommand</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">A command prefix, used to communicate with horizontal scrollbars.
+<br>When the view in the widget's window changes, the widget will
+generate a Tcl command by concatenating the scroll command and
+two numbers.
+Each of the numbers is a fraction between 0 and 1 indicating
+a position in the document; 0 indicates the beginning,
+and 1 indicates the end.
+The first fraction indicates the first information in the widget
+that is visible in the window, and the second fraction indicates
+the information just after the last portion that is visible.
+<br>Typically the <b>xScrollCommand</b> option consists of the path name 
+of a <b>scrollbar</b> widget followed by ``set'', e.g. ``.x.scrollbar set''.
+This will cause the scrollbar to be updated whenever the view in the 
+window changes.
+<br>If this option is set to the empty string (the default),
+then no command is be executed.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="stdopt_-yscrollcommand">-yscrollcommand</a></td><td width="40%" align="left">yScrollCommand</td><td width="40%" align="left">ScrollCommand</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">A command prefix, used to communicate with vertical scrollbars.
+See the description of <b>-xscrollcommand</b> above for details.
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d0c10">LABEL OPTIONS</a></h2><p>The following options are supported by labels, buttons,
+and other button-like widgets:
+</p><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="stdopt_-text">-text</a></td><td width="40%" align="left">text</td><td width="40%" align="left">Text</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies a text string to be displayed inside the widget
+(unless overridden by <b>-textvariable</b>).
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="stdopt_-textvariable">-textvariable</a></td><td width="40%" align="left">textVariable</td><td width="40%" align="left">Variable</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the name of variable whose value will be used
+in place of the <b>-text</b> resource.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="stdopt_-underline">-underline</a></td><td width="40%" align="left">underline</td><td width="40%" align="left">Underline</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">If set, specifies the integer index (0-based) of a character to underline 
+in the text string.
+The underlined character is used for mnemonic activation
+(see <i>keynav(n)</i>).
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="stdopt_-image">-image</a></td><td width="40%" align="left">image</td><td width="40%" align="left">Image</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies an image to display.
+This is a list of 1 or more elements.
+The first element is the default image name.
+The rest of the list is a sequence of <i>statespec / value</i> pairs
+as per <b>style map</b>, specifying different images to use when
+the widget is in a particular state or combination of states.
+All images in the list should have the same size.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="stdopt_-compound">-compound</a></td><td width="40%" align="left">compound</td><td width="40%" align="left">Compound</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies how to display the image relative to the text,
+in the case both <b>-text</b> and <b>-image</b> are present.
+Valid values are: 
+<dl>
+
+<dt>text</dt>
+<dd>Display text only.
+</dd>
+
+
+<dt>image</dt>
+<dd>Display image only.
+</dd>
+
+
+<dt>center</dt>
+<dd>Display text centered on top of image.
+</dd>
+
+
+<dt>top</dt>
+<dd></dd>
+
+
+<dt>bottom</dt>
+<dd></dd>
+
+
+<dt>left</dt>
+<dd></dd>
+
+
+<dt>right</dt>
+<dd>Display image above, below, left of, or right of the text, respectively.
+</dd>
+
+
+<dt>none</dt>
+<dd>The default; display the image if present, otherwise the text.
+</dd>
+
+</dl>
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="stdopt_-width">-width</a></td><td width="40%" align="left">width</td><td width="40%" align="left">Width</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">If greater than zero, specifies how much space, in character widths, 
+to allocate for the text label.  
+If less than zero, specifies a minimum width.
+If zero or unspecified, the natural width of the text label is used.
+
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d1660">COMPATIBILITY OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="stdopt_-state">-state</a></td><td width="40%" align="left">state</td><td width="40%" align="left">State</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">May be set to <b>normal</b> or <b>disabled</b>
+to control the <b>disabled</b> state bit.
+This is a ``write-only'' option: setting it changes the
+widget state, but the <b>state</b> widget command does
+not affect the state option.
+
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d1840">COMMANDS</a></h2><dl>
+
+<dt>
+<i class="m">pathName</i> <b>cget</b> <i class="m">option</i>
+</dt>
+<dd>Returns the current value of the configuration option given
+by <i>option</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>configure</b> ?<i class="m">option</i>? ?<i class="m">value option value ...</i>?</dt>
+<dd>Query or modify the configuration options of the widget.
+If one or more <i>option-value</i> pairs are specified,
+then the command modifies the given widget option(s) 
+to have the given value(s); 
+in this case the command returns an empty string.
+If <i>option</i> is specified with no <i>value</i>, 
+then the command returns a list describing the named option:
+the elements of the list are the 
+option name, database name, database class, default value, 
+and current value.
+If no <i>option</i> is specified, returns a list describing all of
+the available options for <i>pathName</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>instate</b> <i class="m">statespec</i> ?<i class="m">script</i>?</dt>
+<dd>Test the widget's state.
+If <i>script</i> is not specified, returns 1 if 
+the widget state matches <i>statespec</i> and 0 otherwise.
+If <i>script</i> is specified, equivalent to
+<i>if {[</i><i>pathName</i> instate <i>stateSpec</i>]} <i>script</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>state</b> ?<i class="m">stateSpec</i>
+</dt>
+<dd>Modify or inquire widget state.
+If <i>stateSpec</i> is present, sets the widget state: 
+for each flag in <i>stateSpec</i>, sets the corresponding flag
+or clears it if prefixed by an exclamation point.
+Returns a new state spec indicating which flags were changed:
+''set changes [<i>pathName</i> state <i>spec</i>] ; 
+<i>pathName</i> state $changes''
+will restore <i>pathName</i> to the original state.
+If <i>stateSpec</i> is not specified, 
+returns a list of the currently-enabled state flags.
+</dd>
+
+</dl>
+<h2><a name="SECTid81d1fe8">WIDGET STATES</a></h2><p>The widget state is a bitmap of independent state flags.
+Widget state flags include:
+</p><dl>
+
+<dt><b>active</b></dt>
+<dd>The mouse cursor is over the widget 
+and pressing a mouse button will cause some action to occur.
+(aka "prelight" (Gnome), "hot" (Windows), "hover").
+</dd>
+
+
+<dt><b>disabled</b></dt>
+<dd>Widget is disabled under program control 
+(aka "unavailable", "inactive") 
+</dd>
+
+
+<dt><b>focus</b></dt>
+<dd>Widget has keyboard focus 
+</dd>
+
+
+<dt><b>pressed</b></dt>
+<dd>Widget is being pressed (aka "armed" in Motif). 
+</dd>
+
+
+<dt><b>selected</b></dt>
+<dd>"On", "true", or "current" for things like checkbuttons and radiobuttons. 
+</dd>
+
+
+<dt><b>background</b></dt>
+<dd>Windows and the Mac have a notion of an "active" or foreground window.
+The <b>background</b> state is set for widgets in a background window,
+and cleared for those in the foreground window.
+</dd>
+
+
+<dt><b>alternate</b></dt>
+<dd>A widget-specific alternate display format.
+For example, used for checkbuttons and radiobuttons 
+in the "tristate" or "mixed" state,
+and for buttons with <b>-default active</b>.
+</dd>
+
+
+<dt><b>invalid</b></dt>
+<dd>The widget's value is invalid.
+(Potential uses: scale widget value out of bounds, 
+entry widget value failed validation.)
+</dd>
+
+</dl><p>A <i>state specification</i> or <i>stateSpec</i> is a list
+of state names, optionally prefixed with an exclamation point (!)
+indicating that the bit is off.
+</p>
+<h2><a name="SECTid81d2650">EXAMPLES</a></h2><pre class="example">
+set b [ttk::button .b]
+
+# Disable the widget:
+$b state disabled			
+
+# Invoke the widget only if it is currently pressed and enabled:
+$b instate {pressed !disabled} { .b invoke }	
+
+# Reenable widget:
+$b state !disabled			
+</pre>
+<h2><a name="SECTid81d26c8">SEE ALSO</a></h2><p class="seealso">
+<a href="tile-intro.html">tile-intro(n)</a>, style(n)</p>
+<h2><a name="SECTid81d2740">KEYWORDS</a></h2><p class="keywords">
+<a class="keyword" href="keyword-index.html#KW-state">state</a>, <a class="keyword" href="keyword-index.html#KW-configure">configure</a>, <a class="keyword" href="keyword-index.html#KW-option">option</a>
+</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

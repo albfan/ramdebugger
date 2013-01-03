@@ -1,0 +1,137 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: progressbar</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d04e0">STANDARD OPTIONS</a> · <a href="#SECTid81d05f8">OPTIONS</a> · <a href="#SECTid81d0e40">DESCRIPTION</a> · <a href="#SECTid81d0f08">WIDGET COMMAND</a> · <a href="#SECTid81d1868">SEE ALSO</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">progressbar - </b><br>Provide progress feedback</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>ttk::progressbar</b> <i class="m">pathName</i> ?<i class="m">options</i>?
+</pre>
+<h2><a name="SECTid81d04e0">STANDARD OPTIONS</a></h2><div class="menu"><table class="menu" width="100%"><tr>
+<td width="25%"><a href="widget.html#stdopt_-class">-class</a></td><td width="25%"><a href="widget.html#stdopt_-cursor">-cursor</a></td><td width="25%"><a href="widget.html#stdopt_-style">-style</a></td><td width="25%"><a href="widget.html#stdopt_-takefocus">-takefocus</a></td>
+</tr></table></div>
+<h2><a name="SECTid81d05f8">OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-orient">-orient</a></td><td width="40%" align="left">orient</td><td width="40%" align="left">Orient</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">One of <b>horizontal</b> or <b>vertical</b>.
+Specifies the orientation of the progress bar.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-length">-length</a></td><td width="40%" align="left">length</td><td width="40%" align="left">Length</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the length of the long axis of the progress bar
+(width if horizontal, height if vertical).
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-mode">-mode</a></td><td width="40%" align="left">mode</td><td width="40%" align="left">Mode</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">One of <b>determinate</b> or <b>indeterminate</b>.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-maximum">-maximum</a></td><td width="40%" align="left">maximum</td><td width="40%" align="left">Maximum</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">A floating point number specifying the maximum <b>-value</b>.
+Defaults to 100.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-value">-value</a></td><td width="40%" align="left">value</td><td width="40%" align="left">Value</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">The current value of the progress bar.
+In <i>determinate</i> mode, this represents the amount of work completed.
+In <i>indeterminate</i> mode, it is interpreted modulo <b>-maximum</b>;
+that is, the progress bar completes one "cycle" when
+the <b>-value</b> increases by <b>-maximum</b>.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-variable">-variable</a></td><td width="40%" align="left">variable</td><td width="40%" align="left">Variable</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">The name of a Tcl variable which is linked to the <b>-value</b>.
+If specified, the <b>-value</b> of the progress bar is 
+automatically set to the value of the variable whenever 
+the latter is modified.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-phase">-phase</a></td><td width="40%" align="left">phase</td><td width="40%" align="left">Phase</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Read-only option.
+The widget periodically increments the value of this option 
+whenever the <b>-value</b> is greater than 0 and,
+in <i>determinate</i> mode, less than <b>-maximum</b>.
+This option may be used by the current theme 
+to provide additional animation effects.
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d0e40">DESCRIPTION</a></h2><p>A progress bar widget shows the status of a long-running operation.
+They can operate in two modes: <i>determinate</i> mode shows the
+amount completed relative to the total amount of work to be done,
+and <i>indeterminate</i> mode provides an animated display to
+let the user know that something is happening.
+</p>
+<h2><a name="SECTid81d0f08">WIDGET COMMAND</a></h2><dl>
+
+<dt>
+<i class="m">pathName</i> <b>cget</b> <i class="m">option</i>
+</dt>
+<dd>Returns the current value of the specified <i>option</i>; see <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>configure</b> ?<i class="m">option</i>? ?<i class="m">value option value ...</i>?</dt>
+<dd>Modify or query widget options; see <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>instate</b> <i class="m">statespec</i> ?<i class="m">script</i>?</dt>
+<dd>Test the widget state; see <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>start</b> ?<i class="m">interval</i>?</dt>
+<dd>Begin autoincrement mode:
+schedules a recurring timer event that calls <b>step</b> 
+every <i>interval</i> milliseconds.
+If omitted, <i>interval</i> defaults to 50 milliseconds (20 steps/second).
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>state</b> ?<i class="m">stateSpec</i>?</dt>
+<dd>Modify or query the widget state; see <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>step</b> ?<i class="m">amount</i>?</dt>
+<dd>Increments the <b>-value</b> by <i>amount</i>.  
+<i>amount</i> defaults to 1.0 if omitted.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>stop</b> ?<i class="m">amount</i>?</dt>
+<dd>Stop autoincrement mode:
+cancels any recurring timer event initiated by <i>pathName</i> <b>start</b>.
+</dd>
+
+</dl>
+<h2><a name="SECTid81d1868">SEE ALSO</a></h2><p class="seealso">widget(n)</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

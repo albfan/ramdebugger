@@ -1,0 +1,418 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0033)http://www.sqlite.org/pragma.html -->
+<HTML><HEAD><TITLE>Pragma statements supported by SQLite</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+<META content="MSHTML 6.00.2900.2604" name=GENERATOR></HEAD>
+<BODY vLink=#508896 link=#50695f bgColor=white>
+<TABLE width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD vAlign=top><IMG 
+      src="Pragma statements supported by SQLite_archivos/sqlite.gif"></TD>
+    <TD width="100%"></TD>
+    <TD vAlign=bottom>
+      <UL>
+        <LI><A href="http://www.sqlite.org/cvstrac/tktnew">bugs</A> 
+        <LI><A href="http://www.sqlite.org/changes.html">changes</A> 
+        <LI><A href="http://www.sqlite.org/contrib">contrib</A> 
+        <LI><A 
+        href="http://www.sqlite.org/download.html#cvs">cvs&nbsp;repository</A> 
+        <LI><A href="http://www.sqlite.org/docs.html">documentation</A> 
+    </LI></UL></TD>
+    <TD width=10></TD>
+    <TD vAlign=bottom>
+      <UL>
+        <LI><A href="http://www.sqlite.org/download.html">download</A> 
+        <LI><A href="http://www.sqlite.org/faq.html">faq</A> 
+        <LI><A href="http://www.sqlite.org/index.html">home</A> 
+        <LI><A href="http://www.sqlite.org/support.html">mailing&nbsp;list</A> 
+        <LI><A href="http://www.sqlite.org/index.html">news</A> </LI></UL></TD>
+    <TD width=10></TD>
+    <TD vAlign=bottom>
+      <UL>
+        <LI><A href="http://www.sqlite.org/quickstart.html">quick&nbsp;start</A> 
+
+        <LI><A href="http://www.sqlite.org/support.html">support</A> 
+        <LI><A href="http://www.sqlite.org/lang.html">syntax</A> 
+        <LI><A href="http://www.sqlite.org/cvstrac/timeline">timeline</A> 
+        <LI><A href="http://www.sqlite.org/cvstrac/wiki">wiki</A> 
+  </LI></UL></TD></TR></TBODY></TABLE>
+<TABLE width="100%">
+  <TBODY>
+  <TR>
+    <TD bgColor=#80a796></TD></TR></TBODY></TABLE>
+<P>The <A href="http://www.sqlite.org/pragma.html#syntax">PRAGMA command</A> is 
+a special command used to modify the operation of the SQLite library or to query 
+the library for internal (non-table) data. The PRAGMA command is issued using 
+the same interface as other SQLite commands (e.g. SELECT, INSERT) but is 
+different in the following important respects: </P>
+<UL>
+  <LI>Specific pragma statements may be removed and others added in future 
+  releases of SQLite. Use with caution! 
+  <LI>No error messages are generated if an unknown pragma is issued. Unknown 
+  pragmas are simply ignored. This means if there is a typo in a pragma 
+  statement the library does not inform the user of the fact. 
+  <LI>Some pragmas take effect during the SQL compilation stage, not the 
+  execution stage. This means if using the C-language sqlite3_compile(), 
+  sqlite3_step(), sqlite3_finalize() API (or similar in a wrapper interface), 
+  the pragma may be applied to the library during the sqlite3_compile() call. 
+  <LI>The pragma command is unlikely to be compatible with any other SQL engine. 
+  </LI></UL>
+<P>The available pragmas fall into four basic categories:</P>
+<UL>
+  <LI>Pragmas used to <A href="http://www.sqlite.org/pragma.html#schema">query 
+  the schema</A> of the current database. 
+  <LI>Pragmas used to <A href="http://www.sqlite.org/pragma.html#modify">modify 
+  the operation</A> of the SQLite library in some manner, or to query for the 
+  current mode of operation. 
+  <LI>Pragmas used to <A href="http://www.sqlite.org/pragma.html#version">query 
+  or modify the databases two version values</A>, the schema-version and the 
+  user-version. 
+  <LI>Pragmas used to <A href="http://www.sqlite.org/pragma.html#debug">debug 
+  the library</A> and verify that database files are not corrupted. </LI></UL>
+<HR>
+<A name=syntax></A>
+<H1>PRAGMA command syntax</H1>
+<TABLE cellPadding=10>
+  <TBODY>
+  <TR>
+    <TD vAlign=top align=right><I><FONT 
+      color=#ff3434>sql-statement</FONT></I>&nbsp;::=</TD>
+    <TD><B><FONT color=#2c2cf0>PRAGMA </FONT></B><I><FONT 
+      color=#ff3434>name</FONT></I><B><FONT color=#2c2cf0> </FONT></B>[<B><FONT 
+      color=#2c2cf0>= </FONT></B><I><FONT color=#ff3434>value</FONT></I><B><FONT 
+      color=#2c2cf0></FONT></B>]<B><FONT color=#2c2cf0> 
+      </FONT></B><BIG>|</BIG><B><FONT color=#2c2cf0><BR>PRAGMA 
+      </FONT></B><I><FONT color=#ff3434>function</FONT></I><B><FONT 
+      color=#2c2cf0><BIG>(</BIG></FONT></B><I><FONT 
+      color=#ff3434>arg</FONT></I><B><FONT 
+    color=#2c2cf0><BIG>)</BIG></FONT></B></TD></TR></TBODY></TABLE>
+<P>The pragmas that take an integer <B><I>value</I></B> also accept symbolic 
+names. The strings "<B>on</B>", "<B>true</B>", and "<B>yes</B>" are equivalent 
+to <B>1</B>. The strings "<B>off</B>", "<B>false</B>", and "<B>no</B>" are 
+equivalent to <B>0</B>. These strings are case- insensitive, and do not require 
+quotes. An unrecognized string will be treated as <B>1</B>, and will not 
+generate an error. When the <I>value</I> is returned it is as an integer.</P>
+<HR>
+<A name=modify></A>
+<H1>Pragmas to modify library operation</H1>
+<UL><A name=pragma_auto_vacuum></A>
+  <LI>
+  <P><B>PRAGMA auto_vacuum; <BR>PRAGMA auto_vacuum = </B><I>0 | 
+1</I><B>;</B></P>
+  <P>Query or set the auto-vacuum flag in the database.</P>
+  <P>Normally, when a transaction that deletes data from a database is 
+  committed, the database file remains the same size. Unused database file pages 
+  are marked as such and reused later on, when data is inserted into the 
+  database. In this mode the <A 
+  href="http://www.sqlite.org/lang_vacuum.html">VACUUM</A> command is used to 
+  reclaim unused space.</P>
+  <P>When the auto-vacuum flag is set, the database file shrinks when a 
+  transaction that deletes data is committed (The VACUUM command is not useful 
+  in a database with the auto-vacuum flag set). To support this functionality 
+  the database stores extra information internally, resulting in slightly larger 
+  database files than would otherwise be possible.</P>
+  <P>It is only possible to modify the value of the auto-vacuum flag before any 
+  tables have been created in the database. No error message is returned if an 
+  attempt to modify the auto-vacuum flag is made after one or more tables have 
+  been created. </P><A name=pragma_cache_size></A>
+  <LI>
+  <P><B>PRAGMA cache_size; <BR>PRAGMA cache_size = 
+  </B><I>Number-of-pages</I><B>;</B></P>
+  <P>Query or change the maximum number of database disk pages that SQLite will 
+  hold in memory at once. Each page uses about 1.5K of memory. The default cache 
+  size is 2000. If you are doing UPDATEs or DELETEs that change many rows of a 
+  database and you do not mind if SQLite uses more memory, you can increase the 
+  cache size for a possible speed improvement.</P>
+  <P>When you change the cache size using the cache_size pragma, the change only 
+  endures for the current session. The cache size reverts to the default value 
+  when the database is closed and reopened. Use the <A 
+  href="http://www.sqlite.org/pragma.html#pragma_default_cache_size"><B>default_cache_size</B></A> 
+  pragma to check the cache size permanently.</P><A 
+  name=pragma_count_changes></A>
+  <LI>
+  <P><B>PRAGMA count_changes; <BR>PRAGMA count_changes = </B><I>0 | 
+  1</I><B>;</B></P>
+  <P>Query or change the count-changes flag. Normally, when the count-changes 
+  flag is not set, INSERT, UPDATE and DELETE statements return no data. When 
+  count-changes is set, each of these commands returns a single row of data 
+  consisting of one integer value - the number of rows inserted, modified or 
+  deleted by the command. The returned change count does not include any 
+  insertions, modifications or deletions performed by triggers.</P><A 
+  name=pragma_default_cache_size></A>
+  <LI>
+  <P><B>PRAGMA default_cache_size; <BR>PRAGMA default_cache_size = 
+  </B><I>Number-of-pages</I><B>;</B></P>
+  <P>Query or change the maximum number of database disk pages that SQLite will 
+  hold in memory at once. Each page uses 1K on disk and about 1.5K in memory. 
+  This pragma works like the <A 
+  href="http://www.sqlite.org/pragma.html#pragma_cache_size"><B>cache_size</B></A> 
+  pragma with the additional feature that it changes the cache size 
+  persistently. With this pragma, you can set the cache size once and that 
+  setting is retained and reused every time you reopen the database.</P><A 
+  name=pragma_default_synchronous></A>
+  <LI>
+  <P><B>PRAGMA default_synchronous;</B></P>
+  <P>This pragma was available in version 2.8 but was removed in version 3.0. It 
+  is a dangerous pragma whose use is discouraged. To help dissuide users of 
+  version 2.8 from employing this pragma, the documentation will not tell you 
+  what it does.</P><A name=pragma_empty_result_callbacks></A>
+  <LI>
+  <P><B>PRAGMA empty_result_callbacks; <BR>PRAGMA empty_result_callbacks = 
+  </B><I>0 | 1</I><B>;</B></P>
+  <P>Query or change the empty-result-callbacks flag.</P>
+  <P>The empty-result-callbacks flag affects the sqlite3_exec API only. 
+  Normally, when the empty-result-callbacks flag is cleared, the callback 
+  function supplied to the sqlite3_exec() call is not invoked for commands that 
+  return zero rows of data. When empty-result-callbacks is set in this 
+  situation, the callback function is invoked exactly once, with the third 
+  parameter set to 0 (NULL). This is to enable programs that use the 
+  sqlite3_exec() API to retrieve column-names even when a query returns no data. 
+  </P><A name=pragma_encoding></A>
+  <LI>
+  <P><B>PRAGMA encoding; <BR>PRAGMA encoding = "UTF-8"; <BR>PRAGMA encoding = 
+  "UTF-16"; <BR>PRAGMA encoding = "UTF-16le"; <BR>PRAGMA encoding = 
+  "UTF-16be";</B></P>
+  <P>In it's first form, if the main database has already been created, then 
+  this pragma returns the text encoding used by the main database, one of 
+  "UTF-8", "UTF-16le" (little-endian UTF-16 encoding) or "UTF-16be" (big-endian 
+  UTF-16 encoding). If the main database has not already been created, then the 
+  value returned is the text encoding that will be used to create the main 
+  database, if it is created by this session.</P>
+  <P>The second and subsequent forms of this pragma are only useful if the main 
+  database has not already been created. In this case the pragma sets the 
+  encoding that the main database will be created with if it is created by this 
+  session. The string "UTF-16" is interpreted as "UTF-16 encoding using native 
+  machine byte-ordering".</P>
+  <P>Databases created by the ATTACH command always use the same encoding as the 
+  main database.</P><A name=pragma_full_column_names></A>
+  <LI>
+  <P><B>PRAGMA full_column_names; <BR>PRAGMA full_column_names = </B><I>0 | 
+  1</I><B>;</B></P>
+  <P>Query or change the full-column-names flag. This flag affects the way 
+  SQLite names columns of data returned by SELECT statements when the expression 
+  for the column is a table-column name or the wildcard "*". Normally, such 
+  result columns are named &lt;table-name/alias&gt;&lt;column-name&gt; if the 
+  SELECT statement joins two or more tables together, or simply 
+  &lt;column-name&gt; if the SELECT statement queries a single table. When the 
+  full-column-names flag is set, such columns are always named 
+  &lt;table-name/alias&gt; &lt;column-name&gt; regardless of whether or not a 
+  join is performed. </P>
+  <P>If both the short-column-names and full-column-names are set, then the 
+  behaviour associated with the full-column-names flag is exhibited. </P><A 
+  name=pragma_page_size></A>
+  <LI>
+  <P><B>PRAGMA page_size; <BR>PRAGMA page_size = </B><I>bytes</I><B>;</B></P>
+  <P>Query or set the page-size of the database. The page-size may only be set 
+  if the database has not yet been created. The page size must be a power of two 
+  greater than or equal to 512 and less than or equal to 8192. The upper limit 
+  may be modified by setting the value of macro SQLITE_MAX_PAGE_SIZE during 
+  compilation. </P><A name=pragma_short_column_names></A>
+  <LI>
+  <P><B>PRAGMA short_column_names; <BR>PRAGMA short_column_names = </B><I>0 | 
+  1</I><B>;</B></P>
+  <P>Query or change the short-column-names flag. This flag affects the way 
+  SQLite names columns of data returned by SELECT statements when the expression 
+  for the column is a table-column name or the wildcard "*". Normally, such 
+  result columns are named &lt;table-name/alias&gt;lt;column-name&gt; if the 
+  SELECT statement joins two or more tables together, or simply 
+  &lt;column-name&gt; if the SELECT statement queries a single table. When the 
+  short-column-names flag is set, such columns are always named 
+  &lt;column-name&gt; regardless of whether or not a join is performed. </P>
+  <P>If both the short-column-names and full-column-names are set, then the 
+  behaviour associated with the full-column-names flag is exhibited. </P><A 
+  name=pragma_synchronous></A>
+  <LI>
+  <P><B>PRAGMA synchronous; <BR>PRAGMA synchronous = FULL; </B>(2)<B> <BR>PRAGMA 
+  synchronous = NORMAL; </B>(1)<B> <BR>PRAGMA synchronous = OFF; </B>(0)</P>
+  <P>Query or change the setting of the "synchronous" flag. The first (query) 
+  form will return the setting as an integer. When synchronous is FULL (2), the 
+  SQLite database engine will pause at critical moments to make sure that data 
+  has actually been written to the disk surface before continuing. This ensures 
+  that if the operating system crashes or if there is a power failure, the 
+  database will be uncorrupted after rebooting. FULL synchronous is very safe, 
+  but it is also slow. When synchronous is NORMAL (1, the default), the SQLite 
+  database engine will still pause at the most critical moments, but less often 
+  than in FULL mode. There is a very small (though non-zero) chance that a power 
+  failure at just the wrong time could corrupt the database in NORMAL mode. But 
+  in practice, you are more likely to suffer a catastrophic disk failure or some 
+  other unrecoverable hardware fault. So NORMAL is the default mode. With 
+  synchronous OFF (0), SQLite continues without pausing as soon as it has handed 
+  data off to the operating system. If the application running SQLite crashes, 
+  the data will be safe, but the database might become corrupted if the 
+  operating system crashes or the computer loses power before that data has been 
+  written to the disk surface. On the other hand, some operations are as much as 
+  50 or more times faster with synchronous OFF. </P><A 
+  name=pragma_temp_store></A>
+  <LI>
+  <P><B>PRAGMA temp_store; <BR>PRAGMA temp_store = DEFAULT;</B> (0)<B> 
+  <BR>PRAGMA temp_store = FILE;</B> (1)<B> <BR>PRAGMA temp_store = MEMORY;</B> 
+  (2)</P>
+  <P>Query or change the setting of the "<B>temp_store</B>" parameter. When 
+  temp_store is DEFAULT (0), the compile-time C preprocessor macro TEMP_STORE is 
+  used to determine where temporary tables and indices are stored. When 
+  temp_store is MEMORY (2) temporary tables and indices are kept in memory. When 
+  temp_store is FILE (1) temporary tables and indices are stored in a file. The 
+  <A 
+  href="http://www.sqlite.org/pragma.html#pragma_temp_store_directory">temp_store_directory</A> 
+  pragma can be used to specify the directory containing this file. <B>FILE</B> 
+  is specified. When the temp_store setting is changed, all existing temporary 
+  tables, indices, triggers, and views are immediately deleted.</P>
+  <P>It is possible for the library compile-time C preprocessor symbol 
+  TEMP_STORE to override this pragma setting. The following table summarizes the 
+  interaction of the TEMP_STORE preprocessor macro and the temp_store 
+pragma:</P>
+  <BLOCKQUOTE>
+    <TABLE cellPadding=2 border=1>
+      <TBODY>
+      <TR>
+        <TH vAlign=bottom>TEMP_STORE</TH>
+        <TH vAlign=bottom>PRAGMA<BR>temp_store</TH>
+        <TH>Storage used for<BR>TEMP tables and indices</TH></TR>
+      <TR>
+        <TD align=middle>0</TD>
+        <TD align=middle><EM>any</EM></TD>
+        <TD align=middle>file</TD></TR>
+      <TR>
+        <TD align=middle>1</TD>
+        <TD align=middle>0</TD>
+        <TD align=middle>file</TD></TR>
+      <TR>
+        <TD align=middle>1</TD>
+        <TD align=middle>1</TD>
+        <TD align=middle>file</TD></TR>
+      <TR>
+        <TD align=middle>1</TD>
+        <TD align=middle>2</TD>
+        <TD align=middle>memory</TD></TR>
+      <TR>
+        <TD align=middle>2</TD>
+        <TD align=middle>0</TD>
+        <TD align=middle>memory</TD></TR>
+      <TR>
+        <TD align=middle>2</TD>
+        <TD align=middle>1</TD>
+        <TD align=middle>file</TD></TR>
+      <TR>
+        <TD align=middle>2</TD>
+        <TD align=middle>2</TD>
+        <TD align=middle>memory</TD></TR>
+      <TR>
+        <TD align=middle>3</TD>
+        <TD align=middle><EM>any</EM></TD>
+        <TD align=middle>memory</TD></TR></TBODY></TABLE></BLOCKQUOTE><BR><A 
+  name=pragma_temp_store_directory></A>
+  <LI>
+  <P><B>PRAGMA temp_store_directory; <BR>PRAGMA temp_store_directory = 
+  'directory-name';</B></P>
+  <P>Query or change the setting of the "temp_store_directory" - the directory 
+  where files used for storing temporary tables and indices are kept. This 
+  setting lasts for the duration of the current connection only and resets to 
+  its default value for each new connection opened. 
+  <P>When the temp_store_directory setting is changed, all existing temporary 
+  tables, indices, triggers, and viewers are immediately deleted. In practice, 
+  temp_store_directory should be set immediately after the database is opened. 
+  </P>
+  <P>The value <I>directory-name</I> should be enclosed in single quotes. To 
+  revert the directory to the default, set the <I>directory-name</I> to an empty 
+  string, e.g., <I>PRAGMA temp_store_directory = ''</I>. An error is raised if 
+  <I>directory-name</I> is not found or is not writable. </P>
+  <P>The default directory for temporary files depends on the OS. For 
+  Unix/Linux/OSX, the default is the is the first writable directory found in 
+  the list of: <B>/var/tmp, /usr/tmp, /tmp,</B> and 
+  <B><I>current-directory</I></B>. For Windows NT, the default directory is 
+  determined by Windows, generally <B>C:\Documents and 
+  Settings\<I>user-name</I>\Local Settings\Temp\</B>. Temporary files created by 
+  SQLite are unlinked immediately after opening, so that the operating system 
+  can automatically delete the files when the SQLite process exits. Thus, 
+  temporary files are not normally visible through <I>ls</I> or <I>dir</I> 
+  commands.</P></LI></UL>
+<HR>
+<A name=schema></A>
+<H1>Pragmas to query the database schema</H1>
+<UL><A name=pragma_database_list></A>
+  <LI>
+  <P><B>PRAGMA database_list;</B></P>
+  <P>For each open database, invoke the callback function once with information 
+  about that database. Arguments include the index and the name the database was 
+  attached with. The first row will be for the main database. The second row 
+  will be for the database used to store temporary tables.</P><A 
+  name=pragma_foreign_key_list></A>
+  <LI>
+  <P><B>PRAGMA foreign_key_list(</B><I>table-name</I><B>);</B></P>
+  <P>For each foreign key that references a column in the argument table, invoke 
+  the callback function with information about that foreign key. The callback 
+  function will be invoked once for each column in each foreign key.</P><A 
+  name=pragma_index_info></A>
+  <LI>
+  <P><B>PRAGMA index_info(</B><I>index-name</I><B>);</B></P>
+  <P>For each column that the named index references, invoke the callback 
+  function once with information about that column, including the column name, 
+  and the column number.</P><A name=pragma_index_list></A>
+  <LI>
+  <P><B>PRAGMA index_list(</B><I>table-name</I><B>);</B></P>
+  <P>For each index on the named table, invoke the callback function once with 
+  information about that index. Arguments include the index name and a flag to 
+  indicate whether or not the index must be unique.</P><A 
+  name=pragma_table_info></A>
+  <LI>
+  <P><B>PRAGMA table_info(</B><I>table-name</I><B>);</B></P>
+  <P>For each column in the named table, invoke the callback function once with 
+  information about that column, including the column name, data type, whether 
+  or not the column can be NULL, and the default value for the 
+column.</P></LI></UL>
+<HR>
+<A name=version></A>
+<H1>Pragmas to query/modify version values</H1>
+<UL><A name=pragma_schema_version></A><A name=pragma_user_version></A>
+  <LI>
+  <P><B>PRAGMA [database.]schema_version; <BR>PRAGMA [database.]schema_version = 
+  </B><I>integer </I><B>; <BR>PRAGMA [database.]user_version; <BR>PRAGMA 
+  [database.]user_version = </B><I>integer </I><B>;</B> 
+  <P>The pragmas schema_version and user_version are used to set or get the 
+  value of the schema-version and user-version, respectively. Both the 
+  schema-version and the user-version are 32-bit signed integers stored in the 
+  database header.</P>
+  <P>The schema-version is usually only manipulated internally by SQLite. It is 
+  incremented by SQLite whenever the database schema is modified (by creating or 
+  dropping a table or index). The schema version is used by SQLite each time a 
+  query is executed to ensure that the internal cache of the schema used when 
+  compiling the SQL query matches the schema of the database against which the 
+  compiled query is actually executed. Subverting this mechanism by using 
+  "PRAGMA schema_version" to modify the schema-version is potentially dangerous 
+  and may lead to program crashes or database corruption. Use with caution!</P>
+  <P>The user-version is not used internally by SQLite. It may be used by 
+  applications for any purpose.</P></LI></UL>
+<HR>
+<A name=debug></A>
+<H1>Pragmas to debug the library</H1>
+<UL><A name=pragma_integrity_check></A>
+  <LI>
+  <P><B>PRAGMA integrity_check;</B></P>
+  <P>The command does an integrity check of the entire database. It looks for 
+  out-of-order records, missing pages, malformed records, and corrupt indices. 
+  If any problems are found, then a single string is returned which is a 
+  description of all problems. If everything is in order, "ok" is 
+  returned.</P><A name=pragma_parser_trace></A>
+  <LI>
+  <P><B>PRAGMA parser_trace = ON; </B>(1)<B> <BR>PRAGMA parser_trace = OFF;</B> 
+  (0)</P>
+  <P>Turn tracing of the SQL parser inside of the SQLite library on and off. 
+  This is used for debugging. This only works if the library is compiled without 
+  the NDEBUG macro. </P><A name=pragma_vdbe_trace></A>
+  <LI>
+  <P><B>PRAGMA vdbe_trace = ON; </B>(1)<B> <BR>PRAGMA vdbe_trace = OFF;</B> 
+  (0)</P>
+  <P>Turn tracing of the virtual database engine inside of the SQLite library on 
+  and off. This is used for debugging. See the <A 
+  href="http://www.sqlite.org/vdbe.html#trace">VDBE documentation</A> for more 
+  information.</P><A name=pragma_vdbe_listing></A>
+  <LI>
+  <P><B>PRAGMA vdbe_listing = ON; </B>(1)<B> <BR>PRAGMA vdbe_listing = OFF;</B> 
+  (0)</P>
+  <P>Turn listings of virtual machine programs on and off. With listing is on, 
+  the entire content of a program is printed just prior to beginning execution. 
+  This is like automatically executing an EXPLAIN prior to each statement. The 
+  statement executes normally after the listing is printed. This is used for 
+  debugging. See the <A href="http://www.sqlite.org/vdbe.html#trace">VDBE 
+  documentation</A> for more information.</P></LI></UL></BODY></HTML>

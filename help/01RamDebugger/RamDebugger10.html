@@ -1,0 +1,44 @@
+<html>
+    <!---*- coding: utf-8;-*- -->
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+        <style type="text/css">
+	p { text-align:justify; }
+	body { font-family: Verdana, Arial, Helvetica, Geneva; font-size 8px; }
+
+	a { text-decoration:none }
+	pre { font-family:Courier New, Courier, Mono; }
+	h1 { font-family:Arial; font-size: 28; }
+	h2 { font-family:Arial; font-size: 24; }
+	h3 { font-family:Arial; font-size: 22; }
+	h4 { font-family:Arial; font-size: 18; }
+	P { font-family:Arial, Helvetica, sans-serif; font-size: 17; }
+	code { font-family:Courier New, Courier, Mono; font-size: 16; }
+	li { font-family:Arial, Helvetica, sans-serif; font-size: 17; }
+	ol { font-family:Arial, Helvetica, sans-serif; font-size: 17; }
+	ul { font-family:Arial, Helvetica, sans-serif; font-size: 17; }
+    </style>
+        <title>Debugging GiD</title>
+    </head>
+    <body>
+        <a name="Usage&gt;Debugging GiD"/>
+        <h3>Debugging GiD</h3>
+        <p>GiD is a pre/postprocessing program for Finite Element Analysis that uses TCL/TK as its
+extension language <a href="http://www.gidhome.com">http://www.gidhome.com</a>
+.        </p>
+        <p>To debug GiD in Windows, it is necessary to load the <b>comm</b>
+ package. Do it in file:
+<code>&lt;GiD installation dir&gt;/scripts/tclfile-opengl</code>
+ around line 420 before section
+<code>Debug funcs</code>
+.        </p>
+        <p>In UNIX, it should work directly.</p>
+        <p>Check section <a href="RamDebugger8.html#Usage&gt;Debugging remotely">Debugging remotely</a>
+ for the rest of the steps to follow.
+Check section <a href="RamDebugger9.html#Usage&gt;As package">As package</a>
+ for an alternative way of debugging
+GiD. Specifically, the package require RamDebugger should be added near the end of
+file <code>&lt;GiD installation dir&gt;/scripts/tclfile-opengl</code>
+.        </p>
+    </body>
+</html>

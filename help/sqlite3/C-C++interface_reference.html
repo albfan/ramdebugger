@@ -1,0 +1,1492 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0035)C-C++ interface_reference.html -->
+<HTML><HEAD><TITLE>C/C++ Interface For SQLite Version 3</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252">
+<META content="MSHTML 6.00.2900.2604" name=GENERATOR></HEAD>
+<BODY vLink=#508896 link=#50695f bgColor=white>
+<TABLE width="100%" border=0>
+  <TBODY>
+  <TR>
+    <TD vAlign=top><IMG 
+      src="C-C++ Interface For SQLite Version 3 reference_archivos/sqlite.gif"></TD>
+    <TD width="100%"></TD>
+    <TD vAlign=bottom>
+      <UL>
+        <LI><A href="http://www.sqlite.org/cvstrac/tktnew">bugs</A> 
+        <LI><A href="http://www.sqlite.org/changes.html">changes</A> 
+        <LI><A href="http://www.sqlite.org/contrib">contrib</A> 
+        <LI><A 
+        href="http://www.sqlite.org/download.html#cvs">cvs&nbsp;repository</A> 
+        <LI><A href="http://www.sqlite.org/docs.html">documentation</A> 
+    </LI></UL></TD>
+    <TD width=10></TD>
+    <TD vAlign=bottom>
+      <UL>
+        <LI><A href="http://www.sqlite.org/download.html">download</A> 
+        <LI><A href="http://www.sqlite.org/faq.html">faq</A> 
+        <LI><A href="http://www.sqlite.org/index.html">home</A> 
+        <LI><A href="http://www.sqlite.org/support.html">mailing&nbsp;list</A> 
+        <LI><A href="http://www.sqlite.org/index.html">news</A> </LI></UL></TD>
+    <TD width=10></TD>
+    <TD vAlign=bottom>
+      <UL>
+        <LI><A href="http://www.sqlite.org/quickstart.html">quick&nbsp;start</A> 
+
+        <LI><A href="http://www.sqlite.org/support.html">support</A> 
+        <LI><A href="http://www.sqlite.org/lang.html">syntax</A> 
+        <LI><A href="http://www.sqlite.org/cvstrac/timeline">timeline</A> 
+        <LI><A href="http://www.sqlite.org/cvstrac/wiki">wiki</A> 
+  </LI></UL></TD></TR></TBODY></TABLE>
+<TABLE width="100%">
+  <TBODY>
+  <TR>
+    <TD bgColor=#80a796></TD></TR></TBODY></TABLE>
+<H2>C/C++ Interface For SQLite Version 3</H2>
+<TABLE cellPadding=5 width="100%">
+  <TBODY>
+  <TR>
+    <TD vAlign=top>
+      <UL>
+        <LI><A 
+        href="C-C++interface_reference.html#result-codes"><I>result-codes</I></A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_aggregate_context">sqlite3_aggregate_context</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_aggregate_count">sqlite3_aggregate_count</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_bind_blob">sqlite3_bind_blob</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_bind_double">sqlite3_bind_double</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_bind_int">sqlite3_bind_int</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_bind_int64">sqlite3_bind_int64</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_bind_null">sqlite3_bind_null</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_bind_parameter_count">sqlite3_bind_parameter_count</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_bind_parameter_index">sqlite3_bind_parameter_index</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_bind_parameter_name">sqlite3_bind_parameter_name</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_bind_text">sqlite3_bind_text</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_bind_text16">sqlite3_bind_text16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_busy_handler">sqlite3_busy_handler</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_busy_timeout">sqlite3_busy_timeout</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_changes">sqlite3_changes</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_close">sqlite3_close</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_collation_needed">sqlite3_collation_needed</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_collation_needed16">sqlite3_collation_needed16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_column_blob">sqlite3_column_blob</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_column_bytes">sqlite3_column_bytes</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_column_bytes16">sqlite3_column_bytes16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_column_count">sqlite3_column_count</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_column_decltype">sqlite3_column_decltype</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_column_decltype16">sqlite3_column_decltype16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_column_double">sqlite3_column_double</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_column_int">sqlite3_column_int</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_column_int64">sqlite3_column_int64</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_column_name">sqlite3_column_name</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_column_name16">sqlite3_column_name16</A> 
+        </LI></UL></TD>
+    <TD width=10></TD>
+    <TD vAlign=top>
+      <UL>
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_column_text">sqlite3_column_text</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_column_text16">sqlite3_column_text16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_column_type">sqlite3_column_type</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_commit_hook">sqlite3_commit_hook</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_complete">sqlite3_complete</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_complete16">sqlite3_complete16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_create_collation">sqlite3_create_collation</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_create_collation16">sqlite3_create_collation16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_create_function">sqlite3_create_function</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_create_function16">sqlite3_create_function16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_data_count">sqlite3_data_count</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_errcode">sqlite3_errcode</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_errmsg">sqlite3_errmsg</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_errmsg16">sqlite3_errmsg16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_exec">sqlite3_exec</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_finalize">sqlite3_finalize</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_free">sqlite3_free</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_free_table">sqlite3_free_table</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_get_table">sqlite3_get_table</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_interrupt">sqlite3_interrupt</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_last_insert_rowid">sqlite3_last_insert_rowid</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_libversion">sqlite3_libversion</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_mprintf">sqlite3_mprintf</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_open">sqlite3_open</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_open16">sqlite3_open16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_prepare">sqlite3_prepare</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_prepare16">sqlite3_prepare16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_progress_handler">sqlite3_progress_handler</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_reset">sqlite3_reset</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_result_blob">sqlite3_result_blob</A> 
+        </LI></UL></TD>
+    <TD width=10></TD>
+    <TD vAlign=top>
+      <UL>
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_result_double">sqlite3_result_double</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_result_error">sqlite3_result_error</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_result_error16">sqlite3_result_error16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_result_int">sqlite3_result_int</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_result_int64">sqlite3_result_int64</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_result_null">sqlite3_result_null</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_result_text">sqlite3_result_text</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_result_text16">sqlite3_result_text16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_result_text16be">sqlite3_result_text16be</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_result_text16le">sqlite3_result_text16le</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_result_value">sqlite3_result_value</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_set_authorizer">sqlite3_set_authorizer</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_step">sqlite3_step</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_total_changes">sqlite3_total_changes</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_trace">sqlite3_trace</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_user_data">sqlite3_user_data</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_value_blob">sqlite3_value_blob</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_value_bytes">sqlite3_value_bytes</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_value_bytes16">sqlite3_value_bytes16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_value_double">sqlite3_value_double</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_value_int">sqlite3_value_int</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_value_int64">sqlite3_value_int64</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_value_text">sqlite3_value_text</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_value_text16">sqlite3_value_text16</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_value_text16be">sqlite3_value_text16be</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_value_text16le">sqlite3_value_text16le</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_value_type">sqlite3_value_type</A> 
+
+        <LI><A 
+        href="C-C++interface_reference.html#sqlite3_vmprintf">sqlite3_vmprintf</A> 
+        </LI></UL></TD></TR></TBODY></TABLE><!-- 88 entries.  30 rows in 3 columns --><A 
+name=result-codes>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>#define SQLITE_OK           0   /* Successful result */
+#define SQLITE_ERROR        1   /* SQL error or missing database */
+#define SQLITE_INTERNAL     2   /* An internal logic error in SQLite */
+#define SQLITE_PERM         3   /* Access permission denied */
+#define SQLITE_ABORT        4   /* Callback routine requested an abort */
+#define SQLITE_BUSY         5   /* The database file is locked */
+#define SQLITE_LOCKED       6   /* A table in the database is locked */
+#define SQLITE_NOMEM        7   /* A malloc() failed */
+#define SQLITE_READONLY     8   /* Attempt to write a readonly database */
+#define SQLITE_INTERRUPT    9   /* Operation terminated by sqlite_interrupt() */
+#define SQLITE_IOERR       10   /* Some kind of disk I/O error occurred */
+#define SQLITE_CORRUPT     11   /* The database disk image is malformed */
+#define SQLITE_NOTFOUND    12   /* (Internal Only) Table or record not found */
+#define SQLITE_FULL        13   /* Insertion failed because database is full */
+#define SQLITE_CANTOPEN    14   /* Unable to open the database file */
+#define SQLITE_PROTOCOL    15   /* Database lock protocol error */
+#define SQLITE_EMPTY       16   /* (Internal Only) Database table is empty */
+#define SQLITE_SCHEMA      17   /* The database schema changed */
+#define SQLITE_TOOBIG      18   /* Too much data for one row of a table */
+#define SQLITE_CONSTRAINT  19   /* Abort due to constraint violation */
+#define SQLITE_MISMATCH    20   /* Data type mismatch */
+#define SQLITE_MISUSE      21   /* Library used incorrectly */
+#define SQLITE_NOLFS       22   /* Uses OS features not supported on host */
+#define SQLITE_AUTH        23   /* Authorization denied */
+#define SQLITE_ROW         100  /* sqlite_step() has another row ready */
+#define SQLITE_DONE        101  /* sqlite_step() has finished executing */
+</PRE></BLOCKQUOTE>
+<P>Many SQLite functions return an integer result code from the set shown above 
+in order to indicates success or failure. </P><A name=sqlite3_aggregate_context>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>  void *sqlite3_aggregate_context(sqlite3_context*, int nBytes);
+</PRE></BLOCKQUOTE>
+<P>Aggregate functions use this routine to allocate a structure for storing 
+their state. The first time this routine is called for a particular aggregate, a 
+new structure of size nBytes is allocated, zeroed, and returned. On subsequent 
+calls (for the same aggregate instance) the same buffer is returned. The 
+implementation of the aggregate can use the returned buffer to accumulate 
+data.</P>
+<P>The buffer allocated is freed automatically by SQLite. </P><A 
+name=sqlite3_aggregate_count>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>  int sqlite3_aggregate_count(sqlite3_context*);
+</PRE></BLOCKQUOTE>
+<P>The next routine returns the number of calls to xStep for a particular 
+aggregate function instance. The current call to xStep counts so this routine 
+always returns at least 1. </P><A name=sqlite3_bind_blob><A 
+name=sqlite3_bind_double><A name=sqlite3_bind_int><A name=sqlite3_bind_int64><A 
+name=sqlite3_bind_null><A name=sqlite3_bind_text><A name=sqlite3_bind_text16>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>  int sqlite3_bind_blob(sqlite3_stmt*, int, const void*, int n, void(*)(void*));
+  int sqlite3_bind_double(sqlite3_stmt*, int, double);
+  int sqlite3_bind_int(sqlite3_stmt*, int, int);
+  int sqlite3_bind_int64(sqlite3_stmt*, int, long long int);
+  int sqlite3_bind_null(sqlite3_stmt*, int);
+  int sqlite3_bind_text(sqlite3_stmt*, int, const char*, int n, void(*)(void*));
+  int sqlite3_bind_text16(sqlite3_stmt*, int, const void*, int n, void(*)(void*));
+  #define SQLITE_STATIC      ((void(*)(void *))0)
+  #define SQLITE_TRANSIENT   ((void(*)(void *))-1)
+</PRE></BLOCKQUOTE>
+<P>In the SQL strings input to <A 
+href="C-C++interface_reference.html#sqlite3_prepare">sqlite3_prepare</A>() 
+and <A 
+href="C-C++interface_reference.html#sqlite3_prepare16">sqlite3_prepare16</A>(), 
+one or more literals can be replace by a parameter "?" or ":AAA" or "$VVV" where 
+AAA is an alphanumeric identifier and VVV is a variable name according to the 
+syntax rules of the TCL programming language. The values of these parameters 
+(also called "host parameter names") can be set using the sqlite3_bind_*() 
+routines.</P>
+<P>The first argument to the sqlite3_bind_*() routines always is a pointer to 
+the sqlite3_stmt structure returned from <A 
+href="C-C++interface_reference.html#sqlite3_prepare">sqlite3_prepare</A>(). 
+The second argument is the index of the parameter to be set. The first parameter 
+has an index of 1. When the same named parameter is used more than once, second 
+and subsequent occurrences have the same index as the first occurrence. The 
+index for named parameters can be looked up using the <A 
+href="C-C++interface_reference.html#sqlite3_bind_parameter_name">sqlite3_bind_parameter_name</A>() 
+API if desired.</P>
+<P>The fifth argument to <A 
+href="C-C++interface_reference.html#sqlite3_bind_blob">sqlite3_bind_blob</A>(), 
+<A 
+href="C-C++interface_reference.html#sqlite3_bind_text">sqlite3_bind_text</A>(), 
+and sqlite3_bind_text16() is a destructor used to dispose of the BLOB or text 
+after SQLite has finished with it. If the fifth argument is the special value 
+SQLITE_STATIC, then the library assumes that the information is in static, 
+unmanaged space and does not need to be freed. If the fifth argument has the 
+value SQLITE_TRANSIENT, then SQLite makes its own private copy of the data 
+before returning.</P>
+<P>The sqlite3_bind_*() routines must be called after <A 
+href="C-C++interface_reference.html#sqlite3_prepare">sqlite3_prepare</A>() 
+or <A 
+href="C-C++interface_reference.html#sqlite3_reset">sqlite3_reset</A>() and 
+before <A 
+href="C-C++interface_reference.html#sqlite3_step">sqlite3_step</A>(). 
+Bindings are not cleared by the <A 
+href="C-C++interface_reference.html#sqlite3_reset">sqlite3_reset</A>() 
+routine. Unbound parameters are interpreted as NULL. </P><A 
+name=sqlite3_bind_parameter_count>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>  int sqlite3_bind_parameter_count(sqlite3_stmt*);
+</PRE></BLOCKQUOTE>
+<P>Return the number of parameters in the precompiled statement given as the 
+argument. </P><A name=sqlite3_bind_parameter_index>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>  int sqlite3_bind_parameter_index(sqlite3_stmt*, const char *zName);
+</PRE></BLOCKQUOTE>
+<P>Return the index of the parameter with the given name. The name must match 
+exactly. If there is no parameter with the given name, return 0. The string 
+zName is always in the UTF-8 encoding. </P><A name=sqlite3_bind_parameter_name>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>  const char *sqlite3_bind_parameter_name(sqlite3_stmt*, int n);
+</PRE></BLOCKQUOTE>
+<P>Return the name of the n-th parameter in the precompiled statement. 
+Parameters of the form ":AAA" or "$VVV" have a name which is the string ":AAA" 
+or "$VVV". In other words, the initial ":" or "$" is included as part of the 
+name. Parameters of the form "?" have no name.</P>
+<P>If the value n is out of range or if the n-th parameter is nameless, then 
+NULL is returned. The returned string is always in the UTF-8 encoding. </P><A 
+name=sqlite3_busy_handler>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>  int sqlite3_busy_handler(sqlite3*, int(*)(void*,int), void*);
+</PRE></BLOCKQUOTE>
+<P>This routine identifies a callback function that might be invoked whenever an 
+attempt is made to open a database table that another thread or process has 
+locked. If the busy callback is NULL, then SQLITE_BUSY is returned immediately 
+upon encountering the lock. If the busy callback is not NULL, then the callback 
+might invoked with two arguments. The second argument is the number of prior 
+calls to the busy callback for the same lock. If the busy callback returns 0, 
+then no additional attempts are made to access the database and SQLITE_BUSY is 
+returned. If the callback returns non-zero, then another attempt is made to open 
+the database for reading and the cycle repeats.</P>
+<P>The presence of a busy handler does not guarantee that it will be invoked 
+when there is lock contention. If SQLite determines that invoking the busy 
+handler could result in a deadlock, it will return SQLITE_BUSY instead. Consider 
+a scenario where one process is holding a read lock that it is trying to promote 
+to a reserved lock and a second process is holding a reserved lock that it is 
+trying to promote to an exclusive lock. The first process cannot proceed because 
+it is blocked by the second and the second process cannot proceed because it is 
+blocked by the first. If both processes invoke the busy handlers, neither will 
+make any progress. Therefore, SQLite returns SQLITE_BUSY for the first process, 
+hoping that this will induce the first process to release its read lock and 
+allow the second process to proceed.</P>
+<P>The default busy callback is NULL.</P>
+<P>Sqlite is re-entrant, so the busy handler may start a new query. (It is not 
+clear why anyone would every want to do this, but it is allowed, in theory.) But 
+the busy handler may not close the database. Closing the database from a busy 
+handler will delete data structures out from under the executing query and will 
+probably result in a coredump. </P><A name=sqlite3_busy_timeout>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>  int sqlite3_busy_timeout(sqlite3*, int ms);
+</PRE></BLOCKQUOTE>
+<P>This routine sets a busy handler that sleeps for a while when a table is 
+locked. The handler will sleep multiple times until at least "ms" milliseconds 
+of sleeping have been done. After "ms" milliseconds of sleeping, the handler 
+returns 0 which causes <A 
+href="C-C++interface_reference.html#sqlite3_exec">sqlite3_exec</A>() to 
+return SQLITE_BUSY.</P>
+<P>Calling this routine with an argument less than or equal to zero turns off 
+all busy handlers. </P><A name=sqlite3_changes>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>  int sqlite3_changes(sqlite3*);
+</PRE></BLOCKQUOTE>
+<P>This function returns the number of database rows that were changed (or 
+inserted or deleted) by the most recently completed INSERT, UPDATE, or DELETE 
+statement. Only changes that are directly specified by the INSERT, UPDATE, or 
+DELETE statement are counted. Auxiliary changes caused by triggers are not 
+counted. Use the <A 
+href="C-C++interface_reference.html#sqlite3_total_changes">sqlite3_total_changes</A>() 
+function to find the total number of changes including changes caused by 
+triggers.</P>
+<P>Within the body of a trigger, the sqlite3_changes() function does work to 
+report the number of rows that were changed for the most recently completed 
+INSERT, UPDATE, or DELETE statement within the trigger body.</P>
+<P>SQLite implements the command "DELETE FROM table" without a WHERE clause by 
+dropping and recreating the table. (This is much faster than going through and 
+deleting individual elements from the table.) Because of this optimization, the 
+change count for "DELETE FROM table" will be zero regardless of the number of 
+elements that were originally in the table. To get an accurate count of the 
+number of rows deleted, use "DELETE FROM table WHERE 1" instead. </P><A 
+name=sqlite3_close>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>  int sqlite3_close(sqlite3*);
+</PRE></BLOCKQUOTE>
+<P>Call this function with a pointer to a structure that was previously returned 
+from <A 
+href="C-C++interface_reference.html#sqlite3_open">sqlite3_open</A>() or <A 
+href="C-C++interface_reference.html#sqlite3_open16">sqlite3_open16</A>() 
+and the corresponding database will by closed.</P>
+<P>SQLITE_OK is returned if the close is successful. If there are prepared 
+statements that have not been finalized, then SQLITE_BUSY is returned. 
+SQLITE_ERROR might be returned if the argument is not a valid connection pointer 
+returned by <A 
+href="C-C++interface_reference.html#sqlite3_open">sqlite3_open</A>() or if 
+the connection pointer has been closed previously. </P><A 
+name=sqlite3_collation_needed><A name=sqlite3_collation_needed16>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_collation_needed(
+  sqlite3*, 
+  void*, 
+  void(*)(void*,sqlite3*,int eTextRep,const char*)
+);
+int sqlite3_collation_needed16(
+  sqlite3*, 
+  void*,
+  void(*)(void*,sqlite3*,int eTextRep,const void*)
+);
+</PRE></BLOCKQUOTE>
+<P>To avoid having to register all collation sequences before a database can be 
+used, a single callback function may be registered with the database handle to 
+be called whenever an undefined collation sequence is required.</P>
+<P>If the function is registered using the <A 
+href="C-C++interface_reference.html#sqlite3_collation_needed">sqlite3_collation_needed</A>() 
+API, then it is passed the names of undefined collation sequences as strings 
+encoded in UTF-8. If sqlite3_collation_needed16() is used, the names are passed 
+as UTF-16 in machine native byte order. A call to either function replaces any 
+existing callback.</P>
+<P>When the user-function is invoked, the first argument passed is a copy of the 
+second argument to <A 
+href="C-C++interface_reference.html#sqlite3_collation_needed">sqlite3_collation_needed</A>() 
+or sqlite3_collation_needed16(). The second argument is the database handle. The 
+third argument is one of SQLITE_UTF8, SQLITE_UTF16BE or SQLITE_UTF16LE, 
+indicating the most desirable form of the collation sequence function required. 
+The fourth argument is the name of the required collation sequence.</P>
+<P>The collation sequence is returned to SQLite by a collation-needed callback 
+using the <A 
+href="C-C++interface_reference.html#sqlite3_create_collation">sqlite3_create_collation</A>() 
+or <A 
+href="C-C++interface_reference.html#sqlite3_create_collation16">sqlite3_create_collation16</A>() 
+APIs, described above. </P><A name=sqlite3_column_blob><A 
+name=sqlite3_column_bytes><A name=sqlite3_column_bytes16><A 
+name=sqlite3_column_double><A name=sqlite3_column_int><A 
+name=sqlite3_column_int64><A name=sqlite3_column_text><A 
+name=sqlite3_column_text16><A name=sqlite3_column_type>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>const void *sqlite3_column_blob(sqlite3_stmt*, int iCol);
+int sqlite3_column_bytes(sqlite3_stmt*, int iCol);
+int sqlite3_column_bytes16(sqlite3_stmt*, int iCol);
+double sqlite3_column_double(sqlite3_stmt*, int iCol);
+int sqlite3_column_int(sqlite3_stmt*, int iCol);
+long long int sqlite3_column_int64(sqlite3_stmt*, int iCol);
+const unsigned char *sqlite3_column_text(sqlite3_stmt*, int iCol);
+const void *sqlite3_column_text16(sqlite3_stmt*, int iCol);
+int sqlite3_column_type(sqlite3_stmt*, int iCol);
+#define SQLITE_INTEGER  1
+#define SQLITE_FLOAT    2
+#define SQLITE_TEXT     3
+#define SQLITE_BLOB     4
+#define SQLITE_NULL     5
+</PRE></BLOCKQUOTE>
+<P>These routines return information about the information in a single column of 
+the current result row of a query. In every case the first argument is a pointer 
+to the SQL statement that is being executed (the sqlite_stmt* that was returned 
+from <A 
+href="C-C++interface_reference.html#sqlite3_prepare">sqlite3_prepare</A>()) 
+and the second argument is the index of the column for which information should 
+be returned. iCol is zero-indexed. The left-most column has an index of 0.</P>
+<P>If the SQL statement is not currently point to a valid row, or if the the 
+column index is out of range, the result is undefined.</P>
+<P>If the result is a BLOB then the <A 
+href="C-C++interface_reference.html#sqlite3_column_bytes">sqlite3_column_bytes</A>() 
+routine returns the number of bytes in that BLOB. No type conversions occur. If 
+the result is a string (or a number since a number can be converted into a 
+string) then <A 
+href="C-C++interface_reference.html#sqlite3_column_bytes">sqlite3_column_bytes</A>() 
+converts the value into a UTF-8 string and returns the number of bytes in the 
+resulting string. The value returned does not include the \000 terminator at the 
+end of the string. The <A 
+href="C-C++interface_reference.html#sqlite3_column_bytes16">sqlite3_column_bytes16</A>() 
+routine converts the value into a UTF-16 encoding and returns the number of 
+bytes (not characters) in the resulting string. The \u0000 terminator is not 
+included in this count.</P>
+<P>These routines attempt to convert the value where appropriate. For example, 
+if the internal representation is FLOAT and a text result is requested, 
+sprintf() is used internally to do the conversion automatically. The following 
+table details the conversions that are applied:</P>
+<P>
+<BLOCKQUOTE>
+  <TABLE border=1>
+    <TBODY>
+    <TR>
+      <TH>Internal Type</TH>
+      <TH>Requested Type</TH>
+      <TH>Conversion</TH></TR>
+    <TR>
+      <TD>NULL </TD>
+      <TD>INTEGER</TD>
+      <TD>Result is 0</TD></TR>
+    <TR>
+      <TD>NULL </TD>
+      <TD>FLOAT </TD>
+      <TD>Result is 0.0</TD></TR>
+    <TR>
+      <TD>NULL </TD>
+      <TD>TEXT </TD>
+      <TD>Result is an empty string</TD></TR>
+    <TR>
+      <TD>NULL </TD>
+      <TD>BLOB </TD>
+      <TD>Result is a zero-length BLOB</TD></TR>
+    <TR>
+      <TD>INTEGER </TD>
+      <TD>FLOAT </TD>
+      <TD>Convert from integer to float</TD></TR>
+    <TR>
+      <TD>INTEGER </TD>
+      <TD>TEXT </TD>
+      <TD>ASCII rendering of the integer</TD></TR>
+    <TR>
+      <TD>INTEGER </TD>
+      <TD>BLOB </TD>
+      <TD>Same as for INTEGER-&gt;TEXT</TD></TR>
+    <TR>
+      <TD>FLOAT </TD>
+      <TD>INTEGER</TD>
+      <TD>Convert from float to integer</TD></TR>
+    <TR>
+      <TD>FLOAT </TD>
+      <TD>TEXT </TD>
+      <TD>ASCII rendering of the float</TD></TR>
+    <TR>
+      <TD>FLOAT </TD>
+      <TD>BLOB </TD>
+      <TD>Same as FLOAT-&gt;TEXT</TD></TR>
+    <TR>
+      <TD>TEXT </TD>
+      <TD>INTEGER</TD>
+      <TD>Use atoi()</TD></TR>
+    <TR>
+      <TD>TEXT </TD>
+      <TD>FLOAT </TD>
+      <TD>Use atof()</TD></TR>
+    <TR>
+      <TD>TEXT </TD>
+      <TD>BLOB </TD>
+      <TD>No change</TD></TR>
+    <TR>
+      <TD>BLOB </TD>
+      <TD>INTEGER</TD>
+      <TD>Convert to TEXT then use atoi()</TD></TR>
+    <TR>
+      <TD>BLOB </TD>
+      <TD>FLOAT </TD>
+      <TD>Convert to TEXT then use atof()</TD></TR>
+    <TR>
+      <TD>BLOB </TD>
+      <TD>TEXT </TD>
+      <TD>Add a \000 terminator if needed</TD></TR></TBODY></TABLE></BLOCKQUOTE>
+<P></P><A name=sqlite3_column_count>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_column_count(sqlite3_stmt *pStmt);
+</PRE></BLOCKQUOTE>
+<P>Return the number of columns in the result set returned by the prepared SQL 
+statement. This routine returns 0 if pStmt is an SQL statement that does not 
+return data (for example an UPDATE).</P>
+<P>See also <A 
+href="C-C++interface_reference.html#sqlite3_data_count">sqlite3_data_count</A>(). 
+</P><A name=sqlite3_column_decltype><A name=sqlite3_column_decltype16>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>const char *sqlite3_column_decltype(sqlite3_stmt *, int i);
+const void *sqlite3_column_decltype16(sqlite3_stmt*,int);
+</PRE></BLOCKQUOTE>
+<P>The first argument is a prepared SQL statement. If this statement is a SELECT 
+statement, the Nth column of the returned result set of the SELECT is a table 
+column then the declared type of the table column is returned. If the Nth column 
+of the result set is not at table column, then a NULL pointer is returned. The 
+returned string is UTF-8 encoded for <A 
+href="C-C++interface_reference.html#sqlite3_column_decltype">sqlite3_column_decltype</A>() 
+and UTF-16 encoded for sqlite3_column_decltype16(). For example, in the database 
+schema:</P>
+<P>
+<BLOCKQUOTE><PRE> CREATE TABLE t1(c1 INTEGER);
+ </PRE></BLOCKQUOTE>
+<P></P>
+<P>And the following statement compiled:</P>
+<P>
+<BLOCKQUOTE><PRE> SELECT c1 + 1, 0 FROM t1;
+ </PRE></BLOCKQUOTE>
+<P></P>
+<P>Then this routine would return the string "INTEGER" for the second result 
+column (i==1), and a NULL pointer for the first result column (i==0). </P><A 
+name=sqlite3_column_name><A name=sqlite3_column_name16>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>const char *sqlite3_column_name(sqlite3_stmt*,int);
+const void *sqlite3_column_name16(sqlite3_stmt*,int);
+</PRE></BLOCKQUOTE>
+<P>The first argument is a prepared SQL statement. This function returns the 
+column heading for the Nth column of that statement, where N is the second 
+function argument. The string returned is UTF-8 for <A 
+href="C-C++interface_reference.html#sqlite3_column_name">sqlite3_column_name</A>() 
+and UTF-16 for sqlite3_column_name16(). </P><A name=sqlite3_commit_hook>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>void *sqlite3_commit_hook(sqlite3*, int(*xCallback)(void*), void *pArg);
+</PRE></BLOCKQUOTE>
+<P><I>Experimental</I></P>
+<P>Register a callback function to be invoked whenever a new transaction is 
+committed. The pArg argument is passed through to the callback. callback. If the 
+callback function returns non-zero, then the commit is converted into a 
+rollback.</P>
+<P>If another function was previously registered, its pArg value is returned. 
+Otherwise NULL is returned.</P>
+<P>Registering a NULL function disables the callback. Only a single commit hook 
+callback can be registered at a time. </P><A name=sqlite3_complete><A 
+name=sqlite3_complete16>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_complete(const char *sql);
+int sqlite3_complete16(const void *sql);
+</PRE></BLOCKQUOTE>
+<P>These functions return true if the given input string comprises one or more 
+complete SQL statements. The argument must be a nul-terminated UTF-8 string for 
+<A 
+href="C-C++interface_reference.html#sqlite3_complete">sqlite3_complete</A>() 
+and a nul-terminated UTF-16 string for sqlite3_complete16(). </P><A 
+name=sqlite3_create_collation><A name=sqlite3_create_collation16>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_create_collation(
+  sqlite3*, 
+  const char *zName, 
+  int pref16, 
+  void*,
+  int(*xCompare)(void*,int,const void*,int,const void*)
+);
+int sqlite3_create_collation16(
+  sqlite3*, 
+  const char *zName, 
+  int pref16, 
+  void*,
+  int(*xCompare)(void*,int,const void*,int,const void*)
+);
+#define SQLITE_UTF8     1
+#define SQLITE_UTF16BE  2
+#define SQLITE_UTF16LE  3
+#define SQLITE_UTF16    4
+</PRE></BLOCKQUOTE>
+<P>These two functions are used to add new collation sequences to the sqlite3 
+handle specified as the first argument. </P>
+<P>The name of the new collation sequence is specified as a UTF-8 string for <A 
+href="C-C++interface_reference.html#sqlite3_create_collation">sqlite3_create_collation</A>() 
+and a UTF-16 string for sqlite3_create_collation16(). In both cases the name is 
+passed as the second function argument.</P>
+<P>The third argument must be one of the constants SQLITE_UTF8, SQLITE_UTF16LE 
+or SQLITE_UTF16BE, indicating that the user-supplied routine expects to be 
+passed pointers to strings encoded using UTF-8, UTF-16 little-endian or UTF-16 
+big-endian respectively. The SQLITE_UTF16 constant indicates that text strings 
+are expected in UTF-16 in the native byte order of the host machine.</P>
+<P>A pointer to the user supplied routine must be passed as the fifth argument. 
+If it is NULL, this is the same as deleting the collation sequence (so that 
+SQLite cannot call it anymore). Each time the user supplied function is invoked, 
+it is passed a copy of the void* passed as the fourth argument to <A 
+href="C-C++interface_reference.html#sqlite3_create_collation">sqlite3_create_collation</A>() 
+or sqlite3_create_collation16() as its first argument.</P>
+<P>The remaining arguments to the user-supplied routine are two strings, each 
+represented by a [length, data] pair and encoded in the encoding that was passed 
+as the third argument when the collation sequence was registered. The user 
+routine should return negative, zero or positive if the first string is less 
+than, equal to, or greater than the second string. i.e. (STRING1 - STRING2). 
+</P><A name=sqlite3_create_function><A name=sqlite3_create_function16>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_create_function(
+  sqlite3 *,
+  const char *zFunctionName,
+  int nArg,
+  int eTextRep,
+  void *pUserData,
+  void (*xFunc)(sqlite3_context*,int,sqlite3_value**),
+  void (*xStep)(sqlite3_context*,int,sqlite3_value**),
+  void (*xFinal)(sqlite3_context*)
+);
+int sqlite3_create_function16(
+  sqlite3*,
+  const void *zFunctionName,
+  int nArg,
+  int eTextRep,
+  void *pUserData,
+  void (*xFunc)(sqlite3_context*,int,sqlite3_value**),
+  void (*xStep)(sqlite3_context*,int,sqlite3_value**),
+  void (*xFinal)(sqlite3_context*)
+);
+#define SQLITE_UTF8     1
+#define SQLITE_UTF16    2
+#define SQLITE_UTF16BE  3
+#define SQLITE_UTF16LE  4
+#define SQLITE_ANY      5
+</PRE></BLOCKQUOTE>
+<P>These two functions are used to add SQL functions or aggregates implemented 
+in C. The only difference between these two routines is that the second 
+argument, the name of the (scalar) function or aggregate, is encoded in UTF-8 
+for <A 
+href="C-C++interface_reference.html#sqlite3_create_function">sqlite3_create_function</A>() 
+and UTF-16 for sqlite3_create_function16().</P>
+<P>The first argument is the database handle that the new function or aggregate 
+is to be added to. If a single program uses more than one database handle 
+internally, then user functions or aggregates must be added individually to each 
+database handle with which they will be used.</P>
+<P>The third argument is the number of arguments that the function or aggregate 
+takes. If this argument is -1 then the function or aggregate may take any number 
+of arguments.</P>
+<P>The fourth argument, eTextRep, specifies what type of text arguments this 
+function prefers to receive. Any function should be able to work work with 
+UTF-8, UTF-16le, or UTF-16be. But some implementations may be more efficient 
+with one representation than another. Users are allowed to specify separate 
+implementations for the same function which are called depending on the text 
+representation of the arguments. The the implementation which provides the best 
+match is used. If there is only a single implementation which does not care what 
+text representation is used, then the fourth argument should be SQLITE_ANY.</P>
+<P>The fifth argument is an arbitrary pointer. The function implementations can 
+gain access to this pointer using the sqlite_user_data() API.</P>
+<P>The sixth, seventh and eighth argumens, xFunc, xStep and xFinal, are pointers 
+to user implemented C functions that implement the user function or aggregate. A 
+scalar function requires an implementation of the xFunc callback only, NULL 
+pointers should be passed as the xStep and xFinal arguments. An aggregate 
+function requires an implementation of xStep and xFinal, and NULL should be 
+passed for xFunc. To delete an existing user function or aggregate, pass NULL 
+for all three function callbacks. Specifying an inconstant set of callback 
+values, such as an xFunc and an xFinal, or an xStep but no xFinal, results in an 
+SQLITE_ERROR return. </P><A name=sqlite3_data_count>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_data_count(sqlite3_stmt *pStmt);
+</PRE></BLOCKQUOTE>
+<P>Return the number of values in the current row of the result set.</P>
+<P>After a call to <A 
+href="C-C++interface_reference.html#sqlite3_step">sqlite3_step</A>() that 
+returns SQLITE_ROW, this routine will return the same value as the <A 
+href="C-C++interface_reference.html#sqlite3_column_count">sqlite3_column_count</A>() 
+function. After <A 
+href="C-C++interface_reference.html#sqlite3_step">sqlite3_step</A>() has 
+returned an SQLITE_DONE, SQLITE_BUSY or error code, or before <A 
+href="C-C++interface_reference.html#sqlite3_step">sqlite3_step</A>() has 
+been called on a prepared SQL statement, this routine returns zero. </P><A 
+name=sqlite3_errcode>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_errcode(sqlite3 *db);
+</PRE></BLOCKQUOTE>
+<P>Return the error code for the most recent failed sqlite3_* API call 
+associated with sqlite3 handle 'db'. If a prior API call failed but the most 
+recent API call succeeded, the return value from this routine is undefined. </P>
+<P>Calls to many sqlite3_* functions set the error code and string returned by 
+sqlite3_errcode(), <A 
+href="C-C++interface_reference.html#sqlite3_errmsg">sqlite3_errmsg</A>() 
+and <A 
+href="C-C++interface_reference.html#sqlite3_errmsg16">sqlite3_errmsg16</A>() 
+(overwriting the previous values). Note that calls to sqlite3_errcode(), <A 
+href="C-C++interface_reference.html#sqlite3_errmsg">sqlite3_errmsg</A>() 
+and <A 
+href="C-C++interface_reference.html#sqlite3_errmsg16">sqlite3_errmsg16</A>() 
+themselves do not affect the results of future invocations. Calls to API 
+routines that do not return an error code (examples: <A 
+href="C-C++interface_reference.html#sqlite3_data_count">sqlite3_data_count</A>() 
+or <A 
+href="C-C++interface_reference.html#sqlite3_mprintf">sqlite3_mprintf</A>()) 
+do not change the error code returned by this routine.</P>
+<P>Assuming no other intervening sqlite3_* API calls are made, the error code 
+returned by this function is associated with the same error as the strings 
+returned by <A 
+href="C-C++interface_reference.html#sqlite3_errmsg">sqlite3_errmsg</A>() 
+and <A 
+href="C-C++interface_reference.html#sqlite3_errmsg16">sqlite3_errmsg16</A>(). 
+</P><A name=sqlite3_errmsg><A name=sqlite3_errmsg16>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>const char *sqlite3_errmsg(sqlite3*);
+const void *sqlite3_errmsg16(sqlite3*);
+</PRE></BLOCKQUOTE>
+<P>Return a pointer to a UTF-8 encoded string (<A 
+href="C-C++interface_reference.html#sqlite3_errmsg">sqlite3_errmsg</A>) or 
+a UTF-16 encoded string (sqlite3_errmsg16) describing in English the error 
+condition for the most recent sqlite3_* API call. The returned string is always 
+terminated by an 0x00 byte.</P>
+<P>The string "not an error" is returned when the most recent API call was 
+successful. </P><A name=sqlite3_exec>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_exec(
+  sqlite3*,                     /* An open database */
+  const char *sql,              /* SQL to be executed */
+  sqlite_callback,              /* Callback function */
+  void *,                       /* 1st argument to callback function */
+  char **errmsg                 /* Error msg written here */
+);
+</PRE></BLOCKQUOTE>
+<P>A function to executes one or more statements of SQL.</P>
+<P>If one or more of the SQL statements are queries, then the callback function 
+specified by the 3rd argument is invoked once for each row of the query result. 
+This callback should normally return 0. If the callback returns a non-zero value 
+then the query is aborted, all subsequent SQL statements are skipped and the 
+sqlite3_exec() function returns the SQLITE_ABORT.</P>
+<P>The 4th argument is an arbitrary pointer that is passed to the callback 
+function as its first argument.</P>
+<P>The 2nd argument to the callback function is the number of columns in the 
+query result. The 3rd argument to the callback is an array of strings holding 
+the values for each column. The 4th argument to the callback is an array of 
+strings holding the names of each column.</P>
+<P>The callback function may be NULL, even for queries. A NULL callback is not 
+an error. It just means that no callback will be invoked.</P>
+<P>If an error occurs while parsing or evaluating the SQL (but not while 
+executing the callback) then an appropriate error message is written into memory 
+obtained from malloc() and *errmsg is made to point to that message. The calling 
+function is responsible for freeing the memory that holds the error message. Use 
+<A href="C-C++interface_reference.html#sqlite3_free">sqlite3_free</A>() 
+for this. If errmsg==NULL, then no error message is ever written.</P>
+<P>The return value is is SQLITE_OK if there are no errors and some other return 
+code if there is an error. The particular return value depends on the type of 
+error. </P>
+<P>If the query could not be executed because a database file is locked or busy, 
+then this function returns SQLITE_BUSY. (This behavior can be modified somewhat 
+using the <A 
+href="C-C++interface_reference.html#sqlite3_busy_handler">sqlite3_busy_handler</A>() 
+and <A 
+href="C-C++interface_reference.html#sqlite3_busy_timeout">sqlite3_busy_timeout</A>() 
+functions.) </P><A name=sqlite3_finalize>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_finalize(sqlite3_stmt *pStmt);
+</PRE></BLOCKQUOTE>
+<P>The sqlite3_finalize() function is called to delete a prepared SQL statement 
+obtained by a previous call to <A 
+href="C-C++interface_reference.html#sqlite3_prepare">sqlite3_prepare</A>() 
+or <A 
+href="C-C++interface_reference.html#sqlite3_prepare16">sqlite3_prepare16</A>(). 
+If the statement was executed successfully, or not executed at all, then 
+SQLITE_OK is returned. If execution of the statement failed then an error code 
+is returned. </P>
+<P>All prepared statements must finalized before <A 
+href="C-C++interface_reference.html#sqlite3_close">sqlite3_close</A>() is 
+called or else the close will fail with a return code of SQLITE_BUSY.</P>
+<P>This routine can be called at any point during the execution of the virtual 
+machine. If the virtual machine has not completed execution when this routine is 
+called, that is like encountering an error or an interrupt. (See <A 
+href="C-C++interface_reference.html#sqlite3_interrupt">sqlite3_interrupt</A>().) 
+Incomplete updates may be rolled back and transactions canceled, depending on 
+the circumstances, and the result code returned will be SQLITE_ABORT. </P><A 
+name=sqlite3_free>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>void sqlite3_free(char *z);
+</PRE></BLOCKQUOTE>
+<P>Use this routine to free memory obtained from <A 
+href="C-C++interface_reference.html#sqlite3_mprintf">sqlite3_mprintf</A>() 
+or <A 
+href="C-C++interface_reference.html#sqlite3_vmprintf">sqlite3_vmprintf</A>(). 
+</P><A name=sqlite3_get_table><A name=sqlite3_free_table>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_get_table(
+  sqlite3*,              /* An open database */
+  const char *sql,       /* SQL to be executed */
+  char ***resultp,       /* Result written to a char *[]  that this points to */
+  int *nrow,             /* Number of result rows written here */
+  int *ncolumn,          /* Number of result columns written here */
+  char **errmsg          /* Error msg written here */
+);
+void sqlite3_free_table(char **result);
+</PRE></BLOCKQUOTE>
+<P>This next routine is really just a wrapper around <A 
+href="C-C++interface_reference.html#sqlite3_exec">sqlite3_exec</A>(). 
+Instead of invoking a user-supplied callback for each row of the result, this 
+routine remembers each row of the result in memory obtained from malloc(), then 
+returns all of the result after the query has finished. </P>
+<P>As an example, suppose the query result where this table:</P>
+<P><PRE>        Name        | Age
+        -----------------------
+        Alice       | 43
+        Bob         | 28
+        Cindy       | 21
+ </PRE>
+<P></P>
+<P>If the 3rd argument were &amp;azResult then after the function returns 
+azResult will contain the following data:</P>
+<P><PRE>        azResult[0] = "Name";
+        azResult[1] = "Age";
+        azResult[2] = "Alice";
+        azResult[3] = "43";
+        azResult[4] = "Bob";
+        azResult[5] = "28";
+        azResult[6] = "Cindy";
+        azResult[7] = "21";
+ </PRE>
+<P></P>
+<P>Notice that there is an extra row of data containing the column headers. But 
+the *nrow return value is still 3. *ncolumn is set to 2. In general, the number 
+of values inserted into azResult will be ((*nrow) + 1)*(*ncolumn).</P>
+<P>After the calling function has finished using the result, it should pass the 
+result data pointer to sqlite3_free_table() in order to release the memory that 
+was malloc-ed. Because of the way the malloc() happens, the calling function 
+must not try to call malloc() directly. Only sqlite3_free_table() is able to 
+release the memory properly and safely.</P>
+<P>The return value of this routine is the same as from <A 
+href="C-C++interface_reference.html#sqlite3_exec">sqlite3_exec</A>(). 
+</P><A name=sqlite3_interrupt>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE> void sqlite3_interrupt(sqlite3*);
+</PRE></BLOCKQUOTE>
+<P>This function causes any pending database operation to abort and return at 
+its earliest opportunity. This routine is typically called in response to a user 
+action such as pressing "Cancel" or Ctrl-C where the user wants a long query 
+operation to halt immediately. </P><A name=sqlite3_last_insert_rowid>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>long long int sqlite3_last_insert_rowid(sqlite3*);
+</PRE></BLOCKQUOTE>
+<P>Each entry in an SQLite table has a unique integer key. (The key is the value 
+of the INTEGER PRIMARY KEY column if there is such a column, otherwise the key 
+is generated at random. The unique key is always available as the ROWID, OID, or 
+_ROWID_ column.) This routine returns the integer key of the most recent insert 
+in the database.</P>
+<P>This function is similar to the mysql_insert_id() function from MySQL. </P><A 
+name=sqlite3_libversion>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>  const char *sqlite3_libversion(void);
+</PRE></BLOCKQUOTE>
+<P>Return a pointer to a string which contains the version number of the 
+library. The same string is available in the global variable named 
+"sqlite3_version". This interface is provided since windows is unable to access 
+global variables in DLLs. </P><A name=sqlite3_mprintf><A name=sqlite3_vmprintf>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>char *sqlite3_mprintf(const char*,...);
+char *sqlite3_vmprintf(const char*, va_list);
+</PRE></BLOCKQUOTE>
+<P>These routines are variants of the "sprintf()" from the standard C library. 
+The resulting string is written into memory obtained from malloc() so that there 
+is never a possibility of buffer overflow. These routines also implement some 
+additional formatting options that are useful for constructing SQL 
+statements.</P>
+<P>The strings returned by these routines should be freed by calling <A 
+href="C-C++interface_reference.html#sqlite3_free">sqlite3_free</A>().</P>
+<P>All of the usual printf formatting options apply. In addition, there is a 
+"%q" option. %q works like %s in that it substitutes a null-terminated string 
+from the argument list. But %q also doubles every '\'' character. %q is designed 
+for use inside a string literal. By doubling each '\'' character it escapes that 
+character and allows it to be inserted into the string.</P>
+<P>For example, so some string variable contains text as follows:</P>
+<P>
+<BLOCKQUOTE><PRE>  char *zText = "It's a happy day!";
+ </PRE></BLOCKQUOTE>
+<P></P>
+<P>One can use this text in an SQL statement as follows:</P>
+<P>
+<BLOCKQUOTE><PRE>  sqlite3_exec_printf(db, "INSERT INTO table VALUES('%q')",
+       callback1, 0, 0, zText);
+  </PRE></BLOCKQUOTE>
+<P></P>
+<P>Because the %q format string is used, the '\'' character in zText is escaped 
+and the SQL generated is as follows:</P>
+<P>
+<BLOCKQUOTE><PRE>  INSERT INTO table1 VALUES('It''s a happy day!')
+ </PRE></BLOCKQUOTE>
+<P></P>
+<P>This is correct. Had we used %s instead of %q, the generated SQL would have 
+looked like this:</P>
+<P>
+<BLOCKQUOTE><PRE>  INSERT INTO table1 VALUES('It's a happy day!');
+  </PRE></BLOCKQUOTE>
+<P></P>
+<P>This second example is an SQL syntax error. As a general rule you should 
+always use %q instead of %s when inserting text into a string literal. </P><A 
+name=sqlite3_open><A name=sqlite3_open16>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_open(
+  const char *filename,   /* Database filename (UTF-8) */
+  sqlite3 **ppDb          /* OUT: SQLite db handle */
+);
+int sqlite3_open16(
+  const void *filename,   /* Database filename (UTF-16) */
+  sqlite3 **ppDb          /* OUT: SQLite db handle */
+);
+</PRE></BLOCKQUOTE>
+<P>Open the sqlite database file "filename". The "filename" is UTF-8 encoded for 
+<A href="C-C++interface_reference.html#sqlite3_open">sqlite3_open</A>() 
+and UTF-16 encoded in the native byte order for sqlite3_open16(). An sqlite3* 
+handle is returned in *ppDb, even if an error occurs. If the database is opened 
+(or created) successfully, then SQLITE_OK is returned. Otherwise an error code 
+is returned. The <A 
+href="C-C++interface_reference.html#sqlite3_errmsg">sqlite3_errmsg</A>() 
+or <A 
+href="C-C++interface_reference.html#sqlite3_errmsg16">sqlite3_errmsg16</A>() 
+routines can be used to obtain an English language description of the error.</P>
+<P>If the database file does not exist, then a new database will be created as 
+needed. The encoding for the database will be UTF-8 if <A 
+href="C-C++interface_reference.html#sqlite3_open">sqlite3_open</A>() is 
+called and UTF-16 if sqlite3_open16 is used.</P>
+<P>Whether or not an error occurs when it is opened, resources associated with 
+the sqlite3* handle should be released by passing it to <A 
+href="C-C++interface_reference.html#sqlite3_close">sqlite3_close</A>() 
+when it is no longer required. </P><A name=sqlite3_prepare><A 
+name=sqlite3_prepare16>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_prepare(
+  sqlite3 *db,            /* Database handle */
+  const char *zSql,       /* SQL statement, UTF-8 encoded */
+  int nBytes,             /* Length of zSql in bytes. */
+  sqlite3_stmt **ppStmt,  /* OUT: Statement handle */
+  const char **pzTail     /* OUT: Pointer to unused portion of zSql */
+);
+int sqlite3_prepare16(
+  sqlite3 *db,            /* Database handle */
+  const void *zSql,       /* SQL statement, UTF-16 encoded */
+  int nBytes,             /* Length of zSql in bytes. */
+  sqlite3_stmt **ppStmt,  /* OUT: Statement handle */
+  const void **pzTail     /* OUT: Pointer to unused portion of zSql */
+);
+</PRE></BLOCKQUOTE>
+<P>To execute an SQL query, it must first be compiled into a byte-code program 
+using one of the following routines. The only difference between them is that 
+the second argument, specifying the SQL statement to compile, is assumed to be 
+encoded in UTF-8 for the <A 
+href="C-C++interface_reference.html#sqlite3_prepare">sqlite3_prepare</A>() 
+function and UTF-16 for sqlite3_prepare16().</P>
+<P>The first argument "db" is an SQLite database handle. The second argument 
+"zSql" is the statement to be compiled, encoded as either UTF-8 or UTF-16 (see 
+above). If the next argument, "nBytes", is less than zero, then zSql is read up 
+to the first nul terminator. If "nBytes" is not less than zero, then it is the 
+length of the string zSql in bytes (not characters).</P>
+<P>*pzTail is made to point to the first byte past the end of the first SQL 
+statement in zSql. This routine only compiles the first statement in zSql, so 
+*pzTail is left pointing to what remains uncompiled.</P>
+<P>*ppStmt is left pointing to a compiled SQL statement that can be executed 
+using <A 
+href="C-C++interface_reference.html#sqlite3_step">sqlite3_step</A>(). Or 
+if there is an error, *ppStmt may be set to NULL. If the input text contained no 
+SQL (if the input is and empty string or a comment) then *ppStmt is set to NULL. 
+The calling procedure is responsible for deleting this compiled SQL statement 
+using <A 
+href="C-C++interface_reference.html#sqlite3_finalize">sqlite3_finalize</A>() 
+after it has finished with it.</P>
+<P>On success, SQLITE_OK is returned. Otherwise an error code is returned. 
+</P><A name=sqlite3_progress_handler>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>void sqlite3_progress_handler(sqlite3*, int, int(*)(void*), void*);
+</PRE></BLOCKQUOTE>
+<P><I>Experimental</I></P>
+<P>This routine configures a callback function - the progress callback - that is 
+invoked periodically during long running calls to <A 
+href="C-C++interface_reference.html#sqlite3_exec">sqlite3_exec</A>(), <A 
+href="C-C++interface_reference.html#sqlite3_step">sqlite3_step</A>() and 
+<A 
+href="C-C++interface_reference.html#sqlite3_get_table">sqlite3_get_table</A>(). 
+An example use for this API is to keep a GUI updated during a large query.</P>
+<P>The progress callback is invoked once for every N virtual machine opcodes, 
+where N is the second argument to this function. The progress callback itself is 
+identified by the third argument to this function. The fourth argument to this 
+function is a void pointer passed to the progress callback function each time it 
+is invoked.</P>
+<P>If a call to <A 
+href="C-C++interface_reference.html#sqlite3_exec">sqlite3_exec</A>(), <A 
+href="C-C++interface_reference.html#sqlite3_step">sqlite3_step</A>() or <A 
+href="C-C++interface_reference.html#sqlite3_get_table">sqlite3_get_table</A>() 
+results in less than N opcodes being executed, then the progress callback is not 
+invoked.</P>
+<P>To remove the progress callback altogether, pass NULL as the third argument 
+to this function.</P>
+<P>If the progress callback returns a result other than 0, then the current 
+query is immediately terminated and any database changes rolled back. If the 
+query was part of a larger transaction, then the transaction is not rolled back 
+and remains active. The <A 
+href="C-C++interface_reference.html#sqlite3_exec">sqlite3_exec</A>() call 
+returns SQLITE_ABORT. </P>
+<P></P><A name=sqlite3_reset>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_reset(sqlite3_stmt *pStmt);
+</PRE></BLOCKQUOTE>
+<P>The sqlite3_reset() function is called to reset a prepared SQL statement 
+obtained by a previous call to <A 
+href="C-C++interface_reference.html#sqlite3_prepare">sqlite3_prepare</A>() 
+or <A 
+href="C-C++interface_reference.html#sqlite3_prepare16">sqlite3_prepare16</A>() 
+back to it's initial state, ready to be re-executed. Any SQL statement variables 
+that had values bound to them using the sqlite3_bind_*() API retain their 
+values. </P><A name=sqlite3_result_blob><A name=sqlite3_result_double><A 
+name=sqlite3_result_error><A name=sqlite3_result_error16><A 
+name=sqlite3_result_int><A name=sqlite3_result_int64><A 
+name=sqlite3_result_null><A name=sqlite3_result_text><A 
+name=sqlite3_result_text16><A name=sqlite3_result_text16be><A 
+name=sqlite3_result_text16le><A name=sqlite3_result_value>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>void sqlite3_result_blob(sqlite3_context*, const void*, int n, void(*)(void*));
+void sqlite3_result_double(sqlite3_context*, double);
+void sqlite3_result_error(sqlite3_context*, const char*, int);
+void sqlite3_result_error16(sqlite3_context*, const void*, int);
+void sqlite3_result_int(sqlite3_context*, int);
+void sqlite3_result_int64(sqlite3_context*, long long int);
+void sqlite3_result_null(sqlite3_context*);
+void sqlite3_result_text(sqlite3_context*, const char*, int n, void(*)(void*));
+void sqlite3_result_text16(sqlite3_context*, const void*, int n, void(*)(void*));
+void sqlite3_result_text16be(sqlite3_context*, const void*, int n, void(*)(void*));
+void sqlite3_result_text16le(sqlite3_context*, const void*, int n, void(*)(void*));
+void sqlite3_result_value(sqlite3_context*, sqlite3_value*);
+</PRE></BLOCKQUOTE>
+<P>User-defined functions invoke these routines in order to set their return 
+value. The sqlite3_result_value() routine is used to return an exact copy of one 
+of the arguments to the function.</P>
+<P>The operation of these routines is very similar to the operation of <A 
+href="C-C++interface_reference.html#sqlite3_bind_blob">sqlite3_bind_blob</A>() 
+and its cousins. Refer to the documentation there for additional information. 
+</P><A name=sqlite3_set_authorizer>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_set_authorizer(
+  sqlite3*,
+  int (*xAuth)(void*,int,const char*,const char*,const char*,const char*),
+  void *pUserData
+);
+#define SQLITE_CREATE_INDEX          1   /* Index Name      Table Name      */
+#define SQLITE_CREATE_TABLE          2   /* Table Name      NULL            */
+#define SQLITE_CREATE_TEMP_INDEX     3   /* Index Name      Table Name      */
+#define SQLITE_CREATE_TEMP_TABLE     4   /* Table Name      NULL            */
+#define SQLITE_CREATE_TEMP_TRIGGER   5   /* Trigger Name    Table Name      */
+#define SQLITE_CREATE_TEMP_VIEW      6   /* View Name       NULL            */
+#define SQLITE_CREATE_TRIGGER        7   /* Trigger Name    Table Name      */
+#define SQLITE_CREATE_VIEW           8   /* View Name       NULL            */
+#define SQLITE_DELETE                9   /* Table Name      NULL            */
+#define SQLITE_DROP_INDEX           10   /* Index Name      Table Name      */
+#define SQLITE_DROP_TABLE           11   /* Table Name      NULL            */
+#define SQLITE_DROP_TEMP_INDEX      12   /* Index Name      Table Name      */
+#define SQLITE_DROP_TEMP_TABLE      13   /* Table Name      NULL            */
+#define SQLITE_DROP_TEMP_TRIGGER    14   /* Trigger Name    Table Name      */
+#define SQLITE_DROP_TEMP_VIEW       15   /* View Name       NULL            */
+#define SQLITE_DROP_TRIGGER         16   /* Trigger Name    Table Name      */
+#define SQLITE_DROP_VIEW            17   /* View Name       NULL            */
+#define SQLITE_INSERT               18   /* Table Name      NULL            */
+#define SQLITE_PRAGMA               19   /* Pragma Name     1st arg or NULL */
+#define SQLITE_READ                 20   /* Table Name      Column Name     */
+#define SQLITE_SELECT               21   /* NULL            NULL            */
+#define SQLITE_TRANSACTION          22   /* NULL            NULL            */
+#define SQLITE_UPDATE               23   /* Table Name      Column Name     */
+#define SQLITE_ATTACH               24   /* Filename        NULL            */
+#define SQLITE_DETACH               25   /* Database Name   NULL            */
+
+#define SQLITE_DENY   1   /* Abort the SQL statement with an error */
+#define SQLITE_IGNORE 2   /* Don't allow access, but don't generate an error */
+</PRE></BLOCKQUOTE>
+<P>This routine registers a callback with the SQLite library. The callback is 
+invoked (at compile-time, not at run-time) for each attempt to access a column 
+of a table in the database. The callback should return SQLITE_OK if access is 
+allowed, SQLITE_DENY if the entire SQL statement should be aborted with an error 
+and SQLITE_IGNORE if the column should be treated as a NULL value.</P>
+<P>The second argument to the access authorization function will be one of the 
+defined constants shown. These values signify what kind of operation is to be 
+authorized. The 3rd and 4th arguments to the authorization function will be 
+arguments or NULL depending on which of the following codes is used as the 
+second argument. The 5th argument is the name of the database ("main", "temp", 
+etc.) if applicable. The 6th argument is the name of the inner-most trigger or 
+view that is responsible for the access attempt or NULL if this access attempt 
+is directly from input SQL code.</P>
+<P>The return value of the authorization function should be one of the constants 
+SQLITE_OK, SQLITE_DENY, or SQLITE_IGNORE.</P>
+<P>The intent of this routine is to allow applications to safely execute 
+user-entered SQL. An appropriate callback can deny the user-entered SQL access 
+certain operations (ex: anything that changes the database) or to deny access to 
+certain tables or columns within the database. </P><A name=sqlite3_step>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>int sqlite3_step(sqlite3_stmt*);
+</PRE></BLOCKQUOTE>
+<P>After an SQL query has been prepared with a call to either <A 
+href="C-C++interface_reference.html#sqlite3_prepare">sqlite3_prepare</A>() 
+or <A 
+href="C-C++interface_reference.html#sqlite3_prepare16">sqlite3_prepare16</A>(), 
+then this function must be called one or more times to execute the 
+statement.</P>
+<P>The return value will be either SQLITE_BUSY, SQLITE_DONE, SQLITE_ROW, 
+SQLITE_ERROR, or SQLITE_MISUSE.</P>
+<P>SQLITE_BUSY means that the database engine attempted to open a locked 
+database and there is no busy callback registered. Call sqlite3_step() again to 
+retry the open.</P>
+<P>SQLITE_DONE means that the statement has finished executing successfully. 
+sqlite3_step() should not be called again on this virtual machine without first 
+calling <A 
+href="C-C++interface_reference.html#sqlite3_reset">sqlite3_reset</A>() to 
+reset the virtual machine back to its initial state.</P>
+<P>If the SQL statement being executed returns any data, then SQLITE_ROW is 
+returned each time a new row of data is ready for processing by the caller. The 
+values may be accessed using the sqlite3_column_*() functions. sqlite3_step() is 
+called again to retrieve the next row of data.</P>
+<P>SQLITE_ERROR means that a run-time error (such as a constraint violation) has 
+occurred. sqlite3_step() should not be called again on the VM. More information 
+may be found by calling <A 
+href="C-C++interface_reference.html#sqlite3_errmsg">sqlite3_errmsg</A>().</P>
+<P>SQLITE_MISUSE means that the this routine was called inappropriately. Perhaps 
+it was called on a virtual machine that had already been finalized or on one 
+that had previously returned SQLITE_ERROR or SQLITE_DONE. Or it could be the 
+case the the same database connection is being used simultaneously by two or 
+more threads. </P><A name=sqlite3_total_changes>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>  int sqlite3_total_changes(sqlite3*);
+</PRE></BLOCKQUOTE>
+<P>This function returns the total number of database rows that have be 
+modified, inserted, or deleted since the database connection was created using 
+<A href="C-C++interface_reference.html#sqlite3_open">sqlite3_open</A>(). 
+All changes are counted, including changes by triggers and changes to TEMP and 
+auxiliary databases. Except, changes to the SQLITE_MASTER table (caused by 
+statements such as CREATE TABLE) are not counted. Nor are changes counted when 
+an entire table is deleted using DROP TABLE.</P>
+<P>See also the <A 
+href="C-C++interface_reference.html#sqlite3_changes">sqlite3_changes</A>() 
+API.</P>
+<P>SQLite implements the command "DELETE FROM table" without a WHERE clause by 
+dropping and recreating the table. (This is much faster than going through and 
+deleting individual elements form the table.) Because of this optimization, the 
+change count for "DELETE FROM table" will be zero regardless of the number of 
+elements that were originally in the table. To get an accurate count of the 
+number of rows deleted, use "DELETE FROM table WHERE 1" instead. </P><A 
+name=sqlite3_trace>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>void *sqlite3_trace(sqlite3*, void(*xTrace)(void*,const char*), void*);
+</PRE></BLOCKQUOTE>
+<P>Register a function that is called each time an SQL statement is evaluated. 
+The callback function is invoked on the first call to <A 
+href="C-C++interface_reference.html#sqlite3_step">sqlite3_step</A>() after 
+calls to <A 
+href="C-C++interface_reference.html#sqlite3_prepare">sqlite3_prepare</A>() 
+or <A 
+href="C-C++interface_reference.html#sqlite3_reset">sqlite3_reset</A>(). 
+This function can be used (for example) to generate a log file of all SQL 
+executed against a database. This can be useful when debugging an application 
+that uses SQLite. </P><A name=sqlite3_user_data>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>void *sqlite3_user_data(sqlite3_context*);
+</PRE></BLOCKQUOTE>
+<P>The pUserData argument to the <A 
+href="C-C++interface_reference.html#sqlite3_create_function">sqlite3_create_function</A>() 
+and <A 
+href="C-C++interface_reference.html#sqlite3_create_function16">sqlite3_create_function16</A>() 
+routines used to register user functions is available to the implementation of 
+the function using this call. </P><A name=sqlite3_value_blob><A 
+name=sqlite3_value_bytes><A name=sqlite3_value_bytes16><A 
+name=sqlite3_value_double><A name=sqlite3_value_int><A 
+name=sqlite3_value_int64><A name=sqlite3_value_text><A 
+name=sqlite3_value_text16><A name=sqlite3_value_text16be><A 
+name=sqlite3_value_text16le><A name=sqlite3_value_type>
+<P>
+<HR>
+
+<P></P>
+<BLOCKQUOTE><PRE>const void *sqlite3_value_blob(sqlite3_value*);
+int sqlite3_value_bytes(sqlite3_value*);
+int sqlite3_value_bytes16(sqlite3_value*);
+double sqlite3_value_double(sqlite3_value*);
+int sqlite3_value_int(sqlite3_value*);
+long long int sqlite3_value_int64(sqlite3_value*);
+const unsigned char *sqlite3_value_text(sqlite3_value*);
+const void *sqlite3_value_text16(sqlite3_value*);
+const void *sqlite3_value_text16be(sqlite3_value*);
+const void *sqlite3_value_text16le(sqlite3_value*);
+int sqlite3_value_type(sqlite3_value*);
+</PRE></BLOCKQUOTE>
+<P>This group of routines returns information about arguments to a user-defined 
+function. Function implementations use these routines to access their arguments. 
+These routines are the same as the sqlite3_column_... routines except that these 
+routines take a single sqlite3_value* pointer instead of an sqlite3_stmt* and an 
+integer column number.</P>
+<P>See the documentation under <A 
+href="C-C++interface_reference.html#sqlite3_column_blob">sqlite3_column_blob</A> 
+for additional information. </P>
+<TABLE width="100%">
+  <TBODY>
+  <TR>
+    <TD bgColor=#80a796></TD></TR></TBODY></TABLE><SMALL><I>This page last modified 
+on 2005/03/14 02:01:50</I></SMALL> </BODY></HTML>

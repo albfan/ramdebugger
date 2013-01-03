@@ -1,0 +1,124 @@
+<HTML><HEAD><TITLE>Tcl Tcl Library Procedures - Standard manual page</TITLE></HEAD><BODY>
+<DL>
+<DD><A HREF="StdChannels.htm#M2" NAME="L646">NAME</A>
+<DL><DD>Tcl_StandardChannels - How the Tcl library deals with the standard channels</DL>
+<DD><A HREF="StdChannels.htm#M3" NAME="L647">DESCRIPTION</A>
+<DD><A HREF="StdChannels.htm#M4" NAME="L648">APIs</A>
+<DD><A HREF="StdChannels.htm#M5" NAME="L649">INITIALIZATION OF TCL STANDARD CHANNELS</A>
+<DL>
+<DD><A HREF="StdChannels.htm#M6" NAME="L650">1)</A>
+<DD><A HREF="StdChannels.htm#M7" NAME="L651">2)</A>
+<DL>
+<DD><A HREF="StdChannels.htm#M8" NAME="L652">(a)</A>
+<DD><A HREF="StdChannels.htm#M9" NAME="L653">(b)</A>
+</DL>
+<DD><A HREF="StdChannels.htm#M10" NAME="L654">3)</A>
+</DL>
+<DD><A HREF="StdChannels.htm#M11" NAME="L655">RE-INITIALIZATION OF TCL STANDARD CHANNELS</A>
+<DD><A HREF="StdChannels.htm#M12" NAME="L656">tclsh</A>
+<DD><A HREF="StdChannels.htm#M13" NAME="L657">wish</A>
+<DD><A HREF="StdChannels.htm#M14" NAME="L658">SEE ALSO</A>
+<DD><A HREF="StdChannels.htm#M15" NAME="L659">KEYWORDS</A>
+</DL><HR>
+<H3><A NAME="M2">NAME</A></H3>
+Tcl_StandardChannels - How the Tcl library deals with the standard channels
+<H3><A NAME="M3">DESCRIPTION</A></H3>
+This page explains the initialization and use of standard channels in
+the Tcl library.
+<P>
+The term <I>standard channels</I> comes out of the Unix world and
+refers to the three channels automatically opened by the OS for
+each new application. They are <B>stdin</B>, <B>stdout</B> and
+<B>stderr</B>. The first is the standard input an application can read
+from, the other two refer to writable channels, one for regular
+output and the other for error messages.
+<P>
+Tcl generalizes this concept in a cross-platform way and
+exposes standard channels to the script level.
+
+<H3><A NAME="M4">APIs</A></H3>
+The public API procedures dealing directly with standard channels are
+<B><A HREF="../TclLib/GetStdChan.htm">Tcl_GetStdChannel</A></B> and <B><A HREF="../TclLib/GetStdChan.htm">Tcl_SetStdChannel</A></B>. Additional public
+APIs to consider are <B><A HREF="../TclLib/OpenFileChnl.htm">Tcl_RegisterChannel</A></B>,
+<B><A HREF="../TclLib/CrtChannel.htm">Tcl_CreateChannel</A></B> and <B><A HREF="../TclLib/OpenFileChnl.htm">Tcl_GetChannel</A></B>.
+<H3><A NAME="M5">INITIALIZATION OF TCL STANDARD CHANNELS</A></H3>
+Standard channels are initialized by the Tcl library in three cases:
+when explicitly requested, when implicitly required before returning
+channel information, or when implicitly required during registration
+of a new channel.
+<P>
+These cases differ in how they handle unavailable platform- specific
+standard channels.  (A channel is not ``available'' if it could not be
+successfully opened; for example, in a Tcl application run as a
+Windows NT service.)
+<P>
+<DL>
+<DT><A NAME="M6">1)</A><DD>
+A single standard channel is initialized when it is explicitly
+specified in a call to <B><A HREF="../TclLib/GetStdChan.htm">Tcl_SetStdChannel</A></B>.  The states of the
+other standard channels are unaffected.
+<P>
+Missing platform-specific standard channels do not matter here. This
+approach is not available at the script level.
+<P><DT><A NAME="M7">2)</A><DD>
+All uninitialized standard channels are initialized to
+platform-specific default values:
+<P>
+<DL>
+<DT><A NAME="M8">(a)</A><DD>
+when open channels are listed with <B><A HREF="../TclLib/OpenFileChnl.htm">Tcl_GetChannelNames</A></B> (or the
+<B><A HREF="../TclCmd/file.htm">file channels</A></B> script command), or
+<P><DT><A NAME="M9">(b)</A><DD>
+when information about any standard channel is requested with a call
+to <B><A HREF="../TclLib/GetStdChan.htm">Tcl_GetStdChannel</A></B>, or with a call to <B><A HREF="../TclLib/OpenFileChnl.htm">Tcl_GetChannel</A></B>
+which specifies one of the standard names (<B>stdin</B>, <B>stdout</B>
+and <B>stderr</B>).
+<P></DL>
+<P>In case of missing platform-specific standard channels, the Tcl
+standard channels are considered as initialized and then immediately
+closed. This means that the first three Tcl channels then opened by
+the application are designated as the Tcl standard channels.
+<P><DT><A NAME="M10">3)</A><DD>
+All uninitialized standard channels are initialized to
+platform-specific default values when a user-requested channel is
+registered with <B><A HREF="../TclLib/OpenFileChnl.htm">Tcl_RegisterChannel</A></B>.
+<P>
+In case of unavailable platform-specific standard channels the channel
+whose creation caused the initialization of the Tcl standard channels
+is made a normal channel.  The next three Tcl channels opened by the
+application are designated as the Tcl standard channels.  In other
+words, of the first four Tcl channels opened by the application the
+second to fourth are designated as the Tcl standard channels.
+<P></DL>
+<P>
+<H3><A NAME="M11">RE-INITIALIZATION OF TCL STANDARD CHANNELS</A></H3>
+Once a Tcl standard channel is initialized through one of the methods
+above, closing this Tcl standard channel will cause the next call to
+<B><A HREF="../TclLib/CrtChannel.htm">Tcl_CreateChannel</A></B> to make the new channel the new standard
+channel, too. If more than one Tcl standard channel was closed
+<B><A HREF="../TclLib/CrtChannel.htm">Tcl_CreateChannel</A></B> will fill the empty slots in the order
+<B>stdin</B>, <B>stdout</B> and <B>stderr</B>.
+<P>
+<B><A HREF="../TclLib/CrtChannel.htm">Tcl_CreateChannel</A></B> will not try to reinitialize an empty slot if
+that slot was not initialized before. It is this behavior which
+enables an application to employ method 1 of initialization, i.e. to
+create and designate their own Tcl standard channels.
+
+<H3><A NAME="M12">tclsh</A></H3>
+The Tcl shell (or rather <B><A HREF="../TclLib/Tcl_Main.htm">Tcl_Main</A></B>) uses method 2 to initialize
+the standard channels.
+
+<H3><A NAME="M13">wish</A></H3>
+The windowing shell (or rather <B>Tk_MainEx</B>) uses method 1 to
+initialize the standard channels (See <B>Tk_InitConsoleChannels</B>)
+on non-Unix platforms.  On Unix platforms, <B>Tk_MainEx</B> implicitly
+uses method 2 to initialize the standard channels.
+
+<H3><A NAME="M14">SEE ALSO</A></H3>
+<B><A HREF="../TclLib/CrtChannel.htm">Tcl_CreateChannel</A></B>, <B><A HREF="../TclLib/OpenFileChnl.htm">Tcl_RegisterChannel</A></B>, <B><A HREF="../TclLib/OpenFileChnl.htm">Tcl_GetChannel</A></B>, <B><A HREF="../TclLib/GetStdChan.htm">Tcl_GetStdChannel</A></B>, <B><A HREF="../TclLib/GetStdChan.htm">Tcl_SetStdChannel</A></B>, <B>Tk_InitConsoleChannels</B>, <B><A HREF="../UserCmd/tclsh.htm">tclsh</A></B>, <B><A HREF="../UserCmd/wish.htm">wish</A></B>, <B><A HREF="../TclLib/Tcl_Main.htm">Tcl_Main</A></B>, <B>Tk_MainEx</B>
+<H3><A NAME="M15">KEYWORDS</A></H3>
+<A href="../Keywords/S.htm#standard channels">standard channels</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 2001 by ActiveState Corporation
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

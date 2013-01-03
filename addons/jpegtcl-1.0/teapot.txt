@@ -1,0 +1,9 @@
+Package jpegtcl 1.0
+Meta as::author  {Jan Nijtmans}
+Meta as::origin  http://sourceforge.net/projects/tkimg
+Meta description A variant of the libjpeg system library made suitable
+Meta description for direct loading as a Tcl package.
+Meta license     BSD
+Meta platform    win32-ix86
+Meta require     {Tcl 8.4}
+Meta summary     jpeg Support

@@ -1,0 +1,126 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: paned</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d0648">DESCRIPTION</a> · <a href="#SECTid81d06c0">STANDARD OPTIONS</a> · <a href="#SECTid81d07d8">WIDGET OPTIONS</a> · <a href="#SECTid81d0968">PANE OPTIONS</a> · <a href="#SECTid81d0af8">WIDGET COMMAND</a> · <a href="#SECTid81d1340">INTERNAL ROUTINES</a> · <a href="#SECTid81d16b0">SEE ALSO</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">ttk::paned - </b><br>Multi-pane container window</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>ttk::paned</b> <i class="m">pathName</i> ?<i class="m">options</i>?
+
+<i class="m">pathName</i> add <i class="m">pathName</i>.<i class="m">subwindow</i> ?<i class="m">options...</i>?
+<i class="m">pathName</i> insert <i class="m">index</i> <i class="m">pathName</i>.<i class="m">subwindow</i> ?<i class="m">options...</i>?
+</pre>
+<h2><a name="SECTid81d0648">DESCRIPTION</a></h2><p>A paned widget displays a number of subwindows,
+stacked either vertically or horizontally.  
+The user may adjust the relative sizes of the subwindows
+by dragging the sash between panes.
+</p>
+<h2><a name="SECTid81d06c0">STANDARD OPTIONS</a></h2><div class="menu"><table class="menu" width="100%"><tr>
+<td width="25%"><a href="widget.html#stdopt_-class">-class</a></td><td width="25%"><a href="widget.html#stdopt_-cursor">-cursor</a></td><td width="25%"><a href="widget.html#stdopt_-style">-style</a></td><td width="25%"><a href="widget.html#stdopt_-takefocus">-takefocus</a></td>
+</tr></table></div>
+<h2><a name="SECTid81d07d8">WIDGET OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-orient">-orient</a></td><td width="40%" align="left">orient</td><td width="40%" align="left">Orient</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the orientation of the window.
+If <b>vertical</b>, subpanes are stacked top-to-bottom;
+if <b>horizontal</b>, subpanes are stacked left-to-right.
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d0968">PANE OPTIONS</a></h2><p>The following options may be specified for each pane:
+</p><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-weight">-weight</a></td><td width="40%" align="left">weight</td><td width="40%" align="left">Weight</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">An integer specifying the relative stretchability of the pane.
+When the paned window is resized, the extra space is added
+or subracted to each pane proportionally to its <b>-weight</b>.
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d0af8">WIDGET COMMAND</a></h2><p>Supports the standard <b>configure</b>, <b>cget</b>, <b>state</b>, 
+and <b>instate</b> commands; see <i>widget(n)</i> for details.
+Additional commands:
+</p><dl class="commandlist">
+
+<dt>
+<i class="m">pathname</i> <b>add</b> <i class="m">subwindow</i> <i class="m">options...</i>
+</dt>
+<dd>Adds a new pane to the window.
+<i>subwindow</i> must be a direct child of the paned window <i>pathname</i>.
+See <a href="#SECTid81d0968">PANE OPTIONS</a> for the list of available options.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>forget</b> <i class="m">pane</i>
+</dt>
+<dd>Removes the specified subpane from the widget.
+<i>pane</i> is either an integer index or the name of a managed subwindow.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>insert</b> <i class="m">pos</i> <i class="m">subwindow</i> <i class="m">options...</i>
+</dt>
+<dd>Inserts a pane at the specified position.
+<i>pos</i> is either the string <b>end</b>, an integer index, 
+or the name of a managed subwindow.
+If <i>subwindow</i> is already managed by the paned window, 
+moves it to the specified position.
+See <a href="#SECTid81d0968">PANE OPTIONS</a> for the list of available options.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>pane</b> <i class="m">pane -option</i> ?<i class="m">value</i> ?<i class="m">-option value...</i>
+</dt>
+<dd>Query or modify the options of the specified <i>pane</i>,
+where <i>pane</i> is either an integer index or the name of a managed subwindow.
+If no <i>-option</i> is specified, returns a dictionary of the pane 
+option values.
+If one <i>-option</i> is specified, returns the value of that <i>option</i>.
+Otherwise, sets the <i>-option</i>s to the corresponding <i>value</i>s.
+</dd>
+
+</dl>
+<h2><a name="SECTid81d1340">INTERNAL ROUTINES</a></h2><p>The following routines are used internally by the <b>paned</b> widget
+binding code.
+</p><dl class="commandlist">
+
+<dt>
+<i class="m">pathname</i> <b>sashpos</b> <i class="m">index</i> ?<i class="m">newpos</i>?</dt>
+<dd>If <i>newpos</i> is specified, sets the sash position 
+(subject to constraints).
+Returns the position of sash number <i>index</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>identify</b> <i class="m">x y</i>
+</dt>
+<dd>Returns a list consisting of the sash index at point <i>x,y</i>
+and the name of the sash subelement at that point.
+Returns the empty list if <i>x,y</i> is not over a sash.
+</dd>
+
+</dl>
+<h2><a name="SECTid81d16b0">SEE ALSO</a></h2><p class="seealso">widget(n), notebook(n).</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

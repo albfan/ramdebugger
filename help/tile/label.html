@@ -1,0 +1,133 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: label</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d04e0">DESCRIPTION</a> · <a href="#SECTid81d0580">STANDARD OPTIONS</a> · <a href="#SECTid81d0788">OPTIONS</a> · <a href="#SECTid81d1368">WIDGET COMMAND</a> · <a href="#SECTid81d1818">SEE ALSO</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">label - </b><br>Display a text string and/or image</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>ttk::label</b> <i class="m">pathName</i> ?<i class="m">options</i>?
+</pre>
+<h2><a name="SECTid81d04e0">DESCRIPTION</a></h2><p>A <b>label</b> widget displays a textual label and/or image.
+The label may be linked to a Tcl variable 
+to automatically change the displayed text.
+</p>
+<h2><a name="SECTid81d0580">STANDARD OPTIONS</a></h2><div class="menu"><table class="menu" width="100%">
+<tr>
+<td width="25%"><a href="widget.html#stdopt_-class">-class</a></td><td width="25%"><a href="widget.html#stdopt_-compound">-compound</a></td><td width="25%"><a href="widget.html#stdopt_-cursor">-cursor</a></td><td width="25%"><a href="widget.html#stdopt_-image">-image</a></td>
+</tr><tr>
+<td width="25%"><a href="widget.html#stdopt_-style">-style</a></td><td width="25%"><a href="widget.html#stdopt_-takefocus">-takefocus</a></td><td width="25%"><a href="widget.html#stdopt_-text">-text</a></td><td width="25%"><a href="widget.html#stdopt_-textvariable">-textvariable</a></td>
+</tr><tr>
+<td width="25%"><a href="widget.html#stdopt_-underline">-underline</a></td><td width="25%"><a href="widget.html#stdopt_-width">-width</a></td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d0788">OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-anchor">-anchor</a></td><td width="40%" align="left">anchor</td><td width="40%" align="left">Anchor</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies how the information in the widget is positioned
+relative to the inner margins.  Legal values are
+<b>n</b>, <b>ne</b>, <b>e</b>, <b>se</b>,
+<b>s</b>, <b>sw</b>, <b>w</b>, <b>nw</b>, and <b>center</b>.
+See also <b>-justify</b>.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-background">-background</a></td><td width="40%" align="left">frameColor</td><td width="40%" align="left">FrameColor</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">The widget's background color.  
+If unspecified, the theme default is used.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-font">-font</a></td><td width="40%" align="left">font</td><td width="40%" align="left">Font</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Font to use for label text.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-foreground">-foreground</a></td><td width="40%" align="left">textColor</td><td width="40%" align="left">TextColor</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">The widget's foreground color.
+If unspecified, the theme default is used.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-justify">-justify</a></td><td width="40%" align="left">justify</td><td width="40%" align="left">Justify</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">If there are multiple lines of text, specifies how
+the lines are laid out relative to one another.
+One of <b>left</b>, <b>center</b>, or <b>right</b>.
+See also <b>-anchor</b>.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-padding">-padding</a></td><td width="40%" align="left">padding</td><td width="40%" align="left">Padding</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the amount of extra space to allocate for the widget.
+The padding is a list of up to four length specifications 
+<i>left top right bottom</i>.
+If fewer than four elements are specified, 
+<i>bottom</i> defaults to <i>top</i>,
+<i>right</i> defaults to <i>left</i>, and 
+<i>top</i> defaults to <i>left</i>.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-relief">-relief</a></td><td width="40%" align="left">relief</td><td width="40%" align="left">Relief</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the 3-D effect desired for the widget border.
+Valid values are
+<b>flat</b>, <b>groove</b>, <b>raised</b>, <b>ridge</b>, <b>solid</b>, 
+and <b>sunken</b>.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-text">-text</a></td><td width="40%" align="left">text</td><td width="40%" align="left">Text</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies a text string to be displayed inside the widget
+(unless overridden by <b>-textvariable</b>).
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-wraplength">-wraplength</a></td><td width="40%" align="left">wrapLength</td><td width="40%" align="left">WrapLength</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the maximum line length (in pixels).
+If this option is less than or equal to zero,
+then automatic wrapping is not performed; otherwise
+the text is split into lines such that no line is longer
+than the specified value.
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d1368">WIDGET COMMAND</a></h2><dl>
+
+<dt>
+<i class="m">pathName</i> <b>cget</b> <i class="m">option</i>
+</dt>
+<dd></dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>configure</b> ?<i class="m">option</i>? ?<i class="m">value option value ...</i>?</dt>
+<dd></dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>instate</b> <i class="m">statespec</i> ?<i class="m">script</i>?</dt>
+<dd></dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>state</b> ?<i class="m">stateSpec</i>?</dt>
+<dd>See <i>widget(n)</i>
+</dd>
+
+</dl>
+<h2><a name="SECTid81d1818">SEE ALSO</a></h2><p class="seealso">widget(n)</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

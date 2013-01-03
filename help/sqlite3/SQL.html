@@ -1,0 +1,1970 @@
+<html><head><title>Query Language Understood by SQLite</title></head>
+<body bgcolor="white" link="#50695f" vlink="#508896">
+<table width="100%" border="0">
+<tr><td valign="top"><img src="sqlite.gif"></td>
+<td width="100%"></td>
+<td valign="bottom">
+<ul>
+<li><a href="http://www.sqlite.org/cvstrac/tktnew">bugs</a></li>
+<li><a href="changes.html">changes</a></li>
+<li><a href="contrib">contrib</a></li>
+<li><a href="download.html#cvs">cvs&nbsp;repository</a></li>
+<li><a href="docs.html">documentation</a></li>
+</ul>
+</td>
+<td width="10"></td>
+<td valign="bottom">
+<ul>
+<li><a href="download.html">download</a></li>
+<li><a href="faq.html">faq</a></li>
+<li><a href="index.html">home</a></li>
+<li><a href="support.html">mailing&nbsp;list</a></li>
+<li><a href="index.html">news</a></li>
+</ul>
+</td>
+<td width="10"></td>
+<td valign="bottom">
+<ul>
+<li><a href="quickstart.html">quick&nbsp;start</a></li>
+<li><a href="support.html">support</a></li>
+<li><a href="lang.html">syntax</a></li>
+<li><a href="http://www.sqlite.org/cvstrac/timeline">timeline</a></li>
+<li><a href="http://www.sqlite.org/cvstrac/wiki">wiki</a></li>
+</ul>
+</td>
+</tr></table>
+<table width="100%">
+<tr><td bgcolor="#80a796"></td></tr>
+</table>
+
+<h1>SQL As Understood By SQLite</h1>
+
+<p>The SQLite library understands most of the standard SQL
+language.  But it does <a href="omitted.html">omit some features</a>
+while at the same time
+adding a few features of its own.  This document attempts to
+describe precisely what parts of the SQL language SQLite does
+and does not support.  A list of <a href="lang_keywords.html">keywords</a> is 
+also provided.</p>
+
+<p>In all of the syntax diagrams that follow, literal text is shown in
+bold blue.  Non-terminal symbols are shown in italic red.  Operators
+that are part of the syntactic markup itself are shown in black roman.</p>
+
+<p>This document is just an overview of the SQL syntax implemented
+by SQLite.  Many low-level productions are omitted.  For detailed information
+on the language that SQLite understands, refer to the source code and
+the grammar file "parse.y".</p>
+
+
+<p>SQLite implements the follow syntax:</p>
+<p><ul>
+
+<li><a href="#altertable">ALTER TABLE</a></li>
+<li><a href="#analyze">ANALYZE</a></li>
+<li><a href="#attach">ATTACH DATABASE</a></li>
+<li><a href="#transaction">BEGIN TRANSACTION</a></li>
+<li><a href="#comment">comment</a></li>
+<li><a href="#transaction">COMMIT TRANSACTION</a></li>
+<li><a href="#copy">COPY</a></li>
+<li><a href="#createindex">CREATE INDEX</a></li>
+<li><a href="#createtable">CREATE TABLE</a></li>
+<li><a href="#createtrigger">CREATE TRIGGER</a></li>
+<li><a href="#createview">CREATE VIEW</a></li>
+<li><a href="#delete">DELETE</a></li>
+<li><a href="#detach">DETACH DATABASE</a></li>
+<li><a href="#dropindex">DROP INDEX</a></li>
+<li><a href="#droptable">DROP TABLE</a></li>
+<li><a href="#droptrigger">DROP TRIGGER</a></li>
+<li><a href="#dropview">DROP VIEW</a></li>
+<li><a href="#transaction">END TRANSACTION</a></li>
+<li><a href="#explain">EXPLAIN</a></li>
+<li><a href="#expr">expression</a></li>
+<li><a href="#insert">INSERT</a></li>
+<li><a href="#conflict">ON CONFLICT clause</a></li>
+<li><a href="pragma.html">PRAGMA</a></li>
+<li><a href="#reindex">REINDEX</a></li>
+<li><a href="#replace">REPLACE</a></li>
+<li><a href="#transaction">ROLLBACK TRANSACTION</a></li>
+<li><a href="#select">SELECT</a></li>
+<li><a href="#update">UPDATE</a></li>
+<li><a href="#vacuum">VACUUM</a></li>
+</ul></p>
+
+<p>Details on the implementation of each command are provided in
+the sequel.</p>
+
+
+<hr />
+<a name="altertable"></a>
+<h1>ALTER TABLE</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">ALTER TABLE </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">alteration</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">alteration</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">RENAME TO </font></b><i><font color="#ff3434">new-table-name</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">alteration</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">ADD </font></b>[<b><font color="#2c2cf0">COLUMN</font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">column-def</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>SQLite's version of the ALTER TABLE command allows the user to 
+rename or add a new column to an existing table. It is not possible
+to remove a column from a table.
+</p>
+
+<p>The RENAME TO syntax is used to rename the table identified by 
+<i>[database-name.]table-name</i> to <i>new-table-name</i>. This command 
+cannot be used to move a table between attached databases, only to rename 
+a table within the same database.</p>
+
+<p>If the table being renamed has triggers or indices, then these remain
+attached to the table after it has been renamed. However, if there are
+any view definitions, or statements executed by triggers that refer to
+the table being renamed, these are not automatically modified to use the new
+table name. If this is required, the triggers or view definitions must be
+dropped and recreated to use the new table name by hand.
+</p>
+
+<p>The ADD [COLUMN] syntax is used to add a new column to an existing table.
+The new column is always appended to the end of the list of existing columns.
+<i>Column-def</i> may take any of the forms permissable in a CREATE TABLE 
+statement, with the following restrictions:
+<ul>
+<li>The column may not have a PRIMARY KEY or UNIQUE constraint.</li>
+<li>The column may not have a default value of CURRENT_TIME, CURRENT_DATE 
+    or CURRENT_TIMESTAMP.</li>
+<li>If a NOT NULL constraint is specified, then the column must have a
+    default value other than NULL.
+</ul>
+
+<p>The execution time of the ALTER TABLE command is independent of
+the amount of data in the table.  The ALTER TABLE command runs as quickly
+on a table with 10 million rows as it does on a table with 1 row.
+</p>
+
+<p>After ADD COLUMN has been run on a database, that database will not
+be readable by SQLite version 3.1.3 and earlier until the database
+is <a href="lang_vacuum.html">VACUUM</a>ed.</p>
+
+
+<hr />
+<a name="analyze"></a>
+<h1>ANALYZE</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">ANALYZE</font></b></td></tr>
+</table>
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">ANALYZE </font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">ANALYZE </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The ANALYZE command gathers statistics about indices and stores them
+in a special tables in the database where the query optimizer can use
+them to help make better index choices.
+If no arguments are given, all indices in all attached databases are
+analyzed.  If a database name is given as the argument, all indices
+in that one database are analyzed.  If the argument is a table name,
+then only indices associated with that one table are analyzed.</p>
+
+<p>The initial implementation stores all statistics in a single
+table named <b>sqlite_stat1</b>.  Future enhancements may create
+additional tables with the same name pattern except with the "1"
+changed to a different digit.  The <b>sqlite_stat1</b> table cannot
+be DROPped, but it all the content can be DELETEd which as the
+same effect.</p>
+
+
+<hr />
+<a name="attach"></a>
+<h1>ATTACH DATABASE</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">ATTACH </font></b>[<b><font color="#2c2cf0">DATABASE</font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">database-filename</font></i><b><font color="#2c2cf0"> AS </font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The ATTACH DATABASE statement adds a preexisting database 
+file to the current database connection.  If the filename contains 
+punctuation characters it must be quoted.  The names 'main' and 
+'temp' refer to the main database and the database used for 
+temporary tables.  These cannot be detached.  Attached databases 
+are removed using the <a href="#detach">DETACH DATABASE</a> 
+statement.</p>
+
+<p>You can read from and write to an attached database and you
+can modify the schema of the attached database.  This is a new
+feature of SQLite version 3.0.  In SQLite 2.8, schema changes
+to attached databases were not allowed.</p>
+
+<p>You cannot create a new table with the same name as a table in 
+an attached database, but you can attach a database which contains
+tables whose names are duplicates of tables in the main database.  It is 
+also permissible to attach the same database file multiple times.</p>
+
+<p>Tables in an attached database can be referred to using the syntax 
+<i>database-name.table-name</i>.  If an attached table doesn't have 
+a duplicate table name in the main database, it doesn't require a 
+database name prefix.  When a database is attached, all of its 
+tables which don't have duplicate names become the 'default' table
+of that name.  Any tables of that name attached afterwards require the table 
+prefix. If the 'default' table of a given name is detached, then 
+the last table of that name attached becomes the new default.</p>
+
+<p>
+Transactions involving multiple attached databases are atomic,
+assuming that the main database is not ":memory:".  If the main
+database is ":memory:" then 
+transactions continue to be atomic within each individual
+database file. But if the host computer crashes in the middle
+of a COMMIT where two or more database files are updated,
+some of those files might get the changes where others
+might not.
+Atomic commit of attached databases is a new feature of SQLite version 3.0.
+In SQLite version 2.8, all commits to attached databases behaved as if
+the main database were ":memory:".
+</p>
+
+<p>There is a compile-time limit of 10 attached database files.</p>
+
+
+<hr />
+<a name="transaction"></a>
+<h1>BEGIN TRANSACTION</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">BEGIN </font></b>[<b><font color="#2c2cf0"> DEFERRED </font></b><big>|</big><b><font color="#2c2cf0"> IMMEDIATE </font></b><big>|</big><b><font color="#2c2cf0"> EXCLUSIVE </font></b>]<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">TRANSACTION </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">name</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">END </font></b>[<b><font color="#2c2cf0">TRANSACTION </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">name</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">COMMIT </font></b>[<b><font color="#2c2cf0">TRANSACTION </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">name</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">ROLLBACK </font></b>[<b><font color="#2c2cf0">TRANSACTION </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">name</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>Beginning in version 2.0, SQLite supports transactions with
+rollback and atomic commit.</p>
+
+<p>The optional transaction name is ignored. SQLite currently 
+does not allow nested transactions.</p>
+
+<p>
+No changes can be made to the database except within a transaction.
+Any command that changes the database (basically, any SQL command
+other than SELECT) will automatically start a transaction if
+one is not already in effect.  Automatically started transactions
+are committed at the conclusion of the command.
+</p>
+
+<p>
+Transactions can be started manually using the BEGIN
+command.  Such transactions usually persist until the next
+COMMIT or ROLLBACK command.  But a transaction will also 
+ROLLBACK if the database is closed or if an error occurs
+and the ROLLBACK conflict resolution algorithm is specified.
+See the documentation on the <a href="#conflict">ON CONFLICT</a>
+clause for additional information about the ROLLBACK
+conflict resolution algorithm.
+</p>
+
+<p>
+In SQLite version 3.0.8 and later, transactions can be deferred,
+immediate, or exclusive.  Deferred means that no locks are acquired
+on the database until the database is first accessed.  Thus with a
+deferred transaction, the BEGIN statement itself does nothing.  Locks
+are not acquired until the first read or write operation.  The first read
+operation against a database creates a SHARED lock and the first
+write operation creates a RESERVED lock.   Because the acquisition of
+locks is deferred until they are needed, it is possible that another
+thread or process could create a separate transaction and write to
+the database after the BEGIN on the current thread has executed.
+If the transaction is immediate, then RESERVED locks
+are acquired on all databases as soon as the BEGIN command is
+executed, without waiting for the
+database to be used.  After a BEGIN IMMEDIATE, you are guaranteed that
+no other thread or process will be able to write to the database or
+do a BEGIN IMMEDIATE or BEGIN EXCLUSIVE.  Other processes can continue
+to read from the database, however.  An exclusive transaction causes
+EXCLUSIVE locks to be acquired on all databases.  After a BEGIN
+EXCLUSIVE, you are guaranteed that no other thread or process will
+be able to read or write the database until the transaction is
+complete.
+</p>
+
+<p>
+A description of the meaning of SHARED, RESERVED, and EXCLUSIVE locks
+is available <a href="lockingv3.html">separately</a>.
+</p>
+
+<p>
+The default behavior for SQLite version 3.0.8 is a
+deferred transaction.  For SQLite version 3.0.0 through 3.0.7,
+deferred is the only kind of transaction available.  For SQLite
+version 2.8 and earlier, all transactions are exclusive.
+</p>
+
+<p>
+The COMMIT command does not actually perform a commit until all
+pending SQL commands finish.  Thus if two or more SELECT statements
+are in the middle of processing and a COMMIT is executed, the commit
+will not actually occur until all SELECT statements finish.
+</p>
+
+<p>
+An attempt to execute COMMIT might result in an SQLITE_BUSY return code.
+This indicates that another thread or process had a read lock on the database
+that prevented the database from being updated.  When COMMIT fails in this
+way, the transaction remains active and the COMMIT can be retried later
+after the reader has had a chance to clear.
+</p>
+
+
+<hr />
+<a name="comment"></a>
+<h1>comment</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">comment</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"></font></b><i><font color="#ff3434">SQL-comment</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">C-comment</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">SQL-comment</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">-- </font></b><i><font color="#ff3434">single-line</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">C-comment</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">/<big>*</big> </font></b><i><font color="#ff3434">multiple-lines</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"><big>*</big>/</font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p> Comments aren't SQL commands, but can occur in SQL queries. They are 
+treated as whitespace by the parser.  They can begin anywhere whitespace 
+can be found, including inside expressions that span multiple lines.
+</p>
+
+<p> SQL comments only extend to the end of the current line.</p>
+
+<p> C comments can span any number of lines.  If there is no terminating
+delimiter, they extend to the end of the input.  This is not treated as
+an error.  A new SQL statement can begin on a line after a multiline
+comment ends.  C comments can be embedded anywhere whitespace can occur,
+including inside expressions, and in the middle of other SQL statements.
+C comments do not nest.  SQL comments inside a C comment will be ignored.
+</p>
+
+
+<hr />
+<a name="copy"></a>
+<h1>COPY</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">COPY </font></b>[<b><font color="#2c2cf0"> OR </font></b><i><font color="#ff3434">conflict-algorithm</font></i><b><font color="#2c2cf0"> </font></b>]<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> FROM </font></b><i><font color="#ff3434">filename</font></i><b><font color="#2c2cf0"><br>
+</font></b>[<b><font color="#2c2cf0"> USING DELIMITERS </font></b><i><font color="#ff3434">delim</font></i><b><font color="#2c2cf0"> </font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The COPY command is available in SQLite version 2.8 and earlier.
+The COPY command has been removed from SQLite version 3.0 due to
+complications in trying to support it in a mixed UTF-8/16 environment.
+In version 3.0, the <a href="sqlite.html">command-line shell</a>
+contains a new command <b>.import</b> that can be used as a substitute
+for COPY.
+</p>
+
+<p>The COPY command is an extension used to load large amounts of
+data into a table.  It is modeled after a similar command found
+in PostgreSQL.  In fact, the SQLite COPY command is specifically
+designed to be able to read the output of the PostgreSQL dump
+utility <b>pg_dump</b> so that data can be easily transferred from
+PostgreSQL into SQLite.</p>
+
+<p>The table-name is the name of an existing table which is to
+be filled with data.  The filename is a string or identifier that
+names a file from which data will be read.  The filename can be
+the <b>STDIN</b> to read data from standard input.</p>
+
+<p>Each line of the input file is converted into a single record
+in the table.  Columns are separated by tabs.  If a tab occurs as
+data within a column, then that tab is preceded by a baskslash "\"
+character.  A baskslash in the data appears as two backslashes in
+a row.  The optional USING DELIMITERS clause can specify a delimiter
+other than tab.</p>
+
+<p>If a column consists of the character "\N", that column is filled
+with the value NULL.</p>
+
+<p>The optional conflict-clause allows the specification of an alternative
+constraint conflict resolution algorithm to use for this one command.
+See the section titled
+<a href="#conflict">ON CONFLICT</a> for additional information.</p>
+
+<p>When the input data source is STDIN, the input can be terminated
+by a line that contains only a baskslash and a dot:
+"<font color="#2c2cf0"><big>\.</big></font>".</p>
+
+<hr />
+<a name="createindex"></a>
+<h1>CREATE INDEX</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">CREATE </font></b>[<b><font color="#2c2cf0">UNIQUE</font></b>]<b><font color="#2c2cf0"> INDEX </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">index-name</font></i><b><font color="#2c2cf0"> <br>
+ON </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> <big>(</big> </font></b><i><font color="#ff3434">column-name</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"><big>,</big> </font></b><i><font color="#ff3434">column-name</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b><big>*</big><b><font color="#2c2cf0"> <big>)</big><br>
+</font></b>[<b><font color="#2c2cf0"> ON CONFLICT </font></b><i><font color="#ff3434">conflict-algorithm</font></i><b><font color="#2c2cf0"> </font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">column-name</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"></font></b><i><font color="#ff3434">name</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"> COLLATE </font></b><i><font color="#ff3434">collation-name</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"> ASC </font></b><big>|</big><b><font color="#2c2cf0"> DESC </font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The CREATE INDEX command consists of the keywords "CREATE INDEX" followed
+by the name of the new index, the keyword "ON", the name of a previously
+created table that is to be indexed, and a parenthesized list of names of
+columns in the table that are used for the index key.
+Each column name can be followed by one of the "ASC" or "DESC" keywords
+to indicate sort order, but the sort order is ignored in the current
+implementation.  Sorting is always done in ascending order.</p>
+
+<p>The COLLATE clause following each column name defines a collating
+sequence used for text entires in that column.  The default collating
+sequence is the collating sequence defined for that column in the
+CREATE TABLE statement.  Or if no collating sequence is otherwise defined,
+the built-in BINARY collating sequence is used.</p>
+
+<p>There are no arbitrary limits on the number of indices that can be
+attached to a single table, nor on the number of columns in an index.</p>
+
+<p>If the UNIQUE keyword appears between CREATE and INDEX then duplicate
+index entries are not allowed.  Any attempt to insert a duplicate entry
+will result in an error.</p>
+
+<p>The optional conflict-clause allows the specification of an alternative
+default constraint conflict resolution algorithm for this index.
+This only makes sense if the UNIQUE keyword is used since otherwise
+there are not constraints on the index.  The default algorithm is
+ABORT.  If a COPY, INSERT, or UPDATE statement specifies a particular
+conflict resolution algorithm, that algorithm is used in place of
+the default algorithm specified here.
+See the section titled
+<a href="#conflict">ON CONFLICT</a> for additional information.</p>
+
+<p>The exact text
+of each CREATE INDEX statement is stored in the <b>sqlite_master</b>
+or <b>sqlite_temp_master</b> table, depending on whether the table
+being indexed is temporary.  Every time the database is opened,
+all CREATE INDEX statements
+are read from the <b>sqlite_master</b> table and used to regenerate
+SQLite's internal representation of the index layout.</p>
+
+<p>Indexes are removed with the <a href="#dropindex">DROP INDEX</a> 
+command.</p>
+
+
+<hr />
+<a name="createtable"></a>
+<h1>CREATE TABLE</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-command</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">CREATE </font></b>[<b><font color="#2c2cf0">TEMP </font></b><big>|</big><b><font color="#2c2cf0"> TEMPORARY</font></b>]<b><font color="#2c2cf0"> TABLE </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> <big>(</big><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font></b><i><font color="#ff3434">column-def</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"><big>,</big> </font></b><i><font color="#ff3434">column-def</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b><big>*</big><b><font color="#2c2cf0"><br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font></b>[<b><font color="#2c2cf0"><big>,</big> </font></b><i><font color="#ff3434">constraint</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b><big>*</big><b><font color="#2c2cf0"><br>
+<big>)</big></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-command</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">CREATE </font></b>[<b><font color="#2c2cf0">TEMP </font></b><big>|</big><b><font color="#2c2cf0"> TEMPORARY</font></b>]<b><font color="#2c2cf0"> TABLE </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"><big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> AS </font></b><i><font color="#ff3434">select-statement</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">column-def</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"></font></b><i><font color="#ff3434">name</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">type</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"></font></b>[<b><font color="#2c2cf0">CONSTRAINT </font></b><i><font color="#ff3434">name</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">column-constraint</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b><big>*</big><b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">type</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"></font></b><i><font color="#ff3434">typename</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">typename</font></i><b><font color="#2c2cf0"> <big>(</big> </font></b><i><font color="#ff3434">number</font></i><b><font color="#2c2cf0"> <big>)</big> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">typename</font></i><b><font color="#2c2cf0"> <big>(</big> </font></b><i><font color="#ff3434">number</font></i><b><font color="#2c2cf0"> <big>,</big> </font></b><i><font color="#ff3434">number</font></i><b><font color="#2c2cf0"> <big>)</big></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">column-constraint</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">NOT NULL </font></b>[<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">conflict-clause</font></i><b><font color="#2c2cf0"> </font></b>]<b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+PRIMARY KEY </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">sort-order</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">conflict-clause</font></i><b><font color="#2c2cf0"> </font></b>]<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">AUTOINCREMENT</font></b>]<b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+UNIQUE </font></b>[<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">conflict-clause</font></i><b><font color="#2c2cf0"> </font></b>]<b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+CHECK <big>(</big> </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> <big>)</big> </font></b>[<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">conflict-clause</font></i><b><font color="#2c2cf0"> </font></b>]<b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+DEFAULT </font></b><i><font color="#ff3434">value</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+COLLATE </font></b><i><font color="#ff3434">collation-name</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">constraint</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">PRIMARY KEY <big>(</big> </font></b><i><font color="#ff3434">column-list</font></i><b><font color="#2c2cf0"> <big>)</big> </font></b>[<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">conflict-clause</font></i><b><font color="#2c2cf0"> </font></b>]<b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+UNIQUE <big>(</big> </font></b><i><font color="#ff3434">column-list</font></i><b><font color="#2c2cf0"> <big>)</big> </font></b>[<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">conflict-clause</font></i><b><font color="#2c2cf0"> </font></b>]<b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+CHECK <big>(</big> </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> <big>)</big> </font></b>[<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">conflict-clause</font></i><b><font color="#2c2cf0"> </font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">conflict-clause</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">ON CONFLICT </font></b><i><font color="#ff3434">conflict-algorithm</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>A CREATE TABLE statement is basically the keywords "CREATE TABLE"
+followed by the name of a new table and a parenthesized list of column
+definitions and constraints.  The table name can be either an identifier
+or a string.  Tables names that begin with "<b>sqlite_</b>" are reserved
+for use by the engine.</p>
+
+<p>Each column definition is the name of the column followed by the
+datatype for that column, then one or more optional column constraints.
+The datatype for the column does not restrict what data may be put
+in that column.
+See <a href="datatype3.html">Datatypes In SQLite Version 3</a> for
+additional information.
+The UNIQUE constraint causes an index to be created on the specified
+columns.  This index must contain unique keys.
+The COLLATE clause specifies what text <a href="datatype3.html#collation">
+collating function</a> to use when comparing text entries for the column.  
+The built-in BINARY collating function is used by default.
+<p>
+The DEFAULT constraint specifies a default value to use when doing an INSERT.
+The value may be NULL, a string constant or a number. Starting with version
+3.1.0, the default value may also be one of the special case-independant
+keywords CURRENT_TIME, CURRENT_DATE or CURRENT_TIMESTAMP. If the value is
+NULL, a string constant or number, it is literally inserted into the column
+whenever an INSERT statement that does not specify a value for the column is
+executed. If the value is CURRENT_TIME, CURRENT_DATE or CURRENT_TIMESTAMP, then
+the current UTC date and/or time is inserted into the columns. For
+CURRENT_TIME, the format is HH:MM:SS. For CURRENT_DATE, YYYY-MM-DD. The format
+for CURRENT_TIMESTAMP is "YYYY-MM-DD HH:MM:SS".
+</p>
+
+<p>Specifying a PRIMARY KEY normally just creates a UNIQUE index
+on the corresponding columns.  However, if primary key is on a single column
+that has datatype INTEGER, then that column is used internally
+as the actual key of the B-Tree for the table.  This means that the column
+may only hold unique integer values.  (Except for this one case,
+SQLite ignores the datatype specification of columns and allows
+any kind of data to be put in a column regardless of its declared
+datatype.)  If a table does not have an INTEGER PRIMARY KEY column,
+then the B-Tree key will be a automatically generated integer.  The
+B-Tree key for a row can always be accessed using one of the
+special names "<b>ROWID</b>", "<b>OID</b>", or "<b>_ROWID_</b>".
+This is true regardless of whether or not there is an INTEGER
+PRIMARY KEY.  An INTEGER PRIMARY KEY column man also include the
+keyword AUTOINCREMENT.  The AUTOINCREMENT keyword modified the way
+that B-Tree keys are automatically generated.  Additional detail
+on automatic B-Tree key generation is available
+<a href="autoinc.html">separately</a>.</p>
+
+<p>If the "TEMP" or "TEMPORARY" keyword occurs in between "CREATE"
+and "TABLE" then the table that is created is only visible
+within that same database connection
+and is automatically deleted when
+the database connection is closed.  Any indices created on a temporary table
+are also temporary.  Temporary tables and indices are stored in a
+separate file distinct from the main database file.</p>
+
+<p> If a &lt;database-name&gt; is specified, then the table is created in 
+the named database. It is an error to specify both a &lt;database-name&gt;
+and the TEMP keyword, unless the &lt;database-name&gt; is "temp". If no
+database name is specified, and the TEMP keyword is not present,
+the table is created in the main database.</p>
+
+<p>The optional conflict-clause following each constraint
+allows the specification of an alternative default
+constraint conflict resolution algorithm for that constraint.
+The default is abort ABORT.  Different constraints within the same
+table may have different default conflict resolution algorithms.
+If an COPY, INSERT, or UPDATE command specifies a different conflict
+resolution algorithm, then that algorithm is used in place of the
+default algorithm specified in the CREATE TABLE statement.
+See the section titled
+<a href="#conflict">ON CONFLICT</a> for additional information.</p>
+
+<p>CHECK constraints are ignored in the current implementation.
+Support for CHECK constraints may be added in the future.  As of
+version 2.3.0, NOT NULL, PRIMARY KEY, and UNIQUE constraints all
+work.</p>
+
+<p>There are no arbitrary limits on the number
+of columns or on the number of constraints in a table.
+The total amount of data in a single row is limited to about
+1 megabytes in version 2.8.  In version 3.0 there is no arbitrary
+limit on the amount of data in a row.</p>
+
+
+<p>The CREATE TABLE AS form defines the table to be
+the result set of a query.  The names of the table columns are
+the names of the columns in the result.</p>
+
+<p>The exact text
+of each CREATE TABLE statement is stored in the <b>sqlite_master</b>
+table.  Every time the database is opened, all CREATE TABLE statements
+are read from the <b>sqlite_master</b> table and used to regenerate
+SQLite's internal representation of the table layout.
+If the original command was a CREATE TABLE AS then then an equivalent
+CREATE TABLE statement is synthesized and store in <b>sqlite_master</b>
+in place of the original command.
+The text of CREATE TEMPORARY TABLE statements are stored in the
+<b>sqlite_temp_master</b> table.
+</p>
+
+<p>Tables are removed using the <a href="#droptable">DROP TABLE</a> 
+statement.  </p>
+
+
+<hr />
+<a name="createtrigger"></a>
+<h1>CREATE TRIGGER</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">CREATE </font></b>[<b><font color="#2c2cf0">TEMP </font></b><big>|</big><b><font color="#2c2cf0"> TEMPORARY</font></b>]<b><font color="#2c2cf0"> TRIGGER </font></b><i><font color="#ff3434">trigger-name</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"> BEFORE </font></b><big>|</big><b><font color="#2c2cf0"> AFTER </font></b>]<b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">database-event</font></i><b><font color="#2c2cf0"> ON </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">trigger-action</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">CREATE </font></b>[<b><font color="#2c2cf0">TEMP </font></b><big>|</big><b><font color="#2c2cf0"> TEMPORARY</font></b>]<b><font color="#2c2cf0"> TRIGGER </font></b><i><font color="#ff3434">trigger-name</font></i><b><font color="#2c2cf0"> INSTEAD OF<br>
+</font></b><i><font color="#ff3434">database-event</font></i><b><font color="#2c2cf0"> ON </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">view-name</font></i><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">trigger-action</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">database-event</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">DELETE </font></b><big>|</big><b><font color="#2c2cf0"> <br>
+INSERT </font></b><big>|</big><b><font color="#2c2cf0"> <br>
+UPDATE </font></b><big>|</big><b><font color="#2c2cf0"> <br>
+UPDATE OF </font></b><i><font color="#ff3434">column-list</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">trigger-action</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"></font></b>[<b><font color="#2c2cf0"> FOR EACH ROW </font></b><big>|</big><b><font color="#2c2cf0"> FOR EACH STATEMENT </font></b>]<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"> WHEN </font></b><i><font color="#ff3434">expression</font></i><b><font color="#2c2cf0"> </font></b>]<b><font color="#2c2cf0"> <br>
+BEGIN <br>
+&nbsp;&nbsp;&nbsp;&nbsp;</font></b><i><font color="#ff3434">trigger-step</font></i><b><font color="#2c2cf0"> ; </font></b>[<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">trigger-step</font></i><b><font color="#2c2cf0"> ; </font></b>]<b><font color="#2c2cf0"></font></b><big>*</big><b><font color="#2c2cf0"><br>
+END</font></b></td></tr>
+</table>
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">trigger-step</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"></font></b><i><font color="#ff3434">update-statement</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">insert-statement</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"> <br>
+</font></b><i><font color="#ff3434">delete-statement</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">select-statement</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The CREATE TRIGGER statement is used to add triggers to the 
+database schema. Triggers are database operations (the <i>trigger-action</i>) 
+that are automatically performed when a specified database event (the
+<i>database-event</i>) occurs.  </p>
+
+<p>A trigger may be specified to fire whenever a DELETE, INSERT or UPDATE of a
+particular database table occurs, or whenever an UPDATE of one or more
+specified columns of a table are updated.</p>
+
+<p>At this time SQLite supports only FOR EACH ROW triggers, not FOR EACH
+STATEMENT triggers. Hence explicitly specifying FOR EACH ROW is optional.  FOR
+EACH ROW implies that the SQL statements specified as <i>trigger-steps</i> 
+may be executed (depending on the WHEN clause) for each database row being
+inserted, updated or deleted by the statement causing the trigger to fire.</p>
+
+<p>Both the WHEN clause and the <i>trigger-steps</i> may access elements of 
+the row being inserted, deleted or updated using references of the form 
+"NEW.<i>column-name</i>" and "OLD.<i>column-name</i>", where
+<i>column-name</i> is the name of a column from the table that the trigger
+is associated with. OLD and NEW references may only be used in triggers on
+<i>trigger-event</i>s for which they are relevant, as follows:</p>
+
+<table border=0 cellpadding=10>
+<tr>
+<td valign="top" align="right" width=120><i>INSERT</i></td>
+<td valign="top">NEW references are valid</td>
+</tr>
+<tr>
+<td valign="top" align="right" width=120><i>UPDATE</i></td>
+<td valign="top">NEW and OLD references are valid</td>
+</tr>
+<tr>
+<td valign="top" align="right" width=120><i>DELETE</i></td>
+<td valign="top">OLD references are valid</td>
+</tr>
+</table>
+</p>
+
+<p>If a WHEN clause is supplied, the SQL statements specified as <i>trigger-steps</i> are only executed for rows for which the WHEN clause is true. If no WHEN clause is supplied, the SQL statements are executed for all rows.</p>
+
+<p>The specified <i>trigger-time</i> determines when the <i>trigger-steps</i>
+will be executed relative to the insertion, modification or removal of the
+associated row.</p>
+
+<p>An ON CONFLICT clause may be specified as part of an UPDATE or INSERT
+<i>trigger-step</i>. However if an ON CONFLICT clause is specified as part of 
+the statement causing the trigger to fire, then this conflict handling
+policy is used instead.</p>
+
+<p>Triggers are automatically dropped when the table that they are 
+associated with is dropped.</p>
+
+<p>Triggers may be created on views, as well as ordinary tables, by specifying
+INSTEAD OF in the CREATE TRIGGER statement. If one or more ON INSERT, ON DELETE
+or ON UPDATE triggers are defined on a view, then it is not an error to execute
+an INSERT, DELETE or UPDATE statement on the view, respectively. Thereafter,
+executing an INSERT, DELETE or UPDATE on the view causes the associated
+  triggers to fire. The real tables underlying the view are not modified
+  (except possibly explicitly, by a trigger program).</p>
+
+<p><b>Example:</b></p>
+
+<p>Assuming that customer records are stored in the "customers" table, and
+that order records are stored in the "orders" table, the following trigger
+ensures that all associated orders are redirected when a customer changes
+his or her address:</p>
+
+<blockquote><pre>
+CREATE TRIGGER update_customer_address UPDATE OF address ON customers 
+  BEGIN
+    UPDATE orders SET address = new.address WHERE customer_name = old.name;
+  END;
+</pre></blockquote>
+
+<p>With this trigger installed, executing the statement:</p>
+
+<blockquote><pre>
+UPDATE customers SET address = '1 Main St.' WHERE name = 'Jack Jones';
+</pre></blockquote>
+
+<p>causes the following to be automatically executed:</p>
+
+<blockquote><pre>
+UPDATE orders SET address = '1 Main St.' WHERE customer_name = 'Jack Jones';
+</pre></blockquote>
+
+<p>Note that currently, triggers may behave oddly when created on tables
+  with INTEGER PRIMARY KEY fields. If a BEFORE trigger program modifies the 
+  INTEGER PRIMARY KEY field of a row that will be subsequently updated by the
+  statement that causes the trigger to fire, then the update may not occur. 
+  The workaround is to declare the table with a PRIMARY KEY column instead
+  of an INTEGER PRIMARY KEY column.</p>
+
+
+<p>A special SQL function RAISE() may be used within a trigger-program, with the following syntax</p> 
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">raise-function</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">RAISE <big>(</big> ABORT<big>,</big> </font></b><i><font color="#ff3434">error-message</font></i><b><font color="#2c2cf0"> <big>)</big> </font></b><big>|</big><b><font color="#2c2cf0"> <br>
+RAISE <big>(</big> FAIL<big>,</big> </font></b><i><font color="#ff3434">error-message</font></i><b><font color="#2c2cf0"> <big>)</big> </font></b><big>|</big><b><font color="#2c2cf0"> <br>
+RAISE <big>(</big> ROLLBACK<big>,</big> </font></b><i><font color="#ff3434">error-message</font></i><b><font color="#2c2cf0"> <big>)</big> </font></b><big>|</big><b><font color="#2c2cf0"> <br>
+RAISE <big>(</big> IGNORE <big>)</big></font></b></td></tr>
+</table>
+
+<p>When one of the first three forms is called during trigger-program execution, the specified ON CONFLICT processing is performed (either ABORT, FAIL or 
+ ROLLBACK) and the current query terminates. An error code of SQLITE_CONSTRAINT is returned to the user, along with the specified error message.</p>
+
+<p>When RAISE(IGNORE) is called, the remainder of the current trigger program,
+the statement that caused the trigger program to execute and any subsequent
+    trigger programs that would of been executed are abandoned. No database
+    changes are rolled back.  If the statement that caused the trigger program
+    to execute is itself part of a trigger program, then that trigger program
+    resumes execution at the beginning of the next step.
+</p>
+
+<p>Triggers are removed using the <a href="#droptrigger">DROP TRIGGER</a>
+statement.</p>
+
+
+<hr />
+<a name="createview"></a>
+<h1>CREATE VIEW</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-command</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">CREATE </font></b>[<b><font color="#2c2cf0">TEMP </font></b><big>|</big><b><font color="#2c2cf0"> TEMPORARY</font></b>]<b><font color="#2c2cf0"> VIEW </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"><big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">view-name</font></i><b><font color="#2c2cf0"> AS </font></b><i><font color="#ff3434">select-statement</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The CREATE VIEW command assigns a name to a pre-packaged 
+<a href="#select">SELECT</a>
+statement.  Once the view is created, it can be used in the FROM clause
+of another SELECT in place of a table name.
+</p>
+
+<p>If the "TEMP" or "TEMPORARY" keyword occurs in between "CREATE"
+and "VIEW" then the view that is created is only visible to the
+process that opened the database and is automatically deleted when
+the database is closed.</p>
+
+<p> If a &lt;database-name&gt; is specified, then the view is created in 
+the named database. It is an error to specify both a &lt;database-name&gt;
+and the TEMP keyword, unless the &lt;database-name&gt; is "temp". If no
+database name is specified, and the TEMP keyword is not present,
+the table is created in the main database.</p>
+
+<p>You cannot COPY, DELETE, INSERT or UPDATE a view.  Views are read-only 
+in SQLite.  However, in many cases you can use a <a href="#createtrigger">
+TRIGGER</a> on the view to accomplish the same thing.  Views are removed 
+with the <a href="#dropview">DROP VIEW</a> 
+command.</p>
+
+
+<hr />
+<a name="delete"></a>
+<h1>DELETE</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">DELETE FROM </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">WHERE </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The DELETE command is used to remove records from a table.
+The command consists of the "DELETE FROM" keywords followed by
+the name of the table from which records are to be removed.
+</p>
+
+<p>Without a WHERE clause, all rows of the table are removed.
+If a WHERE clause is supplied, then only those rows that match
+the expression are removed.</p>
+
+
+<hr />
+<a name="detach"></a>
+<h1>DETACH DATABASE</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-command</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">DETACH </font></b>[<b><font color="#2c2cf0">DATABASE</font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>This statement detaches an additional database connection previously 
+attached using the <a href="#attach">ATTACH DATABASE</a> statement.  It
+is possible to have the same database file attached multiple times using 
+different names, and detaching one connection to a file will leave the 
+others intact.</p>
+
+<p>This statement will fail if SQLite is in the middle of a transaction.</p>
+
+
+<hr />
+<a name="dropindex"></a>
+<h1>DROP INDEX</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-command</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">DROP INDEX </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">index-name</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The DROP INDEX statement removes an index added
+with the <a href="#createindex">
+CREATE INDEX</a> statement.  The index named is completely removed from
+the disk.  The only way to recover the index is to reenter the
+appropriate CREATE INDEX command.</p>
+
+<p>The DROP INDEX statement does not reduce the size of the database 
+file in the default mode.
+Empty space in the database is retained for later INSERTs.  To 
+remove free space in the database, use the <a href="#vacuum">VACUUM</a> 
+command.  If AUTOVACUUM mode is enabled for a database then space
+will be freed automatically by DROP INDEX.</p>
+
+
+<hr />
+<a name="droptable"></a>
+<h1>DROP TABLE</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-command</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">DROP TABLE </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"><big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The DROP TABLE statement removes a table added with the <a href=
+"#createtable">CREATE TABLE</a> statement.  The name specified is the
+table name.  It is completely removed from the database schema and the 
+disk file.  The table can not be recovered.  All indices associated 
+with the table are also deleted.</p>
+
+<p>The DROP TABLE statement does not reduce the size of the database 
+file in the default mode.  Empty space in the database is retained for
+later INSERTs.  To 
+remove free space in the database, use the <a href="#vacuum">VACUUM</a> 
+command.  If AUTOVACUUM mode is enabled for a database then space
+will be freed automatically by DROP TABLE.</p>
+
+
+<hr />
+<a name="droptrigger"></a>
+<h1>DROP TRIGGER</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">DROP TRIGGER </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">trigger-name</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+ 
+<p>The DROP TRIGGER statement removes a trigger created by the 
+<a href="#createtrigger">CREATE TRIGGER</a> statement.  The trigger is 
+deleted from the database schema. Note that triggers are automatically 
+dropped when the associated table is dropped.</p>
+
+
+<hr />
+<a name="dropview"></a>
+<h1>DROP VIEW</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-command</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">DROP VIEW </font></b><i><font color="#ff3434">view-name</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The DROP VIEW statement removes a view created by the <a href=
+"#createview">CREATE VIEW</a> statement.  The name specified is the 
+view name.  It is removed from the database schema, but no actual data 
+in the underlying base tables is modified.</p>
+
+
+<hr />
+<a name="explain"></a>
+<h1>EXPLAIN</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">EXPLAIN </font></b><i><font color="#ff3434">sql-statement</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The EXPLAIN command modifier is a non-standard extension.  The
+idea comes from a similar command found in PostgreSQL, but the operation
+is completely different.</p>
+
+<p>If the EXPLAIN keyword appears before any other SQLite SQL command
+then instead of actually executing the command, the SQLite library will
+report back the sequence of virtual machine instructions it would have
+used to execute the command had the EXPLAIN keyword not been present.
+For additional information about virtual machine instructions see
+the <a href="arch.html">architecture description</a> or the documentation
+on <a href="opcode.html">available opcodes</a> for the virtual machine.</p>
+
+
+<hr />
+<a name="expr"></a>
+<h1>expression</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">expr</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"></font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">binary-op</font></i><b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">NOT</font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">like-op</font></i><b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">ESCAPE </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">unary-op</font></i><b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+<big>(</big> </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> <big>)</big> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">column-name</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> <big>.</big> </font></b><i><font color="#ff3434">column-name</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> <big>.</big> </font></b><i><font color="#ff3434">column-name</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">literal-value</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">parameter</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">function-name</font></i><b><font color="#2c2cf0"> <big>(</big> </font></b><i><font color="#ff3434">expr-list</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"> <big>*</big> <big>)</big> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> ISNULL </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> NOTNULL </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">NOT</font></b>]<b><font color="#2c2cf0"> BETWEEN </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> AND </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">NOT</font></b>]<b><font color="#2c2cf0"> IN <big>(</big> </font></b><i><font color="#ff3434">value-list</font></i><b><font color="#2c2cf0"> <big>)</big> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">NOT</font></b>]<b><font color="#2c2cf0"> IN <big>(</big> </font></b><i><font color="#ff3434">select-statement</font></i><b><font color="#2c2cf0"> <big>)</big> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">NOT</font></b>]<b><font color="#2c2cf0"> IN </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+</font></b>[<b><font color="#2c2cf0">EXISTS</font></b>]<b><font color="#2c2cf0"> <big>(</big> </font></b><i><font color="#ff3434">select-statement</font></i><b><font color="#2c2cf0"> <big>)</big> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+CASE </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"> </font></b>(<b><font color="#2c2cf0"> WHEN </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> THEN </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> </font></b>)+<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">ELSE </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"> END </font></b><big>|</big><b><font color="#2c2cf0"><br>
+CAST <big>(</big> </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> AS </font></b><i><font color="#ff3434">type</font></i><b><font color="#2c2cf0"> <big>)</big></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">like-op</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">LIKE </font></b><big>|</big><b><font color="#2c2cf0"> GLOB </font></b><big>|</big><b><font color="#2c2cf0"> REGEXP</font></b></td></tr>
+</table>
+
+<p>This section is different from the others.  Most other sections of
+this document talks about a particular SQL command.  This section does
+not talk about a standalone command but about "expressions" which are 
+subcomponents of most other commands.</p>
+
+<p>SQLite understands the following binary operators, in order from
+highest to lowest precedence:</p>
+
+<blockquote><pre>
+<font color="#2c2cf0"><big>||
+*    /    %
++    -
+&lt;&lt;   &gt;&gt;   &amp;    |
+&lt;    &lt;=   &gt;    &gt;=
+=    ==   !=   &lt;&gt;   </big>IN
+AND   
+OR</font>
+</pre></blockquote>
+
+<p>Supported unary operators are these:</p>
+
+<blockquote><pre>
+<font color="#2c2cf0"><big>-    +    !    ~</big></font>
+</pre></blockquote>
+
+<p>Note that there are two variations of the equals and not equals
+operators.  Equals can be either
+<font color="#2c2cf0"><big>=</big></font> or <font color="#2c2cf0"><big>==</big></font>.
+The non-equals operator can be either
+<font color="#2c2cf0"><big>!=</big></font> or <font color="#2c2cf0"><big>&lt;&gt;</big></font>.
+The <font color="#2c2cf0"><big>||</big></font> operator is "concatenate" - it joins together
+the two strings of its operands.
+The operator <font color="#2c2cf0"><big>%</big></font> outputs the remainder of its left 
+operand modulo its right operand.</p>
+
+<p>The result of any binary operator is a numeric value, except
+for the <font color="#2c2cf0"><big>||</big></font> concatenation operator which gives a string
+result.</p>
+
+
+<a name="literal_value"></a>
+<p>
+A literal value is an integer number or a floating point number.
+Scientific notation is supported.  The "." character is always used
+as the decimal point even if the locale setting specifies "," for
+this role - the use of "," for the decimal point would result in
+syntactic ambiguity.  A string constant is formed by enclosing the
+string in single quotes (').  A single quote within the string can
+be encoded by putting two single quotes in a row - as in Pascal.
+C-style escapes using the backslash character are not supported because
+they are not standard SQL.
+BLOB literals are string literals containing hexadecimal data and
+preceded by a single "x" or "X" character.  For example:</p>
+
+<blockquote><pre>
+X'53514697465'
+</pre></blockquote>
+
+<p>
+A literal value can also be the token "NULL".
+</p>
+
+<p>
+A parameter specifies a placeholder in the expression for a literal
+value that is filled in at runtime using the
+<a href="capi3ref.html#sqlite3_bind_int">sqlite3_bind</a> API.
+Parameters can take several forms:
+</p
+
+<blockquote>
+<table>
+<tr>
+<td align="right" valign="top"><b>?</b><i>NNN</i></td><td width="20"></td>
+<td>A question mark followed by a number <i>NNN</i> holds a spot for the
+NNN-th parameter.  NNN must be between 1 and 999.</td>
+</tr>
+<tr>
+<td align="right" valign="top"><b>?</b></td><td width="20"></td>
+<td>A question mark that is not followed by a number holds a spot for
+the next unused parameter.</td>
+</tr>
+<tr>
+<td align="right" valign="top"><b>:</b><i>AAAA</i></td><td width="20"></td>
+<td>A colon followed by an identifier name holds a spot for a named
+parameter with the name AAAA.  Named parameters are also numbered.
+The number assigned is the next unused number.  To avoid confusion,
+it is best to avoid mixing named and numbered parameters.</td>
+</tr>
+<tr>
+<td align="right" valign="top"><b>$</b><i>AAAA</i></td><td width="20"></td>
+<td>A dollar-sign followed by an identifier name also holds a spot for a named
+parameter with the name AAAA.  The identifier name in this case can include
+one or more occurances of "::" and a suffix enclosed in "(...)" containing
+any text at all.  This syntax is the form of a variable name in the Tcl
+programming language.</td>
+</tr>
+</table>
+</blockquote>
+
+<p>Parameters that are not assigned values using
+<a href="capi3ref.html#sqlite3_bind_int">sqlite3_bind</a> are treated
+as NULL.</p>
+
+<a name="like"></a>
+<p>The LIKE operator does a pattern matching comparison. The operand
+to the right contains the pattern, the left hand operand contains the
+string to match against the pattern. 
+
+A percent symbol <font color="#2c2cf0"><big>%</big></font> in the pattern matches any
+sequence of zero or more characters in the string.  An underscore
+<font color="#2c2cf0"><big>_</big></font> in the pattern matches any single character in the
+string.  Any other character matches itself or it's lower/upper case
+equivalent (i.e. case-insensitive matching).  (A bug: SQLite only
+understands upper/lower case for 7-bit Latin characters.  Hence the
+LIKE operator is case sensitive for 8-bit iso8859 characters or UTF-8
+characters.  For example, the expression <b>'a'&nbsp;LIKE&nbsp;'A'</b>
+is TRUE but <b>'&aelig;'&nbsp;LIKE&nbsp;'&AElig;'</b> is FALSE.).</p>
+
+<p>If the optional ESCAPE clause is present, then the expression
+following the ESCAPE keyword must evaluate to a string consisting of
+a single character. This character may be used in the LIKE pattern
+to include literal percent or underscore characters. The escape
+character followed by a percent symbol, underscore or itself matches a
+literal percent symbol, underscore or escape character in the string,
+respectively. The infix LIKE operator is implemented by calling the
+user function <a href="#likeFunc"> like(<i>X</i>,<i>Y</i>)</a>.</p>
+
+
+The LIKE operator is not case sensitive and will match upper case
+characters on one side against lower case characters on the other.  
+(A bug: SQLite only understands upper/lower case for 7-bit Latin
+characters.  Hence the LIKE operator is case sensitive for 8-bit
+iso8859 characters or UTF-8 characters.  For example, the expression
+<b>'a'&nbsp;LIKE&nbsp;'A'</b> is TRUE but
+<b>'&aelig;'&nbsp;LIKE&nbsp;'&AElig;'</b> is FALSE.).</p>
+
+<p>The infix LIKE
+operator is implemented by calling the user function <a href="#likeFunc">
+like(<i>X</i>,<i>Y</i>)</a>.  If an ESCAPE clause is present, it adds
+a third parameter to the function call. If the functionality of LIKE can be
+overridden by defining an alternative implementation of the
+like() SQL function.</p>
+</p>
+
+<a name="glob"></a>
+<p>The GLOB operator is similar to LIKE but uses the Unix
+file globbing syntax for its wildcards.  Also, GLOB is case
+sensitive, unlike LIKE.  Both GLOB and LIKE may be preceded by
+the NOT keyword to invert the sense of the test.  The infix GLOB 
+operator is implemented by calling the user function <a href="#globFunc">
+glob(<i>X</i>,<i>Y</i>)</a> and can be modified by overriding
+that function.</p>
+
+<a name="regexp"></a>
+<p>The REGEXP operator is a special syntax for the regexp()
+user function.  No regexp() user function is defined by default
+and so use of the REGEXP operator will normally result in an
+error message.  If a user-defined function named "regexp"
+is defined at run-time, that function will be called in order
+to implement the REGEXP operator.</p>
+
+<p>A column name can be any of the names defined in the CREATE TABLE
+statement or one of the following special identifiers: "<b>ROWID</b>",
+"<b>OID</b>", or "<b>_ROWID_</b>".
+These special identifiers all describe the
+unique random integer key (the "row key") associated with every 
+row of every table.
+The special identifiers only refer to the row key if the CREATE TABLE
+statement does not define a real column with the same name.  Row keys
+act like read-only columns.  A row key can be used anywhere a regular
+column can be used, except that you cannot change the value
+of a row key in an UPDATE or INSERT statement.
+"SELECT * ..." does not return the row key.</p>
+
+<p>SELECT statements can appear in expressions as either the
+right-hand operand of the IN operator, as a scalar quantity, or
+as the operand of an EXISTS operator.
+As a scalar quantity or the operand of an IN operator,
+the SELECT should have only a single column in its
+result.  Compound SELECTs (connected with keywords like UNION or
+EXCEPT) are allowed.
+With the EXISTS operator, the columns in the result set of the SELECT are
+ignored and the expression returns TRUE if one or more rows exist
+and FALSE if the result set is empty.
+If no terms in the SELECT expression refer to value in the containing
+query, then the expression is evaluated once prior to any other
+processing and the result is reused as necessary.  If the SELECT expression
+does contain variables from the outer query, then the SELECT is reevaluated
+every time it is needed.</p>
+
+<p>When a SELECT is the right operand of the IN operator, the IN
+operator returns TRUE if the result of the left operand is any of
+the values generated by the select.  The IN operator may be preceded
+by the NOT keyword to invert the sense of the test.</p>
+
+<p>When a SELECT appears within an expression but is not the right
+operand of an IN operator, then the first row of the result of the
+SELECT becomes the value used in the expression.  If the SELECT yields
+more than one result row, all rows after the first are ignored.  If
+the SELECT yields no rows, then the value of the SELECT is NULL.</p>
+
+<p>A CAST expression changes the datatype of the <expr> into the
+type specified by &lt;type&gt;. 
+&lt;type&gt; can be any non-empty type name that is valid
+for the type in a column definition of a CREATE TABLE statement.</p>
+
+<p>Both simple and aggregate functions are supported.  A simple
+function can be used in any expression.  Simple functions return
+a result immediately based on their inputs.  Aggregate functions
+may only be used in a SELECT statement.  Aggregate functions compute
+their result across all rows of the result set.</p>
+
+<p>The functions shown below are available by default.  Additional
+functions may be written in C and added to the database engine using
+the <a href="capi3ref.html#cfunc">sqlite3_create_function()</a>
+API.</p>
+
+<table border=0 cellpadding=10>
+<tr>
+<td valign="top" align="right" width=120>abs(<i>X</i>)</td>
+<td valign="top">Return the absolute value of argument <i>X</i>.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">coalesce(<i>X</i>,<i>Y</i>,...)</td>
+<td valign="top">Return a copy of the first non-NULL argument.  If
+all arguments are NULL then NULL is returned.  There must be at least 
+2 arguments.</td>
+</tr>
+
+<tr>
+<a name="globFunc"></a>
+<td valign="top" align="right">glob(<i>X</i>,<i>Y</i>)</td>
+<td valign="top">This function is used to implement the
+"<b>X GLOB Y</b>" syntax of SQLite.  The
+<a href="capi3ref.html#sqlite3_create_function">sqlite3_create_function()</a> 
+interface can
+be used to override this function and thereby change the operation
+of the <a href="#globFunc">GLOB</a> operator.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">ifnull(<i>X</i>,<i>Y</i>)</td>
+<td valign="top">Return a copy of the first non-NULL argument.  If
+both arguments are NULL then NULL is returned. This behaves the same as 
+<b>coalesce()</b> above.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">last_insert_rowid()</td>
+<td valign="top">Return the ROWID of the last row insert from this
+connection to the database.  This is the same value that would be returned
+from the <b>sqlite_last_insert_rowid()</b> API function.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">length(<i>X</i>)</td>
+<td valign="top">Return the string length of <i>X</i> in characters.
+If SQLite is configured to support UTF-8, then the number of UTF-8
+characters is returned, not the number of bytes.</td>
+</tr>
+
+<tr>
+<a name="likeFunc"></a>
+<td valign="top" align="right">like(<i>X</i>,<i>Y</i> [,<i>Z</i>])</td>
+<td valign="top">
+This function is used to implement the "<b>X LIKE Y [ESCAPE Z]</b>"
+syntax of SQL. If the optional ESCAPE clause is present, then the
+user-function is invoked with three arguments. Otherwise, it is
+invoked with two arguments only. The 
+<a href="capi3ref.html#sqlite3_create_function">
+sqlite_create_function()</a> interface can be used to override this
+function and thereby change the operation of the <a
+href= "#like">LIKE</a> operator. When doing this, it may be important
+to override both the two and three argument versions of the like() 
+function. Otherwise, different code may be called to implement the
+LIKE operator depending on whether or not an ESCAPE clause was 
+specified.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">lower(<i>X</i>)</td>
+<td valign="top">Return a copy of string <i>X</i> will all characters
+converted to lower case.  The C library <b>tolower()</b> routine is used
+for the conversion, which means that this function might not
+work correctly on UTF-8 characters.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">max(<i>X</i>,<i>Y</i>,...)</td>
+<td valign="top">Return the argument with the maximum value.  Arguments
+may be strings in addition to numbers.  The maximum value is determined
+by the usual sort order.  Note that <b>max()</b> is a simple function when
+it has 2 or more arguments but converts to an aggregate function if given
+only a single argument.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">min(<i>X</i>,<i>Y</i>,...)</td>
+<td valign="top">Return the argument with the minimum value.  Arguments
+may be strings in addition to numbers.  The minimum value is determined
+by the usual sort order.  Note that <b>min()</b> is a simple function when
+it has 2 or more arguments but converts to an aggregate function if given
+only a single argument.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">nullif(<i>X</i>,<i>Y</i>)</td>
+<td valign="top">Return the first argument if the arguments are different, 
+otherwise return NULL.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">quote(<i>X</i>)</td>
+<td valign="top">This routine returns a string which is the value of
+its argument suitable for inclusion into another SQL statement.
+Strings are surrounded by single-quotes with escapes on interior quotes
+as needed.  BLOBs are encoded as hexadecimal literals.
+The current implementation of VACUUM uses this function.  The function
+is also useful when writing triggers to implement undo/redo functionality.
+</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">random(*)</td>
+<td valign="top">Return a random integer between -2147483648 and
++2147483647.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">round(<i>X</i>)<br>round(<i>X</i>,<i>Y</i>)</td>
+<td valign="top">Round off the number <i>X</i> to <i>Y</i> digits to the
+right of the decimal point.  If the <i>Y</i> argument is omitted, 0 is 
+assumed.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">soundex(<i>X</i>)</td>
+<td valign="top">Compute the soundex encoding of the string <i>X</i>.
+The string "?000" is returned if the argument is NULL.
+This function is omitted from SQLite by default.
+It is only available the -DSQLITE_SOUNDEX=1 compiler option
+is used when SQLite is built.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">sqlite_version(*)</td>
+<td valign="top">Return the version string for the SQLite library
+that is running.  Example:  "2.8.0"</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">substr(<i>X</i>,<i>Y</i>,<i>Z</i>)</td>
+<td valign="top">Return a substring of input string <i>X</i> that begins
+with the <i>Y</i>-th character and which is <i>Z</i> characters long.
+The left-most character of <i>X</i> is number 1.  If <i>Y</i> is negative
+the the first character of the substring is found by counting from the
+right rather than the left.  If SQLite is configured to support UTF-8,
+then characters indices refer to actual UTF-8 characters, not bytes.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">typeof(<i>X</i>)</td>
+<td valign="top">Return the type of the expression <i>X</i>.  The only 
+return values are "null", "integer", "real", "text", and "blob".
+SQLite's type handling is 
+explained in <a href="datatype3.html">Datatypes in SQLite Version 3</a>.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">upper(<i>X</i>)</td>
+<td valign="top">Return a copy of input string <i>X</i> converted to all
+upper-case letters.  The implementation of this function uses the C library
+routine <b>toupper()</b> which means it may not work correctly on 
+UTF-8 strings.</td>
+</tr>
+</table>
+
+<p>
+The following aggregate functions are available by default.  Additional
+aggregate functions written in C may be added using the 
+<a href="capi3ref.html#sqlite3_create_function">sqlite3_create_function()</a>
+API.</p>
+
+<table border=0 cellpadding=10>
+<tr>
+<td valign="top" align="right" width=120>avg(<i>X</i>)</td>
+<td valign="top">Return the average value of all <i>X</i> within a group.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">count(<i>X</i>)<br>count(*)</td>
+<td valign="top">The first form return a count of the number of times
+that <i>X</i> is not NULL in a group.  The second form (with no argument)
+returns the total number of rows in the group.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">max(<i>X</i>)</td>
+<td valign="top">Return the maximum value of all values in the group.
+The usual sort order is used to determine the maximum.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">min(<i>X</i>)</td>
+<td valign="top">Return the minimum non-NULL value of all values in the group.
+The usual sort order is used to determine the minimum.  NULL is only returned
+if all values in the group are NULL.</td>
+</tr>
+
+<tr>
+<td valign="top" align="right">sum(<i>X</i>)</td>
+<td valign="top">Return the numeric sum of all values in the group.</td>
+</tr>
+</table>
+
+
+<hr />
+<a name="insert"></a>
+<h1>INSERT</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">INSERT </font></b>[<b><font color="#2c2cf0">OR </font></b><i><font color="#ff3434">conflict-algorithm</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"> INTO </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"><big>(</big></font></b><i><font color="#ff3434">column-list</font></i><b><font color="#2c2cf0"><big>)</big></font></b>]<b><font color="#2c2cf0"> VALUES<big>(</big></font></b><i><font color="#ff3434">value-list</font></i><b><font color="#2c2cf0"><big>)</big> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+INSERT </font></b>[<b><font color="#2c2cf0">OR </font></b><i><font color="#ff3434">conflict-algorithm</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"> INTO </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"><big>(</big></font></b><i><font color="#ff3434">column-list</font></i><b><font color="#2c2cf0"><big>)</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">select-statement</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The INSERT statement comes in two basic forms.  The first form
+(with the "VALUES" keyword) creates a single new row in an existing table.
+If no column-list is specified then the number of values must
+be the same as the number of columns in the table.  If a column-list
+is specified, then the number of values must match the number of
+specified columns.  Columns of the table that do not appear in the
+column list are filled with the default value, or with NULL if not
+default value is specified.
+</p>
+
+<p>The second form of the INSERT statement takes it data from a
+SELECT statement.  The number of columns in the result of the
+SELECT must exactly match the number of columns in the table if
+no column list is specified, or it must match the number of columns
+name in the column list.  A new entry is made in the table
+for every row of the SELECT result.  The SELECT may be simple
+or compound.  If the SELECT statement has an ORDER BY clause,
+the ORDER BY is ignored.</p>
+
+<p>The optional conflict-clause allows the specification of an alternative
+constraint conflict resolution algorithm to use during this one command.
+See the section titled
+<a href="#conflict">ON CONFLICT</a> for additional information.
+For compatibility with MySQL, the parser allows the use of the
+single keyword <a href="#replace">REPLACE</a> as an alias for "INSERT OR REPLACE".
+</p>
+
+
+<hr />
+<a name="conflict"></a>
+<h1>ON CONFLICT clause</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">conflict-clause</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">ON CONFLICT </font></b><i><font color="#ff3434">conflict-algorithm</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">conflict-algorithm</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">ROLLBACK </font></b><big>|</big><b><font color="#2c2cf0"> ABORT </font></b><big>|</big><b><font color="#2c2cf0"> FAIL </font></b><big>|</big><b><font color="#2c2cf0"> IGNORE </font></b><big>|</big><b><font color="#2c2cf0"> REPLACE</font></b></td></tr>
+</table>
+
+<p>The ON CONFLICT clause is not a separate SQL command.  It is a
+non-standard clause that can appear in many other SQL commands.
+It is given its own section in this document because it is not
+part of standard SQL and therefore might not be familiar.</p>
+
+<p>The syntax for the ON CONFLICT clause is as shown above for
+the CREATE TABLE and CREATE INDEX commands.  For the COPY, INSERT, and
+UPDATE commands, the keywords "ON CONFLICT" are replaced by "OR", to make
+the syntax seem more natural.  But the meaning of the clause is the same
+either way.</p>
+
+<p>The ON CONFLICT clause specifies an algorithm used to resolve
+constraint conflicts.  There are five choices: ROLLBACK, ABORT,
+FAIL, IGNORE, and REPLACE. The default algorithm is ABORT.  This
+is what they mean:</p>
+
+<dl>
+<dt><b>ROLLBACK</b></dt>
+<dd><p>When a constraint violation occurs, an immediate ROLLBACK
+occurs, thus ending the current transaction, and the command aborts
+with a return code of SQLITE_CONSTRAINT.  If no transaction is
+active (other than the implied transaction that is created on every
+command) then this algorithm works the same as ABORT.</p></dd>
+
+<dt><b>ABORT</b></dt>
+<dd><p>When a constraint violation occurs, the command backs out
+any prior changes it might have made and aborts with a return code
+of SQLITE_CONSTRAINT.  But no ROLLBACK is executed so changes
+from prior commands within the same transaction
+are preserved.  This is the default behavior.</p></dd>
+
+<dt><b>FAIL</b></dt>
+<dd><p>When a constraint violation occurs, the command aborts with a
+return code SQLITE_CONSTRAINT.  But any changes to the database that
+the command made prior to encountering the constraint violation
+are preserved and are not backed out.  For example, if an UPDATE
+statement encountered a constraint violation on the 100th row that
+it attempts to update, then the first 99 row changes are preserved
+but changes to rows 100 and beyond never occur.</p></dd>
+
+<dt><b>IGNORE</b></dt>
+<dd><p>When a constraint violation occurs, the one row that contains
+the constraint violation is not inserted or changed.  But the command
+continues executing normally.  Other rows before and after the row that
+contained the constraint violation continue to be inserted or updated
+normally.  No error is returned.</p></dd>
+
+<dt><b>REPLACE</b></dt>
+<dd><p>When a UNIQUE constraint violation occurs, the pre-existing rows
+that are causing the constraint violation are removed prior to inserting
+or updating the current row.  Thus the insert or update always occurs.
+The command continues executing normally.  No error is returned.
+If a NOT NULL constraint violation occurs, the NULL value is replaced
+by the default value for that column.  If the column has no default
+value, then the ABORT algorithm is used.</p>
+
+<p>When this conflict resolution strategy deletes rows in order to
+satisfy a constraint, it does not invoke delete triggers on those
+rows.  But that may change in a future release.</p>
+</dl>
+
+<p>The algorithm specified in the OR clause of a COPY, INSERT, or UPDATE
+overrides any algorithm specified in a CREATE TABLE or CREATE INDEX.
+If no algorithm is specified anywhere, the ABORT algorithm is used.</p>
+
+
+<hr />
+<a name="reindex"></a>
+<h1>REINDEX</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">REINDEX </font></b><i><font color="#ff3434">collation name</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">REINDEX </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table/index-name</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The REINDEX command is used to delete and recreate indices from scratch.
+This is useful when the definition of a collation sequence has changed.
+</p>
+
+<p>In the first form, all indices in all attached databases that use the
+named collation sequence are recreated. In the second form, if 
+<i>[database-name.]table/index-name</i> identifies a table, then all indices
+associated with the table are rebuilt. If an index is identified, then only
+this specific index is deleted and recreated.
+</p>
+
+<p>If no <i>database-name</i> is specified and there exists both a table or
+index and a collation sequence of the specified name, then indices associated
+with the collation sequence only are reconstructed. This ambiguity may be
+dispelled by always specifying a <i>database-name</i> when reindexing a
+specific table or index.
+
+
+<hr />
+<a name="replace"></a>
+<h1>REPLACE</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">REPLACE INTO </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"><big>(</big> </font></b><i><font color="#ff3434">column-list</font></i><b><font color="#2c2cf0"> <big>)</big></font></b>]<b><font color="#2c2cf0"> VALUES <big>(</big> </font></b><i><font color="#ff3434">value-list</font></i><b><font color="#2c2cf0"> <big>)</big> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+REPLACE INTO </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"><big>(</big> </font></b><i><font color="#ff3434">column-list</font></i><b><font color="#2c2cf0"> <big>)</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">select-statement</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The REPLACE command is an alias for the "INSERT OR REPLACE" variant
+of the <a href="#insert">INSERT</a> command.  This alias is provided for
+compatibility with MySQL.  See the 
+<a href="#insert">INSERT</a> command documentation for additional
+information.</p>  
+
+
+<hr />
+<a name="select"></a>
+<h1>SELECT</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">SELECT </font></b>[<b><font color="#2c2cf0">ALL </font></b><big>|</big><b><font color="#2c2cf0"> DISTINCT</font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">result</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">FROM </font></b><i><font color="#ff3434">table-list</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"><br>
+</font></b>[<b><font color="#2c2cf0">WHERE </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"><br>
+</font></b>[<b><font color="#2c2cf0">GROUP BY </font></b><i><font color="#ff3434">expr-list</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"><br>
+</font></b>[<b><font color="#2c2cf0">HAVING </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"><br>
+</font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">compound-op</font></i><b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">select</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b><big>*</big><b><font color="#2c2cf0"><br>
+</font></b>[<b><font color="#2c2cf0">ORDER BY </font></b><i><font color="#ff3434">sort-expr-list</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"><br>
+</font></b>[<b><font color="#2c2cf0">LIMIT </font></b><i><font color="#ff3434">integer</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"></font></b>(<b><font color="#2c2cf0"> OFFSET </font></b><big>|</big><b><font color="#2c2cf0"> <big>,</big> </font></b>)<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">integer</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">result</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"></font></b><i><font color="#ff3434">result-column</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"><big>,</big> </font></b><i><font color="#ff3434">result-column</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b><big>*</big><b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">result-column</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"><big>*</big> </font></b><big>|</big><b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> <big>.</big> <big>*</big> </font></b><big>|</big><b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">AS</font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">string</font></i><b><font color="#2c2cf0"> </font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">table-list</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"></font></b><i><font color="#ff3434">table</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">join-op</font></i><b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table</font></i><b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">join-args</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b><big>*</big><b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">table</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"></font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">AS </font></b><i><font color="#ff3434">alias</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"> </font></b><big>|</big><b><font color="#2c2cf0"><br>
+<big>(</big> </font></b><i><font color="#ff3434">select</font></i><b><font color="#2c2cf0"> <big>)</big> </font></b>[<b><font color="#2c2cf0">AS </font></b><i><font color="#ff3434">alias</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">join-op</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"><big>,</big> </font></b><big>|</big><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">NATURAL</font></b>]<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">LEFT </font></b><big>|</big><b><font color="#2c2cf0"> RIGHT </font></b><big>|</big><b><font color="#2c2cf0"> FULL</font></b>]<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">OUTER </font></b><big>|</big><b><font color="#2c2cf0"> INNER </font></b><big>|</big><b><font color="#2c2cf0"> CROSS</font></b>]<b><font color="#2c2cf0"> JOIN</font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">join-args</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"></font></b>[<b><font color="#2c2cf0">ON </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0">USING <big>(</big> </font></b><i><font color="#ff3434">id-list</font></i><b><font color="#2c2cf0"> <big>)</big></font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sort-expr-list</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"></font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">sort-order</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"><big>,</big> </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">sort-order</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b><big>*</big><b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sort-order</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"></font></b>[<b><font color="#2c2cf0"> COLLATE </font></b><i><font color="#ff3434">collation-name</font></i><b><font color="#2c2cf0"> </font></b>]<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"> ASC </font></b><big>|</big><b><font color="#2c2cf0"> DESC </font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">compound_op</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">UNION </font></b><big>|</big><b><font color="#2c2cf0"> UNION ALL </font></b><big>|</big><b><font color="#2c2cf0"> INTERSECT </font></b><big>|</big><b><font color="#2c2cf0"> EXCEPT</font></b></td></tr>
+</table>
+
+<p>The SELECT statement is used to query the database.  The
+result of a SELECT is zero or more rows of data where each row
+has a fixed number of columns.  The number of columns in the
+result is specified by the expression list in between the
+SELECT and FROM keywords.  Any arbitrary expression can be used
+as a result.  If a result expression is 
+<font color="#2c2cf0"><big>*</big></font> then all columns of all tables are substituted
+for that one expression.  If the expression is the name of
+a table followed by <font color="#2c2cf0"><big>.*</big></font> then the result is all columns
+in that one table.</p>
+
+<p>The DISTINCT keyword causes a subset of result rows to be returned, 
+in which each result row is different.  NULL values are not treated as 
+distinct from each other.  The default behavior is that all result rows 
+be returned, which can be made explicit with the keyword ALL.</p>
+
+<p>The query is executed against one or more tables specified after
+the FROM keyword.  If multiple tables names are separated by commas,
+then the query is against the cross join of the various tables.
+The full SQL-92 join syntax can also be used to specify joins.
+A sub-query
+in parentheses may be substituted for any table name in the FROM clause.
+The entire FROM clause may be omitted, in which case the result is a
+single row consisting of the values of the expression list.
+</p>
+
+<p>The WHERE clause can be used to limit the number of rows over
+which the query operates.</p>
+
+<p>The GROUP BY clauses causes one or more rows of the result to
+be combined into a single row of output.  This is especially useful
+when the result contains aggregate functions.  The expressions in
+the GROUP BY clause do <em>not</em> have to be expressions that
+appear in the result.  The HAVING clause is similar to WHERE except
+that HAVING applies after grouping has occurred.  The HAVING expression
+may refer to values, even aggregate functions, that are not in the result.</p>
+
+<p>The ORDER BY clause causes the output rows to be sorted.  
+The argument to ORDER BY is a list of expressions that are used as the
+key for the sort.  The expressions do not have to be part of the
+result for a simple SELECT, but in a compound SELECT each sort
+expression must exactly match one of the result columns.  Each
+sort expression may be optionally followed by a COLLATE keyword and
+the name of a collating function used for ordering text and/or
+keywords ASC or DESC to specify the sort order.</p>
+
+<p>The LIMIT clause places an upper bound on the number of rows
+returned in the result.  A negative LIMIT indicates no upper bound.
+The optional OFFSET following LIMIT specifies how many
+rows to skip at the beginning of the result set.
+In a compound query, the LIMIT clause may only appear on the
+final SELECT statement.
+The limit is applied to the entire query not
+to the individual SELECT statement to which it is attached.
+Note that if the OFFSET keyword is used in the LIMIT clause, then the
+limit is the first number and the offset is the second number.  If a
+comma is used instead of the OFFSET keyword, then the offset is the
+first number and the limit is the second number.  This seeming
+contradition is intentional - it maximizes compatibility with legacy
+SQL database systems.
+</p>
+
+<p>A compound SELECT is formed from two or more simple SELECTs connected
+by one of the operators UNION, UNION ALL, INTERSECT, or EXCEPT.  In
+a compound SELECT, all the constituent SELECTs must specify the
+same number of result columns.  There may be only a single ORDER BY
+clause at the end of the compound SELECT.  The UNION and UNION ALL
+operators combine the results of the SELECTs to the right and left into
+a single big table.  The difference is that in UNION all result rows
+are distinct where in UNION ALL there may be duplicates.
+The INTERSECT operator takes the intersection of the results of the
+left and right SELECTs.  EXCEPT takes the result of left SELECT after
+removing the results of the right SELECT.  When three are more SELECTs
+are connected into a compound, they group from left to right.</p>
+
+
+<hr />
+<a name="update"></a>
+<h1>UPDATE</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">UPDATE </font></b>[<b><font color="#2c2cf0"> OR </font></b><i><font color="#ff3434">conflict-algorithm</font></i><b><font color="#2c2cf0"> </font></b>]<b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">database-name</font></i><b><font color="#2c2cf0"> <big>.</big></font></b>]<b><font color="#2c2cf0"> </font></b><i><font color="#ff3434">table-name</font></i><b><font color="#2c2cf0"><br>
+SET </font></b><i><font color="#ff3434">assignment</font></i><b><font color="#2c2cf0"> </font></b>[<b><font color="#2c2cf0"><big>,</big> </font></b><i><font color="#ff3434">assignment</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b><big>*</big><b><font color="#2c2cf0"><br>
+</font></b>[<b><font color="#2c2cf0">WHERE </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">assignment</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0"></font></b><i><font color="#ff3434">column-name</font></i><b><font color="#2c2cf0"> <big>=</big> </font></b><i><font color="#ff3434">expr</font></i><b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The UPDATE statement is used to change the value of columns in 
+selected rows of a table.  Each assignment in an UPDATE specifies
+a column name to the left of the equals sign and an arbitrary expression
+to the right.  The expressions may use the values of other columns.
+All expressions are evaluated before any assignments are made.
+A WHERE clause can be used to restrict which rows are updated.</p>
+
+<p>The optional conflict-clause allows the specification of an alternative
+constraint conflict resolution algorithm to use during this one command.
+See the section titled
+<a href="#conflict">ON CONFLICT</a> for additional information.</p>
+
+
+<hr />
+<a name="vacuum"></a>
+<h1>VACUUM</h1>
+
+<table cellpadding="10">
+<tr><td align="right" valign="top">
+<i><font color="#ff3434">sql-statement</font></i>&nbsp;::=</td>
+<td><b><font color="#2c2cf0">VACUUM </font></b>[<b><font color="#2c2cf0"></font></b><i><font color="#ff3434">index-or-table-name</font></i><b><font color="#2c2cf0"></font></b>]<b><font color="#2c2cf0"></font></b></td></tr>
+</table>
+
+<p>The VACUUM command is an SQLite extension modeled after a similar
+command found in PostgreSQL.  If VACUUM is invoked with the name of a
+table or index then it is suppose to clean up the named table or index.
+In version 1.0 of SQLite, the VACUUM command would invoke 
+<b>gdbm_reorganize()</b> to clean up the backend database file.</p>
+
+<p>
+VACUUM became a no-op when the GDBM backend was removed from
+SQLITE in version 2.0.0.
+VACUUM was reimplemented in version 2.8.1.
+The index or table name argument is now ignored.
+</p>
+
+<p>When an object (table, index, or trigger) is dropped from the 
+database, it leaves behind empty space.  This makes the database 
+file larger than it needs to be, but can speed up inserts.  In time 
+inserts and deletes can leave the database file structure fragmented, 
+which slows down disk access to the database contents.
+
+The VACUUM command cleans
+the main database by copying its contents to a temporary database file and 
+reloading the original database file from the copy.  This eliminates 
+free pages,  aligns table data to be contiguous, and otherwise cleans 
+up the database file structure. It is not possible to perform the same
+process on an attached database file.</p>
+
+<p>This command will fail if there is an active transaction.  This 
+command has no effect on an in-memory database.</p>
+
+<p>As of SQLite version 3.1, an alternative to using the VACUUM command
+is auto-vacuum mode, enabled using the 
+<a href="pragma.html#pragma_auto_vacuum">auto_vacuum pragma</a>.</p>
+
+
+<hr />
+<a name="keywords"></a>
+<h1>SQLite keywords</h1>
+
+
+<p>The SQL standard specifies a huge number of keywords which may not
+be used as the names of tables, indices, columns, or databases.  The
+list is so long that few people can remember them all.  For most SQL
+code, your safest bet is to never use any English language word as the
+name of a user-defined object.</p>
+
+<p>If you want to use a keyword as a name, you need to quote it.  There
+are three ways of quoting keywords in SQLite:</p>
+
+<p>
+<blockquote>
+<table>
+<tr>	<td valign="top"><b>'keyword'</b></td><td width="20"></td>
+	<td>A keyword in single quotes is interpreted as a literal string
+        if it occurs in a context where a string literal is allowed, otherwise
+	it is understood as an identifier.</td></tr>
+<tr>	<td valign="top"><b>"keyword"</b></td><td></td>
+	<td>A keyword in double-quotes is interpreted as an identifier if
+        it matches a known identifier.  Otherwise it is interpreted as a
+        string literal.</td></tr>
+<tr>	<td valign="top"><b>[keyword]</b></td><td></td>
+	<td>A keyword enclosed in square brackets is always understood as
+        an identifier.  This is not standard SQL.  This quoting mechanism
+        is used by MS Access and SQL Server and is included in SQLite for
+        compatibility.</td></tr>
+</table>
+</blockquote>
+</p>
+
+<p>Quoted keywords are unaesthetic.
+To help you avoid them, SQLite allows many keywords to be used unquoted
+as the names of databases, tables, indices, triggers, views, and/or columns.
+In the list of keywords that follows, those that can be used as identifiers
+are shown in an italic font.  Keywords that must be quoted in order to be
+used as identifiers are shown in bold.</p>
+
+<p>
+SQLite adds new keywords from time to time when it take on new features.
+So to prevent you code from being broken by future enhancements, you should
+normally quote any indentifier that is an English language word, even if
+you do not have to.
+</p>
+
+<p>
+The following are the keywords currently recognized by SQLite:
+</p>
+
+<blockquote>
+<table width="100%">
+<tr>
+<td align="left" valign="top" width="20%">
+
+<i>ABORT</i><br>
+<i>AFTER</i><br>
+<b>ALL</b><br>
+<b>ALTER</b><br>
+<b>AND</b><br>
+<b>AS</b><br>
+<i>ASC</i><br>
+<i>ATTACH</i><br>
+<b>AUTOINCREMENT</b><br>
+<i>BEFORE</i><br>
+<i>BEGIN</i><br>
+<b>BETWEEN</b><br>
+<b>BY</b><br>
+<i>CASCADE</i><br>
+<b>CASE</b><br>
+<b>CHECK</b><br>
+<b>COLLATE</b><br>
+<b>COMMIT</b><br>
+<i>CONFLICT</i><br>
+<b>CONSTRAINT</b><br>
+<b>CREATE</b><br>
+<b>CROSS</b><br>
+</td><td valign="top" align="left" width="20%">
+<i>CURRENT_DATE</i><br>
+<i>CURRENT_TIME</i><br>
+<i>CURRENT_TIMESTAMP</i><br>
+<i>DATABASE</i><br>
+<b>DEFAULT</b><br>
+<b>DEFERRABLE</b><br>
+<i>DEFERRED</i><br>
+<b>DELETE</b><br>
+<i>DESC</i><br>
+<i>DETACH</i><br>
+<b>DISTINCT</b><br>
+<b>DROP</b><br>
+<i>EACH</i><br>
+<b>ELSE</b><br>
+<i>END</i><br>
+<b>ESCAPE</b><br>
+<b>EXCEPT</b><br>
+<i>EXCLUSIVE</i><br>
+<i>EXPLAIN</i><br>
+<i>FAIL</i><br>
+<i>FOR</i><br>
+<b>FOREIGN</b><br>
+</td><td valign="top" align="left" width="20%">
+<b>FROM</b><br>
+<b>FULL</b><br>
+<i>GLOB</i><br>
+<b>GROUP</b><br>
+<b>HAVING</b><br>
+<i>IGNORE</i><br>
+<i>IMMEDIATE</i><br>
+<b>IN</b><br>
+<b>INDEX</b><br>
+<i>INITIALLY</i><br>
+<b>INNER</b><br>
+<b>INSERT</b><br>
+<i>INSTEAD</i><br>
+<b>INTERSECT</b><br>
+<b>INTO</b><br>
+<b>IS</b><br>
+<b>ISNULL</b><br>
+<b>JOIN</b><br>
+<i>KEY</i><br>
+<b>LEFT</b><br>
+<i>LIKE</i><br>
+<b>LIMIT</b><br>
+</td><td valign="top" align="left" width="20%">
+<i>MATCH</i><br>
+<b>NATURAL</b><br>
+<b>NOT</b><br>
+<b>NOTNULL</b><br>
+<b>NULL</b><br>
+<i>OF</i><br>
+<i>OFFSET</i><br>
+<b>ON</b><br>
+<b>OR</b><br>
+<b>ORDER</b><br>
+<b>OUTER</b><br>
+<i>PRAGMA</i><br>
+<b>PRIMARY</b><br>
+<i>RAISE</i><br>
+<b>REFERENCES</b><br>
+<i>REINDEX</i><br>
+<i>RENAME</i><br>
+<i>REPLACE</i><br>
+<i>RESTRICT</i><br>
+<b>RIGHT</b><br>
+<b>ROLLBACK</b><br>
+<i>ROW</i><br>
+</td><td valign="top" align="left" width="20%">
+<b>SELECT</b><br>
+<b>SET</b><br>
+<i>STATEMENT</i><br>
+<b>TABLE</b><br>
+<i>TEMP</i><br>
+<i>TEMPORARY</i><br>
+<b>THEN</b><br>
+<b>TO</b><br>
+<b>TRANSACTION</b><br>
+<i>TRIGGER</i><br>
+<b>UNION</b><br>
+<b>UNIQUE</b><br>
+<b>UPDATE</b><br>
+<b>USING</b><br>
+<i>VACUUM</i><br>
+<b>VALUES</b><br>
+<i>VIEW</i><br>
+<b>WHEN</b><br>
+<b>WHERE</b><br>
+
+</td></tr></table></blockquote>
+
+<h2>Special names</h2>
+
+<p>The following are not keywords in SQLite, but are used as names of 
+system objects.  They can be used as an identifier for a different 
+type of object.</p>
+
+<blockquote><b>
+  _ROWID_<br>
+  MAIN<br>
+  OID<br>
+  ROWID<br>
+  SQLITE_MASTER<br>
+  SQLITE_SEQUENCE<br>
+  SQLITE_TEMP_MASTER<br>
+  TEMP<br>
+</b></blockquote>
+
+
+<table width="100%">
+<tr><td bgcolor="#80a796"></td></tr>
+</table>
+<small><i>This page last modified on 2005/08/23 11:03:03</i></small>
+</body></html>

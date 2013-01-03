@@ -1,0 +1,53 @@
+<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_SaveResult manual page</TITLE></HEAD><BODY>
+<H3><A NAME="M2">NAME</A></H3>
+Tcl_SaveResult, Tcl_RestoreResult, Tcl_DiscardResult - save and restore an interpreter's result
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tcl.h&gt;</B><BR>
+<B>Tcl_SaveResult(</B><I>interp, statePtr</I><B>)</B><BR>
+<B>Tcl_RestoreResult(</B><I>interp, statePtr</I><B>)</B><BR>
+<B>Tcl_DiscardResult(</B><I>statePtr</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL>
+<P><DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter for which state should be saved.
+<P><DT>Tcl_SavedResult <B>*statePtr</B> (in)<DD>
+Pointer to location where interpreter result should be saved or restored.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+These routines allows a C procedure to take a snapshot of the current
+interpreter result so that it can be restored after a call
+to <B><A HREF="../TclLib/Eval.htm">Tcl_Eval</A></B> or some other routine that modifies the interpreter
+result.  These routines are passed a pointer to a structure that is
+used to store enough information to restore the interpreter result
+state.  This structure can be allocated on the stack of the calling
+procedure.  These routines do not save the state of any error
+information in the interpreter (e.g. the <B>errorCode</B> or
+<B>errorInfo</B> variables).
+<P>
+<B>Tcl_SaveResult</B> moves the string and object results
+of <I>interp</I> into the location specified by <I>statePtr</I>.
+<B>Tcl_SaveResult</B> clears the result for <I>interp</I> and
+leaves the result in its normal empty initialized state.
+<P>
+<B>Tcl_RestoreResult</B> moves the string and object results from
+<I>statePtr</I> back into <I>interp</I>.  Any result or error that was
+already in the interpreter will be cleared.  The <I>statePtr</I> is left
+in an uninitialized state and cannot be used until another call to
+<B>Tcl_SaveResult</B>.
+<P>
+<B>Tcl_DiscardResult</B> releases the saved interpreter state
+stored at <B>statePtr</B>.  The state structure is left in an
+uninitialized state and cannot be used until another call to
+<B>Tcl_SaveResult</B>.
+<P>
+Once <B>Tcl_SaveResult</B> is called to save the interpreter
+result, either <B>Tcl_RestoreResult</B> or
+<B>Tcl_DiscardResult</B> must be called to properly clean up the
+memory associated with the saved state.  
+
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/R.htm#result">result</A>, <A href="../Keywords/S.htm#state">state</A>, <A href="../Keywords/I.htm#interp">interp</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 1997 by Sun Microsystems, Inc.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

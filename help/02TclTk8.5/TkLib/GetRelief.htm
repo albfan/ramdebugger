@@ -1,0 +1,66 @@
+<HTML><HEAD><TITLE>Tk Library Procedures - Tk_GetReliefFromObj manual page</TITLE></HEAD><BODY>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_GetReliefFromObj, Tk_GetRelief, Tk_NameOfRelief - translate between strings and relief values
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+int<BR>
+<B>Tk_GetReliefFromObj(</B><I>interp, objPtr, reliefPtr</I><B>)</B><BR>
+int<BR>
+<B>Tk_GetRelief(</B><I>interp, name, reliefPtr</I><B>)</B><BR>
+CONST char *<BR>
+<B>Tk_NameOfRelief(</B><I>relief</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL>
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter to use for error reporting.
+<P><DT>Tcl_Obj <B>*objPtr</B> (in/out)<DD>
+String value contains name of relief (one of <B>flat</B>, <B>groove</B>,
+<B>raised</B>, <B>ridge</B>, <B>solid</B>, or <B>sunken</B>);
+internal rep will be modified to cache corresponding relief value.
+<P><DT>char <B>*string</B> (in)<DD>
+Same as <I>objPtr</I> except description of relief is passed as
+a string.
+<P><DT>int <B>*reliefPtr</B> (out)<DD>
+Pointer to location in which to store relief value corresponding to
+<I>objPtr</I> or <I>name</I>.
+<P><DT>CONST char <B>*name</B> ()<DD>
+Name of the relief.
+<P><DT>int <B>relief</B> (in)<DD>
+Relief value (one of <B>TK_RELIEF_FLAT</B>, <B>TK_RELIEF_RAISED</B>,
+<B>TK_RELIEF_SUNKEN</B>, <B>TK_RELIEF_GROOVE</B>, <B>TK_RELIEF_SOLID</B>,
+or <B>TK_RELIEF_RIDGE</B>).
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_GetReliefFromObj</B> places in <I>*reliefPtr</I> the relief value
+corresponding to the value of <I>objPtr</I>.  This value will be one of
+<B>TK_RELIEF_FLAT</B>, <B>TK_RELIEF_RAISED</B>, <B>TK_RELIEF_SUNKEN</B>,
+<B>TK_RELIEF_GROOVE</B>, <B>TK_RELIEF_SOLID</B>, or <B>TK_RELIEF_RIDGE</B>.
+Under normal circumstances the return value is <B>TCL_OK</B> and
+<I>interp</I> is unused.
+If <I>objPtr</I> doesn't contain one of the valid relief names
+or an abbreviation of one of them, then <B>TCL_ERROR</B> is returned,
+<I>*reliefPtr</I> is unmodified, and an error message
+is stored in <I>interp</I>'s result if <I>interp</I> isn't NULL.
+<B>Tk_GetReliefFromObj</B> caches information about the return
+value in <I>objPtr</I>, which speeds up future calls to
+<B>Tk_GetReliefFromObj</B> with the same <I>objPtr</I>.
+<P>
+<B>Tk_GetRelief</B> is identical to <B>Tk_GetReliefFromObj</B> except
+that the description of the relief is specified with a string instead
+of an object.  This prevents <B>Tk_GetRelief</B> from caching the
+return value, so <B>Tk_GetRelief</B> is less efficient than
+<B>Tk_GetReliefFromObj</B>.
+<P>
+<B>Tk_NameOfRelief</B> is the logical inverse of <B>Tk_GetRelief</B>.
+Given a relief value it returns the corresponding string (<B>flat</B>,
+<B>raised</B>, <B>sunken</B>, <B>groove</B>, <B>solid</B>, or <B>ridge</B>).
+If <I>relief</I> isn't a legal relief value, then ``unknown relief''
+is returned.
+
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/N.htm#name">name</A>, <A href="../Keywords/R.htm#relief">relief</A>, <A href="../Keywords/S.htm#string">string</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1998 Sun Microsystems, Inc.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

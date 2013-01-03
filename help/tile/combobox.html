@@ -1,0 +1,159 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: combobox</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d04e0">STANDARD OPTIONS</a> · <a href="#SECTid81d05f8">OPTIONS</a> · <a href="#SECTid81d0dc8">DESCRIPTION</a> · <a href="#SECTid81d0e40">WIDGET COMMAND</a> · <a href="#SECTid81d1a48">VIRTUAL EVENTS</a> · <a href="#SECTid81d1ae8">SEE ALSO</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">combobox - </b><br>text field with popdown selection list</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>ttk::combobox</b> <i class="m">pathName</i> ?<i class="m">options</i>?
+</pre>
+<h2><a name="SECTid81d04e0">STANDARD OPTIONS</a></h2><div class="menu"><table class="menu" width="100%"><tr>
+<td width="25%"><a href="widget.html#stdopt_-class">-class</a></td><td width="25%"><a href="widget.html#stdopt_-cursor">-cursor</a></td><td width="25%"><a href="widget.html#stdopt_-style">-style</a></td><td width="25%"><a href="widget.html#stdopt_-takefocus">-takefocus</a></td>
+</tr></table></div>
+<h2><a name="SECTid81d05f8">OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-exportselection">-exportselection</a></td><td width="40%" align="left">exportSelection</td><td width="40%" align="left">ExportSelection</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Boolean value.
+If set, the widget selection is linked to the X selection.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-justify">-justify</a></td><td width="40%" align="left">justify</td><td width="40%" align="left">Justify</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies how the text is aligned within the widget.
+One of <b>left</b>, <b>center</b>, or <b>right</b>.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-postcommand">-postcommand</a></td><td width="40%" align="left">postCommand</td><td width="40%" align="left">PostCommand</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">A Tcl script to evaluate immediately before displaying the listbox.
+The <b>-postcommand</b> script may specify the <b>-values</b> to display.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-state">-state</a></td><td width="40%" align="left">state</td><td width="40%" align="left">State</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">One of <b>normal</b>, <b>readonly</b>, or <b>disabled</b>.
+In the <b>readonly</b> state,
+the value may not be edited directly, and 
+the user can only select one of the <b>-values</b> from the
+dropdown list.
+In the <b>normal</b> state, 
+the text field is directly editable.
+In the <b>disabled</b> state, no interaction is possible.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-textvariable">-textvariable</a></td><td width="40%" align="left">textVariable</td><td width="40%" align="left">TextVariable</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the name of a variable whose value is linked 
+to the widget value.
+Whenever the variable changes value the widget value is updated,
+and vice versa.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-values">-values</a></td><td width="40%" align="left">values</td><td width="40%" align="left">Values</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the list of values to display in the drop-down listbox.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-width">-width</a></td><td width="40%" align="left">width</td><td width="40%" align="left">Width</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies an integer value indicating the desired width of the entry window,
+in average-size characters of the widget's font.
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d0dc8">DESCRIPTION</a></h2><p>A combobox combines a text field with a pop-down list of values;
+the user may select the value of the text field from among the 
+values in the list.
+</p>
+<h2><a name="SECTid81d0e40">WIDGET COMMAND</a></h2><dl>
+
+<dt>
+<i class="m">pathName</i> <b>cget</b> <i class="m">option</i>
+</dt>
+<dd>Returns the current value of the specified <i>option</i>.
+See <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>configure</b> ?<i class="m">option</i>? ?<i class="m">value option value ...</i>?</dt>
+<dd>Modify or query widget options.
+See <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>current</b> ?<i class="m">newIndex</i>?</dt>
+<dd>If <i>newIndex</i> is supplied, sets the combobox value 
+to the element at position <i>newIndex</i> in the list of <b>-values</b>.
+Otherwise, returns the index of the current value in the list of <b>-values</b>
+or <b>-1</b> if the current value does not appear in the list.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>get</b>
+</dt>
+<dd>Returns the current value of the combobox.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>identify</b> <i class="m">x y</i>
+</dt>
+<dd>Returns the name of the element at position <i>x</i>, <i>y</i>,
+or the empty string if the coordinates are outside the window.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>instate</b> <i class="m">statespec</i> ?<i class="m">script</i>?</dt>
+<dd>Test the widget state.
+See <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>set</b> <i class="m">value</i>
+</dt>
+<dd>Sets the value of the combobox to <i>value</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathName</i> <b>state</b> ?<i class="m">stateSpec</i>?</dt>
+<dd>Modify or query the widget state.
+See <i>widget(n)</i>.
+</dd>
+
+</dl><p>The combobox widget also supports the following <i>entry</i>
+widget commands (see <i>entry(n)</i> for details):
+</p><div class="menu"><table class="menu" width="100%">
+<tr>
+<td width="33%">bbox</td><td width="33%">delete</td><td width="33%">icursor</td>
+</tr><tr>
+<td width="33%">index</td><td width="33%">insert</td><td width="33%">selection</td>
+</tr><tr><td width="33%">xview</td></tr>
+</table></div>
+<h2><a name="SECTid81d1a48">VIRTUAL EVENTS</a></h2><p>The combobox widget generates a <b>&lt;&lt;ComboboxSelected&gt;&gt;</b> virtual event
+when the user selects an element from the list of values.
+This event is generated after the listbox is unposted.
+</p>
+<h2><a name="SECTid81d1ae8">SEE ALSO</a></h2><p class="seealso">widget(n), <a href="entry.html">entry(n)</a>
+</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

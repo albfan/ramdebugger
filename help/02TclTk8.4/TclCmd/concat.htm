@@ -1,0 +1,31 @@
+<HTML><HEAD><TITLE>Tcl Built-In Commands - concat manual page</TITLE></HEAD><BODY>
+<H3><A NAME="M2">NAME</A></H3>
+concat - Join lists together
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>concat</B><I> </I>?<I>arg arg ...</I>?<BR>
+<H3><A NAME="M4">DESCRIPTION</A></H3>
+This command joins each of its arguments together with spaces after
+trimming leading and trailing spaces from each of them.  If all the
+arguments are lists, this has the same effect as concatenating them
+into a single list.
+It permits any number of arguments.  For example, the command
+<PRE><B>concat a b {c d e} {f {g h}}</B></PRE>
+will return
+<PRE><B>a b c d e f {g h}</B></PRE>
+as its result, and
+<PRE><B>concat &quot; a b {c   &quot; d &quot;  e} f&quot;</B></PRE>
+will return
+<PRE><B>a b {c d e} f</B></PRE>
+as its result.
+<P>
+If no <I>arg</I>s are supplied, the result is an empty string.
+
+<H3><A NAME="M5">SEE ALSO</A></H3>
+<B><A HREF="../TclCmd/append.htm">append</A></B>, <B><A HREF="../TclCmd/eval.htm">eval</A></B>
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#concatenate">concatenate</A>, <A href="../Keywords/J.htm#join">join</A>, <A href="../Keywords/L.htm#lists">lists</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 1993 The Regents of the University of California.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1996 Sun Microsystems, Inc.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

@@ -1,0 +1,48 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: Ttk_CreateTheme</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0490">SYNOPSIS</a> · <a href="#SECTid81d05f8">ARGUMENTS</a> · <a href="#SECTid81d08c8">DESCRIPTION</a> · <a href="#SECTid81d0918">SEE ALSO</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">Ttk_CreateTheme, Ttk_GetTheme, Ttk_GetDefaultTheme, Ttk_GetCurrentTheme - </b><br>create and use Themes.</p>
+<h2><a name="SECTid81d0490">SYNOPSIS</a></h2><pre class="syntax">
+Ttk_Theme Ttk_CreateTheme(<a href="#ARG-interp"><i>interp</i></a>, <a href="#ARG-name"><i>name</i></a>, <a href="#ARG-parentTheme"><i>parentTheme</i></a>);
+Ttk_Theme Ttk_GetTheme(<a href="#ARG-interp"><i>interp</i></a>, <a href="#ARG-name"><i>name</i></a>);
+Ttk_Theme Ttk_GetDefaultTheme(<a href="#ARG-interp"><i>interp</i></a>);
+Ttk_Theme Ttk_GetCurrentTheme(<a href="#ARG-interp"><i>interp</i></a>);
+</pre>
+<h2><a name="SECTid81d05f8">ARGUMENTS</a></h2><div class="arglist"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Type</th><th width="70%">Name</th><th width="10%">Mode</th>
+</tr></thead><tr class="syntax">
+<td class="type" width="20%" align="left">Tcl_Interp *</td><td class="name" width="70%" align="left"><a name="ARG-interp">interp</a></td><td class="mode" width="10%" align="center">in</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">The Tcl interpreter in which to register/query available themes.
+</td>
+</tr><tr class="syntax">
+<td class="type" width="20%" align="left">Ttk_Theme</td><td class="name" width="70%" align="left"><a name="ARG-parentTheme">parentTheme</a></td><td class="mode" width="10%" align="center">in</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Fallback or parent theme from which the new theme will
+inherit elements and layouts.
+</td>
+</tr><tr class="syntax">
+<td class="type" width="20%" align="left">const char *</td><td class="name" width="70%" align="left"><a name="ARG-name">name</a></td><td class="mode" width="10%" align="center">in</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">The name of the theme.
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d08c8">DESCRIPTION</a></h2>
+<h2><a name="SECTid81d0918">SEE ALSO</a></h2><p class="seealso">Ttk_RegisterLayout, Ttk_BuildLayout</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

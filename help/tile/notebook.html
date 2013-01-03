@@ -1,0 +1,249 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: notebook</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d04e0">DESCRIPTION</a> · <a href="#SECTid81d0580">STANDARD OPTIONS</a> · <a href="#SECTid81d0698">WIDGET OPTIONS</a> · <a href="#SECTid81d0a80">TAB OPTIONS</a> · <a href="#SECTid81d12c8">WIDGET COMMAND</a> · <a href="#SECTid81d1fc0">KEYBOARD TRAVERSAL</a> · <a href="#SECTid81d2218">TAB INDICES</a> · <a href="#SECTid81d2498">VIRTUAL EVENTS</a> · <a href="#SECTid81d2538">EXAMPLE</a> · <a href="#SECTid81d25b0">SEE ALSO</a> · <a href="#SECTid81d2628">KEYWORDS</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">notebook - </b><br>Multi-paned container widget</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>ttk::notebook</b> <i class="m">pathName</i> ?<i class="m">options</i>?
+</pre>
+<h2><a name="SECTid81d04e0">DESCRIPTION</a></h2><p>A <b>notebook</b> widget manages a collection of subpanes 
+and displays a single one at a time.
+Each pane is associated with a tab, which the user
+may select to change the currently-displayed pane.
+</p>
+<h2><a name="SECTid81d0580">STANDARD OPTIONS</a></h2><div class="menu"><table class="menu" width="100%"><tr>
+<td width="25%"><a href="widget.html#stdopt_-class">-class</a></td><td width="25%"><a href="widget.html#stdopt_-cursor">-cursor</a></td><td width="25%"><a href="widget.html#stdopt_-style">-style</a></td><td width="25%"><a href="widget.html#stdopt_-takefocus">-takefocus</a></td>
+</tr></table></div>
+<h2><a name="SECTid81d0698">WIDGET OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-height">-height</a></td><td width="40%" align="left">height</td><td width="40%" align="left">Height</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">If present and greater than zero, 
+specifies the desired height of the pane area
+(not including internal padding or tabs).
+Otherwise, the maximum height of all panes is used.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-padding">-padding</a></td><td width="40%" align="left">padding</td><td width="40%" align="left">Padding</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the amount of extra space to add around the outside
+of the notebook.
+The padding is a list of up to four length specifications 
+<i>left top right bottom</i>.
+If fewer than four elements are specified, 
+<i>bottom</i> defaults to <i>top</i>,
+<i>right</i> defaults to <i>left</i>, and 
+<i>top</i> defaults to <i>left</i>.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-width">-width</a></td><td width="40%" align="left">width</td><td width="40%" align="left">Width</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">If present and greater than zero, 
+specifies the desired width of the pane area
+(not including internal padding).
+Otherwise, the maximum width of all panes is used.
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d0a80">TAB OPTIONS</a></h2><p>The following options may be specified for individual notebook panes:
+</p><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-state">-state</a></td><td width="40%" align="left">state</td><td width="40%" align="left">State</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Either <b>normal</b>, <b>disabled</b> or <b>hidden</b>.  
+If <b>disabled</b>, then the tab is not selectable. If <b>hidden</b>,
+then the tab is not shown.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-sticky">-sticky</a></td><td width="40%" align="left">sticky</td><td width="40%" align="left">Sticky</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies how the child pane is positioned within the pane area.
+Value is a string containing zero or more of the characters
+<b>n, s, e,</b> or <b>w</b>.
+Each letter refers to a side (north, south, east, or west) 
+that the child window will "stick" to,
+as per the <b class="cmd">grid</b> geometry manager.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-padding">-padding</a></td><td width="40%" align="left">padding</td><td width="40%" align="left">Padding</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the amount of extra space to add between the notebook and this pane.
+Syntax is the same as for the widget <b>-padding</b> option.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-text">-text</a></td><td width="40%" align="left">text</td><td width="40%" align="left">Text</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies a string to be displayed in the tab.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-image">-image</a></td><td width="40%" align="left">image</td><td width="40%" align="left">Image</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies an image to display in the tab,
+which must have been created with the <b>image create</b> command.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-compound">-compound</a></td><td width="40%" align="left">compound</td><td width="40%" align="left">Compound</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies how to display the image relative to the text,
+in the case both <b>-text</b> and <b>-image</b> are present.
+See <i>label(n)</i> for legal values.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-underline">-underline</a></td><td width="40%" align="left">underline</td><td width="40%" align="left">Underline</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the integer index (0-based) of a character to underline 
+in the text string.
+The underlined character is used for mnemonic activation
+if <b>ttk::notebook::enableTraversal</b> is called.
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d12c8">WIDGET COMMAND</a></h2><dl class="commandlist">
+
+<dt>
+<i class="m">pathname</i> <b>add</b> <i class="m">child</i> ?<i class="m">options...</i>?</dt>
+<dd>Adds a new tab to the notebook.
+When the tab is selected, the <i>child</i> window
+will be displayed.
+<i>child</i> must be a direct child of the notebook window.
+See <a href="#SECTid81d0a80">TAB OPTIONS</a> for the list of available <i>options</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>configure</b> ?<i class="m">options</i>?</dt>
+<dd>See <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>cget</b> <i class="m">option</i>
+</dt>
+<dd>See <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>forget</b> <i class="m">index</i>
+</dt>
+<dd>Removes the tab specified by <i>index</i>,
+unmaps and unmanages the associated child window.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>index</b> <i class="m">index</i>
+</dt>
+<dd>Returns the numeric index of the tab specified by <i>index</i>,
+or the total number of tabs if <i>index</i> is the string "<b>end</b>".
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>instate</b> <i class="m">args...</i>?</dt>
+<dd>See <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>select</b> <i class="m">index</i>
+</dt>
+<dd>Selects the specified tab; the associated child pane will be displayed,
+and the previously-selected pane (if different) is unmapped.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>state</b> ?<i class="m">statespec</i>?</dt>
+<dd>See <i>widget(n)</i>.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>tab</b> <i class="m">index</i> ?<i class="m">-options</i> ?<i class="m">value ...</i>
+</dt>
+<dd>Query or modify the options of the specific tab.
+If no <i>-option</i> is specified, returns a dictionary of the tab option values.
+If one <i>-option</i> is specified, returns the value of that <i>option</i>.
+Otherwise, sets the <i>-option</i>s to the corresponding <i>value</i>s.
+See <a href="#SECTid81d0a80">TAB OPTIONS</a> for the available options.
+</dd>
+
+
+<dt>
+<i class="m">pathname</i> <b>tabs</b>
+</dt>
+<dd>Returns a list of all pane windows managed by the widget.
+</dd>
+
+</dl>
+<h2><a name="SECTid81d1fc0">KEYBOARD TRAVERSAL</a></h2><p>To enable keyboard traversal for a dialog box
+containing a notebook widget <i>$nb</i>, call:
+</p><pre class="example">
+ttk::notebook::enableTraversal $nb
+</pre><p>This will extend the bindings for the toplevel widget
+containing the notebook as follows:
+</p><ul>
+<li>
+<b>Control-Tab</b> selects the tab following the currently selected one.
+</li>
+<li>
+<b>Shift-Control-Tab</b> selects the tab preceding the currently selected one.
+<i>BUG: this doesn't currently work.</i>
+</li>
+<li>
+<b>Alt-K</b>, where <b>K</b> is the mnemonic (underlined) character
+of any tab, will select that tab.
+</li>
+</ul>
+<h2><a name="SECTid81d2218">TAB INDICES</a></h2><p>The <i>index</i> argument to the above commands may take
+any of the following forms:
+</p><ul>
+<li>An integer between zero and the number of tabs;
+</li>
+<li>The name of a child pane window;
+</li>
+<li>A positional specification of the form "@<i>x</i>,<i>y</i>",
+which identifies the tab 
+</li>
+<li>The literal string "<b>current</b>",
+which identifies the currently-selected tab; or:
+</li>
+<li>The literal string "<b>end</b>",
+which returns the number of tabs 
+(only valid for "<i>pathname</i> <b>index</b>").
+
+</li>
+</ul>
+<h2><a name="SECTid81d2498">VIRTUAL EVENTS</a></h2><p>The notebook widget generates a <b>&lt;&lt;NotebookTabChanged&gt;&gt;</b>
+virtual event after a new tab is selected.
+</p>
+<h2><a name="SECTid81d2538">EXAMPLE</a></h2><pre class="example">
+notebook .nb
+.nb add [frame .nb.f1] -text "First tab"
+.nb add [frame .nb.f2] -text "Second tab"
+.nb select .nb.f2
+ttk::notebook::enableTraversal .nb
+</pre>
+<h2><a name="SECTid81d25b0">SEE ALSO</a></h2><p class="seealso">widget(n), grid(n)</p>
+<h2><a name="SECTid81d2628">KEYWORDS</a></h2><p class="keywords">
+<a class="keyword" href="keyword-index.html#KW-pane">pane</a>, <a class="keyword" href="keyword-index.html#KW-tab">tab</a>
+</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

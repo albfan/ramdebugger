@@ -1,0 +1,43 @@
+<HTML><HEAD><TITLE>Tcl Library Procedures - Tcl_GetCwd manual page</TITLE></HEAD><BODY>
+<H3><A NAME="M2">NAME</A></H3>
+Tcl_GetCwd, Tcl_Chdir - manipulate the current working directory
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tcl.h&gt;</B><BR>
+char *<BR>
+<B>Tcl_GetCwd</B>(<I>interp</I>, <I>bufferPtr</I>)<BR>
+int<BR>
+<B>Tcl_Chdir</B>(<I>path</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL>
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter in which to report an error, if any.
+<P><DT>Tcl_DString <B>*bufferPtr</B> (in/out)<DD>
+This dynamic string is used to store the current working directory.
+At the time of the call it should be uninitialized or free.  The
+caller must eventually call <B><A HREF="../TclLib/DString.htm">Tcl_DStringFree</A></B> to free up
+anything stored here.
+<P><DT>char <B>*path</B> (in)<DD>
+File path in UTF-8 format.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+These procedures may be used to manipulate the current working
+directory for the application.  They provide C-level access to
+the same functionality as the Tcl <B><A HREF="../TclCmd/pwd.htm">pwd</A></B> command.
+<P>
+<B>Tcl_GetCwd</B> returns a pointer to a string specifying the current
+directory, or NULL if the current directory could not be determined.
+If NULL is returned, an error message is left in the interp's result.
+Storage for the result string is allocated in bufferPtr; the caller
+must call <B>Tcl_DStringFree()</B> when the result is no longer needed.
+The format of the path is UTF-8.
+<P>
+<B>Tcl_Chdir</B> changes the applications current working directory to
+the value specified in <I>path</I>.  The format of the passed in string
+must be UTF-8.  The function returns -1 on error or 0 on success.
+
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/P.htm#pwd">pwd</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 1998-1999 Scriptics Corporation
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

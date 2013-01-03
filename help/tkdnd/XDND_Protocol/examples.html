@@ -1,0 +1,62 @@
+<html>
+
+<head>
+<title>Examples of using Drag-And-Drop</title>
+</head>
+
+<body bgcolor="#F8F8F8" text="#000000" link="#0000E9" vlink="#000090" alink="#FF0000">
+<font face=verdana,arial,helvetica>
+
+<h1> Drag-And-Drop Protocol for the X Window System </h1>
+
+<img src="../gifs/line.blue.pure.gif" alt="--------" WIDTH=520 HEIGHT=6>
+
+<h3> Examples of using Drag-And-Drop </h3>
+
+Drag-And-Drop is currently the closest operation we have to "do what I mean."  It is therefore very important to pick the most natural operation to be the default.
+
+<h4> Dragging text (and almost anything else) </h4>
+
+Even though this is the simplest example of DND, it is still non-trivial.
+
+<p>
+When the user drags text within a document, the natural default action is <b>move</b>.  Since users may also want to use DND to duplicate text, one needs to define a modifier key (e.g. Meta) for this.  One cannot use a different mouse button since X users expect middle-click to mean "paste" and right-click to mean "extend the current selection."  (the de-facto standard set by <tt>xterm</tt>)
+
+<p>
+On the other hand, when the user drags text to another document, the natural default action is <b>copy</b> since the two documents are unrelated.  This is also the safest alternative because the original data will not be lost, regardless of what the target does after the drop.  It is reasonable to provide <b>move</b> as well, but not as the default.
+
+<p>
+A special case is a compound document where different parts are managed by different applications.  In this case, <b>move</b> is the natural default action because the user <em>perceives</em> it to be a single document.  Users will still expect <b>copy</b> to be the default when text is dragged to a different document.  (Since the X window ID of the source is included in the XdndPosition message, it is possible to tell if the drop is on a different part of the same document.)
+
+<p>
+When two documents cooperate (e.g. linked spreadsheets), <b>link</b> is an appropriate option, but it should not be the default.
+
+<h4> <a href="dragging_files.html">Dragging files</a> </h4>
+
+This is discussed in depth on a separate <a href="dragging_files.html">page</a>.  Here, it is sufficient to note that, while many programs might accept drops (e.g. a program that builds a Makefile), file managers are the only programs that one would expect to modify the actual file system.  Thus, the appropriate design is for everybody to accept the data type text/uri-list, and for file managers to <em>internally</em> use the action (XdndActionCopy, XdndActionMove, XdndActionLink) to tell themselves what the user wants done.  All other programs that accept text/uri-list should return XdndActionPrivate.
+
+<h4> Trashcans </h4>
+
+Trashcans are simply a convenient extension of file managers to provide a familiar metaphor for deleting files.  They are mentioned here because they introduce an interesting design twist.  The most convenient way for a trashcan to work is for the user to first set it to either <b>store</b> or <b>incinerate</b> and then drop files on it forever.  This means that the <em>target</em> is deciding the action instead of the source.  The trashcan accepts text/uri-list (from any source) and decides whether to move it to <tt>~/.trash</tt> or to delete it.  (XdndActionAsk can be used to tell the trashcan that it should ask after a particular drop.)
+
+<p>
+The best way to tell the user what will happen after a drop is for the trashcan to change its appearance based on the user's setting.
+
+<p>
+<hr>
+
+<p>
+If you have an interesting example, please <a href="mailto:xdnd@newplanetsoftware.com">let us know</a>.
+
+<p>
+<hr>
+
+<p>
+Last updated on August 17, 1998
+
+<p>
+Back to the <a href="xdnd.html">main page</a>.
+
+</body>
+
+</html>

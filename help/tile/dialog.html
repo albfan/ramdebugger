@@ -1,0 +1,149 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: dialog</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d0558">DESCRIPTION</a> · <a href="#SECTid81d0620">OPTIONS</a> · <a href="#SECTid81d0f58">WIDGET COMMANDS</a> · <a href="#SECTid81d1098">PREDEFINED DIALOG TYPES</a> · <a href="#SECTid81d11d8">STOCK BUTTONS</a> · <a href="#SECTid81d1368">EXAMPLE</a> · <a href="#SECTid81d13e0">SEE ALSO</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">dialog - </b><br>create a dialog box</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>ttk::dialog</b> <i class="m">pathname</i> ?<i class="m">options...</i>?
+<b>ttk::dialog::define</b> <i class="m">dialogType</i> ?<i class="m">options...</i>?
+</pre>
+<h2><a name="SECTid81d0558">DESCRIPTION</a></h2><p>A dialog box is a transient top-level window 
+containing an icon, a short message, an optional, longer, detail message,
+and a row of command buttons.
+When the user presses any of the buttons,
+a callback function is invoked
+and then the dialog is destroyed.
+</p><p>Additional widgets may be added in the dialog <i>client frame</i>.
+</p>
+<h2><a name="SECTid81d0620">OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-title">-title</a></td><td width="40%" align="left">n/a</td><td width="40%" align="left">n/a</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies a string to use as the window manager title.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-message">-message</a></td><td width="40%" align="left">n/a</td><td width="40%" align="left">n/a</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the message to display in this dialog.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-detail">-detail</a></td><td width="40%" align="left">n/a</td><td width="40%" align="left">n/a</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies a longer auxilliary message.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-command">-command</a></td><td width="40%" align="left">n/a</td><td width="40%" align="left">n/a</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies a command prefix to be invoked when the user presses
+one of the command buttons.  
+The symbolic name of the button is passed as an additional argument
+to the command.
+The dialog is dismissed after invoking the command.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-type">-type</a></td><td width="40%" align="left">n/a</td><td width="40%" align="left">n/a</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies a built-in or user-defined dialog type.
+See <a href="#SECTid81d1098">PREDEFINED DIALOG TYPES</a>, below.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-icon">-icon</a></td><td width="40%" align="left">n/a</td><td width="40%" align="left">n/a</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies one of the stock dialog icons,
+<b>info</b>, <b>question</b>, <b>warning</b>, or <b>error</b>.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-buttons">-buttons</a></td><td width="40%" align="left">n/a</td><td width="40%" align="left">n/a</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">A list of symbolic button names.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-labels">-labels</a></td><td width="40%" align="left">n/a</td><td width="40%" align="left">n/a</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">A dictionary mapping symbolic button names to textual labels.
+May be omitted if all the buttons are predefined.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-default">-default</a></td><td width="40%" align="left">n/a</td><td width="40%" align="left">n/a</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">The symbolic name of the default button.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-cancel">-cancel</a></td><td width="40%" align="left">n/a</td><td width="40%" align="left">n/a</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">The symbolic name of the "cancel" button.
+The cancel button is invoked if the user presses the Escape key
+and when the dialog is closed from the window manager.
+If <b>-cancel</b> is not specified, 
+the dialog ignores window manager close commands (WM_DELETE_WINDOW).
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d0f58">WIDGET COMMANDS</a></h2><dl>
+
+<dt></dt>
+<dd>
+<b>ttk::dialog::clientframe</b> <i>dlg</i>
+Returns the widget path of the client frame.
+Other widgets may be added to the client frame.
+The client frame appears between the detail message and the command buttons.
+</dd>
+
+</dl>
+<h2><a name="SECTid81d1098">PREDEFINED DIALOG TYPES</a></h2><p>The <b>-type</b> option, if present, specifies default values 
+for other options.  <b>ttk::dialog::define</b> <i>type options...</i>
+specifies a new stock dialog <i>type</i>.  
+The following stock dialog types are predefined:
+</p><pre class="example">
+ttk::dialog::define ok \
+    -icon info -buttons {ok} -default ok
+ttk::dialog::define okcancel \
+    -icon info -buttons {ok cancel} -default ok -cancel cancel
+ttk::dialog::define yesno \
+    -icon question -buttons {yes no}
+ttk::dialog::define yesnocancel \
+    -icon question -buttons {yes no cancel} -cancel cancel
+ttk::dialog::define retrycancel \
+    -icon question -buttons {retry cancel} -cancel cancel
+</pre>
+<h2><a name="SECTid81d11d8">STOCK BUTTONS</a></h2><p>The following ``stock'' symbolic button names have predefined labels:
+<b>yes</b>, <b>no</b>, <b>ok</b>, <b>cancel</b>, and <b>retry</b>.
+</p><p>It is not necessary to list these in the <b>-labels</b> dictionary.
+</p>
+<h2><a name="SECTid81d1368">EXAMPLE</a></h2><pre class="example">
+
+ttk::dialog .saveFileDialog \
+    -title "Save file?" \
+    -icon question \
+    -message "Save file before closing?" \
+    -detail "If you do not save the file, your work will be lost" \
+    -buttons [list yes no cancel] \ 
+    -labels [list yes "Save file" no "Don't save"] \
+    -command safeFileComplete \
+    ;
+
+proc saveFileComplete {button} {
+    switch -- $button {
+    	yes { # save file ... }
+	no  { exit }
+	cancel { # no-op }
+    }
+}
+</pre>
+<h2><a name="SECTid81d13e0">SEE ALSO</a></h2><p class="seealso">tk_messageBox(n), wm(n), toplevel(n)</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

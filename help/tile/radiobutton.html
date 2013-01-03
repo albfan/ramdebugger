@@ -1,0 +1,88 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: radiobutton</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d04e0">DESCRIPTION</a> · <a href="#SECTid81d0580">STANDARD OPTIONS</a> · <a href="#SECTid81d07b0">OPTIONS</a> · <a href="#SECTid81d0ad0">WIDGET COMMAND</a> · <a href="#SECTid81d0d78">WIDGET STATES</a> · <a href="#SECTid81d0f08">SEE ALSO</a> · <a href="#SECTid81d0fa8">KEYWORDS</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">radiobutton - </b><br>Mutually exclusive option widget</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>ttk::radiobutton</b> <i class="m">pathName</i> ?<i class="m">options</i>?
+</pre>
+<h2><a name="SECTid81d04e0">DESCRIPTION</a></h2><p>
+<b>radiobutton</b> widgets are used in groups to show or change
+a set of mutually-exclusive options.
+Radiobuttons are linked to a Tcl variable,
+and have an associated value; when a radiobutton is clicked,
+it sets the variable to its associated value.
+</p>
+<h2><a name="SECTid81d0580">STANDARD OPTIONS</a></h2><div class="menu"><table class="menu" width="100%">
+<tr>
+<td width="25%"><a href="widget.html#stdopt_-class">-class</a></td><td width="25%"><a href="widget.html#stdopt_-compound">-compound</a></td><td width="25%"><a href="widget.html#stdopt_-cursor">-cursor</a></td><td width="25%"><a href="widget.html#stdopt_-image">-image</a></td>
+</tr><tr>
+<td width="25%"><a href="widget.html#stdopt_-state">-state</a></td><td width="25%"><a href="widget.html#stdopt_-style">-style</a></td><td width="25%"><a href="widget.html#stdopt_-takefocus">-takefocus</a></td><td width="25%"><a href="widget.html#stdopt_-text">-text</a></td>
+</tr><tr>
+<td width="25%"><a href="widget.html#stdopt_-textvariable">-textvariable</a></td><td width="25%"><a href="widget.html#stdopt_-underline">-underline</a></td><td width="25%"><a href="widget.html#stdopt_-width">-width</a></td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d07b0">OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-command">-command</a></td><td width="40%" align="left">command</td><td width="40%" align="left">Command</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">A Tcl script to evaluate whenever the widget is invoked.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-value">-value</a></td><td width="40%" align="left">Value</td><td width="40%" align="left">Value</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">The value to store in the associated <i>-variable</i> 
+when the widget is selected. 
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-variable">-variable</a></td><td width="40%" align="left">variable</td><td width="40%" align="left">Variable</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">The name of a global variable whose value is linked to the widget.
+Default value is <b>::selectedButton</b>.
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d0ad0">WIDGET COMMAND</a></h2><p>In addition to the standard 
+<b>cget</b>, <b>configure</b>, <b>instate</b>, and <b>state</b> 
+commands, radiobuttons support the following additional
+widget commands:
+</p><dl>
+
+<dt>
+<i class="m">pathname</i> invoke</dt>
+<dd>Sets the <i>-variable</i> to the <i>-value</i>, selects the widget,
+and evaluates the associated <i>-command</i>.  
+Returns the result of the <i>-command</i>, or the empty
+string if no <i>-command</i> is specified.
+</dd>
+
+</dl>
+<h2><a name="SECTid81d0d78">WIDGET STATES</a></h2><p>The widget does not respond to user input if the <b>disabled</b> state is set.
+The widget sets the <b>selected</b> state whenever 
+the linked <b>-variable</b> is set to the widget's <b>-value</b>,
+and clears it otherwise.
+The widget sets the <b>alternate</b> state whenever the 
+linked <b>-variable</b> is unset.  
+(The <b>alternate</b> state may be used to indicate a ``tri-state'' 
+or ``indeterminate'' selection.)
+</p>
+<h2><a name="SECTid81d0f08">SEE ALSO</a></h2><p class="seealso">widget(n), keynav(n), checkbutton(n)</p>
+<h2><a name="SECTid81d0fa8">KEYWORDS</a></h2><p class="keywords">
+<a class="keyword" href="keyword-index.html#KW-widget">widget</a>, <a class="keyword" href="keyword-index.html#KW-button">button</a>, <a class="keyword" href="keyword-index.html#KW-option">option</a>
+</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

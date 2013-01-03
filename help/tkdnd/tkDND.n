@@ -1,0 +1,762 @@
+'\"
+'\" This software (tkDND) is copyrighted by:
+'\"   George Petasis, National Centre for Scientific Research "Demokritos",
+'\"   Aghia Paraskevi, Athens, Greece.
+'\"   e-mail: petasis@iit.demokritos.gr
+'\"   Laurent Riesterer, Rennes, France.
+'\"   e-mail: (laurent.riesterer@free.fr)
+'\"    
+'\" The following terms apply to all files associated
+'\" with the software unless explicitly disclaimed in individual
+'\" files.
+'\"    
+'\" The authors hereby grant permission to use, copy, modify, distribute,
+'\" and license this software and its documentation for any purpose, provided
+'\" that existing copyright notices are retained in all copies and that this
+'\" notice is included verbatim in any distributions. No written agreement,
+'\" license, or royalty fee is required for any of the authorized uses.
+'\" Modifications to this software may be copyrighted by their authors
+'\" and need not follow the licensing terms described here, provided that
+'\" the new terms are clearly indicated on the first page of each file where
+'\" they apply.
+'\"    
+'\" IN NO EVENT SHALL THE AUTHORS OR DISTRIBUTORS BE LIABLE TO ANY PARTY
+'\" FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES
+'\" ARISING OUT OF THE USE OF THIS SOFTWARE, ITS DOCUMENTATION, OR ANY
+'\" DERIVATIVES THEREOF, EVEN IF THE AUTHORS HAVE BEEN ADVISED OF THE
+'\" POSSIBILITY OF SUCH DAMAGE.
+'\"    
+'\" THE AUTHORS AND DISTRIBUTORS SPECIFICALLY DISCLAIM ANY WARRANTIES,
+'\" INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY,
+'\" FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.  THIS SOFTWARE
+'\" IS PROVIDED ON AN "AS IS" BASIS, AND THE AUTHORS AND DISTRIBUTORS HAVE
+'\" NO OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR
+'\" MODIFICATIONS.
+'\" 
+'\" The definitions below are for supplemental macros used in Tcl/Tk
+'\" manual entries.
+'\"
+'\" .AP type name in/out ?indent?
+'\"	Start paragraph describing an argument to a library procedure.
+'\"	type is type of argument (int, etc.), in/out is either "in", "out",
+'\"	or "in/out" to describe whether procedure reads or modifies arg,
+'\"	and indent is equivalent to second arg of .IP (shouldn't ever be
+'\"	needed;  use .AS below instead)
+'\"
+'\" .AS ?type? ?name?
+'\"	Give maximum sizes of arguments for setting tab stops.  Type and
+'\"	name are examples of largest possible arguments that will be passed
+'\"	to .AP later.  If args are omitted, default tab stops are used.
+'\"
+'\" .BS
+'\"	Start box enclosure.  From here until next .BE, everything will be
+'\"	enclosed in one large box.
+'\"
+'\" .BE
+'\"	End of box enclosure.
+'\"
+'\" .CS
+'\"	Begin code excerpt.
+'\"
+'\" .CE
+'\"	End code excerpt.
+'\"
+'\" .VS ?version? ?br?
+'\"	Begin vertical sidebar, for use in marking newly-changed parts
+'\"	of man pages.  The first argument is ignored and used for recording
+'\"	the version when the .VS was added, so that the sidebars can be
+'\"	found and removed when they reach a certain age.  If another argument
+'\"	is present, then a line break is forced before starting the sidebar.
+'\"
+'\" .VE
+'\"	End of vertical sidebar.
+'\"
+'\" .DS
+'\"	Begin an indented unfilled display.
+'\"
+'\" .DE
+'\"	End of indented unfilled display.
+'\"
+'\" .SO
+'\"	Start of list of standard options for a Tk widget.  The
+'\"	options follow on successive lines, in four columns separated
+'\"	by tabs.
+'\"
+'\" .SE
+'\"	End of list of standard options for a Tk widget.
+'\"
+'\" .OP cmdName dbName dbClass
+'\"	Start of description of a specific option.  cmdName gives the
+'\"	option's name as specified in the class command, dbName gives
+'\"	the option's name in the option database, and dbClass gives
+'\"	the option's class in the option database.
+'\"
+'\" .UL arg1 arg2
+'\"	Print arg1 underlined, then print arg2 normally.
+'\"
+'\" RCS: @(#) $Id: tkDND.n,v 1.2 2002/04/12 08:42:24 petasis Exp $
+'\"
+'\"	# Set up traps and other miscellaneous stuff for Tcl/Tk man pages.
+.if t .wh -1.3i ^B
+.nr ^l \n(.l
+.ad b
+'\"	# Start an argument description
+.de AP
+.ie !"\\$4"" .TP \\$4
+.el \{\
+.   ie !"\\$2"" .TP \\n()Cu
+.   el          .TP 15
+.\}
+.ta \\n()Au \\n()Bu
+.ie !"\\$3"" \{\
+\&\\$1	\\fI\\$2\\fP	(\\$3)
+.\".b
+.\}
+.el \{\
+.br
+.ie !"\\$2"" \{\
+\&\\$1	\\fI\\$2\\fP
+.\}
+.el \{\
+\&\\fI\\$1\\fP
+.\}
+.\}
+..
+'\"	# define tabbing values for .AP
+.de AS
+.nr )A 10n
+.if !"\\$1"" .nr )A \\w'\\$1'u+3n
+.nr )B \\n()Au+15n
+.\"
+.if !"\\$2"" .nr )B \\w'\\$2'u+\\n()Au+3n
+.nr )C \\n()Bu+\\w'(in/out)'u+2n
+..
+.AS Tcl_Interp Tcl_CreateInterp in/out
+'\"	# BS - start boxed text
+'\"	# ^y = starting y location
+'\"	# ^b = 1
+.de BS
+.br
+.mk ^y
+.nr ^b 1u
+.if n .nf
+.if n .ti 0
+.if n \l'\\n(.lu\(ul'
+.if n .fi
+..
+'\"	# BE - end boxed text (draw box now)
+.de BE
+.nf
+.ti 0
+.mk ^t
+.ie n \l'\\n(^lu\(ul'
+.el \{\
+.\"	Draw four-sided box normally, but don't draw top of
+.\"	box if the box started on an earlier page.
+.ie !\\n(^b-1 \{\
+\h'-1.5n'\L'|\\n(^yu-1v'\l'\\n(^lu+3n\(ul'\L'\\n(^tu+1v-\\n(^yu'\l'|0u-1.5n\(ul'
+.\}
+.el \}\
+\h'-1.5n'\L'|\\n(^yu-1v'\h'\\n(^lu+3n'\L'\\n(^tu+1v-\\n(^yu'\l'|0u-1.5n\(ul'
+.\}
+.\}
+.fi
+.br
+.nr ^b 0
+..
+'\"	# VS - start vertical sidebar
+'\"	# ^Y = starting y location
+'\"	# ^v = 1 (for troff;  for nroff this doesn't matter)
+.de VS
+.if !"\\$2"" .br
+.mk ^Y
+.ie n 'mc \s12\(br\s0
+.el .nr ^v 1u
+..
+'\"	# VE - end of vertical sidebar
+.de VE
+.ie n 'mc
+.el \{\
+.ev 2
+.nf
+.ti 0
+.mk ^t
+\h'|\\n(^lu+3n'\L'|\\n(^Yu-1v\(bv'\v'\\n(^tu+1v-\\n(^Yu'\h'-|\\n(^lu+3n'
+.sp -1
+.fi
+.ev
+.\}
+.nr ^v 0
+..
+'\"	# Special macro to handle page bottom:  finish off current
+'\"	# box/sidebar if in box/sidebar mode, then invoked standard
+'\"	# page bottom macro.
+.de ^B
+.ev 2
+'ti 0
+'nf
+.mk ^t
+.if \\n(^b \{\
+.\"	Draw three-sided box if this is the box's first page,
+.\"	draw two sides but no top otherwise.
+.ie !\\n(^b-1
+\h'-1.5n'\L'|\\n(^yu-1v'\l'\\n(^lu+3n\(ul'\L'\\n(^tu+1v-\\n(^yu'\h'|0u'\c
+.el \h'-1.5n'\L'|\\n(^yu-1v'\h'\\n(^lu+3n'\L'\\n(^tu+1v-\\n(^yu'\h'|0u'\c
+.\}
+.if \\n(^v \{\
+.nr ^x \\n(^tu+1v-\\n(^Yu
+\kx\h'-\\nxu'\h'|\\n(^lu+3n'\ky\L'-\\n(^xu'\v'\\n(^xu'\h'|0u'\c
+.\}
+.bp
+'fi
+.ev
+.if \\n(^b \{\
+.mk ^y
+.nr ^b 2
+.\}
+.if \\n(^v \{\
+.mk ^Y
+.\}
+..
+'\"	# DS - begin display
+.de DS
+.RS
+.nf
+.sp
+..
+'\"	# DE - end display
+.de DE
+.fi
+.RE
+.sp
+..
+'\"	# SO - start of list of standard options
+.de SO
+.SH "STANDARD OPTIONS"
+.LP
+.nf
+.ta 4c 8c 12c
+.ft B
+..
+'\"	# SE - end of list of standard options
+.de SE
+.fi
+.ft R
+.LP
+See the \\fBoptions\\fR manual entry for details on the standard options.
+..
+'\"	# OP - start of full description for a single option
+.de OP
+.LP
+.nf
+.ta 4c
+Command-Line Name:	\\fB\\$1\\fR
+Database Name:	\\fB\\$2\\fR
+Database Class:	\\fB\\$3\\fR
+.fi
+.IP
+..
+'\"	# CS - begin code excerpt
+.de CS
+.RS
+.nf
+.ta .25i .5i .75i 1i
+..
+'\"	# CE - end code excerpt
+.de CE
+.fi
+.RE
+..
+.de UL
+\\$1\l'|0\(ul'\\$2
+..
+.TH dnd n 8.4 Tk "Tk Built-In Commands"
+.BS
+'\" Note:  do not modify the .SH NAME line immediately below!
+.SH NAME
+dnd \- Tk Drag and Drop Interface
+.SH SYNOPSIS
+\fBdnd bindtarget\fI  window\fR
+.br
+\fBdnd bindtarget\fI  window type ?event?\fR
+.br
+\fBdnd bindtarget\fI  window type event script ?priority?\fR  
+.br
+\fBdnd cleartarget\fI window\fR
+.br
+.PP
+\fBdnd bindsource\fI  window\fR
+.br
+\fBdnd bindsource\fI  window type\fR
+.br
+\fBdnd bindsource\fI  window type script ?priority?\fR
+.br
+\fBdnd clearsource\fI window\fR
+.br
+.PP
+\fBdnd drag\fI window ?-button button? ?-actions list ?-descriptions list?? ?-cursorwindow window? ?-callback script?\fR
+.br
+
+.SH INTRODUCTION
+.PP
+The \fBdnd\fR command provides a Tcl interface to native, platform specific
+drag and drop mechanism. Under unix the drag & drop protocol in use is the XDND
+protocol (also used by the QT toolkit, KDE & GNOME Desktops). Basic
+interaction (currently drops) with Motif applications is also provided.
+Under Windows, the OLE drag & drop interfaces are used. The Macindosh platform
+is not yet supported.
+.PP
+With the \fBdnd\fR command the user is able to register existing Tk widgets as
+drag sources or drop targets, that are able to send or receive data encoded in 
+specific types. Also through this command drag and drop related information can
+be retrieved, regarding the drag and drop registered widgets.
+.PP
+The legal forms for the \fBdnd\fR command are:
+.TP
+\fBdnd bindtarget\fI window\fR
+This command will return a list of all the registered types that the specified 
+\fIwindow\fR can accept during a drop operation. An empty list will be 
+returned if the window is not yet registered as a drop target.
+.TP
+\fBdnd bindtarget\fI window type ?event?\fR
+This command will return a the binding script for the specified event.
+If \fIevent\fR is not specified, it defaults to the \fB<Drop>\fR event.
+An empty string will be returned if the window is not yet registered as a drop 
+target.
+.TP
+\fBdnd bindtarget\fI window type event script ?priority?\fR
+This command will register a binding script for the event specified by 
+\fIevent\fR and for the specified \fItype\fR.
+Valid events are any of the following events:
+\fB<DragEnter>\fR, \fB<Drag>\fR, \fB<DragLeave>\fR, \fB<Ask>\fR and 
+\fB<Drop>\fR.
+
+The events support modifiers as in Tk. You can use a combination of Shift, Alt,
+Meta, Control, Mod[1-5], Button[1-5] to bind specific scripts when these modifiers
+are used. As in Tk, the closest matching script will be executed. If there is no
+exact match, the following algorithm will be applied: find an event without key modifiers
+but with buttons modifiers, then find an event without buttons modifiers but with the
+key modifiers, then at last find an event without key modifiers and without buttons
+(i.e. a raw event as listed above).
+
+The \fB<DragEnter>\fR event will be delivered when the mouse enters the window 
+during a drag operartion. The \fB<Drag>\fR event will be delivered when the 
+mouse moves inside the widget during a drag operartion and the 
+\fB<DragLeave>\fR event will be delivered if the mouse pointer leaves the
+window during a drag operation.
+Finally, the \fB<Drop>\fR event will be delivered if a drop over the
+window occurs.
+
+If there is already a binding script for the same event, this 
+script is replaced by the new one. If the script is an empty string, then
+any previous binding script is deleted and the specified event is no longer 
+reported to the specified window. The user can optionally specify a
+\fIpriority\fR for this specific type (an integer value ranging from 1 to 100).
+Priorities have meaning only when more than one types are registered for the 
+same event. During a drag operartion the specified event will be delivered
+by executing the binding script associated with the type that has the higher 
+priority (or the lower integer value: priority 1 is the highest priority
+while 100 is the lowest available priority). If priority is ommited, it
+defaults to 50. If more than one types have the same priority, 
+the actual type that will be used cannot be pre-determined.
+.TP
+\fBdnd cleartarget\fI window\fR
+This command will unregister a registered drop target. The window will stop 
+to respond to drops and all binding scripts for all drop target related events 
+will be removed. It is not an error to use this command on a window that has
+never been registered as a drop target. 
+.TP
+\fBdnd bindsource\fI window\fR
+This command will return a list of all the registered types that the 
+specified window can drop on drop targets during a drop operation.
+An empty list will be returned if the window is not yet registered as a 
+drag source.
+.TP
+\fBdnd bindsource\fI window type\fR
+This command will return the binding script that will be used for collecting 
+the data that will be dropped during a drop operartion onto the drop target.
+Each script is associated with a specific type, providing the ability
+to have different scripts for different types. 
+.TP
+\fBdnd bindsource\fI window type script ?priority?\fR
+This command will register a binding script for the specified \fItype\fR.
+This binding script will be used during a drop operation, in order to provide
+the actual data that will be dropped to the drop target. As a result, this
+binding script must returns the data to be dropped and the returned data must 
+be encoding in a proper format, according to the specified type.
+
+If the \fIscript\fR is an empty string, then the specified type will be
+removed from the type list of supported by the drag source types.
+
+Finally, the user can arrange the 
+types that the drag source supports according to priorities. Valid priorities 
+are integers in the range [1,100], with 100 denoting the highest possible
+priority. If \fIpriority\fR is ommited, it defaults to 50. If more than one
+types have the same priority, only one of them will be used for a drop action.
+In this case the actual type that will be used cannot be pre-determined.
+.TP
+\fBdnd clearsource\fI window\fR
+This command will unregister a registered drag source. Subsequent attempts to 
+initiate drag operations from this window with the \fBdnd drag\fR command 
+will fail. The binding script associated for retrieving the data will be
+removed. It is not an error to use this command on a window that has never 
+been registered as a drag source. 
+.TP
+\fBdnd drag\fI window ?-button button? ?-actions list ?-descriptions list?? ?-cursorwindow window? ?-callback script?\fR
+This command will initiate a drag operartion having as source a window 
+registered as a drag source. It is an error to use this command with a window
+that has not been registered as a drag source.
+
+The user can also specify a \fICursor window\fR. A Cursor window is a 
+toplevel window that will appear near the mouse cursor and will follow the
+cursor, as the mouse cursor moves during the drag operation. This window must
+exist when the \fIdnd drag\fR command will be executed. If a Cursor window is
+specified, the user can also register a callback through the \fI-callback\fR
+option. This callback will be called when the mouse pointer is moved and can
+be used in order to update the contents of the window. All available
+substitutions can also be used with this callback. For more information please
+refer to the \fBBINDING SCRIPTS AND SUBSTITUTIONS\fR section. One difference
+with the usual substitutions is that in this context, the %A substitution can
+also take as value the empty string, meaning that the cursor is over a window
+that cannot accept a drop action. It is advised that this particular callback
+should be as fast as possible, as it is called very frequently. That is also
+the reason why the position of the cursor window is managed by the \fIdnd drag\fR command. Also, \fIdnd drag\fR command ensures that the cursor window will
+always be visible (above all other windows).
+
+Finally, the user can optionally specify a list of actions that will be
+associated with  
+the current drag and drop operation. Valid actions are the following: copy,
+move, link and ask. It is up to the drop target to deside which action will be
+actually used for the drop operartion. It is also responsibility of the drop
+target to do the required actions implied by the drop action. For example, if
+the drop action during a file name drop is move, the window that accepts the
+drop is responsible for deleting the old file and create the new file at the 
+dropped location.
+
+If the ask action is included in the specified action list, then 
+a \fIdescription list\fR can be also specified. The meaning of the 
+ask action is that when the drop finally occurs, the widget that will accept
+the drop should display a window that will enable the user to select the 
+action that desires from the available list. The ask action should not be
+listed and also a way to cancel the drop should provided to the user. 
+The descriptions provided with the description list are the text that should 
+be displayed for the corresponding individual action entries in the presented 
+window. As a result, the description list must contain the same number of
+items as the action list and the its text elements must describe the 
+corresponding actions specified by the \fI-actions\fR option. For example,
+a drop that offers all available actions should be defined as follows:
+.CS
+dnd drag .dragSource \-actions {ask copy move link} \\ 
+  \-descriptions {{Please Select Action:} {Copy} {Move} {Link}
+}
+.CE
+
+.SH DRAG AND DROP TYPES
+.PP
+In order to declare the format that the data that will encoded during a 
+drag and drop operation, all drag and drop protocols use the notion of
+\fItypes\fR. Unfortunately, each protocol defines its own, usually platform 
+specific, types. The Tk toolkit, trying to maintain its portability among 
+different platforms, offers some predefined types for some basic kinds of 
+data, like text, filenames and images. These types are represented by their 
+MIME types and are available under all platforms that Tk is available.
+Currently, the following predifined values are available:
+.IP  \fBtext/plain:\fR 5
+This is the type understood by the majority of applications. With this type 
+plain ASCII strings can be transfered. The system encoding will be used in 
+order these strings to be mapped from the utf-8 encoding into ASCII and
+from ASCII into utf-8 strings used internally by tcl.
+.IP  \fBtext/plain;charset=UTF-8:\fR 5
+With this type utf-8 strings can be transfered. No conversion is performed
+before the string is transmitted or after it is received. 
+.IP  \fBtext/uri-list:\fR 5
+This type is able to handle a list of filenames. The system encoding will be
+used in order to convert these strings from/to utf-8 strings.
+.PP
+Besides the predefined types, the user is free to use the platform specific 
+types. For example under windows the type "FILENAME" can be used in order to 
+receive a single filename from the Explorer or the type "NetscapeURL" can be 
+used in order to receive a bookmark drop from Netscape Navigator. Under 
+Unix, the type "FILE_NAME" can be used in order to receive a filename from a 
+Motif application. The dnd command will make no conversion to types other than 
+the predefined ones. Instead it will place received data into tcl byte-arrays
+and extract data from tcl after it converts objects into byte-arrays. Also 
+note that the script should make the proper arrangements in order to maintain 
+portability under different platforms. Procceed with platform depended types 
+\fIonly if you are absolutely sure that the data you want to excange is not 
+supported by the predefined, platform independed, types\fR. 
+
+.SH BINDING SCRIPTS AND SUBSTITUTIONS
+.PP
+Any script argument to \fBdnd\fR is a Tcl script, which will be executed
+in order for the given event to be delivered to the associated window.
+The script will be executed in the same interpreter that the \fBdnd\fR command
+was executed in order to specify the binding, and it will run at global
+level (only global variables will be accessible).
+
+If script contains any % characters, then the script will not be executed
+directly. Instead, a new script will be generated by replacing each %,
+and the character following it, with information from the current event.
+The replacement depends on the character following the %, as defined in the
+list below.
+Some of the substitutions are only valid for certain types of events;
+if they are used for other types of events the value substituted is the empty 
+string.
+.IP \fB%%\fR 5
+Replaced with a single percent. 
+.IP  \fB%A\fR 5
+The current action of the drag and drop operation.
+.IP  \fB%a\fR 5
+The action list supported by the drag source. 
+.IP  \fB%b\fR 5
+The mouse button that is pressed during a drag and drop operation. Note that 
+always a single mouse button is reported as pressed, even if more than one 
+mouse buttons are actually pressed.
+.IP  \fB%c\fR 5
+The codes of the list of types supported by the drag source. All codes are in
+octal format and have the same order as the list of types obtained through the
+\fB%t\fR substitution.
+.IP  \fB%C\fR 5
+The code (in octal format) of the current type of the drag and drop operation.
+.IP  \fB%D\fR 5
+The data that has been dropped. Under some platforms the data will be 
+available before the drop has occured. The format of the data is the current
+type of the drop operation.
+.IP  \fB%d\fR 5
+The list of descriptions, provided by the drag source. If not empty, it 
+provides description text for the actions supported by the drag source.
+.IP  \fB%L\fR 5
+The list of types supported by the drag source.
+.IP  \fB%m\fR 5
+The list of modifier keyboard keys that are pressed. 
+Modifier keys are some special keys, like Shift, Control or Alt. 
+Valid modifiers are "Shift", "Control",
+"Alt", "Meta", "Mod1", "Mod2", "Mod3", "Mod4" and "Mod5". It is useful for
+binding scripts of drop target events to examine this list of modifiers, as it
+is quite usuall to change the action according to the state of some modifier
+keys. An alternative is to use modifiers directly when defining an event into
+the \fIbindtarget\fR command.
+.IP  \fB%t\fR 5
+The list of types supported by the drag source.
+.IP  \fB%T\fR 5
+The current type of the drag and drop operation.
+.IP  \fB%W\fR 5
+The window that the event is delivered to.
+.IP  \fB%X\fR 5
+The mouse pointer x coordinate, relative to the root window.
+.IP  \fB%x\fR 5
+The mouse pointer x coordinate, relative to the window that receives the event.
+.IP  \fB%Y\fR 5
+The mouse pointer y coordinate, relative to the root window.
+.IP  \fB%y\fR 5
+The mouse pointer y coordinate, relative to the window that receives the event.
+
+.SH DRAG AND DROP EVENTS
+.PP
+There are four events that are associated with drop targets and a single event 
+associated with drag sources. The four events that are delivered to drop
+targets are:
+.TP
+\fB<DragEnter>:\fR 
+The binding script associated with this event will be executed when the mouse 
+pointer during a drag operation enters the widget and at least one of the types 
+supported by the drag source is supported as a drop target by the widget. 
+The binding script is responsible for changing the appearence of the widget,
+according to whether the widget will accept the drop or not. If the widget 
+will accept the drop, the return value of this script must be a value of the 
+action list supported by the drag source (which can be obtained with \fB%A\fR),
+the current action (which can be obtained with \fB%a\fR), "private" or "default".
+If the widget will not accept the drop, then "none" must be returned.
+In the special case where the widget refuses the drop at the particular point 
+that the mouse pointer is currently over but wants to be requested again when 
+the mouse moves, the binding script must return a break code:
+
+.br
+return -code break \fIaction\fR
+.br
+
+The main use of this feature is the ability to allow drops over specific items 
+of a canvas widget.
+.TP
+\fB<Drag>:\fR
+The binding script associated with this event will be executed when the mouse 
+pointer during a drag operation moves over the widget and at least one of the 
+types supported by the drag source is supported as a drop target by the widget. 
+The binding script is responsible for reporting if the widget will accept a 
+drop \fIat the specific location that the mouse pointer is currently over\fR.
+If the widget is going to accept a drop, the return value must be the action 
+that will be used for the drop. This action must be an action also supported 
+by the drag source, whose list of supported actions canbe obtained by the %a
+substitution. If the widget wants to utilise an action not supported by the
+drag source, the action "private" must be returned. If you want to use the
+default action specified by the user, the action "default" must be returned.
+If the widget does not want a drop to occur over the specific coordinates that 
+the mouse pointer is currently over, "none" should be returned. The <Drag>
+event will be reported to the widget again, when the mouse pointer moves.
+.TP
+\fB<DragLeave>:\fR
+The binding script associated with this event will be executed when the mouse 
+pointer during a drag operation leaves the widget. The only responsibility of
+this script is to reset the visual appearence of the widget to its default 
+state. This event will also be delivered if the mouse pointer is inside a
+widget that accepts drop during a drag operation and the whole drag nad drop
+operation is canceled (i.e. by pressing the Escape keyboard key).
+.TP
+\fB<Ask>:\fR
+The binding script associated with this event will be executed when the mouse 
+button during a drag operation has been released (meaning a drop), 
+over a widget that can accept a drop of the specific type and the "\fBask\fR" 
+action. This event is only delivered if the drop action is ask. The main
+responsibility of the script is to get the actions supported by the drag 
+source and their descriptions (through %a and %d respectively) and to display 
+a dialog where the user can select the actual action that will be used for 
+the drop operartion. The return value of the script must be the selected by the 
+user action or "none" if the user canceled the drop.
+
+It is an error to return the action "ask".
+If a binding script is not registered for this event, then 
+this functionality will be provided by the Tk core library.
+.TP
+\fB<Drop>:\fR
+The binding script associated with this event will be executed when the mouse 
+button is release over a widget that can accept a drop of the specific type 
+and action. In simple words, when a drop occurs over a widget that can accept 
+the data. The binding script is responsible for reseting the visual appearence 
+of the widget to its default state and to handle the dropped data. The dropped 
+data can be obtained through the \fB%D\fR substitution directive.
+
+.SH SPECIFYING DROP TARGETS
+.PP
+In order to register a data type that can be handled by a target window, the 
+\fBbindtarget\fR option can be used. For example, to handle plain dropped text,
+the following command can be used:
+.CS
+\fBdnd bindtarget .tgt text/plain <Drop> {puts "Drop-Action=%A, Data=%D"}
+.CE
+.PP
+When a drop occurs from a source that supports the "text/plain" type,
+the script associated with the <Drop> event will be executed. In this case, if
+the dropped data was a sentence such as "The quick brown fox jumped over the 
+moon", the command that will be executed is:
+.CS
+puts {Drop-Action=copy, Data="The quick brown fox jumped over the moon"}
+.CE
+.PP
+You can specify anything as a data type. The recommended names that
+can be used as data types are the corresponding MIME types. Internally,
+the MIME types will be converted to the apropriate types understood by 
+the operating system. For example, if the user requests the type text/plain,
+the \fBdnd\fR command passes the type "text/plain" to the X server under unix
+(the XDND protocol defines types by their mime type names). But under
+windows, the type \fBCF_TEXT\fR will be registered.
+\fBCF_TEXT\fR is a special type that represents all simple ASCII text that can
+be dragged and dropped.
+Creating a handler for \fBCF_TEXT\fR on a window will allow that window
+to  handle text drags and drops from another OLE enabled application that 
+also uses the standard \fBCF_TEXT\fR mechanism. The user can also request 
+explicitly to use the type "CF_TEXT". But such an approach will not be portable.
+.PP
+Some common types the are currently supported by the current version of 
+tkDND are "text/uri-list" for dragging and dropping files, 
+"text/plain;charset=utf-8" for handling utf-8 text and 
+"image/xpm" for transfering images. Please refer to the section 
+"DRAG AND DROP TYPES" for more information.
+Some other Windows specific common types for dragging and dropping to 
+and from web browsers are "\fbUniformResourceLocator\fR" and 
+"\fBNetscape Bookmark\fR".
+The type "\fBFileName\fR" is used by Explorer to drag and drop a single file.
+(Note that this type will transfer a \fIsingle\fR file. Many files (or just one 
+file) can be transfered with the predefined type "\fBtext/uri-list\fR")
+.PP
+You can register more than a single type to be handled by a window. 
+Just run the command again with a different data type.  Here is 
+another example for the same window:
+.CS
+dnd bindtarget .tgt TK_COLOR <Drop> {.tgt config -bg %D}
+.CE
+.PP
+In this case, if a an object gets dropped on window .tgt, .tgt will
+ask the source if it supports either text/plain or TK_COLOR.  If it
+does, it will run the script for the match.  It is possible that more
+than one type would be matched between the source and target.  For
+this case, you can use the priority option to specify the order
+in which you want the search for matches to occur.  Priorities range
+from 1 to 100.  1 is the highest priority, 50 is the default priority,
+and 100 is the lowest priority.  If two target data types have the
+same priority, it is undetermined which one will be checked for first.
+In the above example, if you want to check for the TK_COLOR datatype
+before text/plain, give a higher priority to the TK_COLOR datatype:
+.CS
+dnd bindtarget .tgt TK_COLOR <Drop> {.tgt config -bg %D} 1
+.CE
+
+.SH SPECIFYING DRAG SOURCES
+.PP
+For drag sources, the data types that can be provided by a window
+can be registered with the \fBbindsource\fR option. 
+For example, in order to register a window as a drop source for ASCII text,
+the follwowing command can be used:
+.CS
+dnd bindsource .src text/plain {return "Some text"}
+.CE
+.PP
+More than one datatype can be registered with a source window.  To go
+along with our example, setup the window as a provider of data of type
+"TK_COLOR":
+.CS
+dnd bindsource .src TK_COLOR {return red}
+.CE
+
+.SH THE DRAG OPERATION
+.PP
+Now that both the target window and the source window have been 
+configured, one as a data source and the other as a drop area, we 
+still need to do something to initiate the drag operation.  If the 
+application that is being dragged from is not part of Tk, we let it 
+handle the drag & drop operation.  If we want to drag something from 
+the ".src" window to the ".tgt" window, we must initiate the drag and drop 
+operation with the \fBdrag\fR option. 
+Here, we start the operation on a press of mouse button 1. 
+.CS
+bind .src <1> {dnd drag %W}
+.CE
+.PP
+Once button 1 is pressed on the ".src" window, the drag operation begins. 
+When the button is released, a different button is pressed, or a modifier key
+is pressed during the operation, then a drop operation occurs.  If the
+drop occurs over a window that has a type that matches the source 
+window, then the script for the source window gets run first.
+If you  do not want the source window to send data, it can do a:
+.CS
+return -code break
+.CE
+.PP
+If the return value is not an error or a break code, the target window
+script for the matched datatype is then run.
+For the example above, the datatype that matched would be "TK_COLOR".
+First, the script registered for data type "TK_COLOR" on window ".src" 
+would be executed. This is the "return red" statement.
+The string "red" will now substitute the "%D" token to the command for the 
+datatype "TK_COLOR" on the target window .tgt.  The command that will be
+executed will be:
+.CS
+.tgt config -bg red
+.CE
+In our simple example, the background color of the .tgt window will be changed 
+to red on a drag and drop operation from the .src window to the .tgt window.
+
+.SH BUGS
+.PP
+\fBUnix:\fR
+.br
+During drops from Motif applications, the only action that is allowed is the
+copy action.
+
+If during a drag operation the mouse pointer is over a foreign window and the 
+application that owns the window crashes, we may end with a BadWindow error,
+as it is very possible messages delivered to that window to exist in the 
+message queue of the X Server.
+
+.SH KEYWORDS
+.PP
+dnd, drag and drop, shape, update

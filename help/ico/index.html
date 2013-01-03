@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0042)http://tcllib.sourceforge.net/doc/ico.html -->
+<HTML><HEAD><TITLE>ico</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1252"><LINK 
+href="ico-manual_archivos/manpage.css" rel=stylesheet>
+<META 
+content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al." 
+name=xsl-processor>
+<META content="MSHTML 6.00.2900.2523" name=GENERATOR></HEAD>
+<BODY>
+<DIV class=header>
+<DIV class=navbar align=center><A 
+href="http://tcllib.sourceforge.net/doc/ico.html#SECTid905">NAME</A> · <A 
+href="http://tcllib.sourceforge.net/doc/ico.html#SECTid914">SYNOPSIS</A> · <A 
+href="http://tcllib.sourceforge.net/doc/ico.html#SECTid1044">DESCRIPTION</A> · 
+<A href="http://tcllib.sourceforge.net/doc/ico.html#SECTid1050">API</A> · <A 
+href="http://tcllib.sourceforge.net/doc/ico.html#SECTid1548">EXAMPLE</A> · <A 
+href="http://tcllib.sourceforge.net/doc/ico.html#SECTid1557">LIMITATIONS</A> · 
+<A href="http://tcllib.sourceforge.net/doc/ico.html#SECTid1578">KEYWORDS</A> 
+</DIV>
+<P class=notice>Package: tcllib, Version: CVS HEAD</P>
+<HR class=navsep>
+</DIV>
+<DIV class=body>
+<H2><A name=SECTid905>NAME</A></H2>
+<P class=namesection><B class=names>ico - </B><BR>Reading and writing windows 
+icons</P>
+<H2><A name=SECTid914>SYNOPSIS</A></H2><PRE class=syntax>package require <B class=package>Tcl</B> 8.4
+package require <B class=package>ico</B>  ? 0.3 ? 
+<B class=cmd>::ico::getIconList</B> <A href="http://tcllib.sourceforge.net/doc/ico.html#ARG-file"><I>file</I></A>  ? <I class=m>option</I> <I class=m>value</I>... ? 
+<B class=cmd>::ico::getIcon</B> <A href="http://tcllib.sourceforge.net/doc/ico.html#ARG-file"><I>file</I></A> <A href="http://tcllib.sourceforge.net/doc/ico.html#ARG-index"><I>index</I></A>  ? <I class=m>option</I> <I class=m>value</I>... ? 
+<B class=cmd>::ico::writeIcon</B> <A href="http://tcllib.sourceforge.net/doc/ico.html#ARG-file"><I>file</I></A> <A href="http://tcllib.sourceforge.net/doc/ico.html#ARG-index"><I>index</I></A> <A href="http://tcllib.sourceforge.net/doc/ico.html#ARG-depth"><I>depth</I></A> <A href="http://tcllib.sourceforge.net/doc/ico.html#ARG-data"><I>data</I></A>  ? <I class=m>option</I> <I class=m>value</I>... ? 
+<B class=cmd>::ico::copyIcon</B> <A href="http://tcllib.sourceforge.net/doc/ico.html#ARG-file"><I>file</I></A> <A href="http://tcllib.sourceforge.net/doc/ico.html#ARG-index"><I>index</I></A> <I class=m>file2</I> <I class=m>index2</I>  ? <I class=m>option</I> <I class=m>value</I>... ? 
+<B class=cmd>::ico::EXEtoICO</B> <A href="http://tcllib.sourceforge.net/doc/ico.html#ARG-file"><I>file</I></A> <I class=m>file2</I>
+<B class=cmd>::ico::clearCache</B>  ? file ? 
+<B class=cmd>::ico::transparentColor</B> <I class=m>image</I> <I class=m>color</I>
+<B class=cmd>::ico::Show</B> <A href="http://tcllib.sourceforge.net/doc/ico.html#ARG-file"><I>file</I></A>  ? <I class=m>option</I> <I class=m>value</I>... ? 
+</PRE>
+<H2><A name=SECTid1044>DESCRIPTION</A></H2>This package provides functions for 
+reading and writing Windows icons from ICO, EXE, DLL, ICL, and BMP files. 
+<H2><A name=SECTid1050>API</A></H2>
+<DL>
+  <DT><B class=cmd>::ico::getIconList</B> <I class=m>file</I> ? <I 
+  class=m>option</I> <I class=m>value</I>... ? 
+  <DD>Returns a list of icons found in <I class=m>file</I> where each element 
+  has the format {width height depth}. Recognizes the following <I 
+  class=m>option</I>s. 
+  <DL class=optlist>
+    <DT><B>-type</B> <I>fileFormat</I> 
+    <DD></DD></DL><BR>
+  <DT><B class=cmd>::ico::getIcon</B> <I class=m>file</I> <I class=m>index</I> ? 
+  <I class=m>option</I> <I class=m>value</I>... ? 
+  <DD>Extracts the icon at <I class=m>index</I> from <I class=m>file</I>. The 
+  default <B class=option>-format</B> is <TT class=l>image</TT> which will 
+  return the name of a Tk image containing the icon. Optionally <B 
+  class=option>-name</B> may be used to specify the name of the Tk image that is 
+  created. If <B class=option>-format</B> is <TT class=l>colors</TT> then a list 
+  of color names in the #RRGGBB format is returned. Each list element is a 
+  horizontal row. Each horizontal row contains a list of colors for all the 
+  pixels in that row from left to right. Recognizes the following <I 
+  class=m>option</I>s. 
+  <DL class=optlist>
+    <DT><B>-type</B> <I>fileFormat</I> 
+    <DD>
+    <DT><B>-format</B> <I>value</I> 
+    <DD>
+    <DT><B>-name</B> <I>value</I> 
+    <DD></DD></DL><BR>
+  <DT><B class=cmd>::ico::writeIcon</B> <I class=m>file</I> <I class=m>index</I> 
+  <I class=m>depth</I> <I class=m>data</I> ? <I class=m>option</I> <I 
+  class=m>value</I>... ? 
+  <DD>
+  <DIV class=arglist>
+  <TABLE cellPadding=5 rules=none width="100%">
+    <THEAD>
+    <TR class=heading>
+      <TH width="20%">Type</TH>
+      <TH width="70%">Name</TH>
+      <TH width="10%">Mode</TH></TR></THEAD>
+    <TBODY>
+    <TR class=syntax>
+      <TD class=type align=left width="20%">fileName</TD>
+      <TD class=name align=left width="70%"><A name=ARG-file>file</A></TD>
+      <TD class=mode align=middle width="10%">in</TD></TR>
+    <TR class=desc>
+      <TD class=padding width="20%">&nbsp;</TD>
+      <TD class=argdesc align=left width="80%" colSpan=2></TD></TR>
+    <TR class=syntax>
+      <TD class=type align=left width="20%">integer</TD>
+      <TD class=name align=left width="70%"><A name=ARG-index>index</A></TD>
+      <TD class=mode align=middle width="10%">in</TD></TR>
+    <TR class=desc>
+      <TD class=padding width="20%">&nbsp;</TD>
+      <TD class=argdesc align=left width="80%" colSpan=2>This is the 0-based 
+        index of the icon to write. When writing to an EXE, DLL, or ICL file you 
+        may only overwrite existing icons with an icon of the same dimensions 
+        and color depth. When writing to an ICO, <I class=m>index</I> may be one 
+        greater than the last icon. This will append a new icon to the file. 
+        When writing to an ICO, <I class=m>index</I> will accept <TT 
+        class=l>end</TT>. This will also cause the new icon to be appended to 
+        the file. When writing the other types <TT class=l>end</TT> will refer 
+        to the last existing icon. </TD></TR>
+    <TR class=syntax>
+      <TD class=type align=left width="20%">integer</TD>
+      <TD class=name align=left width="70%"><A name=ARG-depth>depth</A></TD>
+      <TD class=mode align=middle width="10%">in</TD></TR>
+    <TR class=desc>
+      <TD class=padding width="20%">&nbsp;</TD>
+      <TD class=argdesc align=left width="80%" colSpan=2>This argument must 
+        have a value of <TT class=l>1</TT>, <TT class=l>4</TT>, <TT 
+        class=l>8</TT>, <TT class=l>24</TT>, or <TT class=l>32</TT>. If <I 
+        class=m>data</I> has more colors than the color depth allows an error 
+        will be generated. </TD></TR>
+    <TR class=syntax>
+      <TD class=type align=left width="20%">options</TD>
+      <TD class=name align=left width="70%"><A name=ARG-data>data</A></TD>
+      <TD class=mode align=middle width="10%">in</TD></TR>
+    <TR class=desc>
+      <TD class=padding width="20%">&nbsp;</TD>
+      <TD class=argdesc align=left width="80%" colSpan=2>This argument is 
+        either a list of colors in the format returned by <B 
+        class=cmd>::ico::getIcon -format colors</B> or the name of a Tk image. 
+      </TD></TR></TBODY></TABLE></DIV><BR>Recognizes the following <I 
+  class=m>option</I>s. 
+  <DL class=optlist>
+    <DT><B>-type</B> <I>fileFormat</I> 
+    <DD></DD></DL><BR>
+  <DT><B class=cmd>::ico::copyIcon</B> <I class=m>file</I> <I class=m>index</I> 
+  <I class=m>file2</I> <I class=m>index2</I> ? <I class=m>option</I> <I 
+  class=m>value</I>... ? 
+  <DD>Copies the icon at <I class=m>index</I> in <I class=m>file</I> to <I 
+  class=m>index2</I> in <I class=m>file2</I>. 
+  <DL class=optlist>
+    <DT><B>-fromtype</B> <I>fileFormat</I> 
+    <DD>
+    <DT><B>-totype</B> <I>fileFormat</I> 
+    <DD></DD></DL><BR>
+  <DT><B class=cmd>::ico::EXEtoICO</B> <I class=m>file</I> <I class=m>file2</I> 
+  <DD>Extracts all icons from the executable <I class=m>file</I> to the ICO file 
+  <I class=m>file2</I>. 
+  <DL class=optlist>
+    <DT><B>-type</B> <I>fileFormat</I> 
+    <DD></DD></DL><BR>
+  <DT><B class=cmd>::ico::clearCache</B> ? file ? 
+  <DD>The <B class=cmd>::ico::getIconList</B> command caches icon offsets inside 
+  EXE, DLL, and ICL files in order to speed up extraction. This command clears 
+  that cache for the specific ? file ? or all files. 
+  <DT><B class=cmd>::ico::transparentColor</B> <I class=m>image</I> <I 
+  class=m>color</I> 
+  <DD>If <I class=m>image</I> is a single word it is assumed to be the name of a 
+  Tk image. All pixels matching <I class=m>color</I> in the <I class=m>image</I> 
+  will be set transparent. Alternatively, <I class=m>image</I> may be a color 
+  list in which case a modified list is returned. 
+  <DT><B class=cmd>::ico::Show</B> <I class=m>file</I> ? <I class=m>option</I> 
+  <I class=m>value</I>... ? 
+  <DD>Application level command which displays a window showing all the icons in 
+  <I class=m>file</I> with information about them. 
+  <DL class=optlist>
+    <DT><B>-type</B> <I>fileFormat</I> 
+    <DD>
+    <DT><B>-parent</B> <I>pathName</I> 
+    <DD></DD></DL></DD></DL>
+<H2><A name=SECTid1548>EXAMPLE</A></H2><PRE class=example>    button .explore -image [::ico::getIcon explorer.exe 0 -name explore]
+    set i [lsearch [::ico::getIconList tclkit.exe] {32 32 8}]]
+    set colorlist [::ico::getIcon tclkit.exe $i -format colors -type EXE]
+
+</PRE>
+<H2><A name=SECTid1557>LIMITATIONS</A></H2>Icons may not be added or removed 
+from file types other than ICO. Icons in these files may only be replaced with 
+icons of the same dimensions and color depth. 
+<P>Icons of 8bpp or lower must include black in the pallete, this means if your 
+icon does not have black in it, you will need to leave a color free so that it 
+may be included by writeIcon. </P>
+<P>There is currently no way to read alpha channel information from 32bpp icons. 
+</P>
+<P>Tk images do not have an alpha channel so the only way to write a true 32bpp 
+icon is from a color list. writing a 32bpp icon from a Tkimage is identical to 
+writing a 24bpp icon. </P>
+<P></P><PRE class=example>    button .explore -image [::ico::getIcon explorer.exe 0 -name explore]
+    set i [lsearch [::ico::getIconList tclkit.exe] {32 32 8}]]
+    set colorlist [::ico::getIcon tclkit.exe $i -format colors -type EXE]
+
+</PRE>
+<H2><A name=SECTid1578>KEYWORDS</A></H2>
+<P class=keywords><A class=keyword 
+href="http://tcllib.sourceforge.net/doc/keyword-index.html#KW-entry">entry</A>, 
+<A class=keyword 
+href="http://tcllib.sourceforge.net/doc/keyword-index.html#KW-icon">icon</A>, <A 
+class=keyword 
+href="http://tcllib.sourceforge.net/doc/keyword-index.html#KW-ico">ico</A>, <A 
+class=keyword 
+href="http://tcllib.sourceforge.net/doc/keyword-index.html#KW-exe">exe</A>, <A 
+class=keyword 
+href="http://tcllib.sourceforge.net/doc/keyword-index.html#KW-dll">dll</A> 
+</P></DIV>
+<HR class=navsep>
+
+<DIV class=navbar align=center><A class=navaid 
+href="http://tmml.sourceforge.net/search.php">Search</A> · <A class=navaid 
+href="http://tcllib.sourceforge.net/doc/index.html">Contents</A> · <A 
+class=navaid 
+href="http://tcllib.sourceforge.net/doc/category-index.html">Index</A> · <A 
+class=navaid 
+href="http://tcllib.sourceforge.net/doc/keyword-index.html">Keywords</A> · <A 
+class=navaid href="http://tmml.sourceforge.net/coredocs.html">About...</A> 
+</DIV></BODY></HTML>

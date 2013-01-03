@@ -1,0 +1,68 @@
+<HTML><HEAD><TITLE>Library Procedures - Tk_AddOption manual page</TITLE></HEAD><BODY>
+<DL>
+<DD><A HREF="AddOption.htm#M2" NAME="L7">NAME</A>
+<DL><DD>Tk_AddOption - Add an option to the option database</DL>
+<DD><A HREF="AddOption.htm#M3" NAME="L8">SYNOPSIS</A>
+<DL>
+</DL>
+<DD><A HREF="AddOption.htm#M4" NAME="L9">ARGUMENTS</A>
+<DL>
+</DL>
+<DD><A HREF="AddOption.htm#M5" NAME="L10">DESCRIPTION</A>
+<DL>
+<DD><A HREF="AddOption.htm#M6" NAME="L11">20</A>
+<DD><A HREF="AddOption.htm#M7" NAME="L12">40</A>
+<DD><A HREF="AddOption.htm#M8" NAME="L13">60</A>
+<DD><A HREF="AddOption.htm#M9" NAME="L14">80</A>
+</DL>
+<DD><A HREF="AddOption.htm#M10" NAME="L15">KEYWORDS</A>
+</DL><HR>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_AddOption - Add an option to the option database
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+void<BR>
+<B>Tk_AddOption</B>(<I>tkwin, name, value, priority</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL>
+<DT>Tk_Window <B>tkwin</B> (in)<DD>
+Token for window.
+<P><DT>CONST char <B>*name</B> (in)<DD>
+Multi-element name of option.
+<P><DT>CONST char <B>*value</B> (in)<DD>
+Value of option.
+<P><DT>int <B>priority</B> (in)<DD>
+Overall priority level to use for option.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+This procedure is invoked to add an option to the database
+associated with <I>tkwin</I>'s main window.  <I>Name</I>
+contains the option being specified and consists of names and/or
+classes separated by asterisks or dots, in the usual X format.
+<I>Value</I> contains the text string to associate with <I>name</I>;
+this value will be returned in calls to <B><A HREF="../TkLib/GetOption.htm">Tk_GetOption</A></B>.
+<I>Priority</I> specifies the priority of the value; when options are
+queried using <B><A HREF="../TkLib/GetOption.htm">Tk_GetOption</A></B>, the value with the highest priority
+is returned.  <I>Priority</I> must be between 0 and <B>TK_MAX_PRIO</B>.  Some
+common priority values are:
+<P>
+<DL>
+<DT><A NAME="M6">20</A><DD>
+Used for default values hard-coded into widgets.
+<P><DT><A NAME="M7">40</A><DD>
+Used for options specified in application-specific startup files.
+<P><DT><A NAME="M8">60</A><DD>
+Used for options specified in user-specific defaults files, such as
+<B>.Xdefaults</B>, resource databases loaded into the X server, or
+user-specific startup files.
+<P><DT><A NAME="M9">80</A><DD>
+Used for options specified interactively after the application starts
+running.
+<P></DL>
+<P>
+<H3><A NAME="M10">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#class">class</A>, <A href="../Keywords/N.htm#name">name</A>, <A href="../Keywords/O.htm#option">option</A>, <A href="../Keywords/A.htm#add">add</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 1998-2000 by Scriptics Corporation.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

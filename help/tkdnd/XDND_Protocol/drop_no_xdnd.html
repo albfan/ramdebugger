@@ -1,0 +1,50 @@
+<html>
+
+<head>
+<title>Dropping on non-XDND windows</title>
+</head>
+
+<body bgcolor="#F8F8F8" text="#000000" link="#0000E9" vlink="#000090" alink="#FF0000">
+<font face=verdana,arial,helvetica>
+
+<h1> Drag-And-Drop Protocol for the X Window System </h1>
+
+<img src="../gifs/line.blue.pure.gif" alt="--------" WIDTH=520 HEIGHT=6>
+
+<h3> Dropping on windows that do not support XDND </h3>
+
+<p>
+Since middle clicking is the universal shortcut for pasting in X, one can drop data into a window that does not support XDND by:
+
+<ol>
+<li> After the mouse has been released to trigger the drop, grab ownership of XA_PRIMARY.
+<p>
+<li> Send a ButtonPress event and then a ButtonRelease event to the deepest subwindow containing the mouse to simulate a middle click.  The times for these events should be the time of the actual button release +1 and +2, respectively.  These values will not be used by anybody else, so one can unambiguously recognize the resulting <tt>XConvertSelection()</tt> request.
+<p>
+<li> If a request for XA_PRIMARY arrives bearing the timestamp of either the ButtonPress or the ButtonRelease event, treat it as a request for XdndSelection.  Note that you must use the X data types instead of the MIME types in this case.  (e.g. XA_STRING instead of text/plain)
+</ol>
+
+Since text is usually the only data that can be pasted into older programs that do not support XDND (e.g. <tt>xterm</tt> and <tt>emacs</tt>), it is a good idea to only use the above trick when dragging text.  As an example, if one drags anything else and fakes a middle click in <tt>xterm</tt>, it will paste the contents of XA_SECONDARY, which is not what the user wants.
+
+<p>
+Thanks to <a href="mailto:jvz@cfdrc.com">Jeroen van der Zijp</a> for the idea.
+
+<p>
+To get this to work with <tt>xterm</tt>, you must add
+<blockquote>
+<tt>XTerm.VT100.allowSendEvents: True</tt>
+</blockquote>
+to your <tt>.Xdefaults</tt> file.
+
+<p>
+<hr>
+
+<p>
+Last updated on September 9, 1998
+
+<p>
+Back to the <a href="xdnd.html">main page</a>.
+
+</body>
+
+</html>

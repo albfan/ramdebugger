@@ -1,0 +1,75 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: frame</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d04e0">DESCRIPTION</a> · <a href="#SECTid81d0580">STANDARD OPTIONS</a> · <a href="#SECTid81d0698">OPTIONS</a> · <a href="#SECTid81d0c10">WIDGET COMMAND</a> · <a href="#SECTid81d0d50">NOTES</a> · <a href="#SECTid81d0f08">SEE ALSO</a> · <a href="#SECTid81d0f80">KEYWORDS</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">frame - </b><br>Simple container widget</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>ttk::frame</b> <i class="m">pathName</i> ?<i class="m">options</i>?
+</pre>
+<h2><a name="SECTid81d04e0">DESCRIPTION</a></h2><p>A <b>frame</b> widget is a container, used to group other widgets together.
+</p>
+<h2><a name="SECTid81d0580">STANDARD OPTIONS</a></h2><div class="menu"><table class="menu" width="100%"><tr>
+<td width="25%"><a href="widget.html#stdopt_-class">-class</a></td><td width="25%"><a href="widget.html#stdopt_-cursor">-cursor</a></td><td width="25%"><a href="widget.html#stdopt_-style">-style</a></td><td width="25%"><a href="widget.html#stdopt_-takefocus">-takefocus</a></td>
+</tr></table></div>
+<h2><a name="SECTid81d0698">OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-borderwidth">-borderwidth</a></td><td width="40%" align="left">borderWidth</td><td width="40%" align="left">BorderWidth</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">The desired width of the widget border.  Defaults to 0. 
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-relief">-relief</a></td><td width="40%" align="left">relief</td><td width="40%" align="left">Relief</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">One of the standard Tk border styles: 
+<b>flat</b>, <b>groove</b>, <b>raised</b>, <b>ridge</b>,
+<b>solid</b>, or <b>sunken</b>.
+Defaults to <b>flat</b>.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-padding">-padding</a></td><td width="40%" align="left">padding</td><td width="40%" align="left">Padding</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Additional padding to include inside the border.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-width">-width</a></td><td width="40%" align="left">width</td><td width="40%" align="left">Width</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">If specified, the widget's requested width in pixels.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-height">-height</a></td><td width="40%" align="left">height</td><td width="40%" align="left">Height</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">If specified, the widget's requested height in pixels.
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d0c10">WIDGET COMMAND</a></h2><p>Supports the standard widget commands
+<b>configure</b>, <b>cget</b>, <b>instate</b>, and <b>state</b>;
+see <i>widget(n)</i>.
+</p>
+<h2><a name="SECTid81d0d50">NOTES</a></h2><p>Note that if the <b class="cmd">pack</b>, <b class="cmd">grid</b>, or other geometry managers
+are used to manage the children of the <b>frame</b>,
+by the GM's requested size will normally take precedence
+over the <b>frame</b> widget's <b>-width</b> and <b>-height</b> options.
+[<b>pack propagate</b>] and [<b>grid propagate</b>] can be used
+to change this.
+</p>
+<h2><a name="SECTid81d0f08">SEE ALSO</a></h2><p class="seealso">widget(n), labelframe(n)</p>
+<h2><a name="SECTid81d0f80">KEYWORDS</a></h2><p class="keywords">
+<a class="keyword" href="keyword-index.html#KW-widget">widget</a>, <a class="keyword" href="keyword-index.html#KW-frame">frame</a>, <a class="keyword" href="keyword-index.html#KW-container">container</a>
+</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>

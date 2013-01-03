@@ -1,0 +1,31 @@
+<HTML><HEAD><TITLE>Tk Library Procedures - Tk_SetCaretPos manual page</TITLE></HEAD><BODY>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_SetCaretPos - set the display caret location
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+int<BR>
+<B>Tk_SetCaretPos</B>(<I>tkwin, x, y, height</I>)<BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL>
+<DT>Tk_Window <B>tkwin</B> (in)<DD>
+Token for window.
+<P><DT>int <B>x</B> (in)<DD>
+Window-relative x coordinate.
+<P><DT>int <B>y</B> (in)<DD>
+Window-relative y coordinate.
+<P><DT>int <B>h</B> (in)<DD>
+Height of the caret in the window.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_SetCaretPos</B> sets the caret location for the display of the
+specified Tk_Window <I>tkwin</I>.  The caret is the per-display cursor
+location used for indicating global focus (e.g. to comply with Microsoft
+Accessibility guidelines), as well as for location of the over-the-spot XIM
+(X Input Methods) or Windows IME windows.
+
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/C.htm#caret">caret</A>, <A href="../Keywords/C.htm#cursor">cursor</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 2002 ActiveState Corporation.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

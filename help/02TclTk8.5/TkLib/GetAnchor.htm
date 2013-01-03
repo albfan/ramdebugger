@@ -1,0 +1,68 @@
+<HTML><HEAD><TITLE>Tk Library Procedures - Tk_GetAnchorFromObj manual page</TITLE></HEAD><BODY>
+<H3><A NAME="M2">NAME</A></H3>
+Tk_GetAnchorFromObj, Tk_GetAnchor, Tk_NameOfAnchor - translate between strings and anchor positions
+<H3><A NAME="M3">SYNOPSIS</A></H3>
+<B>#include &lt;tk.h&gt;</B><BR>
+int<BR>
+<B>Tk_GetAnchorFromObj(</B><I>interp, objPtr, anchorPtr</I><B>)</B><BR>
+int<BR>
+<B>Tk_GetAnchor(</B><I>interp, string, anchorPtr</I><B>)</B><BR>
+CONST char *<BR>
+<B>Tk_NameOfAnchor(</B><I>anchor</I><B>)</B><BR>
+<H3><A NAME="M4">ARGUMENTS</A></H3>
+<DL>
+<DT><A HREF="../TclLib/Interp.htm">Tcl_Interp</A> <B>*interp</B> (in)<DD>
+Interpreter to use for error reporting, or NULL.
+<P><DT>Tcl_Obj <B>*objPtr</B> (in/out)<DD>
+String value contains name of anchor point: <B>n</B>, <B>ne</B>,
+<B>e</B>, <B>se</B>, <B>s</B>, <B>sw</B>, <B>w</B>, <B>nw</B>, or <B>center</B>;
+internal rep will be modified to cache corresponding Tk_Anchor.
+<P><DT>CONST char <B>*string</B> (in)<DD>
+Same as <I>objPtr</I> except description of anchor point is passed as
+a string.
+<P><DT>int <B>*anchorPtr</B> (out)<DD>
+Pointer to location in which to store anchor position corresponding to
+<I>objPtr</I> or <I>string</I>.
+<P><DT>Tk_Anchor <B>anchor</B> (in)<DD>
+Anchor position, e.g. <B>TCL_ANCHOR_CENTER</B>.
+<P></DL>
+<H3><A NAME="M5">DESCRIPTION</A></H3>
+<B>Tk_GetAnchorFromObj</B> places in <I>*anchorPtr</I> an anchor position
+(enumerated type <B>Tk_Anchor</B>)
+corresponding to <I>objPtr</I>'s value.  The result will be one of
+<B>TK_ANCHOR_N</B>, <B>TK_ANCHOR_NE</B>, <B>TK_ANCHOR_E</B>, <B>TK_ANCHOR_SE</B>,
+<B>TK_ANCHOR_S</B>, <B>TK_ANCHOR_SW</B>, <B>TK_ANCHOR_W</B>, <B>TK_ANCHOR_NW</B>,
+or <B>TK_ANCHOR_CENTER</B>.
+Anchor positions are typically used for indicating a point on an object
+that will be used to position the object, e.g. <B>TK_ANCHOR_N</B> means
+position the top center point of the object at a particular place.
+<P>
+Under normal circumstances the return value is <B>TCL_OK</B> and
+<I>interp</I> is unused.
+If <I>string</I> doesn't contain a valid anchor position
+or an abbreviation of one of these names, <B>TCL_ERROR</B> is returned,
+<I>*anchorPtr</I> is unmodified, and an error message is
+stored in <I>interp</I>'s result if <I>interp</I> isn't NULL.
+<B>Tk_GetAnchorFromObj</B> caches information about the return
+value in <I>objPtr</I>, which speeds up future calls to
+<B>Tk_GetAnchorFromObj</B> with the same <I>objPtr</I>.
+<P>
+<B>Tk_GetAnchor</B> is identical to <B>Tk_GetAnchorFromObj</B> except
+that the description of the anchor is specified with a string instead
+of an object.  This prevents <B>Tk_GetAnchor</B> from caching the
+return value, so <B>Tk_GetAnchor</B> is less efficient than
+<B>Tk_GetAnchorFromObj</B>.
+<P>
+<B>Tk_NameOfAnchor</B> is the logical inverse of <B>Tk_GetAnchor</B>.
+Given an anchor position such as <B>TK_ANCHOR_N</B> it returns a
+statically-allocated string corresponding to <I>anchor</I>.
+If <I>anchor</I> isn't a legal anchor value, then
+``unknown anchor position'' is returned.
+
+<H3><A NAME="M6">KEYWORDS</A></H3>
+<A href="../Keywords/A.htm#anchor position">anchor position</A>
+<HR><PRE>
+<A HREF="../copyright.htm">Copyright</A> &#169; 1990 The Regents of the University of California.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1994-1998 Sun Microsystems, Inc.
+<A HREF="../copyright.htm">Copyright</A> &#169; 1995-1997 Roger E. Critchlow Jr.</PRE>
+</BODY></HTML>

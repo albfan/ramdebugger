@@ -1,0 +1,90 @@
+<html>
+<head>
+<link rel="stylesheet" href="manpage.css"><title>Tile package reference: labelframe</title><meta name="xsl-processor" content="Jochen Loewer (loewerj@hotmail.com), Rolf Ade (rolf@pointsman.de) et. al."><meta name="generator" content="$RCSfile: tmml-html.xsl,v $ $Revision: 1.12 $">
+</head><body>
+<div class="header">
+<div class="navbar" align="center">
+<a href="#SECTid81d03a0">NAME</a> · <a href="#SECTid81d0418">SYNOPSIS</a> · <a href="#SECTid81d04e0">DESCRIPTION</a> · <a href="#SECTid81d0580">STANDARD OPTIONS</a> · <a href="#SECTid81d0698">OPTIONS</a> · <a href="#SECTid81d1020">WIDGET COMMAND</a> · <a href="#SECTid81d1160">SEE ALSO</a> · <a href="#SECTid81d11d8">KEYWORDS</a>
+</div><hr class="navsep">
+</div><div class="body">
+
+
+
+<h2><a name="SECTid81d03a0">NAME</a></h2><p class="namesection">
+<b class="names">labelframe - </b><br>Container widget with optional label</p>
+<h2><a name="SECTid81d0418">SYNOPSIS</a></h2><pre class="syntax">
+<b>ttk::labelframe</b> <i class="m">pathName</i> ?<i class="m">options</i>?
+</pre>
+<h2><a name="SECTid81d04e0">DESCRIPTION</a></h2><p>A <b>labelframe</b> widget is a container used to group other widgets together.
+It has an optional label, which may be a plain text string or another widget. 
+</p>
+<h2><a name="SECTid81d0580">STANDARD OPTIONS</a></h2><div class="menu"><table class="menu" width="100%"><tr>
+<td width="25%"><a href="widget.html#stdopt_-class">-class</a></td><td width="25%"><a href="widget.html#stdopt_-cursor">-cursor</a></td><td width="25%"><a href="widget.html#stdopt_-style">-style</a></td><td width="25%"><a href="widget.html#stdopt_-takefocus">-takefocus</a></td>
+</tr></table></div>
+<h2><a name="SECTid81d0698">OPTIONS</a></h2><div class="table"><table width="100%" rules="none" cellpadding="5%">
+<thead><tr class="heading">
+<th width="20%">Name</th><th width="40%">Database name</th><th width="40%">Database class</th>
+</tr></thead><tr class="syntax">
+<td width="20%" align="left"><a name="option_-labelanchor">-labelanchor</a></td><td width="40%" align="left">labelAnchor</td><td width="40%" align="left">LabelAnchor</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies where to place the label.  
+Allowed values are (clockwise from the top upper left corner):
+<b>nw</b>, <b>n</b>, <b>ne</b>, <b>en</b>, <b>e</b>, <b>es</b>,
+<b>se</b>, <b>s</b>,<b>sw</b>, <b>ws</b>, <b>w</b> and <b>wn</b>.
+The default value is theme-dependent.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-text">-text</a></td><td width="40%" align="left">text</td><td width="40%" align="left">Text</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Specifies the text of the label.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-underline">-underline</a></td><td width="40%" align="left">underline</td><td width="40%" align="left">Underline</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">If set, specifies the integer index (0-based) of a character to 
+underline in the text string.
+The underlined character is used for mnemonic activation
+(see <i>keynav(n)</i>).  
+Mnemonic activation for a <b>ttk::labelframe</b> 
+sets the keyboard focus to the first child of the <b>ttk::labelframe</b> widget.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-padding">-padding</a></td><td width="40%" align="left">padding</td><td width="40%" align="left">Padding</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">Additional padding to include inside the border.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-labelwidget">-labelwidget</a></td><td width="40%" align="left">labelWidget</td><td width="40%" align="left">LabelWidget</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">The name of a widget to use for the label.
+If set, overrides the <b>-text</b> option.
+The <b>-labelwidget</b> must be a child of the <b>labelframe</b> widget
+or one of the <b>labelframe</b>'s ancestors, and must belong to the
+same top-level widget as the <b>labelframe</b>.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-width">-width</a></td><td width="40%" align="left">width</td><td width="40%" align="left">Width</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">If specified, the widget's requested width in pixels.
+</td>
+</tr><tr class="syntax">
+<td width="20%" align="left"><a name="option_-height">-height</a></td><td width="40%" align="left">height</td><td width="40%" align="left">Height</td>
+</tr><tr class="desc">
+<td class="padding" width="20%"> </td><td class="argdesc" width="80%" align="left" colspan="2">If specified, the widget's requested height in pixels.
+(See <i>ttk::frame</i> for further notes on <b>-width</b> and <b>-height</b>).
+</td>
+</tr>
+</table></div>
+<h2><a name="SECTid81d1020">WIDGET COMMAND</a></h2><p>Supports the standard widget commands
+<b>configure</b>, <b>cget</b>, <b>instate</b>, and <b>state</b>;
+see <i>widget(n)</i>.
+</p>
+<h2><a name="SECTid81d1160">SEE ALSO</a></h2><p class="seealso">widget(n), frame(n)</p>
+<h2><a name="SECTid81d11d8">KEYWORDS</a></h2><p class="keywords">
+<a class="keyword" href="keyword-index.html#KW-widget">widget</a>, <a class="keyword" href="keyword-index.html#KW-frame">frame</a>, <a class="keyword" href="keyword-index.html#KW-container">container</a>, <a class="keyword" href="keyword-index.html#KW-label">label</a>, <a class="keyword" href="keyword-index.html#KW-groupbox">groupbox</a>
+</p>
+</div><hr class="navsep"><div class="navbar" align="center">
+<a class="navaid" href="index.html">Contents</a> · <a class="navaid" href="category-index.html">Index</a> · <a class="navaid" href="keyword-index.html">Keywords</a>
+</div>
+</body>
+</html>
