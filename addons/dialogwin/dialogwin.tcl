@@ -1703,7 +1703,7 @@ snit::widget dialogwin_snit {
 		wm transient $win $parent
 	    }
 	}
-	update idletasks
+	update
 	wm deiconify $win
 	update idletasks
 	wm geometry $win [wm geometry $win]

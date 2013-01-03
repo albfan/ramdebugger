@@ -6,8 +6,8 @@ exec wish "$0" "$@"
 package require Tcl 8.5
 package require Tk 8.5
 
-#package require compass_utils
-#mylog::init -view_binding <Control-L> debug
+# package require compass_utils
+# mylog::init -view_binding <Control-L> debug
 
 if { [info exists ::starkit::topdir] } {
     # This is for the starkit in UNIX to start graphically
@@ -61,7 +61,7 @@ namespace eval RamDebugger {
     #    RamDebugger version
     ################################################################################
 
-    set Version 7.2
+    set Version 7.3
 
     ################################################################################
     #    Non GUI commands
