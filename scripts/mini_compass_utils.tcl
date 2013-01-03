@@ -15,10 +15,10 @@ proc info_fullargs { procname } {
 }
 
 namespace eval cu {}
+namespace eval cu::file {}
 
 # for tclIndex to work 
 proc cu::menubutton_button { args } {}
-
 
 snit::widgetadaptor cu::menubutton_button {
     option -command ""
@@ -30,12 +30,17 @@ snit::widgetadaptor cu::menubutton_button {
     delegate option -_image to hull as -image
     delegate option -_text to hull as -text
 
+    variable xmin
     variable is_button_active 1
+    variable press_after ""
     
     constructor args {
 	installhull using ttk::menubutton -style Toolbutton
 	bind $win <ButtonPress-1> [mymethod BP1 %x %y]
 	bind $win <ButtonRelease-1> [mymethod BR1 %x %y]
+	bind $win <Down> [list ttk::menubutton::Popdown %W]
+	bind $win <Motion> [mymethod check_cursor %x %y]
+	bind $win <Configure> [mymethod  _calc_xmin]
 
 	$self configurelist $args
     }
@@ -45,21 +50,8 @@ snit::widgetadaptor cu::menubutton_button {
 	if { $options(-text) ne "" } {
 	    $self configure -_image $img
 	    return
-	} elseif { $img ne "" } {
-	    set width [image width $img]
-	    set height [image height $img]
-	} else { foreach "width height" [list 0 16] break }
-
-	set new_img [image create photo -width [expr {$width+7}] -height $height]
-	if { $img ne "" } { $new_img copy $img -to 0 0 }
-	set coords {
-	    -3 -1
-	    -4 -2 -3 -2 -2 -2
-	    -5 -3 -4 -3 -3 -3 -2 -3 -1 -3
-	}
-	foreach "x y" $coords {
-	    $new_img put black -to [expr {$width+7+$x}] [expr {$height+$y}]
-	}
+	} 
+	set new_img [cu::add_down_arrow_to_image $img]
 	$self configure -_image $new_img
 	bind $win <Destroy> +[list image delete $new_img]
     }
@@ -74,28 +66,56 @@ snit::widgetadaptor cu::menubutton_button {
 	}
 	$self configure -_text $value
     }
+    method _calc_xmin {} {
+	if { [winfo width $win] > 1 } {
+	    set xmin  [expr {[winfo width $win]-12}]
+	} else {
+	    set xmin  [expr {[winfo reqwidth $win]-12}]
+	}
+    }
     method give_is_button_active_var {} {
 	return [myvar is_button_active]
     }
     method BP1 { x y } {
 	if { !$is_button_active } { return }
-	if { $x < [winfo width $win]-10 && $options(-command) ne "" } {
+	
+	if { $x < $xmin && $options(-command) ne "" } {
 	    $win instate !disabled {
 		catch { tile::clickToFocus $win }
 		catch { ttk::clickToFocus $win }
 		$win state pressed
 	    }
+	    set press_after [after 700 [mymethod BP1_after]]
 	    return -code break
+	}
+    }
+    method BP1_after {} {
+	set press_after ""
+	$win instate {pressed !disabled} {
+	    ttk::menubutton::Pulldown $self
 	}
     }
     method BR1 { x y } {
 	if { !$is_button_active } { return }
-	if { $x < [winfo width $win]-10 && $options(-command) ne "" } {
+	
+	if { $press_after ne "" } {
+	    after cancel $press_after
+	}
+	if { $press_after ne "" && $x < $xmin && $options(-command) ne "" } {
 	    $win instate {pressed !disabled} {
 		$win state !pressed
 		uplevel #0 $options(-command)
-	    } 
+	    }
+	    set press_after ""
 	    return -code break
+	}
+	set press_after ""
+    }
+    method check_cursor { x y } {
+	if { $x < $xmin } {
+	    $win configure -cursor ""
+	} else {
+	    $win configure -cursor bottom_side
 	}
     }
 }
@@ -451,6 +471,23 @@ snit::widget cu::multiline_entry {
 }
 
 ################################################################################
+#    cu::adapt_text_length
+################################################################################
+
+# remember to grid the label to fill all space. For example with -sticky ew
+proc cu::adapt_text_length { args } {
+    foreach w $args {
+	bind $w <Configure> [list cu::_adapt_text_length_do $w]
+    }
+}
+
+proc cu::_adapt_text_length_do { w } {
+    if { [winfo width $w] > 1 } {
+	$w configure -wraplength [winfo width $w] -justify left
+    }
+}
+
+################################################################################
 #    add_contextual_menu_to_entry
 ################################################################################
 
@@ -499,6 +536,93 @@ proc cu::add_contextual_menu_to_entry { w what args } {
 	}
     }
 }
+
+################################################################################
+#     cu::text_entry_bindings
+################################################################################
+
+proc cu::text_entry_bindings { w } {
+
+    if { ![info exists ::control] } {
+	if { $::tcl_platform(platform) eq "windows" } {
+	    set ::control Control
+	} elseif { [tk windowingsystem] eq "aqua" } {
+	    set ::control Command
+	} else {
+	    set ::control Control
+	}
+    }
+    # "backslash" and "c" are here to help with a problem in Android VNC
+    bind $w <$::control-backslash> "[list cu::text_entry_insert $w];break"
+    bind $w <$::control-less> "[list cu::text_entry_insert $w];break"
+    foreach "acc1 acc2 c" [list plus "" {[]} c "" {{}} 1 "" || 1 1 \\ 3 "" {#}] {
+	set cmd "[list cu::text_entry_insert $w $c];break"
+	if { $acc2 eq "" } {
+	set k2 ""
+    } else {
+	set k2 <KeyPress-$acc2>
+    }
+    bind $w <$::control-less><KeyPress-$acc1>$k2 $cmd
+    bind $w <$::control-backslash><KeyPress-$acc1>$k2 $cmd
+    }
+}
+
+proc cu::text_entry_insert { w { what "" } } {
+    variable last_text_enty_bindings
+    
+    if { ![info exists last_text_enty_bindings] } {
+	set last_text_enty_bindings ""
+    }
+    set list [list "{}" "\[\]" "||" "\\" "#"]
+    set t [clock milliseconds]
+    lassign [dict_getd $last_text_enty_bindings $w ""] time d
+    
+    if { $d eq "" } { set d "{}" }
+    if { $time ne "" && $t < $time+3000 } {
+	if { [winfo class $w] eq "Text" } {
+	    set idx [$w search $d insert-1c]
+	    if { [$w compare $idx == insert-1c] } {
+		if { [string length $d] == 1 } {
+		    $w delete insert-1c
+		} else {
+		    $w delete insert-1c insert+1c
+		}
+	    }
+	} else {
+	    set idx [$w index insert]
+	    if { $idx > 0 } {
+		set idx1 [expr {$idx-1}]
+		set idx2 [expr {$idx-1+[string length $d]}]
+		set txt [string range [$w get] $idx1 $idx2]
+		if { [string equal $d $txt] } {
+		    $w delete $idx1 $idx2
+		}
+	    }
+	}
+	if { $what eq "" } {
+	    set ipos [lsearch -exact $list $d]
+	    incr ipos
+	    if { $ipos >= [llength $list] } {
+		set ipos 0
+	    }
+	    set d [lindex $list $ipos]
+	}
+    }
+    if { $what ne "" } {
+	set d $what
+    }
+    if { [winfo class $w] eq "Text" } {
+	set idx [$w index insert]
+	$w insert insert $d
+	$w mark set insert "$idx+1c"
+    } else {
+	set idx [$w index insert]
+	$w insert insert $d
+	$w icursor [expr {$idx+1}]
+    }
+    dict set last_text_enty_bindings $w [list $t $d]
+}
+
 
 ################################################################################
 #    store preferences
@@ -615,16 +739,62 @@ proc cu::give_window_geometry { w } {
 
 proc cu::set_window_geometry { w geometry } {
 
-    regexp {(\d+)x(\d+)([-+])([-\d]\d*)([-+])([-\d]+)} $geometry {} width height m1 x m2 y
+    if { ![regexp {(\d+)x(\d+)([-+])([-\d]\d*)([-+])([-\d]+)} $geometry {} width height m1 x m2 y] } {
+	regexp {(\d+)x(\d+)} $geometry {} width height
+	lassign [list 0 0 + +] x y m1 m2
+    }
     if { $x < 0 } { set x 0 }
     if { $y < 0 } { set y 0 }
-    if { [ tk windowingsystem] eq "aqua" } {
-	if { $y < 20 } { set y 20 }
-    }
     if { $x > [winfo screenwidth $w]-100 } { set x [expr {[winfo screenwidth $w]-100}] }
     if { $y > [winfo screenheight $w]-100 } { set y [expr {[winfo screenheight $w]-100}] }
+
     wm geometry $w ${width}x$height$m1$x$m2$y
 }
+
+proc cu::create_tooltip_toplevel { b } {
+
+    toplevel $b -class Tooltip
+    if {[tk windowingsystem] eq "aqua"} {
+	::tk::unsupported::MacWindowStyle style $b help none
+    } else {
+	wm overrideredirect $b 1
+    }
+    catch {wm attributes $b -topmost 1}
+    # avoid the blink issue with 1 to <1 alpha on Windows
+    catch {wm attributes $b -alpha 0.99}
+    wm positionfrom $b program
+    if { [tk windowingsystem]  eq "x11" } {
+	set focus [focus]
+	focus -force $b
+	raise $b
+	if { $focus ne "" } {
+	    after 100 [list focus $focus]
+	}
+    }
+}
+
+proc cu::give_widget_background { w } {
+ 
+    set err [catch { $w cget -background } bgcolor]
+    if { $err } {
+	set err [catch {
+		set style [$w cget -style]
+		if { $style eq "" } {
+		    set style [winfo class $w]
+		}
+		set bgcolor [ttk::style lookup $style -background]
+	    }]
+	if { $err } {
+	    if { $::tcl_platform(platform) eq "windows" } {
+		set bgcolor SystemButtonFace
+	    } else {
+		set bgcolor grey
+	    }
+	}
+    }
+   return $bgcolor
+}
+
 
 ################################################################################
 #    XML & xpath utilities
@@ -750,7 +920,7 @@ proc linsert0 { args } {
 }
 
 ################################################################################
-#    cu::kill and cu::ps
+#     cu::file::execute, cu::kill and cu::ps
 ################################################################################
 
 proc cu::kill { pid } {
@@ -789,4 +959,144 @@ proc cu::ps { args } {
 	    return $retList
 	}
     }
+}
+
+proc cu::file::execute { args } {
+    
+    set optional {
+	{ -workdir directory "" }
+	{ -wait boolean 0 }
+	{ -hide_window boolean 0 }
+    }
+    set compulsory "what file"
+
+    set args [parse_args -raise_compulsory_error 0 $optional $compulsory $args]
+
+    switch -- $what {
+	gid {
+	    set exe [get_executable_path gid]
+	    if { $exe eq "" } { return }
+	    if { $wait || $hide_window } {
+		set err [catch { package require twapi }]
+		if { $err } { set has_twapi 0 } else { set has_twapi 1 }
+	    }
+	    if { !$wait || $has_twapi } { lappend args & }
+	    set pid [exec $exe $file {*}$args]
+	   
+	    if { !$wait && !$hide_window } { return }
+	    if { !$has_twapi } { return }
+
+	    if { $hide_window } {
+		foreach hwin [twapi::find_windows -pids $pid -visible true] {
+		    twapi::hide_window $hwin
+		}
+	    }
+	    if { $wait } {
+		while { [twapi::process_exists $pid] } {
+		    after 200
+		}
+	    }
+	}
+	emacs {
+	    exec runemacs -g 100x72 &
+	}
+	wish {
+	    set pwd [pwd]
+	    cd [file dirname $file]
+	    eval exec wish [list [file normalize $file]] $args &
+	    cd $pwd
+	}
+	tkdiff {
+	    set pwd [pwd]
+	    cd [file dirname $file]
+	    exec wish ~/myTclTk/tkcvs/bin/tkdiff.tcl -r [file tail $file] &
+	    cd $pwd
+	}
+	start {
+	    if { $::tcl_platform(platform) eq "unix" } {
+		set programs [list xdg-open gnome-open]
+		if { $::tcl_platform(os) eq "Darwin" } {
+		    set programs [linsert $programs 0 open]
+		}
+		foreach i $programs {
+		    if { [auto_execok $i] ne "" } {
+		        exec $i $file &
+		        return
+		    }
+		}
+		error "could not open file '$file'"
+	    } elseif { [regexp {[&]} $file] } {
+		set bat [file join [file dirname $file] a.bat]
+		set fout [open $bat w]
+		puts $fout "start \"\" \"$file\""
+		close $fout
+		exec $bat 
+		file delete $bat
+	    } else {
+		eval exec [auto_execok start] \"\" [list $file] {*}$args &
+	    }
+	}
+	url {
+	    if { [regexp {^[-\w.]+$} $file] } {
+		set file http://$file
+	    }
+	    if { ![regexp {(?i)^\w+://} $file] && ![regexp {(?i)^mailto:} $file] } {
+		set txt [_ "url does not begin with a known handler like: %s. Proceed?" \
+		        "http:// ftp:// mailto:"]
+		set retval [tk_messageBox -default ok -icon question -message $txt \
+		        -type okcancel]
+		if { $retval == "cancel" } { return }
+	    }
+	    if { $::tcl_platform(platform) eq "windows" } {
+		exec rundll32 url.dll,FileProtocolHandler $file &
+	    } else {
+		set programs [list xdg-open gnome-open]
+		if { $::tcl_platform(os) eq "Darwin" } {
+		    set programs [linsert $programs 0 open]
+		}
+		foreach i $programs {
+		    if { [auto_execok $i] ne "" } {
+		        exec $i $file &
+		        return
+		    }
+		}
+		set cmdList ""
+		foreach i [list firefox konqueror mozilla opera netscape] {
+		    lappend cmdList "$i \"$file\""
+		}
+		exec sh -c [join $cmdList "||"] & 
+	    }
+	}
+	exec {
+	    if { $workdir ne "" } {
+		set pwd [pwd]
+		cd $workdir
+	    }
+	    set err [catch { exec $file {*}$args } errstring]
+	    if { $workdir ne "" } { cd $pwd }
+	    if { $err } {
+		error $errstring $::errorInfo
+	    }
+	}
+	execList {
+	    foreach i $file {
+		if { [auto_execok [lindex $i 0]] ne "" } {
+		    exec {*}$i &
+		    return
+		}
+	    }
+	  error "Could not execute files"
+	}
+	default {
+	    if { $workdir ne "" } {
+		set pwd [pwd]
+		cd $workdir
+	    }
+	    set err [catch { exec $file {*}$args & } errstring]
+	    if { $workdir ne "" } { cd $pwd }
+	    if { $err } {
+		error $errstring $::errorInfo
+	    }
+	}
+    }  
 }

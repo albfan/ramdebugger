@@ -25,7 +25,7 @@ proc RamDebugger::DisplayWindowsHierarchyInfoDo { w canvas widget x y } {
 
     set TextMotionAfterId ""
     set comm {
-	set retval "WIDGET\n\n"
+	set retval "WIDGET   (class: [winfo class WIDGET])\n\n"
 	if { [winfo class WIDGET] == "Toplevel" } {
 	    append retval "TITLE: [wm title WIDGET]\n"
 	}
@@ -35,14 +35,25 @@ proc RamDebugger::DisplayWindowsHierarchyInfoDo { w canvas widget x y } {
 		append retval "LABEL: [WIDGET cget -text]\n"
 	    }
 	}
-	foreach "cols rows" [grid size WIDGET] break
+	lassign [grid size WIDGET] cols rows
 	if { $cols > 0 } {
 	    append retval "GRID MASTER\n"
 	    for { set i 0 } { $i < $rows } { incr i } {
 		for { set j 0 } { $j < $cols } { incr j } {
 		    set slave [grid slaves WIDGET -row $i -column $j]
-		    if { $slave != "" } {
-		        append retval "    $i,$j $slave [grid info $slave]\n"
+		    if { $slave ne "" } {
+		        append retval "    $i,$j $slave"
+		        set retval_in ""
+		        dict for "n v" [grid info $slave] {
+		            if { [string length $retval_in] > 55 } {
+		                append retval "$retval_in\n        "
+		                set retval_in ""
+		            } else {
+		                append retval_in " "
+		            }
+		            append retval_in "$n $v"
+		        }
+		        append retval "$retval_in\n"
 		    }
 		}
 	    }
@@ -58,8 +69,19 @@ proc RamDebugger::DisplayWindowsHierarchyInfoDo { w canvas widget x y } {
 	    }
 	}
 	set info [grid info WIDGET]
-	if { $info != "" } {
-	    append retval "GRID SLAVE\n$info\n"
+	if { $info ne "" } {
+	    append retval "GRID SLAVE\n"
+	    set retval_in ""
+	    dict for "n v" $info {
+		if { [string length $retval_in] > 55 } {
+		    append retval "$retval_in\n        "
+		    set retval_in ""
+		} else {
+		    append retval_in " "
+		}
+		append retval_in "$n $v"
+	    }
+	    append retval "$retval_in\n"
 	}
 	if { [pack slaves WIDGET] != "" } {
 	    append retval "PACK MASTER\n"
@@ -79,7 +101,7 @@ proc RamDebugger::DisplayWindowsHierarchyInfoDo { w canvas widget x y } {
 		    append retval "[string range $retval_in 0 79]\n"
 		    set retval_in "        [string range $retval_in 80 end]"
 		}
-		if { [string length $retval_in] > 40 } {
+		if { [string length $retval_in] > 55 } {
 		    append retval "$retval_in\n"
 		    set retval_in ""
 		}
@@ -100,7 +122,7 @@ proc RamDebugger::DisplayWindowsHierarchyInfoDo { w canvas widget x y } {
 		    append retval "[string range $retval_in 0 79]\n"
 		    set retval_in "        [string range $retval_in 80 end]"
 		}
-		if { [string length $retval_in] > 40 } {
+		if { [string length $retval_in] > 55 } {
 		    append retval "$retval_in\n"
 		    set retval_in ""
 		}
@@ -121,7 +143,7 @@ proc RamDebugger::DisplayWindowsHierarchyInfoDo { w canvas widget x y } {
 		    append retval [string range $retval_in 0 79]\n
 		    set retval_in "        [string range $retval_in 80 end]"
 		}
-		if { [string length $retval_in] > 40 } {
+		if { [string length $retval_in] > 55 } {
 		    append retval "$retval_in\n"
 		    set retval_in ""
 		}
@@ -141,7 +163,7 @@ proc RamDebugger::DisplayWindowsHierarchyInfoDo { w canvas widget x y } {
 		append retval [string range $retval_in 0 79]\n
 		set retval_in "        [string range $retval_in 80 end]"
 	    }
-	    if { [string length $retval_in] > 40 } {
+	    if { [string length $retval_in] > 55 } {
 		append retval "$retval_in\n"
 		set retval_in ""
 	    }
@@ -179,20 +201,21 @@ proc RamDebugger::DisplayWindowsHierarchyInfoDo2 { canvas x y res } {
     
     set w $canvas.help
     if { [winfo exists $w] } { destroy $w }
-    toplevel $w
-    wm overrideredirect $w 1
+    cu::create_tooltip_toplevel -withdraw $w
     wm transient $w $canvas
 
     $w configure -highlightthicknes 1 -highlightbackground grey \
 	-highlightcolor grey
-    pack [label $w.l -fg black -justify left -anchor w -bg grey95]
-    $w.l conf -bd 0
+    grid [label $w.l -fg black -justify left -anchor w -bg grey95] -sticky nsew
+    grid columnconfigure $w 0 -weight 1
+    grid rowconfigure $w 0 -weight 1
+    $w.l configure -bd 0
 
     append res "\nPress Ctrl-x to copy widget name to clipboard. Ctrl-c to copy all.  Ctrl-a to toggle text visualization"
 
-    $w.l conf -text $res
+    $w.l configure -text $res
 
-    wm withdraw $w
+#     wm withdraw $w
     update idletasks
 
     incr x 5
@@ -213,6 +236,7 @@ proc RamDebugger::DisplayWindowsHierarchyInfoDo2 { canvas x y res } {
     wm geometry $w +$x+$y
     wm deiconify $w
     update
+    wm geometry $w +$x+$y
     bind $w <Motion> "destroy $w"
 
     set widgetname [lindex [split $res \n] 0]
@@ -220,12 +244,12 @@ proc RamDebugger::DisplayWindowsHierarchyInfoDo2 { canvas x y res } {
     bind $w.l <$::control-a> [list RamDebugger::DisplayWindowsToggleLongShortText $w $w.l $res]
     bind $w.l <$::control-x> "clipboard clear; [list clipboard append $widgetname]"
     bind $w.l <$::control-c> "clipboard clear; [list clipboard append $res]"
-    
+
     if { [regexp {\mwidth=([-\d]+).*\mheight=([-\d]+).*rootX=([-\d]+).*rootY=([-\d]+)} $res {} \
 	width height rootX rootY]  } {
 	set wpos $w.helppos
 	if { [winfo exists $wpos] } { destroy $wpos }
-	toplevel $wpos
+	cu::create_tooltip_toplevel $wpos
 	$wpos configure -background blue -bd 2 -relief solid
 	
 	set idx 0
@@ -248,10 +272,10 @@ proc RamDebugger::DisplayWindowsHierarchyInfoDo2 { canvas x y res } {
 	    incr idx
 	}
 	if { $idx } { $wpos configure -bd 0 }
-	wm overrideredirect $wpos 1
+	#wm overrideredirect $wpos 1
 	wm geometry $wpos ${width}x$height+$rootX+$rootY
 	after 100 [list wm attributes $wpos -alpha .3]
-	raise $w
+	#raise $w
     }
 }
 
@@ -259,14 +283,14 @@ proc RamDebugger::DisplayWindowsToggleLongShortText { w wl txt } {
     
     if { [$wl cget -text] eq $txt } {
 	$wl configure -text [lindex [split $txt \n] 0]
-	if  { [winfo exists $w.helppos] } {
-	    wm withdraw $w.helppos
-	}
+#         if  { [winfo exists $w.helppos] } {
+#             wm withdraw $w.helppos
+#         }
     } else {
 	$wl configure -text $txt
-	if  { [winfo exists $w.helppos] } {
-	    wm deiconify $w.helppos
-	}
+#         if  { [winfo exists $w.helppos] } {
+#             wm deiconify $w.helppos
+#         }
     }
 }
 
@@ -427,29 +451,36 @@ proc RamDebugger::DisplayWindowsHierarchyFind { w } {
     if { ![info exists DisplayWindowsHierarchyFindLastId] } {
 	set DisplayWindowsHierarchyFindLastId -1
     }
-    set found 0
+    set foundList ""
     foreach i [$canvas find all] {
-	if { $DisplayWindowsHierarchyFindLastId > -1 && \
-		 $i <= $DisplayWindowsHierarchyFindLastId } {
-	    continue
-	}
 	if { [$canvas type $i] == "text" } {
 	    set text [$canvas itemcget $i -text]
 	    if { [string match -nocase *[$w give_uservar_value find]* $text] } {
-		set found 1
-		set DisplayWindowsHierarchyFindLastId $i
-		break
+		if { $DisplayWindowsHierarchyFindLastId > -1 && \
+		    $i <= $DisplayWindowsHierarchyFindLastId } {
+		    lappend foundList $i
+		} else {
+		    set foundList [list $i]
+		    break
+		}
 	    }
 	}
 	set tags [$canvas gettags $i]
 	if { [string match *.* [$w give_uservar_value find]] && \
 	    [lsearch $tags [$w give_uservar_value find]] != -1 } {
-	    set found 1
-	    set DisplayWindowsHierarchyFindLastId $i
-	    break
+	    if { $DisplayWindowsHierarchyFindLastId > -1 && \
+		$i <= $DisplayWindowsHierarchyFindLastId } {
+		lappend foundList $i
+	    } else {
+		set foundList [list $i]
+		break
+	    }
 	}
     }
-    if { $found } {
+    if { [llength $foundList] } {
+	set i [lindex $foundList 0]
+	set DisplayWindowsHierarchyFindLastId $i
+	
 	catch {
 	    $canvas select from $i 0
 	    $canvas select to $i end
@@ -546,6 +577,8 @@ proc RamDebugger::DisplayWindowsPickWindowDo { w l widget } {
     raise $w
     set DisplayWindowsHierarchyFindLastId -1
     $w set_uservar_value find $widget
+    
+    focus -force $w
     DisplayWindowsHierarchyFind $w
 } 
 

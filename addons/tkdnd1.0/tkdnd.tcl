@@ -258,7 +258,7 @@ namespace eval ::dnd {
 	    }
 	}
 
-	set menu $window.__tk_dnd__action_ask__Drop_window_[pid]
+	set menu $window.__tk_dnd[pwd]__action_ask__Drop_window_[pid]
 	catch {destroy $menu}
 	menu $menu -title $title -tearoff 0 -disabledforeground darkgreen
 	$menu add command -font {helvetica 12 bold} \

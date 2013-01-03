@@ -17,10 +17,9 @@ namespace eval ::dialogwinmsgs {
 
 if { [info commands _] eq "" } {
     proc _ { args } {
-	if { [regexp {(.*)\#C\#.*} [lindex $args 0] {} str] } {
-	    set args [lreplace $args 0 0 $str]
-	}
-	return [uplevel 1 ::msgcat::mc $args]
+	set ret [uplevel 1 ::msgcat::mc $args]
+	regexp {(.*)#C#(.*)} $ret {} ret
+	return $ret
     }
 }
 
@@ -49,6 +48,37 @@ if { [info procs GetImage] == "" || ![info exists ::GIDDEFAULT] } {
     }   
 }
 
+namespace eval img {}
+
+if { [info command img::ok-16] eq "" } {
+    image create photo img::ok-16 -data {
+	R0lGODlhEAAQAIIAAPwCBMT+xATCBASCBARCBAQCBEQCBAAAACH5BAEAAAAALAAAAAAQABAAAAM2
+	CLrc/itAF8RkdVyVye4FpzUgJwijORCGUhDDOZbLG6Nd2xjwibIQ2y80sRGIl4IBuWk6Af4EACH+
+	aENyZWF0ZWQgYnkgQk1QVG9HSUYgUHJvIHZlcnNpb24gMi41DQqpIERldmVsQ29yIDE5OTcsMTk5
+	OC4gQWxsIHJpZ2h0cyByZXNlcnZlZC4NCmh0dHA6Ly93d3cuZGV2ZWxjb3IuY29tADs=
+    }
+}
+if { [info command img::fileclose16] eq "" } {
+    image create photo img::fileclose16 -data {
+	R0lGODlhEAAQAIQAAPwCBCQiJBwaHAQCBDQyNDw6PFxaXFRSVERGRCwqLAwODGRiZHx6fPz+/Gxq
+	bAwKDCQmJAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAEA
+	AAAALAAAAAAQABAAAAVaICCOZGmeqBgEwjCkRGEcSKK4JrEcBrMgAdeLVDg0GguGsYEbBQyGYyN6
+	FDoPDIf0+LCKBIgetQERDgGDBGIpNY8GioAU0m6KXFw883w3+/l9f4AkfimGIn4hACH+aENyZWF0
+	ZWQgYnkgQk1QVG9HSUYgUHJvIHZlcnNpb24gMi41DQqpIERldmVsQ29yIDE5OTcsMTk5OC4gQWxs
+	IHJpZ2h0cyByZXNlcnZlZC4NCmh0dHA6Ly93d3cuZGV2ZWxjb3IuY29tADs=
+    }
+}
+
+if { [info command img::nav1downarrow16] eq "" } {
+    image create photo img::nav1downarrow16 -data {
+	R0lGODlhEAAQAIAAAPwCBAQCBCH5BAEAAAAALAAAAAAQABAAAAIYhI+py+0PUZi0zmTtypflV0Vd
+	RJbm6fgFACH+aENyZWF0ZWQgYnkgQk1QVG9HSUYgUHJvIHZlcnNpb24gMi41DQqpIERldmVsQ29y
+	IDE5OTcsMTk5OC4gQWxsIHJpZ2h0cyByZXNlcnZlZC4NCmh0dHA6Ly93d3cuZGV2ZWxjb3IuY29t
+	ADs=
+    }
+}
+
+
 if { [info commands tkTabToWindow] == "" } {
     interp alias "" tkTabToWindow "" tk::TabToWindow
     #::tk::unsupported::ExposePrivateCommand tkTabToWindow
@@ -58,7 +88,7 @@ if { [info commands tkButtonInvoke] == "" } {
     #::tk::unsupported::ExposePrivateCommand tkButtonInvoke
 }
 
-package provide dialogwin 1.12
+package provide dialogwin 1.18
 
 ################################################################################
 #  This software is copyrighted by Ramon Ribó (RAMSAN) ramsan@cimne.upc.es.
@@ -895,24 +925,89 @@ proc DialogWinTop::messageBox { args } {
     return [eval snit_messageBox $args]
 }
 
-proc MessageWin { text title {image question-32.png} {parent .} } {
+proc MessageWin { text title {image question-32.png} {parent .} {check_no_more 1}} {
     if { $parent eq "." } { set parent "" }
     set w [dialogwin_snit $parent.%AUTO% -title $title -okname \
 	       [_ "Ok"] -cancelname "-"]
     set f [$w giveframe]
 
-    label $f.l1 -image [GetImage $image]
-    label $f.msg -justify left -text $text -wraplength 3i
+    ttk::label $f.l1 -image [GetImage $image]
+    ttk::label $f.msg -justify left -text $text -wraplength 3i
+
+    set ::MessageWin_skip_more_windows 0
+    if { $check_no_more} {
+	ttk::checkbutton $f.cb -text [_ "Skip this window"] -offvalue 0 -onvalue 1 \
+	    -variable ::MessageWin_skip_more_windows
+    }
 
     grid $f.l1 $f.msg -sticky nw
     grid configure $f.msg -padx 5 -pady 5
 
+    if { $check_no_more} {
+	grid $f.cb -sticky nw -padx 5 \
+	    -column 1
+	# -columnspan 2
+    }
+
     set action [$w createwindow]
     destroy $w
+    return $::MessageWin_skip_more_windows
 }
 
-proc WarnWin { text {parent .} } {
-    MessageWin $text [_ "Warning"] question-32.png $parent
+proc WarnWin { text {parent .} {id 0}} {
+    # WarnWinText "$id: before MessageWin"
+    set check_no_more 0
+    if { $id != 0} {
+	set check_no_more 1
+    }
+    if { ![ info exists ::GidPriv(MessageWin,NoMoreModal$id)]} {
+	set ::GidPriv(MessageWin,NoMoreModal$id) 0
+    }
+    if { $::GidPriv(MessageWin,NoMoreModal$id) } {
+	WarnWinText "Warning: $text"
+	set ret 1
+    } else {
+	set ret [ MessageWin $text [_ "Warning"] question-32.png $parent $check_no_more]
+	set ::GidPriv(MessageWin,NoMoreModal$id) $ret
+    }
+    # WarnWinText "$id: after MessageWin: ret=$ret="
+}
+
+proc InfoWin { text {parent .} {id 0}} {
+    # WarnWinText "$id: before MessageWin"
+    set check_no_more 0
+    if { $id != 0} {
+	set check_no_more 1
+    }
+    if { ![ info exists ::GidPriv(MessageWin,NoMoreModal$id)]} {
+	set ::GidPriv(MessageWin,NoMoreModal$id) 0
+    }
+    if { $::GidPriv(MessageWin,NoMoreModal$id) } {
+	WarnWinText "Warning: $text"
+	set ret 1
+    } else {
+	set ret [ MessageWin $text [_ "Warning"] info-32.png $parent $check_no_more]
+	set ::GidPriv(MessageWin,NoMoreModal$id) $ret
+    }
+    # WarnWinText "$id: after MessageWin: ret=$ret="
+}
+
+proc CreateWarnWinId { text} {
+    set total_sum 0
+    set check_sum 0
+    for { set i 0} { $i < [ string length $text]} { incr i} {
+	set char [ string index $i]
+	set total_sum [ expr $total_sum + $char]
+	set check_sum [ expr $check_sum ^ $char]
+    }
+    set window_id [ expr ( ( $total_sum & 0xffffff) << 8) | $check_sum]
+    return $window_id
+}
+
+proc ResetNoMoreChecks {} {
+    foreach idx [ array names ::GidPriv MessageWin,NoMoreModal*] {
+	unset ::GidPriv($idx)
+    }
 }
 
 proc WarnWin_hideerror { text errordata { parent .} } {
@@ -921,8 +1016,8 @@ proc WarnWin_hideerror { text errordata { parent .} } {
 	       -cancelname -]
     set f [$w giveframe]
 
-    label $f.l1 -image [GetImage question-32.png]
-    label $f.msg -justify left -text $text -wraplength 3i
+    ttk::label $f.l1 -image [GetImage question-32.png]
+    ttk::label $f.msg -justify left -text $text -wraplength 3i
 
     grid $f.l1 $f.msg -sticky nw
     grid configure $f.msg -padx 5 -pady 5
@@ -1006,6 +1101,15 @@ proc snit_messageBox { args } {
 	       -okname - -cancelname - -transient 1]
     set f [$w giveframe]
 
+    set icons [dict create \
+	    question "question-32.png" \
+	    warning "warning-32.png" \
+	    error "error-32.png" \
+	    info "info-32.png"]
+    
+    if { [dict exists $icons $opts(-icon)] } {
+	set opts(-icon) [dict get $icons $opts(-icon)]
+    }
     ttk::label $f.l1 -image [GetImage $opts(-icon)]
     if { [winfo screenwidth .] < 300 } {
 	set wraplength 1.5i
@@ -1140,9 +1244,13 @@ snit::widget dialogwin_snit {
     option -toplevel_cmd ""
     option -show_frame_toplevel_toggle 1
     option -frame_toplevel toplevel
+    option -topbuttons 0
 
-    hulltype toplevel
-
+    if { $::tcl_platform(os) ne "Darwin" } {
+	hulltype frame
+    } else {
+	hulltype toplevel
+    }
     delegate method * to hull
     delegate option * to hull
 
@@ -1157,11 +1265,14 @@ snit::widget dialogwin_snit {
     variable destroy_handlers ""
 
     constructor args {
-	#wm manage $win
-	
 	$self configurelist $args
 
-	wm withdraw $win
+	if { $options(-frame_toplevel) eq "toplevel" } {
+	    if { $::tcl_platform(os) ne "Darwin" } {
+		wm manage $win
+	    }
+	    wm withdraw $win
+	}
 	
 	if {0&& [info commands ttk::button] eq "" } {
 	    set button_cmd button
@@ -1182,11 +1293,48 @@ snit::widget dialogwin_snit {
 	}
 	set current_row -1
 	if { $options(-show_frame_toplevel_toggle) && $options(-frame_grid_cmd) ne "" } {
-	    frame $win.f0 -bg #880000 -bd 1 -relief solid -height 4 \
+	    ttk::frame $win.f0
+	    frame $win.f0.c -background #880000 -bd 1 -relief solid -height 4 \
 		-cursor hand2
+	    bind $win.f0.c <ButtonRelease-1> [mymethod toogle_frame_toplevel]
+
+	    grid $win.f0.c -sticky ew -row 0 -column 0
+	    grid columnconfigure $win.f0 0 -weight 1
+	    if { $options(-topbuttons) } {
+		ttk::frame $win.f0.buts
+		set col 0
+		if { $options(-okname) ne "-" } {
+		    ttk::button $win.f0.buts.b1 -image img::ok-16 -command [mymethod _applyaction 1] \
+		        -style Toolbutton
+		    tooltip::tooltip $win.f0.buts.b1 $options(-okname)
+		    grid $win.f0.buts.b1 -row 0 -column $col
+		    incr col
+		}
+		if { [llength $options(-morebuttons)] } {
+		    ttk::menubutton $win.f0.buts.b2 -image img::nav1downarrow16 -menu $win.f0.buts.b2.m \
+		        -style Toolbutton
+		    menu $win.f0.buts.b2.m -tearoff 0
+		    set iaction 2
+		    foreach txt $options(-morebuttons) {
+		        $win.f0.buts.b2.m add command -label $txt -command [mymethod _applyaction $iaction]
+		        incr iaction
+		    }
+		    grid $win.f0.buts.b2 -row 0 -column $col
+		    incr col
+		}
+		if { $options(-cancelname) ne "-" } {
+		    ttk::button $win.f0.buts.b3 -image img::fileclose16 -command [mymethod _applyaction 0] \
+		        -style Toolbutton
+		    tooltip::tooltip $win.f0.buts.b3 $options(-cancelname)
+		    grid $win.f0.buts.b3 -row 0 -column $col
+		    incr col
+		}
+		grid $win.f0.buts -row 0 -column 1
+	    }
 	    grid $win.f0 -sticky ew -padx 2 -pady 2
 	    incr current_row
-	    bind $win.f0 <1> [mymethod toogle_frame_toplevel]
+	} else {
+	    set options(-topbuttons) 0
 	}
 	switch $options(-style) {
 	    ridgeframe {
@@ -1213,7 +1361,7 @@ snit::widget dialogwin_snit {
 		error "error: only accepted styles ridgeframe and separator"
 	    }
 	}
-	$win.buts conf -bg [CCColorActivo [$win cget -bg]]
+	$win.buts conf -background [CCColorActivo [$win cget -background]]
 	
 	grid columnconfigure $win 0 -weight 1
 	grid rowconfigure $win $current_row -weight 1
@@ -1236,9 +1384,10 @@ snit::widget dialogwin_snit {
 	foreach i $options(-morebuttons) {
 	    if { [string length $i] > $butwidth } { set butwidth [string length $i] }
 	}
-	if { [catch { package present tile }] == 0 } {
-	    set butwidth [expr {-1*$butwidth}]
-	}
+#         if { [catch { package present tile }] == 0 } {
+#             set butwidth [expr {-1*$butwidth}]
+#         }
+	set butwidth [expr {-1*$butwidth}]
 	set usedletters ""
 	if { $options(-okname) != "-" } {
 	    for { set ipos 0 } { $ipos < [string length $options(-okname)] } { incr ipos } {
@@ -1284,7 +1433,7 @@ snit::widget dialogwin_snit {
 	    if { $ipos < [string length $i] } {
 		$button_cmd $win.buts.b$iaction -text $i -width $butwidth -und $ipos \
 		    -command [mymethod _applyaction $iaction]
-		bind $win <Alt-$letter> [mymethod _button_invoke $win.buts.b$iaction]
+		bind $win <Alt-$letter>  [mymethod _button_invoke $win.buts.b$iaction]
 		bind $win.buts.b$iaction <Return> [mymethod _button_invoke $win.buts.b$iaction]
 		lappend usedletters $letter
 		set widget($letter) $win.buts.b$iaction
@@ -1319,10 +1468,16 @@ snit::widget dialogwin_snit {
 	if { $options(-repeat_answer_check) } {
 	    checkbutton $win.buts.repeat -text [_ "Repeat my answer"] \
 		-variable [myvar repeat_my_answer]
-	    $win.buts.repeat configure -background [CCColorActivo [$win cget -bg]]
+	    $win.buts.repeat configure -background [CCColorActivo [$win cget -background]]
 	}
-
-	grid {*}$togrid -padx 2 -pady 4
+	if { [llength $togrid] } {
+	    grid {*}$togrid -padx 2 -pady 4
+	} else {
+	    catch {
+		grid forget $win.buts
+		grid forget $win.sep
+	    }
+	}
 	if { $options(-repeat_answer_check) } {
 	    grid {*}$togrid -row 1
 	    grid $win.buts.repeat {*}[lrepeat [expr {[llength $togrid]-1}] -] \
@@ -1347,15 +1502,20 @@ snit::widget dialogwin_snit {
 	foreach i $togrid {
 	    foreach letter $usedletters {
 		bind $i <Key-$letter> [mymethod _button_invoke $widget($letter)]
+		bind $i <Control-$letter> { continue }
 	    }
 	}
 	if { $options(-cancelname) ne "-" } {
 	    bind $win <Escape> [mymethod _button_invoke $win.buts.cancel]
 	    bind $win.buts.cancel <Return> [mymethod _button_invoke $win.buts.cancel]
-	    wm protocol $win WM_DELETE_WINDOW [mymethod _button_invoke $win.buts.cancel]
+	    if { $options(-frame_toplevel) eq "toplevel" } {
+		wm protocol $win WM_DELETE_WINDOW [mymethod _button_invoke $win.buts.cancel]
+	    }
 	} else {
 	    bind $win <Escape> [mymethod _applyaction -1]
-	    wm protocol $win WM_DELETE_WINDOW [mymethod _applyaction -1]
+	    if { $options(-frame_toplevel) eq "toplevel" } {
+		wm protocol $win WM_DELETE_WINDOW [mymethod _applyaction -1]
+	    }
 	}
 
 	if { $options(-entrytext) ne "" } {
@@ -1431,13 +1591,16 @@ snit::widget dialogwin_snit {
     }
     onconfigure -title {value} {
 	set options(-title) $value
-	wm title $win $options(-title)
+	if { $options(-frame_toplevel) eq "toplevel" } {
+	    # catch is here as win is a frame in some cases
+	    catch { wm title $win $options(-title) }
+	}
     }
     method giveframe {} {
 	return $win.f
     }
     method giveframe_background {} {
-	set err [catch { $win.f cget -bg } bg]
+	set err [catch { $win.f cget -background } bg]
 	if { $err } {
 	    set style [$win.f cget -style]
 	    if { $style eq "" } { set style [winfo class $win.f] }
@@ -1663,26 +1826,43 @@ snit::widget dialogwin_snit {
 	}
     }
     method createwindownowait_as_frame {} {
+	
+	if { [winfo exists $win.f0.buts] } {
+	    if { [winfo exists $win.sep] } { grid remove $win.sep }
+	    grid remove $win.buts
+	    grid $win.f0.buts
+	}
 	$win configure -bd 1 -relief ridge
 	update idletasks
 	wm forget $win
 	focus $win
-	uplevel #0 $options(-frame_grid_cmd)
+	set err [catch { uplevel #0 $options(-frame_grid_cmd) }]
+	if { $err } {
+	    after idle [list $self createwindownowait_as_toplevel]
+	}
     }
     method createwindownowait_as_toplevel {} {
-	
+
+	if { [winfo exists $win.f0.buts] } {   
+	    if { [winfo exists $win.sep] } { grid $win.sep }
+	    grid $win.buts
+	    grid remove $win.f0.buts
+	}
 	set parent [winfo parent $win]
 	set top [winfo toplevel $parent]
 
 	if { $::tcl_platform(os) ne "Darwin" } {
 	    wm manage $win
 	}
+	wm title $win $options(-title)
+	
 	if { $::tcl_platform(os) eq "Windows CE" } {
 	    bind $win <ConfigureRequest> { if { "%W" eq [winfo toplevel %W] } { etcl::autofit %W }}
 	    bind $win <Expose> { if { "%W" eq [winfo toplevel %W] } { etcl::autofit %W }}
 	}
-	wm withdraw $win
 	update idletasks
+	wm withdraw $win
+	#update idletasks
 
 	lassign "" width height x y
 	if { [catch { package present twapi }] == 0 } {
@@ -1758,6 +1938,9 @@ snit::widget dialogwin_snit {
 	if { ![winfo exists $win] } {
 	    return
 	}
+	# this is necessary because with just one geometry is does not work always ok
+	wm geometry $win ${width}x${height}+${x}+$y
+
 	wm deiconify $win
 	update idletasks
 	wm geometry $win [wm geometry $win]
@@ -1943,6 +2126,7 @@ snit::widget dialogwin_snit {
     # when value of key is changed to 'value1', widgets w1 w2 will be enabled
     # and widgets w3 w4 will be disabled
     # if widget is a number, it refers to a button
+    # if there is a negative sign in front of the widget name, it makes the opposite
     method enable_disable_on_key { args } {
 	set optional {
 	    { -clear "" 0 }
@@ -2072,11 +2256,21 @@ snit::widget dialogwin_snit {
 	    }
 	}
     }
+    method has_traces_to_uservar { key { cmd_pattern "" } } {
+	foreach i $traces {
+	    if { [lindex $i 0] eq [varname uservar($key)] } {
+		if { $cmd_pattern eq "" || [string match $cmd_pattern [lindex $i 2]] } {
+		    return 1
+		}
+	    }
+	}
+	return 0
+    }
     method remove_traces_to_uservar { key { cmd_pattern "" } } {
 	foreach i $traces {
 	    if { [lindex $i 0] eq [varname uservar($key)] } {
 		if { $cmd_pattern eq "" || [string match $cmd_pattern [lindex $i 2]] } {
-		    eval trace remove variable $i
+		    trace remove variable {*}$i
 		}
 	    }
 	}
@@ -2159,6 +2353,18 @@ if 0 {
 #     }
 }
 
+#     one exemple without buttons
+
+if 0 {
+    wm withdraw .
+    set w .ask
+    dialogwin_snit $w -title [_ "Action"] -okname - -cancelname - \
+	-entrytext [_ "Choose action to perform"]:  -entrytype entry
+    set action [$w createwindow]
+    puts [$w giveentryvalue]
+    destroy $w
+    exit
+}
 
 snit::widgetadaptor wizard_snit {
     option -image ""

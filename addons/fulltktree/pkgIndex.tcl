@@ -8,4 +8,4 @@
 # script is sourced, the variable $dir must contain the
 # full path name of this file's directory.
 
-package ifneeded fulltktree 1.16 [list source [file join $dir fulltktree.tcl]]
+package ifneeded fulltktree 1.20 [list source [file join $dir fulltktree.tcl]]

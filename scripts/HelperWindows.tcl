@@ -10,7 +10,12 @@ proc RamDebugger::DisplayVar { X Y x y } {
     variable text
     variable remoteserverType
     variable debuggerstate
+    variable TextMotionAfterId
 
+    if { $TextMotionAfterId ne "" } {
+	after cancel $TextMotionAfterId
+	set TextMotionAfterId ""
+    }
     if { $debuggerstate != "debug" } { return }
 
     if { abs($X-[winfo pointerx $text])> 3 || abs($Y-[winfo pointery $text])> 3 } {
@@ -54,24 +59,19 @@ proc RamDebugger::DisplayVar2 { var X Y x y res } {
     if { $remoteserverType == "gdb" } {
 	lset res 1 [list expr [lindex $res 1]]
     }
-
     if { [lindex $res 0] == 0 && [lindex $res 1 0] ne "error" } {
 	set w $text.help
 	if { [winfo exists $w] } { destroy $w }
-	toplevel $w
-	wm overrideredirect $w 1
-	wm transient $w $text
-	wm geom $w +$X+$Y
+	cu::create_tooltip_toplevel $w
+	wm geometry $w +$X+$Y
 	$w configure -highlightthicknes 1 -highlightbackground grey \
 	    -highlightcolor grey
 	pack [label $w.l -fg black -bg grey95 -wraplength 400 -justify left]
-	#$w.l conf -bd 1 -relief solid
 	set val [lindex $res 1 1]
 	if { [string length $val] > 500 } {
 	    set val [string range $val 0 496]...
 	}
-	$w.l conf -text "$var=$val"
-	raise $w
+	$w.l configure -text "$var=$val"
     }
 }
 
@@ -376,6 +376,8 @@ proc RamDebugger::DisplayVarWindow { mainwindow { var "" } } {
 
     $w set_uservar_value combo [ttk::combobox $f.e1 -textvariable [$w give_uservar expression] \
 	-values $options(old_expressions)]
+    
+    cu::text_entry_bindings $f.e1
 
     set c { %W icursor [expr { [%W index "insert"]-1}] }
     bind $f.e1 <$::control-Key-2> "[list ttk::entry::Insert $f.e1 {""}];$c"
@@ -420,6 +422,8 @@ proc RamDebugger::DisplayVarWindow { mainwindow { var "" } } {
     bind [$w give_uservar_value combo] <Return> "[list $w invokeok] ; break"
     [$w give_uservar_value textv] configure -state disabled
     bind [$w give_uservar_value textv] <1> [list focus [$w give_uservar_value textv]]
+    
+    bind $w <F12> [list destroy $w]
 
     $w createwindow
     $w invokeok
@@ -469,6 +473,8 @@ proc RamDebugger::DisplayBreakpointsWindow {} {
     tooltip::tooltip $f.l1 $help
     ttk::entry $f.e1 -textvariable [$w give_uservar cond ""] -width 80
     
+    cu::text_entry_bindings $f.e1
+
     set columns [list \
 	    [list 6 [_ "Num"] left text 0] \
 	    [list 6 [_ "En/dis"] left text 0] \
@@ -2399,23 +2405,16 @@ proc RamDebugger::SearchInFiles {} {
 # Search
 ################################################################################
 
-proc RamDebugger::SearchWindow_autoclose { { force "" } } {
-    variable options
-    variable SearchToolbar
-    variable mainframe
-    variable text
-
-    if { $force eq "" && (![info exists options(SearchToolbar_autoclose)] ||
-	!$options(SearchToolbar_autoclose)) } { return }
-
-    if { [info exists SearchToolbar] && [lindex $SearchToolbar 0] } {
-	$mainframe showtoolbar 1 0
-	lset SearchToolbar 0 0
-	if { [focus] ne $text } { focus $text }
+proc RamDebugger::SearchWindow_toggle_regexp {} {
+    variable searchmode
+    
+    switch -- $searchmode {
+	"-exact" { set searchmode "-regexp" }
+	"-regexp" { set searchmode "-exact" }
     }
 }
 
-proc RamDebugger::SearchWindow { { replace 0 } }  {
+proc RamDebugger::SearchWindow { args }  {
     variable text
     variable options
     variable text_secondary
@@ -2423,30 +2422,50 @@ proc RamDebugger::SearchWindow { { replace 0 } }  {
     variable SearchToolbar
     variable searchFromBegin
     variable iswince
+
+    set optional {
+	{ -replace boolean 0 }
+	{ -auto_close boolean|force 0 }
+    }
+    set compulsory ""
+    parse_args $optional $compulsory $args
     
     set istoplevel 0
 
     if { ![info exists options(SearchToolbar_autoclose)] } {
 	set options(SearchToolbar_autoclose) 1
     }
+    
+    if { $auto_close != 0 } {
+	if { $auto_close ne "force" && !$options(SearchToolbar_autoclose) } { return }
 
+	if { [info exists SearchToolbar] && [lindex $SearchToolbar 0] } {
+	    $mainframe showtoolbar 1 0
+	    lset SearchToolbar 0 0
+	    if { [focus] ne $text } { focus $text }
+	}
+	return
+    }
     if { [info exists SearchToolbar] } {
 	set f [$mainframe gettoolbar 1]
 	set ::RamDebugger::searchstring [GetSelOrWordInIndex insert]
 	if { $replace != [lindex $SearchToolbar 1] } {
 	    #nothing
 	} elseif { [lindex $SearchToolbar 0] && $options(SearchToolbar_autoclose) } {
+	    set options(SearchToolbar_autoclose) 0
+	} elseif { [lindex $SearchToolbar 0] && !$options(SearchToolbar_autoclose) } {
+	    set options(SearchToolbar_autoclose) 1
 	    $mainframe showtoolbar 1 0
 	    update
 	    focus $text
 	    set SearchToolbar [list 0 $replace]
 	    return
 	} else {
-	    tkTabToWindow $f.e1
-	    $mainframe showtoolbar 1 1
-	    update
-	    set SearchToolbar [list 1 $replace]
-	    return
+#             tkTabToWindow $f.e1
+#             $mainframe showtoolbar 1 1
+#             update
+#             set SearchToolbar [list 1 $replace]
+#             return
 	}
     } else {
 	$mainframe showtoolbar 1 1
@@ -2507,8 +2526,10 @@ proc RamDebugger::SearchWindow { { replace 0 } }  {
     }
     set ::RamDebugger::SearchToolbar [list 1 $replace]
 
-    ttk::label $f.l1 -text "Search:"
+    ttk::label $f.l1 -text [_ "Search"]:
     ttk::combobox $f.e1 -textvariable ::RamDebugger::searchstring -values $options(old_searchs)
+
+    cu::text_entry_bindings $f.e1
 
     # to avoid problems with paste, that sometimes pastes too to the main window
     bind $f.e1 "[bind [winfo class $f.e1] $f.e1]; break"
@@ -2528,17 +2549,17 @@ proc RamDebugger::SearchWindow { { replace 0 } }  {
     grid $f2.r2 -sticky w
 
     set f25 [frame $f.f25 -bd 1 -relief ridge]
-    radiobutton $f25.r1 -text Forward -variable ::RamDebugger::SearchType \
+    radiobutton $f25.r1 -text [_ "Forward"] -variable ::RamDebugger::SearchType \
 	-value -forwards
-    radiobutton $f25.r2 -text Backward -variable ::RamDebugger::SearchType \
+    radiobutton $f25.r2 -text [_ "Backward"] -variable ::RamDebugger::SearchType \
 	-value -backwards
 
     grid $f25.r1 -sticky w
     grid $f25.r2 -sticky w
 
     set f3 [frame $f.f3]
-    checkbutton $f3.cb1 -text "Consider case" -variable ::RamDebugger::searchcase
-    checkbutton $f3.cb2 -text "From beginning" -variable ::RamDebugger::searchFromBegin
+    checkbutton $f3.cb1 -text [_ "Consider case"] -variable ::RamDebugger::searchcase
+    checkbutton $f3.cb2 -text [_ "From beginning"] -variable ::RamDebugger::searchFromBegin
 
     grid $f3.cb1 $f3.cb2 -sticky w
  
@@ -2556,29 +2577,33 @@ proc RamDebugger::SearchWindow { { replace 0 } }  {
 	-style Toolbutton
     ttk::checkbutton $f.cb3 -text Regexp -variable ::RamDebugger::searchmode \
 	-onvalue -regexp -offvalue -exact -style Toolbutton
-
+    ttk::button $f.cb4 -image fileclose16 -style Toolbutton \
+	-command [list RamDebugger::SearchWindow -auto_close force]
+    #-image stop-22
     set helps [list \
 	    $f.r09 "Search" \
 	    $f.r1 "Search backwards (PgUp)" \
 	    $f.r2 "Search forwards (PgDn)" \
 	    $f.cb1 "From beginning (Home)" \
 	    $f.cb2 "Consider case" \
-	    $f.cb3 "Rexexp mode"]
+	    $f.cb3 [_ "Activate/deactivate regular expression search (Ctrl-r)"] \
+	    $f.cb4 [_ "Close search toolbar"]]
     foreach "widget help" $helps {
 	tooltip::tooltip $widget $help
     }
 
     if { $replace } {
-	ttk::label $f.l11 -text "Replace:"
+	ttk::label $f.l11 -text [_ "Replace"]:
 	ttk::combobox $f.e11 -textvariable ::RamDebugger::replacestring \
 	    -values $options(old_replaces)
+	cu::text_entry_bindings $f.e11
 	raise $f.e11 $f2.r1
 	frame $f.buts
 	
 	set ic 0
-	foreach "txt cmd help" [list "Skip" beginreplace "Search next (Shift-Return)" \
-		"Replace" replace "Replace (Return)" \
-		"Replace all" replaceall "Replace all"] {
+	foreach "txt cmd help" [list [_ "Skip"] beginreplace [_ "Search next (Shift-Return)"] \
+		[_ "Replace"] replace [_ "Replace (Return)"] \
+		[_ "Replace all"] replaceall [_ "Replace all"]] {
 	    ttk::button $f.buts.b[incr ic] -text $txt -width 9 \
 		-style Toolbutton -command \
 		[list RamDebugger::SearchReplace $w $cmd]
@@ -2589,7 +2614,11 @@ proc RamDebugger::SearchWindow { { replace 0 } }  {
 
     if { !$istoplevel } {
 	if { !$iswince } {
-	    grid $f.l1 $f.e1 $f.r09 $f.r1 $f.r2 $f.sp1 $f.cb1 $f.cb2 $f.cb3 -sticky w -padx 2
+	    if { !$options(SearchToolbar_autoclose) } {
+		grid $f.l1 $f.e1 $f.r09 $f.r1 $f.r2 $f.sp1 $f.cb1 $f.cb2 $f.cb3 $f.cb4 -sticky w -padx 2
+	    } else {
+		grid $f.l1 $f.e1 $f.r09 $f.r1 $f.r2 $f.sp1 $f.cb1 $f.cb2 $f.cb3 -sticky w -padx 2            
+	    }
 	} else {
 	    grid $f.e1 $f.r09 $f.r1 $f.r2 $f.sp1 $f.cb1 $f.cb2 $f.cb3 -sticky w -padx 0
 	}
@@ -2637,12 +2666,13 @@ proc RamDebugger::SearchWindow { { replace 0 } }  {
     bind $f.e1 <End> "[list set ::RamDebugger::searchFromBegin 0] ; break"
     bind $f.e1 <Prior> "[list set ::RamDebugger::SearchType -backwards] ; break"
     bind $f.e1 <Next> "[list set ::RamDebugger::SearchType -forwards] ; break"
+    bind $f.e1 <Control-r> "[list RamDebugger::SearchWindow_toggle_regexp]; break"
 
     tk::TabToWindow $f.e1
     if { !$replace } {
 	bind $f.l1 <1> "RamDebugger::Search $w begin 0 $f"
 	bind $f.e1 <Return> "RamDebugger::Search $w begin 0 $f"
-	bind $f.e1 <Escape> [list RamDebugger::SearchWindow_autoclose force]
+	bind $f.e1 <Escape> [list RamDebugger::SearchWindow -auto_close force]
     } else {
 	bind $f.l1 <1> "RamDebugger::SearchReplace $w replace"
 	bind $f.e1 <Return> "RamDebugger::SearchReplace $w replace"
@@ -2655,8 +2685,8 @@ proc RamDebugger::SearchWindow { { replace 0 } }  {
 	bind $f.e11 <End> "[list set ::RamDebugger::searchFromBegin 0] ; break"
 	bind $f.e11 <Prior> "[list set ::RamDebugger::SearchType -backwards] ; break"
 	bind $f.e11 <Next> "[list set ::RamDebugger::SearchType -forwards] ; break"
-	bind $f.e1  <Escape> [list RamDebugger::SearchWindow_autoclose force]
-	bind $f.e11 <Escape> [list RamDebugger::SearchWindow_autoclose force]
+	bind $f.e1  <Escape> [list RamDebugger::SearchWindow -auto_close force]
+	bind $f.e11 <Escape> [list RamDebugger::SearchWindow -auto_close force]
     }
 
     if { $istoplevel } {
@@ -2758,7 +2788,7 @@ proc RamDebugger::SearchReplace { w what args } {
 	    menu $menu -tearoff 0
 	    if { !$replace } {
 		$menu add command -label Replace -command \
-		    [list RamDebugger::SearchWindow 1]
+		    [list RamDebugger::SearchWindow -replace 1]
 	    } else {
 		$menu add command -label Search -command \
 		    [list RamDebugger::SearchWindow]
@@ -2778,14 +2808,14 @@ proc RamDebugger::SearchReplace { w what args } {
 	    $menu add separator
 	    $menu add check -label "Auto close toolbar" -variable \
 		::RamDebugger::options(SearchToolbar_autoclose) \
-		-command RamDebugger::SearchWindow_autoclose
+		-command [list RamDebugger::SearchWindow -auto_close 1]
 	    $menu add separator
 	    if { !$replace } {
 		$menu add command -label Close -command \
 		    [list RamDebugger::SearchWindow]
 	    } else {
 		$menu add command -label Close -command \
-		    [list RamDebugger::SearchWindow 1]
+		    [list RamDebugger::SearchWindow -replace 1]
 	    }
 	    tk_popup $menu $x $y
 	}
@@ -2812,7 +2842,7 @@ proc RamDebugger::inline_replace { w search_entry } {
     focus $w.replace
     grab $w.replace
     
-    bind $w.replace <Return> [list RamDebugger::inline_replace_end $w $focus $grab $search_entry accept]
+    #bind $w.replace <Return> [list RamDebugger::inline_replace_end $w $focus $grab $search_entry accept]
     bind $w.replace <$::control-i> [list RamDebugger::inline_replace_end $w $focus $grab $search_entry accept]
     bind $w.replace <Escape> [list RamDebugger::inline_replace_end $w $focus $grab $search_entry end]
     bind $w.replace <1> "[list RamDebugger::inline_replace_end $w $focus $grab $search_entry end];break"
@@ -2824,7 +2854,7 @@ proc RamDebugger::inline_replace { w search_entry } {
     bind $w.replace <$::control-j> "$cmd1; $cmd2; break"
     bind $w.replace <$::control-J> "$cmd1; $cmd3; break"
 
-    set msg [_ "Press <Return> or Ctrl+I to continue search and replace\nCtrl+J to replace\nCtrl+Shift+J to replace all"]
+    set msg [_ "Press Ctrl+I to continue search and replace\nCtrl+J to replace\nCtrl+Shift+J to replace all"]
     tooltip::tooltip $w.replace $msg
     
     label $w.searchl2 -text $msg -justify left -bd 1 -relief solid
@@ -2872,8 +2902,14 @@ proc RamDebugger::textPaste_insert_after { w } {
 }
 
 proc RamDebugger::Search_get_selection { active_text } {
-    if { [$active_text tag ranges sel] ne "" } {
-	set txt [$active_text get {*}[$active_text tag ranges sel]]
+    
+    lassign [GetSelOrWordInIndex -return_range 1 insert] idx1 idx2
+    set txt [$active_text get $idx1 "$idx2+1c"]
+    if { [string trim $txt] ne "" } {
+	$active_text mark set insert $idx1
+	set ::RamDebugger::SearchIni $idx1
+	set ::RamDebugger::SearchPos $idx1
+	$active_text tag add sel $idx1 "$idx2+1c"
     } else {
 	set err [catch { clipboard get } txt]
 	if { $err } { set txt "" }
@@ -2955,9 +2991,11 @@ proc RamDebugger::Search { w what { raiseerror 0 } {f "" } } {
 	    place $w.search -in $w -x 2 -rely 1 -y -1 -anchor sw
 
 	    set msg1 [_ "Press Ctrl+J to replace"]
-	    set msg2 [_ "Press Ctrl+C to use selection for search"]
+	    set msg2 [_ "Press Ctrl+C to use selection or word on cursor for search"]
 	    set msg3 [_ "Press Home to search from beginning"]
-	    tooltip::tooltip $w.search $msg1\n$msg2\n$msg3
+	    set msg4 [_ "Press Ctrl+I again to use last word for search"]
+	    set msg "$msg1\n$msg2\n$msg3\n$msg4"
+	    tooltip::tooltip $w.search $msg
 
 	    focus $active_text
 	    bindtags $active_text [linsert [bindtags $active_text] 0 $w.search]
@@ -2984,15 +3022,16 @@ proc RamDebugger::Search { w what { raiseerror 0 } {f "" } } {
 	    if { $active_text eq $text } {
 		bind $w.search <$::control-j> "RamDebugger::inline_replace $w $w.search; break"
 		
-		label $w.searchl1 -text $msg1
+		label $w.searchl1 -text $msg -justify left -bd 1 -relief solid
 		set x1 [expr {2+[winfo reqwidth $w.search]+2}]
 		place $w.searchl1 -in $w -x $x1 -rely 1 -y -1 -anchor sw
 		after 2000 [list catch [list destroy $w.searchl1]]
 	    }
 	    set ::RamDebugger::searchstring ""
-	    trace var RamDebugger::searchstring w "[list RamDebugger::Search $w {}];#"
-	    bind $w.search <Destroy> [list trace vdelete RamDebugger::searchstring w \
-		"[list RamDebugger::Search $w {}];#"]
+	    set  cmd "[list RamDebugger::Search $w {}]; destroy $w.searchl1; #"
+	    trace add variable RamDebugger::searchstring write $cmd
+	    bind $w.search <Destroy> [list trace remove variable RamDebugger::searchstring write \
+		    $cmd]
 	    bind $w.search <Destroy> "+ [list destroy $w.searchl1]"
 	    bind $w.search <Destroy> "+ [list bindtags $active_text [lreplace [bindtags $active_text] 0 0]] ; break"
 	    foreach i [bind Text] {
@@ -3192,9 +3231,9 @@ proc RamDebugger::OpenProgram { args } {
     interp alias $what exit_interp "" interp delete $what
     $what eval [list proc exit { args } "destroy . ; exit_interp"]
     interp alias $what puts "" RamDebugger::_OpenProgram_puts
-    $what eval [list load {} Tk]
     $what eval [list set argc [llength $argv]]
     $what eval [list set argv $argv]
+    $what eval [list load {} Tk]
     $what eval [list source $file]
 }
 
@@ -3780,6 +3819,15 @@ proc RamDebugger::PositionsStack { what args } {
 # Macros
 ################################################################################
 
+namespace eval ::RamDebugger::Macros {
+    namespace eval mc {}
+}  
+
+proc ::RamDebugger::GiveActiveFileType {} {
+    variable currentfile
+
+    return [GiveFileType $currentfile]
+}
 
 proc RamDebugger::MacrosDo { w what } {
     variable text
@@ -3798,7 +3846,9 @@ proc RamDebugger::MacrosDo { w what } {
 		return
 	    }
 	    set macro [$list item text [lindex $itemList 0] 0]
-	    RamDebugger::Macros::$macro $text
+	    tk_messageBox -message AA-[namespace children ::RamDebugger::Macros]
+
+	    ::RamDebugger::Macros::$macro $text
 	}
 	default {
 	    set ret [snit_messageBox -default ok -icon warning -message \
@@ -3949,6 +3999,9 @@ proc RamDebugger::AddActiveMacrosToMenu { mainframe menu } {
     namespace eval Macros {}
     set Macros::menu $menu
     set Macros::mainframe $mainframe
+    
+    interp alias "" Macros::mc::give_active_file_type "" RamDebugger::GiveActiveFileType
+    interp alias "" Macros::mc::set_is_modified "" RamDebugger::SetIsModified
 
     if { [catch {_AddActiveMacrosToMenu $mainframe $menu} errstring] } {
 	WarnWin "There is an error when trying to use Macros ($::errorInfo). Correct it please"
@@ -4201,14 +4254,55 @@ proc RamDebugger::CountLOCInFilesDo { parent program dirs patterns } {
     DialogWinTop::CreateWindow $f
 }
 
+#################################################################################
+#    insert_brackets_braces
+#################################################################################
 
+proc RamDebugger::insert_brackets_braces {} {
+    variable text
+    cu::text_entry_insert $text
+}
 
-
-
-
-
-
-
-
+# 
+# proc RamDebugger::insert_brackets_braces { { what "" } } {
+#     variable last_insert_brackets_braces
+#     variable text
+#     
+#     if { ![info exists last_insert_brackets_braces] } {
+#         set last_insert_brackets_braces ""
+#     }
+#     set list [list "{}" "\[\]" "||" "\\" "#"]
+#     set t [clock milliseconds]
+#     lassign $last_insert_brackets_braces time d
+#     
+#     if { $d eq "" } { set d "{}" }
+#     if { $time ne "" && $t < $time+3000 } {
+#         set idx [$text search $d insert-1c]
+#         if { [$text compare $idx == insert-1c] } {
+#             if { [string length $d] == 1 } {
+#                 $text delete insert-1c
+#             } else {
+#                 $text delete insert-1c insert+1c
+#             }
+#         }
+#         if { $what eq "" } {
+#             set ipos [lsearch -exact $list $d]
+#             incr ipos
+#             if { $ipos >= [llength $list] } {
+#                 set ipos 0
+#             }
+#             set d [lindex $list $ipos]
+#         }
+#     }
+#     if { $what ne "" } {
+#         set d $what
+#     }
+#     set idx [$text index insert]
+#     $text insert insert $d
+#     $text mark set insert "$idx+1c"
+#     set last_insert_brackets_braces [list $t $d]
+#     
+#     RamDebugger::SetMessage [_ "Press key again to change insertion characters"]
+# }
 
 

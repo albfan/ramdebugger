@@ -1,0 +1,624 @@
+
+<!-- saved from url=(0067)http://users.iit.demokritos.gr/~petasis/Tcl/tkDND/tkDND_Manual.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Manpage of dnd</title>
+</head><body>
+<a name="lbAB">&nbsp;</a>
+<h2>NAME</h2>
+
+dnd - Tk Drag and Drop Interface
+<a name="lbAC">&nbsp;</a>
+<h2>SYNOPSIS</h2>
+
+<b>dnd bindtarget</b><i>  window</i>
+<br>
+
+<b>dnd bindtarget</b><i>  window type ?event?</i>
+<br>
+
+<b>dnd bindtarget</b><i>  window type event script ?priority?</i>  
+<br>
+
+<b>dnd cleartarget</b><i> window</i>
+<br>
+
+<p>
+
+<b>dnd bindsource</b><i>  window</i>
+<br>
+
+<b>dnd bindsource</b><i>  window type</i>
+<br>
+
+<b>dnd bindsource</b><i>  window type script ?priority?</i>
+<br>
+
+<b>dnd clearsource</b><i> window</i>
+<br>
+
+</p><p>
+
+<b>dnd drag</b><i> window ?-actions list ?-descriptions list?? ?-cursorwindow window? ?-callback script?</i>
+<br>
+
+</p><p>
+<a name="lbAD">&nbsp;</a>
+</p><h2>INTRODUCTION</h2>
+
+<p>
+
+The <b>dnd</b> command provides a Tcl interface to native, platform specific
+drag and drop mechanism. Under unix the drag &amp; drop protocol in use is the XDND
+protocol (also used by the QT toolkit, KDE &amp; GNOME Desktops). Basic
+interaction (currently drops) with Motif applications is also provided.
+Under Windows, the OLE drag &amp; drop interfaces are used. The Macindosh platform
+is not yet supported.
+</p><p>
+
+With the <b>dnd</b> command the user is able to register existing Tk widgets as
+drag sources or drop targets, that are able to send or receive data encoded in 
+specific types. Also through this command drag and drop related information can
+be retrieved, regarding the drag and drop registered widgets.
+</p><p>
+
+The legal forms for the <b>dnd</b> command are:
+</p><dl compact="">
+<dt><b>dnd bindtarget</b><i> window</i></dt><dd>
+This command will return a list of all the registered types that the specified 
+<i>window</i> can accept during a drop operation. An empty list will be 
+returned if the window is not yet registered as a drop target.
+</dd><dt><b>dnd bindtarget</b><i> window type ?event?</i></dt><dd>
+This command will return a the binding script for the specified event.
+If <i>event</i> is not specified, it defaults to the <b>&lt;Drop&gt;</b> event.
+An empty string will be returned if the window is not yet registered as a drop 
+target.
+</dd><dt><b>dnd bindtarget</b><i> window type event script ?priority?</i></dt><dd>
+This command will register a binding script for the event specified by 
+<i>event</i> and for the specified <i>type</i>.
+Valid events are any of the following events:
+<b>&lt;DragEnter&gt;</b>, <b>&lt;Drag&gt;</b>, <b>&lt;DragLeave&gt;</b>, <b>&lt;Ask&gt;</b> and 
+<b>&lt;Drop&gt;</b>.
+<p>
+The events support modifiers as in Tk. You can use a combination of Shift, Alt,
+Meta, Control, Mod[1-5], Button[1-5] to bind specific scripts when these modifiers
+are used. As in Tk, the closest matching script will be executed. If there is no
+exact match, the following algorithm will be applied: find an event without key modifiers
+but with buttons modifiers, then find an event without buttons modifiers but with the
+key modifiers, then at last find an event without key modifiers and without buttons
+(i.e. a raw event as listed above).
+</p><p>
+The <b>&lt;DragEnter&gt;</b> event will be delivered when the mouse enters the window 
+during a drag operartion. The <b>&lt;Drag&gt;</b> event will be delivered when the 
+mouse moves inside the widget during a drag operartion and the 
+<b>&lt;DragLeave&gt;</b> event will be delivered if the mouse pointer leaves the
+window during a drag operation.
+Finally, the <b>&lt;Drop&gt;</b> event will be delivered if a drop over the
+window occurs.
+</p><p>
+If there is already a binding script for the same event, this 
+script is replaced by the new one. If the script is an empty string, then
+any previous binding script is deleted and the specified event is no longer 
+reported to the specified window. The user can optionally specify a
+<i>priority</i> for this specific type (an integer value ranging from 1 to 100).
+Priorities have meaning only when more than one types are registered for the 
+same event. During a drag operartion the specified event will be delivered
+by executing the binding script associated with the type that has the higher 
+priority (or the lower integer value: priority 1 is the highest priority
+while 100 is the lowest available priority). If priority is ommited, it
+defaults to 50. If more than one types have the same priority, 
+the actual type that will be used cannot be pre-determined.
+</p></dd><dt><b>dnd cleartarget</b><i> window</i></dt><dd>
+This command will unregister a registered drop target. The window will stop 
+to respond to drops and all binding scripts for all drop target related events 
+will be removed. It is not an error to use this command on a window that has
+never been registered as a drop target. 
+</dd><dt><b>dnd bindsource</b><i> window</i></dt><dd>
+This command will return a list of all the registered types that the 
+specified window can drop on drop targets during a drop operation.
+An empty list will be returned if the window is not yet registered as a 
+drag source.
+</dd><dt><b>dnd bindsource</b><i> window type</i></dt><dd>
+This command will return the binding script that will be used for collecting 
+the data that will be dropped during a drop operartion onto the drop target.
+Each script is associated with a specific type, providing the ability
+to have different scripts for different types. 
+</dd><dt><b>dnd bindsource</b><i> window type script ?priority?</i></dt><dd>
+This command will register a binding script for the specified <i>type</i>.
+This binding script will be used during a drop operation, in order to provide
+the actual data that will be dropped to the drop target. As a result, this
+binding script must returns the data to be dropped and the returned data must 
+be encoding in a proper format, according to the specified type.
+<p>
+If the <i>script</i> is an empty string, then the specified type will be
+removed from the type list of supported by the drag source types.
+</p><p>
+Finally, the user can arrange the 
+types that the drag source supports according to priorities. Valid priorities 
+are integers in the range [1,100], with 100 denoting the highest possible
+priority. If <i>priority</i> is ommited, it defaults to 50. If more than one
+types have the same priority, only one of them will be used for a drop action.
+In this case the actual type that will be used cannot be pre-determined.
+</p></dd><dt><b>dnd clearsource</b><i> window</i></dt><dd>
+This command will unregister a registered drag source. Subsequent attempts to 
+initiate drag operations from this window with the <b>dnd drag</b> command 
+will fail. The binding script associated for retrieving the data will be
+removed. It is not an error to use this command on a window that has never 
+been registered as a drag source. 
+</dd><dt><b>dnd drag</b><i> window ?-actions list ?-descriptions list?? ?-cursorwindow window? ?-callback script?</i></dt><dd>
+This command will initiate a drag operartion having as source a window 
+registered as a drag source. It is an error to use this command with a window
+that has not been registered as a drag source.
+<p>
+The user can also specify a <i>Cursor window</i>. A Cursor window is a 
+toplevel window that will appear near the mouse cursor and will follow the
+cursor, as the mouse cursor moves during the drag operation. This window must
+exist when the <i>dnd drag</i> command will be executed. If a Cursor window is
+specified, the user can also register a callback through the <i>-callback</i>
+option. This callback will be called when the mouse pointer is moved and can
+be used in order to update the contents of the window. All available
+substitutions can also be used with this callback. For more information please
+refer to the <b>BINDING SCRIPTS AND SUBSTITUTIONS</b> section. One difference
+with the usual substitutions is that in this context, the %A substitution can
+also take as value the empty string, meaning that the cursor is over a window
+that cannot accept a drop action. It is advised that this particular callback
+should be as fast as possible, as it is called very frequently. That is also
+the reason why the position of the cursor window is managed by the <i>dnd drag</i> command. Also, <i>dnd drag</i> command ensures that the cursor window will
+always be visible (above all other windows).
+</p><p>
+Finally, the user can optionally specify a list of actions that will be associated with  
+the current drag and drop operation. Valid actions are the following: copy,
+move, link and ask. It is up to the drop target to deside which action will be
+actually used for the drop operartion. It is also responsibility of the drop
+target to do the required actions implied by the drop action. For example, if
+the drop action during a file name drop is move, the window that accepts the
+drop is responsible for deleting the old file and create the new file at the 
+dropped location.
+</p><p>
+If the ask action is included in the specified action list, then 
+the <i>description list</i> must be also specified. The meaning of the 
+ask action is that when the drop finally occurs, the widget that will accept
+the drop should display a window that will enable the user to select the 
+action that desires from the available list. The ask action should not be
+listed and also a way to cancel the drop should provided to the user. 
+The descriptions provided with the description list are the text that should 
+be displayed for the corresponding individual action entries in the presented 
+window. As a result, the description list must contain the same number of
+items as the action list and the its text elements must describe the 
+corresponding actions specified by the <i>-actions</i> option. For example,
+a drop that offers all available actions should be defined as follows:
+
+</p><dl compact=""><dt></dt><dd>
+<pre>
+dnd drag .dragSource -actions {ask copy move link} \ 
+  -descriptions {{Please Select Action:} {Copy} {Move} {Link}
+}
+
+</pre>
+
+</dd></dl>
+
+
+<p>
+</p></dd></dl>
+<a name="lbAE">&nbsp;</a>
+<h2>DRAG AND DROP TYPES</h2>
+
+<p>
+
+In order to declare the format that the data that will encoded during a 
+drag and drop operation, all drag and drop protocols use the notion of
+<i>types</i>. Unfortunately, each protocol defines its own, usually platform 
+specific, types. The Tk toolkit, trying to maintain its portability among 
+different platforms, offers some predefined types for some basic kinds of 
+data, like text, filenames and images. These types are represented by their 
+MIME types and are available under all platforms that Tk is available.
+Currently, the following predifined values are available:
+</p><dl compact="">
+<dt><b>text/plain:</b></dt><dd>
+This is the type understood by the majority of applications. With this type 
+plain ASCII strings can be transfered. The system encoding will be used in 
+order these strings to be mapped from the utf-8 encoding into ASCII and
+from ASCII into utf-8 strings used internally by tcl.
+</dd><dt><b>text/plain;charset=UTF-8:</b></dt><dd>
+With this type utf-8 strings can be transfered. No conversion is performed
+before the string is transmitted or after it is received. 
+</dd><dt><b>text/uri-list:</b></dt><dd>
+This type is able to handle a list of filenames. The system encoding will be
+used in order to convert these strings from/to utf-8 strings.
+</dd></dl>
+<p>
+
+Besides the predefined types, the user is free to use the platform specific 
+types. For example under windows the type "FILENAME" can be used in order to 
+receive a single filename from the Explorer or the type "NetscapeURL" can be 
+used in order to receive a bookmark drop from Netscape Navigator. Under 
+Unix, the type "FILE_NAME" can be used in order to receive a filename from a 
+Motif application. The dnd command will make no conversion to types other than 
+the predefined ones. Instead it will place received data into tcl byte-arrays
+and extract data from tcl after it converts objects into byte-arrays. Also 
+note that the script should make the proper arrangements in order to maintain 
+portability under different platforms. Procceed with platform depended types 
+<i>only if you are absolutely sure that the data you want to excange is not 
+supported by the predefined, platform independed, types</i>. 
+</p><p>
+<a name="lbAF">&nbsp;</a>
+</p><h2>BINDING SCRIPTS AND SUBSTITUTIONS</h2>
+
+<p>
+
+Any script argument to <b>dnd</b> is a Tcl script, which will be executed
+in order for the given event to be delivered to the associated window.
+The script will be executed in the same interpreter that the <b>dnd</b> command
+was executed in order to specify the binding, and it will run at global
+level (only global variables will be accessible).
+</p><p>
+If script contains any % characters, then the script will not be executed
+directly. Instead, a new script will be generated by replacing each %,
+and the character following it, with information from the current event.
+The replacement depends on the character following the %, as defined in the
+list below.
+Some of the substitutions are only valid for certain types of events;
+if they are used for other types of events the value substituted is the empty 
+string.
+</p><dl compact="">
+<dt><b>%%</b></dt><dd>
+Replaced with a single percent. 
+</dd><dt><b>%A</b></dt><dd>
+The current action of the drag and drop operation.
+</dd><dt><b>%a</b></dt><dd>
+The action list supported by the drag source. 
+</dd><dt><b>%b</b></dt><dd>
+The mouse button that is pressed during a drag and drop operation. Note that 
+always a single mouse button is reported as pressed, even if more than one 
+mouse buttons are actually pressed.
+</dd><dt><b>%D</b></dt><dd>
+The data that has been dropped. Under some platforms the data will be 
+available before the drop has occured. The format of the data is the current
+type of the drop operation.
+</dd><dt><b>%d</b></dt><dd>
+The list of descriptions, provided by the drag source. If not empty, it 
+provides description text for the actions supported by the drag source.
+</dd><dt><b>%m</b></dt><dd>
+The list of modifier keyboard keys that are pressed. 
+Modifier keys are some special keys, like Shift, Control or Alt. 
+Valid modifiers are "Shift", "Control",
+"Alt", "Meta", "Mod1", "Mod2", "Mod3", "Mod4" and "Mod5". It is useful for
+binding scripts of drop target events to examine this list of modifiers, as it
+is quite usuall to change the action according to the state of some modifier
+keys. An alternative is to use modifiers directly when defining an event into
+the <i>bindtarget</i> command.
+</dd><dt><b>%T</b></dt><dd>
+The current type of the drag and drop operation.
+</dd><dt><b>%W</b></dt><dd>
+The window that the event is delivered to.
+</dd><dt><b>%X</b></dt><dd>
+The mouse pointer x coordinate, relative to the root window.
+</dd><dt><b>%x</b></dt><dd>
+The mouse pointer x coordinate, relative to the window that receives the event.
+</dd><dt><b>%Y</b></dt><dd>
+The mouse pointer y coordinate, relative to the root window.
+</dd><dt><b>%y</b></dt><dd>
+The mouse pointer y coordinate, relative to the window that receives the event.
+<p>
+</p></dd></dl>
+<a name="lbAG">&nbsp;</a>
+<h2>DRAG AND DROP EVENTS</h2>
+
+<p>
+
+There are four events that are associated with drop targets and a single event 
+associated with drag sources. The four events that are delivered to drop
+targets are:
+</p><dl compact="">
+<dt><b>&lt;DragEnter&gt;:</b> </dt><dd>
+The binding script associated with this event will be executed when the mouse 
+pointer during a drag operation enters the widget and at least one of the types 
+supported by the drag source is supported as a drop target by the widget. 
+The binding script is responsible for changing the appearence of the widget,
+according to whether the widget will accept the drop or not. If the widget 
+will accept the drop, the return value of this script must be a value of the 
+action list supported by the drag source (which can be obtained with <b>%A</b>),
+the current action (which can be obtained with <b>%a</b>), "private" or "default".
+If the widget will not accept the drop, then "none" must be returned.
+In the special case where the widget refuses the drop at the particular point 
+that the mouse pointer is currently over but wants to be requested again when 
+the mouse moves, the binding script must return a break code:
+<p>
+<br>
+
+return -code break <i>action</i>
+<br>
+
+</p><p>
+The main use of this feature is the ability to allow drops over specific items 
+of a canvas widget.
+</p></dd><dt><b>&lt;Drag&gt;:</b></dt><dd>
+The binding script associated with this event will be executed when the mouse 
+pointer during a drag operation moves over the widget and at least one of the 
+types supported by the drag source is supported as a drop target by the widget. 
+The binding script is responsible for reporting if the widget will accept a 
+drop <i>at the specific location that the mouse pointer is currently over</i>.
+If the widget is going to accept a drop, the return value must be the action 
+that will be used for the drop. This action must be an action also supported 
+by the drag source, whose list of supported actions canbe obtained by the %a
+substitution. If the widget wants to utilise an action not supported by the
+drag source, the action "private" must be returned. If you want to use the
+default action specified by the user, the action "default" must be returned.
+If the widget does not want a drop to occur over the specific coordinates that 
+the mouse pointer is currently over, "none" should be returned. The &lt;Drag&gt;
+event will be reported to the widget again, when the mouse pointer moves.
+</dd><dt><b>&lt;DragLeave&gt;:</b></dt><dd>
+The binding script associated with this event will be executed when the mouse 
+pointer during a drag operation leaves the widget. The only responsibility of
+this script is to reset the visual appearence of the widget to its default 
+state. This event will also be delivered if the mouse pointer is inside a
+widget that accepts drop during a drag operation and the whole drag nad drop
+operation is canceled (i.e. by pressing the Escape keyboard key).
+</dd><dt><b>&lt;Ask&gt;:</b></dt><dd>
+The binding script associated with this event will be executed when the mouse 
+button during a drag operation has been released (meaning a drop), 
+over a widget that can accept a drop of the specific type and the "<b>ask</b>" 
+action. This event is only delivered if the drop action is ask. The main
+responsibility of the script is to get the actions supported by the drag 
+source and their descriptions (through %a and %d respectively) and to display 
+a dialog where the user can select the actual action that will be used for 
+the drop operartion. The return value of the script must be the selected by the 
+user action or "none" if the user canceled the drop.
+<p>
+It is an error to return the action "ask".
+If a binding script is not registered for this event, then 
+this functionality will be provided by the Tk core library.
+</p></dd><dt><b>&lt;Drop&gt;:</b></dt><dd>
+The binding script associated with this event will be executed when the mouse 
+button is release over a widget that can accept a drop of the specific type 
+and action. In simple words, when a drop occurs over a widget that can accept 
+the data. The binding script is responsible for reseting the visual appearence 
+of the widget to its default state and to handle the dropped data. The dropped 
+data can be obtained through the <b>%D</b> substitution directive.
+<p>
+</p></dd></dl>
+<a name="lbAH">&nbsp;</a>
+<h2>SPECIFYING DROP TARGETS</h2>
+
+<p>
+
+In order to register a data type that can be handled by a target window, the 
+<b>bindtarget</b> option can be used. For example, to handle plain dropped text,
+the following command can be used:
+
+</p><dl compact=""><dt></dt><dd>
+<pre>
+<b>dnd bindtarget .tgt text/plain &lt;Drop&gt; {puts "Drop-Action=%A, Data=%D"}
+
+</b></pre>
+
+</dd></dl>
+
+
+<p>
+
+When a drop occurs from a source that supports the "text/plain" type,
+the script associated with the &lt;Drop&gt; event will be executed. In this case, if
+the dropped data was a sentence such as "The quick brown fox jumped over the 
+moon", the command that will be executed is:
+
+</p><dl compact=""><dt></dt><dd>
+<pre>
+puts {Drop-Action=copy, Data="The quick brown fox jumped over the moon"}
+
+</pre>
+
+</dd></dl>
+
+
+<p>
+
+You can specify anything as a data type. The recommended names that
+can be used as data types are the corresponding MIME types. Internally,
+the MIME types will be converted to the apropriate types understood by 
+the operating system. For example, if the user requests the type text/plain,
+the <b>dnd</b> command passes the type "text/plain" to the X server under unix
+(the XDND protocol defines types by their mime type names). But under
+windows, the type <b>CF_TEXT</b> will be registered.
+<b>CF_TEXT</b> is a special type that represents all simple ASCII text that can
+be dragged and dropped.
+Creating a handler for <b>CF_TEXT</b> on a window will allow that window
+to  handle text drags and drops from another OLE enabled application that 
+also uses the standard <b>CF_TEXT</b> mechanism. The user can also request 
+explicitly to use the type "CF_TEXT". But such an approach will not be portable.
+</p><p>
+
+Some common types the are currently supported by the current version of 
+tkDND are "text/uri-list" for dragging and dropping files, 
+"text/plain;charset=utf-8" for handling utf-8 text and 
+"image/xpm" for transfering images. Please refer to the section 
+"DRAG AND DROP TYPES" for more information.
+Some other Windows specific common types for dragging and dropping to 
+and from web browsers are "UniformResourceLocator" and 
+"<b>Netscape Bookmark</b>".
+The type "<b>FileName</b>" is used by Explorer to drag and drop a single file.
+(Note that this type will transfer a <i>single</i> file. Many files (or just one 
+file) can be transfered with the predefined type "<b>text/uri-list</b>")
+</p><p>
+
+You can register more than a single type to be handled by a window. 
+Just run the command again with a different data type.  Here is 
+another example for the same window:
+
+</p><dl compact=""><dt></dt><dd>
+<pre>
+dnd bindtarget .tgt TK_COLOR &lt;Drop&gt; {.tgt config -bg %D}
+
+</pre>
+
+</dd></dl>
+
+
+<p>
+
+In this case, if a an object gets dropped on window .tgt, .tgt will
+ask the source if it supports either text/plain or TK_COLOR.  If it
+does, it will run the script for the match.  It is possible that more
+than one type would be matched between the source and target.  For
+this case, you can use the priority option to specify the order
+in which you want the search for matches to occur.  Priorities range
+from 1 to 100.  1 is the highest priority, 50 is the default priority,
+and 100 is the lowest priority.  If two target data types have the
+same priority, it is undetermined which one will be checked for first.
+In the above example, if you want to check for the TK_COLOR datatype
+before text/plain, give a higher priority to the TK_COLOR datatype:
+
+</p><dl compact=""><dt></dt><dd>
+<pre>
+dnd bindtarget .tgt TK_COLOR &lt;Drop&gt; {.tgt config -bg %D} 1
+
+</pre>
+
+</dd></dl>
+
+
+<p>
+<a name="lbAI">&nbsp;</a>
+</p><h2>SPECIFYING DRAG SOURCES</h2>
+
+<p>
+
+For drag sources, the data types that can be provided by a window
+can be registered with the <b>bindsource</b> option. 
+For example, in order to register a window as a drop source for ASCII text,
+the follwowing command can be used:
+
+</p><dl compact=""><dt></dt><dd>
+<pre>
+dnd bindsource .src text/plain {return "Some text"}
+
+</pre>
+
+</dd></dl>
+
+
+<p>
+
+More than one datatype can be registered with a source window.  To go
+along with our example, setup the window as a provider of data of type
+"TK_COLOR":
+
+</p><dl compact=""><dt></dt><dd>
+<pre>
+dnd bindsource .src TK_COLOR {return red}
+
+</pre>
+
+</dd></dl>
+
+
+<p>
+<a name="lbAJ">&nbsp;</a>
+</p><h2>THE DRAG OPERATION</h2>
+
+<p>
+
+Now that both the target window and the source window have been 
+configured, one as a data source and the other as a drop area, we 
+still need to do something to initiate the drag operation.  If the 
+application that is being dragged from is not part of Tk, we let it 
+handle the drag &amp; drop operation.  If we want to drag something from 
+the ".src" window to the ".tgt" window, we must initiate the drag and drop 
+operation with the <b>drag</b> option. 
+Here, we start the operation on a press of mouse button 1. 
+
+</p><dl compact=""><dt></dt><dd>
+<pre>
+bind .src &lt;1&gt; {dnd drag %W}
+
+</pre>
+
+</dd></dl>
+
+
+<p>
+
+Once button 1 is pressed on the ".src" window, the drag operation begins. 
+When the button is released, a different button is pressed, or a modifier key
+is pressed during the operation, then a drop operation occurs.  If the
+drop occurs over a window that has a type that matches the source 
+window, then the script for the source window gets run first.
+If you  do not want the source window to send data, it can do a:
+
+</p><dl compact=""><dt></dt><dd>
+<pre>
+return -code break
+
+</pre>
+
+</dd></dl>
+
+
+<p>
+
+If the return value is not an error or a break code, the target window
+script for the matched datatype is then run.
+For the example above, the datatype that matched would be "TK_COLOR".
+First, the script registered for data type "TK_COLOR" on window ".src" 
+would be executed. This is the "return red" statement.
+The string "red" will now substitute the "%D" token to the command for the 
+datatype "TK_COLOR" on the target window .tgt.  The command that will be
+executed will be:
+
+</p><dl compact=""><dt></dt><dd>
+<pre>
+
+</pre>
+
+</dd></dl>
+
+
+In our simple example, the background color of the .tgt window will be changed 
+to red on a drag and drop operation from the .src window to the .tgt window.
+<p>
+<a name="lbAK">&nbsp;</a>
+</p><h2>BUGS</h2>
+
+<p>
+
+<b>Unix:</b>
+<br>
+
+During drops from Motif applications, the only action that is allowed is the
+copy action.
+</p><p>
+If during a drag operation the mouse pointer is over a foreign window and the 
+application that owns the window crashes, we may end with a BadWindow error,
+as it is very possible messages delivered to that window to exist in the 
+message queue of the X Server.
+</p><p>
+<a name="lbAL">&nbsp;</a>
+</p><h2>KEYWORDS</h2>
+
+<p>
+
+dnd, drag and drop, shape, update
+</p><p>
+
+</p><hr>
+<a name="index">&nbsp;</a><h2>Index</h2>
+<dl>
+<dt><a href="http://users.iit.demokritos.gr/~petasis/Tcl/tkDND/tkDND_Manual.html#lbAB">NAME</a></dt><dd>
+</dd><dt><a href="http://users.iit.demokritos.gr/~petasis/Tcl/tkDND/tkDND_Manual.html#lbAC">SYNOPSIS</a></dt><dd>
+</dd><dt><a href="http://users.iit.demokritos.gr/~petasis/Tcl/tkDND/tkDND_Manual.html#lbAD">INTRODUCTION</a></dt><dd>
+</dd><dt><a href="http://users.iit.demokritos.gr/~petasis/Tcl/tkDND/tkDND_Manual.html#lbAE">DRAG AND DROP TYPES</a></dt><dd>
+</dd><dt><a href="http://users.iit.demokritos.gr/~petasis/Tcl/tkDND/tkDND_Manual.html#lbAF">BINDING SCRIPTS AND SUBSTITUTIONS</a></dt><dd>
+</dd><dt><a href="http://users.iit.demokritos.gr/~petasis/Tcl/tkDND/tkDND_Manual.html#lbAG">DRAG AND DROP EVENTS</a></dt><dd>
+</dd><dt><a href="http://users.iit.demokritos.gr/~petasis/Tcl/tkDND/tkDND_Manual.html#lbAH">SPECIFYING DROP TARGETS</a></dt><dd>
+</dd><dt><a href="http://users.iit.demokritos.gr/~petasis/Tcl/tkDND/tkDND_Manual.html#lbAI">SPECIFYING DRAG SOURCES</a></dt><dd>
+</dd><dt><a href="http://users.iit.demokritos.gr/~petasis/Tcl/tkDND/tkDND_Manual.html#lbAJ">THE DRAG OPERATION</a></dt><dd>
+</dd><dt><a href="http://users.iit.demokritos.gr/~petasis/Tcl/tkDND/tkDND_Manual.html#lbAK">BUGS</a></dt><dd>
+</dd><dt><a href="http://users.iit.demokritos.gr/~petasis/Tcl/tkDND/tkDND_Manual.html#lbAL">KEYWORDS</a></dt><dd>
+</dd></dl>
+<hr>
+This document was created by
+<a href="http://localhost/cgi-bin/man/man2html">man2html</a>,
+using the manual pages.<br>
+Time: 19:27:04 GMT, July 13, 2000
+
+
+</body></html>

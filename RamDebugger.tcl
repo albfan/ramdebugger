@@ -6,8 +6,8 @@ exec wish "$0" "$@"
 package require Tcl 8.5
 package require Tk 8.5
 
-#package require compass_utils
-#mylog::init -view_binding <Control-L> debug
+# package require compass_utils
+# mylog::init -view_binding <Control-L> debug
 
 if { [info exists ::starkit::topdir] } {
     # This is for the starkit in UNIX to start graphically
@@ -61,7 +61,7 @@ namespace eval RamDebugger {
     #    RamDebugger version
     ################################################################################
 
-    set Version 7.8
+    set Version 8.0
 
     ################################################################################
     #    Non GUI commands
@@ -132,6 +132,7 @@ namespace eval RamDebugger {
     variable oldGrab
     variable grabStatus
     variable oldFocus
+    variable big_icons 0
     
     ################################################################################
     # Handlers to save files. Array with names: filename
@@ -163,7 +164,7 @@ namespace eval RamDebugger {
 #   Init proc
 ################################################################################
 
-proc RamDebugger::Init { _readwriteprefs { registerasremote 1 } } {
+proc RamDebugger::Init { _readwriteprefs { registerasremote 1 } { _big_icons 0 } } {
     variable debuggerserver
     variable debuggerserverNum
     variable topdir
@@ -176,13 +177,16 @@ proc RamDebugger::Init { _readwriteprefs { registerasremote 1 } } {
     variable iswince
     variable info_script
     variable usecommR
+    variable big_icons
+    
+    set big_icons $_big_icons
 
     set info_script [info script]
     
     if { ![file isdirectory [file join $topdir_external addons]] } {
-	set text [_ "Error: bad installation. Directory 'addons' could not be found in '%s'" $topdir_external]
-	puts $text
-	catch { tk_messageBox -message $text }
+	set txt [_ "Error: bad installation. Directory 'addons' could not be found in '%s'" $topdir_external]
+	puts $txt
+	catch { tk_messageBox -message $txt }
     }
 
     if { [info commands winfo] ne "" && [winfo screenwidth .] < 350 } {
@@ -3016,6 +3020,7 @@ proc RamDebugger::RecieveFromGdb {} {
 	WarnWin $aa
 	TextOutInsert $aa
 	rstack -handler RamDebugger::UpdateGUIStack
+	ViewOnlyTextOrAll -force_all
 	return
     }
     if { [string match "*No executable specified, use 'target exec'.*" $aa] } {
@@ -3118,8 +3123,8 @@ proc RamDebugger::ViewSecondText {} {
 	bind $text_secondary <Enter> [list RamDebugger::SecondaryTextHelp begin]
 	grid $text_secondary $f.textpane.f.yscroll -sticky nsew
 
-	bind $text_secondary <Alt-Left> "RamDebugger::GotoPreviousNextInWinList prev ; break"
-	bind $text_secondary <Alt-Right> "RamDebugger::GotoPreviousNextInWinList next ; break"
+	bind $text_secondary <$::alt-Left> "RamDebugger::GotoPreviousNextInWinList prev ; break"
+	bind $text_secondary <$::alt-Right> "RamDebugger::GotoPreviousNextInWinList next ; break"
 	bind $text_secondary <Control-Tab> [bind $text <Control-KeyPress-Tab>]
 	bind $text_secondary <Tab> "RamDebugger::Indent ; break"
 
@@ -3224,6 +3229,8 @@ proc RamDebugger::ViewOnlyTextOrAll { args } {
     
     set optional {
 	{ -force_all "" 0 }
+	{ -force_only_text "" 0 }
+	{ -return_state "" 0 }
     }
     set compulsory ""
     parse_args $optional $compulsory $args
@@ -3243,7 +3250,17 @@ proc RamDebugger::ViewOnlyTextOrAll { args } {
 	set fulltext $f.fulltext
     }
 
+    if { $return_state } {
+	if { [lindex [grid info $fulltext] 1] != $f } {
+	    return all
+	} else {
+	    return only_text
+	}
+    }
     if { $force_all && [lindex [grid info $fulltext] 1] != $f } {
+	return
+    }
+    if { $force_only_text && [lindex [grid info $fulltext] 1] == $f } {
 	return
     }
     set delta [expr {[$f.pw cget -sashwidth]+2*[$f.pw cget -sashpad]}]
@@ -3471,25 +3488,43 @@ proc RamDebugger::ExitGUI {} {
 	lappend options(watchedvars) $EvalEntries($i,left)
 	incr i
     }
-    if { ![info exists options(ViewOnlyTextOrAll)] || $options(ViewOnlyTextOrAll) != "OnlyText" } {
-	foreach i [array names options paneweights,*] {
-	    regexp {paneweights,(.*),(.*)} $i {} orient panedw
-	    if { [winfo exists $panedw] } {
-		set idx 0
-		set sum 0
-		set res ""
-		foreach pane [$panedw panes] {
-		    switch $orient {
-		        h { lappend res [winfo width $pane] }
-		        v { lappend res [winfo height $pane] }
-		    }
-		    incr idx
-		    set sum [expr {$sum+[lindex $res end]}]
+#     if { ![info exists options(ViewOnlyTextOrAll)] || $options(ViewOnlyTextOrAll) != "OnlyText" } {
+#         foreach i [array names options paneweights,*] {
+#             regexp {paneweights,(.*),(.*)} $i {} orient panedw
+#             if { [winfo exists $panedw] } {
+#                 set idx 0
+#                 set sum 0
+#                 set res ""
+#                 foreach pane [$panedw panes] {
+#                     switch $orient {
+#                         h { lappend res [winfo width $pane] }
+#                         v { lappend res [winfo height $pane] }
+#                     }
+#                     incr idx
+#                     set sum [expr {$sum+[lindex $res end]}]
+#                 }
+#                 if { $sum > $idx } { set options($i) $res }
+#             }
+#         }
+#     }
+    foreach i [array names options paneweights,*] {
+	regexp {paneweights,(.*),(.*)} $i {} orient panedw
+	if { [winfo exists $panedw] } {
+	    set idx 0
+	    set sum 0
+	    set res ""
+	    foreach pane [$panedw panes] {
+		switch $orient {
+		    h { lappend res [winfo width $pane] }
+		    v { lappend res [winfo height $pane] }
 		}
-		if { $sum > $idx } { set options($i) $res }
+		incr idx
+		set sum [expr {$sum+[lindex $res end]}]
 	    }
+	    if { $sum > $idx } { set options($i) $res }
 	}
     }
+
     set options(currentfile) $currentfile
     set options(currentidx) [$text index insert]
 
@@ -4823,10 +4858,17 @@ proc RamDebugger::ActualizeActivePrograms { menu { force 0 } } {
     WaitState 0
 }
 
-proc RamDebugger::DisconnectStop {} {
+proc RamDebugger::DisconnectStop { args } {
     variable mainframe
     
+    set optional {
+	{ -force "" 0 }
+    }
+    set compulsory ""
+    parse_args $optional $compulsory $args
+
     if { [catch [list RamDebugger::rdebug -disconnect] errstring] } {
+	if { $force } { return }
 	set w [winfo toplevel $mainframe]
 	set menu1 $w.actualizeprogramsmenu
 	tk_popup $menu1 [winfo pointerx .] [winfo pointery .]
@@ -5189,9 +5231,9 @@ proc RamDebugger::ActualizeViewMenu { menu } {
 	$menu del 11 end
     }
 
-    $menu add command -label [_ "Previous"] -acc "Alt-Left" -command \
+    $menu add command -label [_ "Previous"] -acc "$::alt_txt-Left" -command \
 	"RamDebugger::GotoPreviousNextInWinList prev"
-    $menu add command -label [_ "Next"] -acc "Alt-Right" -command \
+    $menu add command -label [_ "Next"] -acc "$::alt_txt-Right" -command \
 	"RamDebugger::GotoPreviousNextInWinList next"
     $menu add command -label [_ "Select"]... -acc "Ctrl-Tab" -command \
 	[list RamDebugger::ChooseViewFile start] -underline 1
@@ -5609,8 +5651,13 @@ proc RamDebugger::TextMotion { X Y x y } {
 	set err [catch { expr { abs($X-$x_old) <= 3 && abs($Y-$y_old) <= 3 } } ret]
 	if { $err || $ret } { return }
     }
-    after cancel $TextMotionAfterId
-    if { [winfo exists $text.help] } { destroy $text.help }
+    if { $TextMotionAfterId ne "" } {
+	after cancel $TextMotionAfterId
+	set TextMotionAfterId ""
+    }
+    if { [winfo exists $text.help] } {
+	destroy $text.help
+    }
     if { $X == -1 || $currentfile == "" || !$IsInStop } { return }
 
     set TextMotionAfterId [after 500 RamDebugger::DisplayVar $X $Y $x $y]
@@ -6036,6 +6083,13 @@ proc RamDebugger::TextOutInsertBlue { data } {
     if { $yend == 1 } { $textOUT yview moveto 1 }
 }
 
+proc RamDebugger::TextCompGet {} {
+    variable textCOMP
+
+    if { ![info exists textCOMP] || ![winfo exists $textCOMP] } { return "" }
+    return [$textCOMP get 1.0 end-1c]
+}
+
 proc RamDebugger::TextCompClear {} {
     variable textCOMP
 
@@ -6343,30 +6397,31 @@ proc RamDebugger::PrevNextCompileError { what } {
 	    prev { set idx end-1c }
 	}
 	$textCOMP tag add sel2 "$idx linestart" "$idx lineend"
-    } else {
-	$textCOMP tag remove sel2 1.0 end
-	set idxini $idx
-	while { [$textCOMP tag range sel2] == "" } {
-	    switch $what {
-		next {
-		    set idx [$textCOMP index $idx+1l]
-		    if { [$textCOMP compare $idx > end-1c] } {
-		        set idx 1.0
-		    }
-		}
-		prev {
-		    set idx [$textCOMP index $idx-1l]
-		    if { [$textCOMP compare $idx < 1.0] } {
-		        set idx end-1c
-		    }
+	set err [catch { $textCOMP index sel2.first} idx]
+	if { $err } { return }
+    }
+    $textCOMP tag remove sel2 1.0 end
+    set idxini $idx
+    while { [$textCOMP tag range sel2] == "" } {
+	switch $what {
+	    next {
+		set idx [$textCOMP index $idx+1l]
+		if { [$textCOMP compare $idx > end-1c] } {
+		    set idx 1.0
 		}
 	    }
-	    set rex {(((?:[a-zA-Z]:/)?[-/\w.]+):([0-9]+))|(((?:[a-zA-Z]:/)?[-/\w. ]+):([0-9]+))}
-	    if { [regexp $rex [$textCOMP get "$idx linestart" "$idx lineend"]] } {
-		$textCOMP tag add sel2 "$idx linestart" "$idx lineend"
+	    prev {
+		set idx [$textCOMP index $idx-1l]
+		if { [$textCOMP compare $idx < 1.0] } {
+		    set idx end-1c
+		}
 	    }
-	    if { $idx == $idxini } { break }
 	}
+	set rex {(((?:[a-zA-Z]:/)?[-/\w.]+):([0-9]+))|(((?:[a-zA-Z]:/)?[-/\w. ]+):([0-9]+))}
+	if { [regexp $rex [$textCOMP get "$idx linestart" "$idx lineend"]] } {
+	    $textCOMP tag add sel2 "$idx linestart" "$idx lineend"
+	}
+	if { $idx == $idxini } { break }
     }
     $textCOMP see $idx
     StackDouble1 $textCOMP $idx
@@ -6377,10 +6432,15 @@ proc RamDebugger::StackDouble1 { textstack idx } {
     variable text
     variable currentfile
     variable options
+    variable WindowFilesList
 
     set idx [$textstack index $idx]
     set data [$textstack get "$idx linestart" "$idx lineend"]
-    set rex {^\#([0-9]+)}
+    
+    set patternList [list {((?:[a-zA-Z]:/)?[-/\w.]+):([0-9]+)} \
+	    {((?:[a-zA-Z]:/)?[-/\w. ]+):([0-9]+)}]
+    #set rex {^\#([0-9]+)}
+    set rex [join $patternList "|"]
     while { ![regexp $rex $data] && [$textstack compare "$idx linestart" > 1.0] } {
 	set prevline [$textstack get "$idx -1 line linestart" "$idx -1 line lineend"]
 	set data "$prevline $data"
@@ -6395,8 +6455,7 @@ proc RamDebugger::StackDouble1 { textstack idx } {
 	    break
 	}
     }
-    foreach pattern [list {((?:[a-zA-Z]:/)?[-/\w.]+):([0-9]+)} \
-		         {((?:[a-zA-Z]:/)?[-/\w. ]+):([0-9]+)}] {
+    foreach pattern $patternList {
 
 	if { [regexp $pattern $data {} file line] } {
 
@@ -6411,11 +6470,25 @@ proc RamDebugger::StackDouble1 { textstack idx } {
 		    set file $fullfile
 		}
 	    }
-	    if { ![file exists $file] && [file exists [file join $options(defaultdir) \
-		                                           $file]] } {
+	    if { ![file exists $file] && [file exists [file join $options(defaultdir) $file]] } {
 		set file [file join $options(defaultdir) $file]
 	    }
-
+	    if { ![file exists $file] } {
+		foreach fileF $WindowFilesList {
+		    if { [file tail $fileF] eq $file } {
+		        set file $fileF
+		        break
+		    }
+		}
+	    }
+	    if { ![file exists $file] } {
+		foreach fileF $options(RecentFiles) {
+		    if { [file tail $fileF] eq $file } {
+		        set file $fileF
+		        break
+		    }
+		}
+	    }
 	    if { [file exists $file] } {
 		set file [filenormalize $file]
 		if { $file != $currentfile } {
@@ -7246,18 +7319,31 @@ proc RamDebugger::SearchBraces { x y } {
 proc RamDebugger::CenterDisplay {} {
     variable text
     variable text_secondary
-
+    variable last_center_display
+    
     if { [info exists text_secondary] && [focus -lastfor $text] eq $text_secondary } {
 	set mytext $text_secondary
-    } else { set mytext $text }
-
+    } else {
+	set mytext $text
+    }
     scan [$mytext index insert] "%d" line
     set NumLines [scan [$mytext index end-1c] %d]
 
-    foreach "f1 f2" [$mytext yview] break
-    set ys [expr $line/double($NumLines)-($f2-$f1)/2.0]
+    set time [clock milliseconds]
+    set fac 0.5
+    lassign [$mytext yview] f1 f2
+    set ys [expr $line/double($NumLines)-$fac*($f2-$f1)]
+
+    if { [info exists last_center_display] } {
+	lassign $last_center_display last_ys last_time
+	if { $time  < $last_time+1000 && round($ys*1000) == round($last_ys*1000) } {
+	    set fac 0.25
+	}
+    }
+    set ys [expr $line/double($NumLines)-$fac*($f2-$f1)]
     if { $ys < 0 } { set ys 0 }
     $mytext yview moveto $ys
+    set last_center_display [list $ys $time]
 }
 
 proc RamDebugger::CommentSelection { what } {
@@ -7419,12 +7505,8 @@ proc RamDebugger::IndentLine { line { pos -1 } } {
 }
 
 proc RamDebugger::UpdateLineNum { command args } {
-    variable LineNum
     variable text
-    variable filesmtime
-    variable currentfile
     variable currentfileIsModified
-    variable CheckExternalFileModification
 
     RamDebugger::CVS::SetUserActivity
 
@@ -7435,6 +7517,27 @@ proc RamDebugger::UpdateLineNum { command args } {
 	wm title [winfo toplevel $text] [wm title [winfo toplevel $text]]*
 	set currentfileIsModified 1
     }
+    UpdateLineNumDo
+}
+
+proc RamDebugger::SetIsModified {} {
+    variable text
+    variable currentfileIsModified
+
+    if { !$currentfileIsModified } {
+	wm title [winfo toplevel $text] [wm title [winfo toplevel $text]]*
+	set currentfileIsModified 1
+    }
+    UpdateLineNumDo
+}
+
+proc RamDebugger::UpdateLineNumDo {} {
+    variable LineNum
+    variable text
+    variable filesmtime
+    variable currentfile
+    variable currentfileIsModified
+    variable CheckExternalFileModification
 
     set idx [$text index insert]
     set line ""
@@ -7857,6 +7960,30 @@ proc RamDebugger::MarkerContextualSubmenuDo { line what } {
     }
 }
 
+proc RamDebugger::set_breakpoint { x y } {
+    variable text
+
+    set line [scan [$text index @0,$y] %d]
+    if { [rinfo $line] != "" } {
+	set hasbreak 1
+    } else { set hasbreak 0 }
+
+    if { $hasbreak } {
+	set hasbreak 0
+	foreach num [rinfo $line] {
+	    rdel $num
+	}
+    } else {
+	set hasbreak 1
+	if { [catch [list rbreak $line] errorstring] } {
+	    WaitState 0
+	    WarnWin $errorstring
+	    return
+	}
+    }
+    UpdateArrowAndBreak $line $hasbreak ""
+}
+
 proc RamDebugger::MarkerContextualSubmenu { w x y X Y } {
     variable text
     variable marker
@@ -8043,13 +8170,20 @@ proc RamDebugger::ShowButtonsToolBar {} {
 
 proc RamDebugger::ToogleToolbarsStatusbar {} {
     variable options
+    variable text
+
+    set w [winfo toplevel $text]
 
     if {$options(showbuttonstoolbar) } {
 	set options(showbuttonstoolbar) 0
 	set options(showstatusbar) 0
+	$w configure -menu ""
+	grid remove [winfo parent $text].xscroll
     } else {
 	set options(showbuttonstoolbar) 1
 	set options(showstatusbar) 1
+	$w configure -menu $w.menubar
+	grid [winfo parent $text].xscroll
     }
     ShowStatusBar
     ShowButtonsToolBar
@@ -8074,6 +8208,47 @@ proc RamDebugger::Splash {} {
     grid $w.l2 -padx 5 -pady 5
     grid columnconfigure $w 0 -weight 1
     update
+}
+
+proc RamDebugger::move_toolbar { what button toolbar x } {
+    variable move_toolbar
+
+    switch $what {
+	BP1 {
+	    set px [dict get [place info $toolbar] -x]
+	    set move_toolbar [list 0 $x $px]
+	}
+	BM1 {
+	    if { ![info exists move_toolbar] } { return }
+	    lassign $move_toolbar started x_old px_old
+	    if { !$started } {
+		if { abs($x-$x_old)<=5 } { return }
+		set move_toolbar [list 1 $x_old $px_old]
+	    }
+	    catch { $button state !pressed }
+
+	    set px [expr {$px_old+$x-$x_old}]
+	    set widthT [winfo width $toolbar]
+	    set widthP [winfo width [winfo parent $toolbar]]
+	    if { $widthT < $widthP} { return }
+	    if { $px+$widthT < $widthP } {
+		set px [expr {$widthP-$widthT}]
+	    } elseif { $px > 0 } {
+		set px 0
+	    }
+	    place $toolbar -x $px
+	}
+	left {
+	    place $toolbar -x 0
+	}
+	right {
+	    set widthT [winfo width $toolbar]
+	    set widthP [winfo width [winfo parent $toolbar]]
+	    if { $widthT < $widthP} { return }
+	    set px [expr {$widthP-$widthT}]
+	    place $toolbar -x $px
+	}
+    }
 }
 
 proc RamDebugger::EndSplash {} {
@@ -8115,6 +8290,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     variable pane2
     variable pane3
     variable iswince
+    variable big_icons
 
     if { !$iswince } {
 	proc ::bgerror { errstring } {
@@ -8137,7 +8313,8 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 
     #require BWidgetR, a BWidget with some modifications, marked with RAMSAN
     #inside the GiD scripts BWidget is really BWidgetR, to avoid duplicate it
-    if { [catch {package require BWidgetR}] } { 
+    if { [catch {package require BWidgetR}] } {
+	puts "could not load package BWidgetR. Loading package BWidget. Some problems with accelerators may appear, specially on MacOSX"
 	package require BWidget
     }
    
@@ -8203,7 +8380,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     if { $iswince } { pocketpc::init }
 
     if { $topleveluse == "" } {
-	toplevel $w
+	toplevel $w -class RamDebugger
     } else {
 	toplevel $w -use $topleveluse
 	update idletasks ;# doesn't work if this is removed; does not work with it either
@@ -8283,6 +8460,8 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		            -command "RamDebugger::CommentSelection toggle"] \
 		    [list command &[_ "Uncomment region"] {} [_ "Un-comment selected region"] "Shift F6" \
 		        -command "RamDebugger::CommentSelection off"] \
+		    [list command &[_ "Insert braces/brackets"] {} [_ "Inserts  pairs of brackets, braces or quotes"] "Ctrl less" \
+		        -command [list RamDebugger::insert_brackets_braces]] \
 		    separator \
 		    [list command [_ "Center display"] {} [_ "Center text display"] "Ctrl l" \
 		        -command "RamDebugger::CenterDisplay"] \
@@ -8316,7 +8495,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		[list command [_ "Isearch backward"] {} [_ "Incrementally search backward"] "Ctrl r" \
 		-command "RamDebugger::Search $w ibackward"] \
 		[list command &[_ "Replace"]... {} [_ "Replace text in source file"] "" \
-		-command "RamDebugger::SearchWindow 1"] \
+		-command "RamDebugger::SearchWindow -replace 1"] \
 		[list command &[_ "Goto line"] {} [_ "Go to the given line"] "Ctrl g" \
 		-command "RamDebugger::GotoLine"] \
 		separator \
@@ -8353,7 +8532,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		 [_ "View/hide buttons toolbar"] "" \
 		-variable RamDebugger::options(showbuttonstoolbar) -command RamDebugger::ShowButtonsToolBar] \
 		[list command &[_ "Toggle toobars and statusbar"] {} \
-		[_ "Toggle the view of the toolbar and the statusbar"] "Ctrl 6" \
+		[_ "Toggle the view of the toolbar and the statusbar"] "" \
 		-command "RamDebugger::ToogleToolbarsStatusbar"] \
 		separator \
 		] \
@@ -8368,7 +8547,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		-command "RamDebugger::ContNextGUI rstep"] \
 		[list command [_ "Break"] debugentry [_ "Break execution as fast as possible"] "" \
 		-command "RamDebugger::ContNextGUI rnextfull"] \
-		[list command [_ "Return"] debugentry [_ "Makes the code return from proc without finishing execution"] "F12" \
+		[list command [_ "Return"] debugentry [_ "Makes the code return from proc without finishing execution"] "" \
 		-command "RamDebugger::ContNextGUI rnextreturn"] \
 		[list command [_ "Stop debugging"] debugentry [_ "Stop current debugging"] "Shift F5" \
 		     -command RamDebugger::DisconnectStop] \
@@ -8379,7 +8558,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		-command "RamDebugger::ContNextGUI rcontoutloop"] \
 		separator \
 		[list command &[_ "Expressions"]... debugentry \
-		    [_ "Open a window to visualize expresions or variables"] "" \
+		    [_ "Open a window to visualize expresions or variables"] "F12" \
 		-command "RamDebugger::DisplayVarWindow $w"] \
 		[list command [_ "Breakpoints"]... debugentry \
 		    [_ "Open a window to visualize the breakpoints list"] "Alt F9" \
@@ -8492,7 +8671,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		[list command &[_ "Count LOC"] {} [_ "Count number of lines of code"] "" \
 		-command "RamDebugger::CountLOCInFiles $w"] \
 		separator \
-		[list command &[_ "Windows hierarchy"] {} [_ "View windows hierarchy"] "Ctrl 1" \
+		[list command &[_ "Windows hierarchy"] {} [_ "View windows hierarchy"] "" \
 		-command "RamDebugger::DisplayWindowsHierarchy"] \
 		] \
 		&[_ "Help"] all help 0 [list \
@@ -8571,7 +8750,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 
     bind $label <1> RamDebugger::GotoLine
     set label [$mainframe addindicator -textvariable RamDebugger::remoteserver -width 15 \
-		   -anchor e -padx 3]
+		   -anchor e -padx 3 -anchor w]
     set menu [$mainframe getmenu activeprograms]
     set menu1 [menu $w.actualizeprogramsmenu -tearoff 0]
     $menu1 configure -postcommand [list RamDebugger::ActualizeActivePrograms $menu1 1]
@@ -8587,6 +8766,9 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     set menu [$mainframe getmenu activeconfiguration]
     catch { $menu conf -postcommand "$menu conf -selectcolor black" }
 
+    
+    place [ttk::sizegrip $label.sg] -relx 1 -rely 1 -anchor se
+    
     set f [$mainframe getframe]
 
     ################################################################################
@@ -8594,7 +8776,14 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     ################################################################################
 
     if { !$iswince } {
-	set toolbar [$mainframe addtoolbar]
+	set t [$mainframe addtoolbar]
+	set toolbar [ttk::frame $t.toolbar]
+	place $toolbar -anchor nw -relx 0 -y 0
+	bind $toolbar <Configure> { [winfo parent %W] configure -height [expr {[winfo height %W]+4}] }
+	bind $toolbar <ButtonPress-1> [list RamDebugger::move_toolbar BP1 %W $toolbar %X]
+	bind $toolbar <B1-Motion> [list RamDebugger::move_toolbar BM1 %W $toolbar %X]
+	bind $toolbar <Alt-Left> [list RamDebugger::move_toolbar left %W $toolbar %X]
+	bind $toolbar <Alt-Right> [list RamDebugger::move_toolbar right %W $toolbar %X]
     } else {
 	$mainframe addtoolbar
 	set toolbar [ttk::frame $f.toolbar]
@@ -8622,7 +8811,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		]
 	set tktablet_ok 0
 	if { $tktablet_ok } {
-	    lappend data "" [_ "Activate TabletPC drag"] ""
+	    lappend data "" [_ "Activate mouse drag for touchscreens"] ""
 	}
 	lappend data colorize-16 [_ "Reinstrument and recolorize code"] "RamDebugger::ReinstrumentCurrentFile"
     } else {
@@ -8637,6 +8826,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		editpaste22 [_ "Paste text from clipboard"] \
 		    [list menubutton_button "RamDebugger::CutCopyPasteText paste" "RamDebugger::CutCopyPasteText paste_stack %W"] \
 		find-22 [_ "Search text in source file"] "RamDebugger::SearchWindow" \
+		colorize-22 [_ "Reinstrument and recolorize code"] "RamDebugger::ReinstrumentCurrentFile" \
 		- - - \
 		player_end-22 [_ "begin/continue execution"] "RamDebugger::ContNextGUI rcont" \
 		player_stop-22 [_ "Set/unset &breakpoint"] "RamDebugger::SetGUIBreakpoint" \
@@ -8649,12 +8839,19 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		- - - \
 		]
 	if { $tktablet_ok } {
-	    lappend data "" [_ "Activate TabletPC drag"] ""
+	    lappend data "" [_ "Activate mouse drag for touchscreens"] ""
 	}
-	lappend data colorize-22 [_ "Reinstrument and recolorize code"] "RamDebugger::ReinstrumentCurrentFile"
     }
     set idx 0
     foreach "img help cmd" $data {
+	if { $big_icons && $img ne "-" && $img ne "" } {
+	    package require compass_utils::img
+	    set img0 $img
+	    set img [image create photo -width 32 -height 32]
+	    $img copy $img0 -to 8 8
+	    #cu::img::zoom $img $img0 Lanczos3
+	    image delete $img0
+	}        
 	if { [string match "menubutton_button *" $cmd] } {
 	    cu::menubutton_button $toolbar.bbox$idx -image $img -style Toolbutton \
 		-command [lindex $cmd 1] -menu $toolbar.bbox$idx.m \
@@ -8670,11 +8867,12 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 	    ttk::separator $toolbar.bbox$idx -orient vertical
 	}
 	grid $toolbar.bbox$idx -row 0 -column $idx -sticky ns
+	bindtags $toolbar.bbox$idx [linsert [bindtags $toolbar.bbox$idx] 2 $toolbar]
 	incr idx
     }
     grid columnconfigure $toolbar $idx -weight 1
     if { $tktablet_ok } {
-	set tabletPC_drag_button $toolbar.bbox[expr {$idx-2}]
+	set tabletPC_drag_button $toolbar.bbox[expr {$idx-1}]
     }
     ################################################################################
     # the horizontal 3 levels pane
@@ -8751,11 +8949,15 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 	event add <<Contextual>> <App>
 	set ::control Control
 	set ::control_txt Ctrl
+	set ::alt Alt
+	set ::alt_txt Alt
     } elseif { [tk windowingsystem] eq "aqua" } {
 	event add <<ContextualPress>> <ButtonPress-2>
 	event add <<Contextual>> <ButtonRelease-2>
 	set ::control Command
 	set ::control_txt Command
+	set ::alt Control
+	set ::alt_txt Ctrl
 	
 	foreach ev [bind Text] {
 	    if { [regsub {Control} $ev {Command} evC] } {
@@ -8767,6 +8969,8 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 	event add <<Contextual>> <ButtonRelease-3>
 	set ::control Control
 	set ::control_txt Ctrl
+	set ::alt Alt
+	set ::alt_txt Alt
     }
     bind $marker <<Contextual>> [list RamDebugger::MarkerContextualSubmenu %W %x %y %X %Y]
     
@@ -8782,7 +8986,15 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     scrollbar $fulltext.yscroll -orient vertical -grid 2 -command \
 	[list RamDebugger::ScrollTextAndCanvas $fulltext.text $fulltext.can]
     scrollbar $fulltext.xscroll -orient horizontal -grid "0 2" -command "$fulltext.text xview"
+    
+    if { $big_icons } {
+	$fulltext.yscroll configure -width 22
+    }
 
+#    grid $fulltext.can $fulltext.text $fulltext.yscroll -sticky wns
+    
+#    grid $fulltext.can -bg grey90 -grid "0 wns"
+    
     ApplyColorPrefs $text
     
     if { !$iswince } {
@@ -8853,7 +9065,13 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 		$f.m add checkbutton -label [_ "Auto raise stack trace"] -variable \
 		    RamDebugger::options(auto_raise_stack_trace)
 	    }
-	    compile { $f.m add command -label [_ "Clear"] -command RamDebugger::TextCompClear }
+	    compile {
+		set xt [expr {$x-[winfo rootx $f]}]
+		set yt [expr {$y-[winfo rooty $f]}]
+		$f.m add command -label [_ "Activate stack level"] -command \
+		    [list RamDebugger::StackDouble1 $f @$xt,$yt]
+		$f.m add command -label [_ "Clear"] -command RamDebugger::TextCompClear
+	    }
 	}
 	tk_popup $f.m $x $y
     }
@@ -9056,23 +9274,33 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     # in linux, F10 makes some stupid thing
     bind all <F10> ""
 
-    bind $text <Alt-Left> "RamDebugger::GotoPreviousNextInWinList prev ; break"
+    bind $text <$::alt-Left> "RamDebugger::GotoPreviousNextInWinList prev ; break"
     bind $text <Control-Tab> "[list RamDebugger::ChooseViewFile start] ; break"
 
 #     bind $text <Control-Tab> "RamDebugger::GotoPreviousNextInWinList prev ; break"
 #     bind $text <Control-Shift-Tab> "RamDebugger::GotoPreviousNextInWinList next ; break"
-    bind $text <Alt-Right> "RamDebugger::GotoPreviousNextInWinList next ; break"
+    bind $text <$::alt-Right> "RamDebugger::GotoPreviousNextInWinList next ; break"
     bind $text <Tab> "RamDebugger::Indent ; break"
     bind $text <Return> "[bind Text <Return>] ; RamDebugger::IndentLine {} ; break"
 
     set c [list $text mark set insert "insert-1c"]
-    bind $text <$::control-Key-2> "[list tk::TextInsert $text {""}];$c"
+    #bind $text <$::control-Key-2> "[list tk::TextInsert $text {""}];$c"
+
+    bind $text <$::control-Key-1> [list RamDebugger::PositionsStack save]
+    bind $text <$::control-Key-2> [list RamDebugger::PositionsStack go]
+
+    bind $text <$::control-Key-6> "RamDebugger::CommentSelection toggle"
     bind $text <$::control-Key-9> "[list tk::TextInsert $text {()}];$c"
     bind $text <$::control-plus> "[list tk::TextInsert $text {[]}];$c"
     bind $text <$::control-Shift-plus> [list RamDebugger::insert_translation_cmd]
     bind $text <$::control-asterisk> [list RamDebugger::insert_translation_cmd]
     bind $text <$::control-ccedilla> "[list tk::TextInsert $text {{}}];$c"
+    
+    cu::text_entry_bindings $text
 
+    bind $text <$::control-A> [list tk::TextSetCursor %W 1.0]
+    bind $text <$::control-E> [list tk::TextSetCursor %W {end - 1 indices}]
+    
     set cmd {
 	if { "%A" eq "\}" } {
 	    %OLD_CMD%
@@ -9085,14 +9313,17 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     bind $text <$::control-x> "RamDebugger::CutCopyPasteText cut   ; break"
     bind $text <$::control-c> "RamDebugger::CutCopyPasteText copy  ; break"
     bind $text <$::control-v> "RamDebugger::CutCopyPasteText paste ; break"
-    bind $text <Alt-BackSpace> [list RamDebugger::DeletePreviousWord]
+    bind $text <$::alt-BackSpace> [list RamDebugger::DeletePreviousWord]
+    bind $text <$::control-BackSpace> [list RamDebugger::DeletePreviousWord]
     bind [winfo toplevel $text] <$::control-v> ""
     bind [winfo toplevel $text] <Tab> ""
-    bind $text <FocusIn> [list RamDebugger::SearchWindow_autoclose]
+    bind $text <FocusIn> [list RamDebugger::SearchWindow -auto_close 1]
     bind $text <$::control-I> [list RamDebugger::Search $w iforward_get_insert]
+    bind $text <Escape><i> "[list RamDebugger::Search $w iforward_get_insert] ;break"
+    bind $w <$::control-slash> [list RamDebugger::CVS::update_recursive . current] ;# control-shift-7
 
     set menu [$mainframe getmenu edit]
-    $menu entryconfigure [_ "Isearch forward selected"] -acc "Ctrl+Shift-I"
+    $menu entryconfigure [_ "Isearch forward selected"] -acc "Ctrl+Shift+I"
 
 
     bind $w <Shift-Key-F5> "RamDebugger::DisconnectStop ;break"
@@ -9100,6 +9331,9 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     foreach i [bind $w] {
 	bind $text $i "[bind $w $i] ;break"
     }
+
+    bind $marker <Double-1> [list RamDebugger::set_breakpoint %x %y]
+
     bind $marker <1> {
 	catch { destroy [winfo toplevel %W].search }
 	tk::TextButton1 $RamDebugger::text 0 %y
@@ -9144,7 +9378,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
 	tk::CancelRepeat
     }
 
-    bind all <$::control-Key-1> "RamDebugger::DisplayWindowsHierarchy ;break"
+    #bind all <$::control-Key-1> "RamDebugger::DisplayWindowsHierarchy ;break"
 
     ApplyDropBinding $w [list RamDebugger::DropBindingDone %D]
 
@@ -9248,7 +9482,7 @@ proc RamDebugger::InitGUI { { w .gui } { geometry "" } { ViewOnlyTextOrAll "" } 
     }
     if { [info exists options(SearchToolbar)] && [lindex $options(SearchToolbar) 0] && \
 	(![info exists options(SearchToolbar_autoclose)] || !$options(SearchToolbar_autoclose)) } {
-	SearchWindow [lindex $options(SearchToolbar) 1]
+	SearchWindow -replace [lindex $options(SearchToolbar) 1]
     }
     ShowStatusBar
     ShowButtonsToolBar
@@ -9512,9 +9746,18 @@ if { ![info exists SkipRamDebuggerInit] } {
 	set iposm1 [expr {$ipos+1}]
 	set topleveluse [lindex $argv $iposm1]
 	set argv [lreplace $argv $ipos $iposm1]
-    } else { set topleveluse "" }
+    } else {
+	set topleveluse ""
+    }
+    if { [set ipos [lsearch $argv "-big_icons"]] != -1 } {
+	set iposm1 [expr {$ipos+1}]
+	set big_icons [lindex $argv $iposm1]
+	set argv [lreplace $argv $ipos $iposm1]
+    } else {
+	set big_icons 0
+    }
 
-    RamDebugger::Init $readwriteprefs $registerasremote
+    RamDebugger::Init $readwriteprefs $registerasremote $big_icons
     
     ################################################################################
     #     Init the GUI part

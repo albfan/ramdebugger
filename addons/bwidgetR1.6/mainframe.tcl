@@ -657,6 +657,18 @@ proc MainFrame::_parse_name { menuname } {
 #        {accel event}        a list containing the accelerator string and the event
 
 proc MainFrame::_parse_accelerator { desc } {
+    
+    if { $::tcl_platform(platform) eq "windows" } {
+	set control Control
+	set control_txt Ctrl
+    } elseif { [tk windowingsystem] eq "aqua" } {
+	set control Command
+	set control_txt Command
+    } else {
+	set control Control
+	set control_txt Ctrl
+    }
+    
     if { [llength $desc] == 1 } {
 	set seq None
 	set key [string tolower [lindex $desc 0]]
@@ -682,8 +694,8 @@ proc MainFrame::_parse_accelerator { desc } {
 	    set event "<Key-$key>"
 	}
 	Ctrl {
-	    set accel "Ctrl+[string toupper $key]"
-	    set event "<Control-Key-$key>"
+	    set accel "$control_txt+[string toupper $key]"
+	    set event "<$control-Key-$key>"
 	}
 	Print {
 	    # RAMSAN
@@ -697,16 +709,16 @@ proc MainFrame::_parse_accelerator { desc } {
 	}
 	ShiftCtrl {
 	    # RAMSAN
-	    set accel "Shift+Ctrl+[string toupper $key]"
-	    set event "<Shift-Control-Key-[string toupper $key]>"
+	    set accel "Shift+$control_txt+[string toupper $key]"
+	    set event "<Shift-$control-Key-[string toupper $key]>"
 	}
 	Alt {
 	    set accel "Alt+[string toupper $key]"
 	    set event "<Alt-Key-$key>"
 	}
 	CtrlAlt {
-	    set accel "Ctrl+Alt+[string toupper $key]"
-	    set event "<Control-Alt-Key-$key>"
+	    set accel "$control_txt+Alt+[string toupper $key]"
+	    set event "<$control-Alt-Key-$key>"
 	}
 	default {
 	    return -code error "invalid accelerator code $seq"

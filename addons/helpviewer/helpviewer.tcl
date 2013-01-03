@@ -5,7 +5,7 @@
 lappend auto_path [file dirname [file dirname [info script]]]
 
 ################################################################################
-#  This software is copyrighted by Ramon Ribó (RAMSAN) ramsan@cimne.upc.es.
+#  This software is copyrighted by Ramon Ribo (RAMSAN) ramsan@cimne.upc.es.
 #  (http://gid.cimne.upc.es/ramsan) The following terms apply to all files
 #  associated with the software unless explicitly disclaimed in individual files.
 
@@ -40,7 +40,9 @@ lappend auto_path [file dirname [file dirname [info script]]]
 #package require -exact Tkhtml 2.0
 package require Tkhtml;#de momento que funcione si tiene solo la version 2
 
-package require BWidget
+if { [catch {package require BWidgetR}] } {
+    package require BWidget
+}
 package require supergrid
 package require dialogwin
 package require fileutil
@@ -282,7 +284,7 @@ proc HelpViewer::CreateFrame { frame { hscroll 1 } {vscroll 1 }  } {
     -scriptcommand ScriptCmd \
     -appletcommand AppletCmd \
     -underlinehyperlinks 0 \
-    -bg white -tablerelief raised \
+    -background white -tablerelief raised \
     -resolvercommand ResolveUri \
     -exportselection 1 \
     -takefocus 1
@@ -583,21 +585,26 @@ proc HelpViewer::LoadRef { w new { enterinhistory 1 } } {
 	SearchManHelpFor $w $word $sec
 	return
     } elseif { $new != "" && [regexp {[a-zA-Z]+[a-zA-Z]:.*} $new] } {
-	regexp {[^/\\]*:.*} $new url
-	if { [regexp {:/[^/]} $url] } {
-	    regsub {:/} $url {://} url
+	regexp {\w{2,}:.*} $new url
+	if { [regexp {\w{2,}:/[^/]} $url] } {
+	    regsub {\w{2,}:/} $url {&/} url
 	}
-	if { $tcl_platform(platform) != "windows"} {
-	    set comm [auto_execok konqueror]
-	    if { $comm == "" } {
-		set comm [auto_execok netscape]
-	    }
-	    if { $comm == "" } {
+	if { $tcl_platform(platform) ne "windows"} {
+	    set err [catch { exec xdg-open $url } ret]
+	    if { $err } {
 		tk_messageBox -icon warning -message \
-		"Check url: $url in your web browser." -type ok
-	    } else {
-		exec $comm $url &
+		    "Check url: $url in your web browser ($ret)" -type ok
 	    }
+#             set comm [auto_execok konqueror]
+#             if { $comm == "" } {
+#                 set comm [auto_execok netscape]
+#             }
+#             if { $comm == "" } {
+#                 tk_messageBox -icon warning -message \
+#                 "Check url: $url in your web browser." -type ok
+#             } else {
+#                 exec $comm $url &
+#             }
 	} else {
 	    if { [info commands freewrap::shell_getCmd_imp] ne "" } {
 		set comm [freewrap::shell_getCmd_imp .html open]
@@ -1293,7 +1300,7 @@ proc HelpViewer::HelpWindow { file { base .help} { geom "" } { title "" } { tocf
 	if { ![winfo exists $base] } return ;# windows disabled || usemorewindows == 0
     } else {
 	toplevel $base
-	if { $::tcl_platform(platform) == "windows" } {	   
+	if { $::tcl_platform(platform) == "windows" } {           
 	    wm attributes $base -toolwindow 1
 	}
 	wm title $base $title
@@ -1486,8 +1493,8 @@ proc HelpViewer::HelpWindow { file { base .help} { geom "" } { title "" } { tocf
     set pane1 [frame $pw.pane1]
     $pw add $pane1 -width $weight1
 
-    $pane1 configure -bg \#add8d8
-    NoteBook $pane1.nb -homogeneous 1 -bd 1 -internalborderwidth 3 -bg \#add8d8 \
+    $pane1 configure -background \#add8d8
+    NoteBook $pane1.nb -homogeneous 1 -bd 1 -internalborderwidth 3 -background \#add8d8 \
 	    -activebackground \#add8d8  -disabledforeground \#add8d8 -grid "0 py3"
 
     set notebook $pane1.nb
@@ -1495,9 +1502,9 @@ proc HelpViewer::HelpWindow { file { base .help} { geom "" } { title "" } { tocf
     set f1 [$pane1.nb insert end tree -text [_ "Contents"] -image appbook16]
 
     set sw [ScrolledWindow $f1.lf -relief sunken -borderwidth 1 -grid "0"]
-    set tree [Tree $sw.tree -bg white\
+    set tree [Tree $sw.tree -background white\
 	    -relief flat -borderwidth 2 -width 15 -highlightthickness 0\
-	    -redraw 1 -deltay 18 -bg #add8d8\
+	    -redraw 1 -deltay 18 -background #add8d8\
 	-opencmd   "HelpViewer::moddir 1 $sw.tree" \
 	-closecmd  "HelpViewer::moddir 0 $sw.tree" \
 	-width 5 \
@@ -1516,7 +1523,7 @@ proc HelpViewer::HelpWindow { file { base .help} { geom "" } { title "" } { tocf
 
     set f2 [$pane1.nb insert end search -text [_ "Search"] -image viewmag16]
 
-    label $f2.l1 -text "S:" -bg #add8d8 -grid 0
+    label $f2.l1 -text "S:" -background #add8d8 -grid 0
     ComboBox $f2.e1 -textvariable HelpViewer::searchstring -entrybg #add8d8 \
 	-bd 1 -grid "1 py3"
 
@@ -1525,13 +1532,13 @@ proc HelpViewer::HelpWindow { file { base .help} { geom "" } { title "" } { tocf
 
 
     ScrolledWindow $f2.lf1 -relief sunken -borderwidth 1 -grid "0 2"
-    set searchlistbox1 [listbox $f2.lf1.lb -listvar HelpViewer::SearchFound -bg white \
+    set searchlistbox1 [listbox $f2.lf1.lb -listvar HelpViewer::SearchFound -background white \
 	    -exportselection 0]
     $f2.lf1 setwidget $f2.lf1.lb
 
     ScrolledWindow $f2.lf2 -relief sunken -borderwidth 1 -grid "0 2"
     set searchlistbox2 [listbox $f2.lf2.lb -listvar HelpViewer::SearchFound2 -grid "0 2" \
-	    -bg white -exportselection 0]
+	    -background white -exportselection 0]
     $f2.lf2 setwidget $f2.lf2.lb
 
     bind $f2.lf1.lb <FocusIn> "if { \[%W curselection] == {} } { %W selection set 0 }"
@@ -1564,7 +1571,7 @@ proc HelpViewer::HelpWindow { file { base .help} { geom "" } { title "" } { tocf
 		-scriptcommand HelpViewer::ScriptCmd \
 		-appletcommand HelpViewer::AppletCmd \
 		-underlinehyperlinks 0 \
-		-bg white -tablerelief raised \
+		-background white -tablerelief raised \
 		-resolvercommand HelpViewer::ResolveUri \
 		-exportselection 1 \
 		-takefocus 1 \
@@ -1586,16 +1593,16 @@ proc HelpViewer::HelpWindow { file { base .help} { geom "" } { title "" } { tocf
 	$html configure -imagecmd [list HelpViewer::ImageCmd $sw.h]
     }
 
-    frame $base.buts -bg grey93 -grid "0 ew"
+    frame $base.buts -background grey93 -grid "0 ew"
 
-    button $base.buts.b1 -image imatge_fletxa_e -bg grey93 -relief flat \
+    button $base.buts.b1 -image imatge_fletxa_e -background grey93 -relief flat \
 	    -command "History::GoBackward $html" -height 50 -grid "0 e" \
 	    -highlightthickness 0
-    button $base.buts.b2 -image imatge_fletxa_d -bg grey93 -relief flat \
+    button $base.buts.b2 -image imatge_fletxa_d -background grey93 -relief flat \
 	    -command "History::GoForward $html" -height 50 -grid "1 w" \
 	    -highlightthickness 0
 
-    menubutton $base.buts.b3 -text [_ "More"]... -bg grey93 -fg \#add8d8 -relief flat \
+    menubutton $base.buts.b3 -text [_ "More"]... -background grey93 -foreground \#add8d8 -relief flat \
 	    -menu $base.buts.b3.m -grid "2 e" -activebackground grey93 -width 6
 
     menu $base.buts.b3.m
@@ -1620,7 +1627,7 @@ proc HelpViewer::HelpWindow { file { base .help} { geom "" } { title "" } { tocf
 	bind $html <ButtonRelease-3> [list tk_popup $base.buts.b3.m %X %Y]
     }
 
-#     menubutton $base.buts.b3 -image imatge_save -bg grey93 -relief flat \
+#     menubutton $base.buts.b3 -image imatge_save -background grey93 -relief flat \
 #             -menu $base.buts.b3.m -height 50 -grid "2 e" -activebackground grey93
 
 #     menu $base.buts.b3.m
@@ -1634,23 +1641,25 @@ proc HelpViewer::HelpWindow { file { base .help} { geom "" } { title "" } { tocf
 #             "HelpViewer::HTMLToClipBoardCSV $base"
 
     if { $HelpPrefs::RunningAlone } {
-	button $base.buts.b4 -image imatge_quit -bg grey93 -relief flat \
+	button $base.buts.b4 -image imatge_quit -background grey93 -relief flat \
 		-command "exit" -height 50 -grid "3 e" \
 	    -highlightthickness 0
     } else {
-	button $base.buts.b4 -image imatge_quit -bg grey93 -relief flat \
+	button $base.buts.b4 -image imatge_quit -background grey93 -relief flat \
 		-command "destroy $base" -height 50 -grid "3 e" \
 	    -highlightthickness 0
     }
 
     supergrid::go $pane1
     supergrid::go $pane2
+
+    #supergrid::go $base.buts
     supergrid::go $base
     
     grid configure $base.buts.b4 -padx "2 14"
 
-    grid columnconf $base.buts "0 1" -weight 1
-    grid columnconf $base.buts "2 3 4" -weight 0
+    grid columnconfigure $base.buts "0 1" -weight 1
+    grid columnconfigure $base.buts "2 3 4" -weight 0
 
 #     if { $HelpPrefs::RunningAlone } {
 #         grid $base.mbar -col 0 -row 0 -columnspan 3 -sticky ew
@@ -1760,7 +1769,7 @@ proc HelpViewer::HelpWindow { file { base .help} { geom "" } { title "" } { tocf
 
     bind [winfo toplevel $html] <Control-f> "focus $html; HelpViewer::SearchWindow ; break"
     bind [winfo toplevel $html] <F3> "focus $html; HelpViewer::Search ; break"
-    if { [info script] == $::argv0 } {
+    if { [info exists ::argv0] && [info script] == $::argv0 } {
 	bind [winfo toplevel $html] <Escape> "exit"
     } else {
 	bind [winfo toplevel $html] <Escape> "destroy [winfo toplevel $html]"
@@ -2381,9 +2390,9 @@ proc HelpViewer::SearchWindow {} {
     entry $f.e1 -textvariable ::HelpViewer::searchstring -grid "1 px3 py3"
 
     set f25 [frame $f.f25 -bd 1 -relief ridge -grid "0 2 w px3"]
-    radiobutton $f25.r1 -text [_ "Forward"] -variable ::HelpViewer::SearchType \
+    ttk::radiobutton $f25.r1 -text [_ "Forward"] -variable ::HelpViewer::SearchType \
 	-value -forwards -grid "0 w"
-    radiobutton $f25.r2 -text [_ "Backward"] -variable ::HelpViewer::SearchType \
+    ttk::radiobutton $f25.r2 -text [_ "Backward"] -variable ::HelpViewer::SearchType \
 	-value -backwards -grid "0 w"
 
     set f3 [frame $f.f3 -grid "0 2 w"]

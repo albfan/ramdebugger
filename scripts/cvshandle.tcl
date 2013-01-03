@@ -183,6 +183,8 @@ proc RamDebugger::CVS::SaveRevision { { raiseerror 0 } } {
 proc RamDebugger::CVS::OpenRevisions { { file "" } } {
     variable cvsworkdir
 
+    package require sha1
+
     RamDebugger::WaitState 1
     
     if { $file eq "" } { set file $RamDebugger::currentfile }
@@ -547,23 +549,27 @@ proc RamDebugger::CVS::indicator_init { f } {
     foreach i [list 1 2 3] {
 	#bind $f.l$i <1> [list RamDebugger::OpenProgram tkcvs]
 	bind $f.l$i <1> [list RamDebugger::CVS::update_recursive $cvs_indicator_frame last]
-	bind $f.l$i <<Contextual>> [list RamDebugger::CVS::indicator_menu $cvs_indicator_frame %X %Y]
+	bind $f.l$i <<ContextualPress>> [list RamDebugger::CVS::indicator_menu $cvs_indicator_frame %X %Y]
     }
     grid $f.l1 $f.l2 $f.l3 -sticky w
 }
 
 proc RamDebugger::CVS::indicator_menu { cvs_indicator_frame x y } {
+    
     set currentfileL $RamDebugger::currentfile
     
     destroy $cvs_indicator_frame.menu
     set menu [menu $cvs_indicator_frame.menu -tearoff 0]
-    $menu add command -label [_ "Open"] -command \
+    $menu add command -label [_ "Open"] -accelerator "Ctrl+7" -command \
 	[list RamDebugger::CVS::update_recursive $cvs_indicator_frame last]
-    $menu add command -label [_ "Open - current directory"] -command \
+    $menu add command -label [_ "Open - current directory"] -accelerator "Ctrl+Shift-7" -command \
 	[list RamDebugger::CVS::update_recursive $cvs_indicator_frame current]
     $menu add separator
     $menu add command -label [_ "Differences"] -command \
 	[list RamDebugger::CVS::update_recursive_cmd "" open_program tkdiff "" "" [list $RamDebugger::currentfile]]
+    $menu add command -label [_ "Differences (ignore blanks)"] -command \
+	[list RamDebugger::CVS::update_recursive_cmd "" open_program tkdiff_ignore_blanks "" "" [list $RamDebugger::currentfile]]
+
     $menu add command -label [_ "Differences window"] -command \
 	[list RamDebugger::CVS::update_recursive_cmd "" diff_window "" "" [list $RamDebugger::currentfile]]
 
@@ -609,8 +615,9 @@ proc RamDebugger::CVS::indicator_update {} {
 	fileevent $cvs_indicator_fileid readable [list RamDebugger::CVS::indicator_update_do cvs]
     }
     set  fossil_indicator_data ""
-    if { [auto_execok fossil] ne "" && [catch { exec fossil info }] == 0 } {
-	set fossil_indicator_fileid [open "|fossil changes" r]
+    set fossil [auto_execok fossil]
+    if { $fossil ne "" && [catch { exec $fossil info }] == 0 } {
+	set fossil_indicator_fileid [open "|$fossil changes" r]
 	fconfigure $fossil_indicator_fileid -blocking 0
 	fileevent $fossil_indicator_fileid readable \
 	    [list RamDebugger::CVS::indicator_update_do fossil]
@@ -692,11 +699,22 @@ proc RamDebugger::CVS::indicator_update_do { cvs_or_fossil } {
 #    proc CVS update recursive
 ################################################################################
 
-proc RamDebugger::CVS::update_recursive { wp current_or_last } {
+proc RamDebugger::CVS::update_recursive { wp current_or_last_or_this args } {
     variable try_threaded
     
-    if { [file isdirectory [file dirname $RamDebugger::currentfile]] } {
+    if { $current_or_last_or_this eq "this" } {
+	set directory [file normalize [lindex $args 0]]
+	set current_or_last_or_this current
+    } elseif { [file isdirectory [file dirname $RamDebugger::currentfile]] } {
 	set directory [file dirname $RamDebugger::currentfile]
+	set pwd [pwd]
+	cd $directory
+	set fossil [auto_execok fossil]
+	if { $fossil ne "" && [catch { exec $fossil info } info] == 0 } {
+	    regexp -line {^local-root:\s*(.*)} $info {} dirLocal
+	    set directory [string trimright $dirLocal /]
+	}
+	cd $pwd
     } else {
 	set directory ""
     }
@@ -705,15 +723,16 @@ proc RamDebugger::CVS::update_recursive { wp current_or_last } {
     append script "[list set ::control_txt $::control_txt]\n"
 
     foreach cmd [list update_recursive_do0 select_directory messages_menu clear_entry insert_in_entry \
-	    update_recursive_do1 update_recursive_accept update_recursive_cmd \
-	    waitstate parse_timeline parse_finfo] {
+	    insert_ticket update_recursive_do1 update_recursive_accept update_recursive_cmd \
+	    waitstate parse_timeline parse_finfo open_program show_help] {
 	set full_cmd RamDebugger::CVS::$cmd
 	append script "[list proc $cmd [info_fullargs $full_cmd] [info body $full_cmd]]\n"
     }
     append script "[list namespace eval RamDebugger ""]\n"
     append script "[list set RamDebugger::topdir $RamDebugger::topdir]\n"
+    append script "[list set RamDebugger::AppDataDir $::RamDebugger::AppDataDir]\n"
     append script "[list lappend ::auto_path {*}$::auto_path]\n"
-    append script "[list update_recursive_do0 $directory $current_or_last]\n"
+    append script "[list update_recursive_do0 $directory $current_or_last_or_this]\n"
     
 
     if { $try_threaded eq "debug" } {
@@ -730,6 +749,15 @@ proc RamDebugger::CVS::update_recursive { wp current_or_last } {
     }
 }
 
+proc RamDebugger::CVS::show_help {} {
+    package require helpviewer
+
+    set file "01RamDebugger/RamDebugger12.html"
+    
+    HelpViewer::EnterDirForIndex $::RamDebugger::AppDataDir
+    HelpViewer::HelpWindow [file join $::RamDebugger::topdir help $file]
+}
+
 proc RamDebugger::CVS::update_recursive_do0 { directory current_or_last } {
 
     package require dialogwin
@@ -739,21 +767,27 @@ proc RamDebugger::CVS::update_recursive_do0 { directory current_or_last } {
     wm withdraw .
     
     destroy ._ask
-    set w [dialogwin_snit ._ask -title [_ "VCS management"] \
+    set w [dialogwin_snit ._ask -title [_ "VCS management"] -class VCS \
 	    -okname [_ View] -morebuttons [list [_ "Update"]] \
 	    -cancelname [_ Close] -grab 0 -callback [list update_recursive_do1]]
     
     if { $::tcl_platform(platform) ne "windows" } {
 	catch {
+	    package require img::png
 	    set img [image create photo -file [file join $::RamDebugger::topdir addons ramdebugger.png]]
 	    wm iconphoto $w $img
 	}
+    } else {
+	catch { wm iconbitmap $w $::RamDebugger::topdir/addons/ramdebugger.ico }
     }
     set f [$w giveframe]
     
-    ttk::label $f.l0 -text [_ "Select origin directory for CVS or fossil update recursive, then use the contextual menu on the files:"] \
-	-wraplength 400 -justify left
-
+    ttk::label $f.l0 -text [_ "Select origin directory for fossil or CVS update recursive, then use the contextual menu on the files"] \
+	-justify left -width 50
+    cu::adapt_text_length $f.l0
+    
+    ttk::button $f.b0 -text [_ "Help"] -command show_help
+    
     set dict [cu::get_program_preferences -valueName cvs_update_recursive RamDebugger]
     
     set directories [dict_getd $dict directories ""]
@@ -765,7 +799,8 @@ proc RamDebugger::CVS::update_recursive_do0 { directory current_or_last } {
 	set directories [linsert0 $directories $directory]
     }
     $w set_uservar_value directories $directories
-    $w set_uservar_value messages  [dict_getd $dict messages ""]
+    $w set_uservar_value messages [dict_getd $dict messages ""]
+    $w set_uservar_value ticket_status [dict_getd $dict ticket_status "Fixed"]
     
     if { [info command RamDebugger::CVS::document-open-16] eq "" } {
 	image create photo RamDebugger::CVS::document-open-16 -data {
@@ -929,34 +964,51 @@ proc RamDebugger::CVS::update_recursive_do0 { directory current_or_last } {
 	-menu $f.b3.m -style Toolbutton
     menu $f.b3.m -tearoff 0 -postcommand [namespace code [list messages_menu $w $f.b3.m  $f.e2]] 
     
+    ttk::label $f.l3 -text [_ "Change ticket status"]:
+    ttk::entry $f.e3 -textvariable [$w give_uservar tickets ""]
+    
+    tooltip::tooltip $f.e3 [_ "Enter a list of 'ticket unique ids' in order to change its status"]
+    
+    set statusList [list "" Open Verified Review Deferred Fixed Tested Closed]
+    ttk::combobox $f.cb1 -textvariable [$w give_uservar ticket_status] -width 8 \
+	-values $statusList -state readonly
+    
     package require fulltktree
     set columns [list [list 100 [_ "line"] left item 0]]
     fulltktree $f.toctree -height 350 \
 	-columns $columns -expand 0 \
 	-selectmode extended -showheader 1 -showlines 0  \
 	-indent 0 -sensitive_cols all \
+	-have_search_button automatic \
 	-contextualhandler_menu [list "update_recursive_cmd" $w contextual]
     $w set_uservar_value tree $f.toctree
     
-    grid $f.l0    -         -      -sticky w -padx 2 -pady 2
-    grid $f.l1 $f.e1 $f.b1 -sticky w -padx 2 -pady 2
-    grid $f.l2 $f.e2 $f.b2 -sticky w -padx 2 -pady 2
-    grid $f.sem         ^   $f.b3 -sticky w -padx 2 -pady 2
-    grid $f.toctree - - -sticky nsew
+    grid $f.l0    -      -   $f.b0 -   -sticky w -padx 2 -pady 2
+    grid $f.l1 $f.e1 -        -   $f.b1 -sticky w -padx 2 -pady 2
+    grid $f.l2 $f.e2 -        -   $f.b2 -sticky w -padx 2 -pady 2
+    grid $f.sem         ^  ^ ^ $f.b3 -sticky w -padx 2 -pady 2
+    grid $f.l3  $f.e3  $f.cb1 -  - -sticky w -padx 2 -pady 2
+    grid $f.toctree - - - - -sticky nsew -padx 2 -pady 2
+    grid configure $f.l0 -sticky ew -padx "2 10" -columnspan 3
     grid configure $f.l2 -pady "2 0"
     grid configure $f.sem -pady 0
-    grid configure $f.e1 $f.e2 -sticky ew
-    grid columnconfigure $f 1 -weight 1
-    grid rowconfigure $f 4 -weight 1
+    grid configure $f.e1 $f.e2 $f.e3 -sticky ew
+    grid columnconfigure $f "0" -weight 1
+    grid columnconfigure $f "1" -weight 100
+    grid rowconfigure $f 5 -weight 1
     
     $w set_uservar_value dir $dir
     $w set_uservar_value message ""
     
     bind $w <$::control-d> [list "update_recursive_cmd" $w open_program tkdiff $f.toctree ""]
+    bind $w <$::control-D> [list "update_recursive_cmd" $w open_program tkdiff_ignore_blanks $f.toctree ""]
     bind $w <$::control-i> [list "update_recursive_cmd" $w commit $f.toctree ""]
+    bind $w <$::control-f> [list "update_recursive_cmd" $w open_program fossil_ui $f.toctree ""]
+
     bind $w <$::control-e> [list $w invokeok]
     bind $w <$::control-u> [list $w invokebutton 2]
     bind $f.e2 <$::control-i> "[bind $w <$::control-i>];break"
+    bind $f.e2 <$::control-f> "[bind $w <$::control-f];break"
 
     $w tooltip_button 1 [_ "View modified files and file to be updated from repository %s" $::control_txt-e]
     $w tooltip_button 2 [_ "Update files from repository %s" $::control_txt-u]
@@ -964,6 +1016,7 @@ proc RamDebugger::CVS::update_recursive_do0 { directory current_or_last } {
     tk::TabToWindow $f.e1
     bind $w <Return> [list $w invokeok]
     $w createwindow
+    return $w
 }
 
 proc RamDebugger::CVS::waitstate { w on_off { txt "" } } {
@@ -1007,7 +1060,18 @@ proc RamDebugger::CVS::messages_menu { w menu entry } {
 
     set tree [$w give_uservar_value tree]
     set files ""
+    set dirList ""
     foreach item [$tree selection get] {
+	set itemL $item
+	while { $itemL != 0 } {
+	    if { [file isdirectory [$tree item text $itemL 0]] } {
+		lappend dirList [$tree item text $itemL 0]
+		break
+	    }
+	    set itemL [$tree item parent $itemL]
+	}
+	set color [$tree item element cget $item 0 e_text_sel -fill]
+	if { $color in "red blue" } { continue }
 	if { [regexp {^[MA]\s(\S+)} [$tree item text $item 0] {} file] } { 
 	    lappend files $file
 	} elseif { [regexp {(\w{2,})\s+(.*)} [$tree item text $item 0] {} mode file] && $mode ne "UNCHANGED" } {
@@ -1036,26 +1100,97 @@ proc RamDebugger::CVS::messages_menu { w menu entry } {
 	    }
 	}
     }
-    set pwd [pwd]
-    cd [$w give_uservar_value dir]
-    set err [catch { parse_timeline [exec fossil timeline -n 2000 -t t] } ret]
-    cd $pwd
-    if { $err } { set ret "" }
-
-    set has_sep 0
-    foreach i $ret {
-	lassign $i date time checkin comment
-	if { [regexp {New ticket\s*(\[\w+\])\s+<i>(.*)</i>} $comment {} ticket message] } {
-	    if { !$has_sep } {
-		$menu add separator
-		set has_sep 1
-	    }
-	    set txt1 [string range "$ticket $message" 0 100]...
-	    set txt2 "$ticket $message"
-	    $menu add command -label [_ "Insert ticket '%s'" $txt1] -command  \
-		[namespace code [list insert_in_entry $w $entry $txt2]]
+    
+    set dir [$w give_uservar_value dir]
+    if { [llength $dirList] } {
+	set pwd [pwd]
+	cd [lindex $dirList 0]
+	set fossil [auto_execok fossil]
+	if { $fossil ne "" && [catch { exec $fossil info } info] == 0 } {
+	    regexp -line {^local-root:\s*(.*)} $info {} dir
 	}
-    }    
+	cd $pwd
+    }
+    
+    set pwd [pwd]
+    cd $dir
+    set fossil [auto_execok fossil]
+    if { $fossil ne "" && [catch { exec $fossil info }] == 0 } {
+	set err [catch { exec $fossil ticket show 0 "status=='Open'" } ret]
+	if { !$err } {
+	    set fieds [split [lindex [split $ret \n] 0] \t]
+	    set ipos_tkt_uuid [lsearch -exact $fieds tkt_uuid]
+	    set ipos_title [lsearch -exact $fieds title]
+	    if { $ipos_tkt_uuid == -1 || $ipos_title == -1 } {
+		set err 1
+	    }
+	}
+    } else {
+	set err 1
+    }
+    if { !$err } {
+	set ticketList ""
+	foreach line [lrange [split $ret \n] 1 end] {
+	    set values [split $line \t]
+	    set ticket [lindex $values $ipos_tkt_uuid]
+	    set message [lindex $values $ipos_title]
+	    lappend ticketList [list "\[[string range $ticket 0 9]\]" $message 1]
+	}
+    } else {
+	set err [catch { parse_timeline [exec $fossil timeline -n 2000 -t t] } ret]
+	if { $err } { set ret "" }
+	
+	set ticketList ""
+	foreach i $ret {
+	    lassign $i date time checkin comment
+	    if { [regexp {New ticket\s*(\[\w+\]):?\s+<i>(.*)</i>} $comment {} ticket message] } {
+		set ipos [lsearch -exact -index 0 $ticketList $ticket] 
+		if { $ipos != -1 } {
+		    #nothing
+		} else {
+		    lappend ticketList [list $ticket $message 1]
+		}
+	    } elseif { [regexp {(?:Fixed|Closed) ticket\s*(\[\w+\]):?\s+<i>(.*)</i>} $comment {} ticket message] } {
+		set ipos [lsearch -exact -index 0 $ticketList $ticket]
+		if { $ipos != -1 } {
+		    lset ticketList $ipos 2 0
+		} else {
+		    lappend ticketList [list $ticket $message 0]
+		}
+	    }
+	}
+    }
+    set has_sep 0
+    foreach i $ticketList {
+	lassign $i ticket message active
+	if { !$active } { continue }
+	if { !$has_sep } {
+	    $menu add separator
+	    set has_sep 1
+	}
+	set txt1 [string range "$ticket $message" 0 80]...
+	set txt2 "ticket $ticket: $message"
+	$menu add command -label [_ "Insert ticket '%s'" $txt1] -command  \
+	    [namespace code [list insert_ticket $w $entry $ticket $txt2]]
+    }
+
+    set num 1
+    set fossil [auto_execok fossil]
+    set err [catch { exec $fossil ticket list reports } ret]
+    if { !$err } {
+	foreach line [split $ret \n] {
+	    if { [regexp {(\d)\s+(.*)} $line {} num_in txt] && $num_in > 0 && [regexp {(?i)open} $txt] } {
+		set num $num_in
+		break
+	    }
+	}
+    }
+    set url "http://localhost:PORT/rptview?rn=$num"
+    $menu add separator
+    $menu add command -label [_ "Open tickets browser"] -command \
+	[list "update_recursive_cmd" $w open_program fossil_ui $tree "" $url]
+    
+    cd $pwd
 }
 
 proc RamDebugger::CVS::select_directory { w } {
@@ -1066,13 +1201,26 @@ proc RamDebugger::CVS::select_directory { w } {
 }
 
 proc RamDebugger::CVS::clear_entry { w entry } {
+    update
     $entry delete 1.0 end
-    focus $entry
+    tk::TabToWindow $entry
 }
 
 proc RamDebugger::CVS::insert_in_entry { w entry txt } {
+    update
     tk::TextInsert $entry $txt
-    focus $entry
+    tk::TabToWindow $entry
+}
+
+proc RamDebugger::CVS::insert_ticket { w entry ticket txt } {
+    
+    set tickets [string trim [$w give_uservar_value tickets]]
+    if { $tickets ne "" } {
+	append tickets ","
+    }
+    append tickets $ticket
+    $w set_uservar_value tickets $tickets
+    insert_in_entry $w $entry $txt
 }
 
 proc RamDebugger::CVS::update_recursive_do1 { w } {
@@ -1143,47 +1291,36 @@ proc RamDebugger::CVS::parse_finfo { finfo } {
     return $list
 }
 
-proc RamDebugger::CVS::update_recursive_accept { w what dir tree itemP { item "" } } {
+proc RamDebugger::CVS::update_recursive_accept { args } {
     variable fossil_version
+    
+    set optional {
+	{ -item item "" }
+	{ -cvs_and_fossil boolean 0 }
+    }
+    set compulsory "w what dir tree itemP"
+   parse_args $optional $compulsory $args
+    
+    if { $cvs_and_fossil } {
+	$w set_uservar_value cvs_and_fossil 1
+    }
     
     waitstate $w on $what 
     if { $item ne "" } {
 	foreach i [$tree item children $item] { $tree item delete $i }
-    }
+    }    
     set olddir [pwd]
     set err [catch { cd $dir } ret]
     if { $err } { return }
-
+    
     set has_vcs 0
-    if { [file exists [file join $dir CVS]] } {
-	if { $what eq "view" } {
-	    set err [catch { exec cvs -n -q update 2>@1 } ret]
-	} else {
-	    set err [catch { exec cvs -q update 2>@1 } ret]
-	}
-	foreach line [split $ret \n] {
-	    if { ![winfo exists $tree] } {
-		cd $olddir
-		waitstate $w off
-		return
-	    }
-	    if { $line eq "cvs server: WARNING: global `-l' option ignored." } { continue }
-	    if { $item eq "" } {
-		set item [$tree insert end [list $dir] $itemP]
-	    }
-	    set i [$tree insert end [list "$line"] $item]
-	    if { ![regexp {^[A-Z]\s|^cvs} $line] } {
-		$tree item configure $i -visible 0
-	    }
-	    update
-	}
-	set has_vcs 1
-    }
-    if { [auto_execok fossil] ne "" && [catch { exec fossil info } info] == 0 } {
+
+    set fossil [auto_execok fossil]
+    if { $fossil ne "" && [catch { exec $fossil info } info] == 0 } {
 	regexp -line {^local-root:\s*(.*)} $info {} dirLocal
 	set dirLocal [string trimright $dirLocal /]
 	set fossil_version 0
-	set err [catch { exec fossil version } ret]
+	set err [catch { exec $fossil version } ret]
 	if { !$err && [regexp {\d{4}-\d{2}-\d{2}} $ret date] } {
 	    if { [clock scan $date] >= [clock scan "2009-12-18"] } {
 		set fossil_version 1
@@ -1200,18 +1337,18 @@ proc RamDebugger::CVS::update_recursive_accept { w what dir tree itemP { item ""
 	    set item [$tree insert end [list $dirLocal] $itemP]
 	}
 	if { $what eq "view" &&  [update_recursive_cmd $w give_fossil_sync $dir] } {
-	    set err [catch { exec fossil pull } ret]
+	    set err [catch { exec $fossil pull } ret]
 	    if { $err && $ret ne "" } {
 		snit_messageBox -message $ret -parent $w
 	    }
 	}
 	if { $fossil_version == 0 } {
-	    set err [catch { exec fossil ls 2>@1 } list_files]
+	    set err [catch { exec $fossil ls 2>@1 } list_files]
 	} else {
-	    set err [catch { exec fossil ls -l 2>@1 } list_files]
+	    set err [catch { exec $fossil ls -l 2>@1 } list_files]
 	}
 	if { !$err } {
-	    set err [catch { exec fossil extras 2>@1 } list_files2]
+	    set err [catch { exec $fossil extras 2>@1 } list_files2]
 	    foreach line [split $list_files2 \n] {
 		append list_files "\n? $line"
 	    }
@@ -1219,19 +1356,19 @@ proc RamDebugger::CVS::update_recursive_accept { w what dir tree itemP { item ""
 	lassign $what op version
 	switch $op {
 	    update {
-		set err [catch { exec fossil update 2>@1 } list_files3]
+		set err [catch { exec $fossil update 2>@1 } list_files3]
 	    }
 	    update_this {
-		set err [catch { exec fossil update $version 2>@1 } list_files3]
+		set err [catch { exec $fossil update $version 2>@1 } list_files3]
 	    }
 	    merge_this {
-		set err [catch { exec fossil merge $version 2>@1 } list_files3]
+		set err [catch { exec $fossil merge $version 2>@1 } list_files3]
 	    }
 	    checkout_this {
-		set err [catch { exec fossil checkout $version 2>@1 } list_files3]
+		set err [catch { exec $fossil checkout $version 2>@1 } list_files3]
 	    }
 	    view {
-		set err [catch { exec fossil update --nochange 2>@1 } list_files3]
+		set err [catch { exec $fossil update --nochange 2>@1 } list_files3]
 	    }
 	}
 	if { !$err } {
@@ -1241,9 +1378,9 @@ proc RamDebugger::CVS::update_recursive_accept { w what dir tree itemP { item ""
 	    $w set_uservar_value fossil_timeline_view_more 0
 	}
 	if { [$w give_uservar_value fossil_timeline_view_more] } {
-	    set err [catch { parse_timeline [exec fossil timeline -n 200 -t ci] } ret]
+	    set err [catch { parse_timeline [exec $fossil timeline -n 200 -t ci] } ret]
 	} else {
-	    set err [catch { parse_timeline [exec fossil timeline after current] } ret]
+	    set err [catch { parse_timeline [exec $fossil timeline after current] } ret]
 	}
 	if { !$err } {
 	    set itemT [$tree insert end [list [_ Timeline]] $item]
@@ -1261,6 +1398,8 @@ proc RamDebugger::CVS::update_recursive_accept { w what dir tree itemP { item ""
 		return
 	    }
 	    if { [regexp {^Total network traffic:} $line] } {  continue }
+	    if { [regexp {^waiting for server} $line] } {  continue }
+	    if { [regexp {^-{5,}} $line] } { break }
 	    if { $item eq "" } {
 		set item [$tree insert end [list $dir] $itemP]
 	    }
@@ -1271,6 +1410,53 @@ proc RamDebugger::CVS::update_recursive_accept { w what dir tree itemP { item ""
 	    update
 	}
 	set has_vcs 1
+    }
+    if { [file isdirectory [file join $dir CVS]] } {
+	if { ![$w exists_uservar cvs_and_fossil] } {
+	    $w set_uservar_value cvs_and_fossil 0
+	}
+	if { $has_vcs && ![$w give_uservar_value cvs_and_fossil] } {
+	    set found 0
+	    foreach i [$tree item children $item] {
+		if { [$tree item text $i 0] eq [_ "Update CVS"] } {
+		    set found 1
+		    break
+		}
+	    }
+	    if { !$found } {
+		set itemCVS [$tree insert end [list [_ "Update CVS"]] $item]
+		set cmd [list update_recursive_accept -cvs_and_fossil 1 -item $item $w $what $dir $tree $itemP]
+		$tree item_window_configure -text [_ "Update CVS"] -command $cmd $itemCVS
+	    }
+	} else {
+	    set err [catch { cd $dir } ret]
+	    if { $err } { return }
+	    
+	    if { $what eq "view" } {
+		set err [catch { exec cvs -n -q update 2>@1 } ret]
+	    } else {
+		set err [catch { exec cvs -q update 2>@1 } ret]
+	    }
+	    set itemD ""
+	    foreach line [split $ret \n] {
+		if { ![winfo exists $tree] } {
+		    cd $olddir
+		    waitstate $w off
+		    return
+		}
+		if { $line eq "cvs server: WARNING: global `-l' option ignored." } { continue }
+		if { $itemD eq "" } {
+		    set itemD [$tree insert end [list $dir] $itemP]
+		}
+		set i [$tree insert end [list "$line"] $itemD]
+		if { ![regexp {^[A-Z]\s|^cvs} $line] } {
+		    $tree item configure $i -visible 0
+		}
+		update
+	    }
+	    set has_vcs 1
+	}
+	if { $item eq "" } { set item $itemD }
     }
     cd $olddir
 
@@ -1295,22 +1481,48 @@ proc RamDebugger::CVS::update_recursive_accept { w what dir tree itemP { item ""
 proc RamDebugger::CVS::update_recursive_cmd { w what args } {
     variable fossil_version
     
+    set fossil [auto_execok fossil]
+    
     switch $what {
 	contextual {
 	    lassign $args tree menu id sel_ids
 	    lassign "0 0 0 0 0 0" has_cvs has_fossil cvs_active fossil_active can_be_added is_timeline
+	    set dirs ""
 	    foreach item $sel_ids {
 		set txt [$tree item text $item 0]
 		if { [regexp {^\d+} $txt] && [$tree item text [$tree item parent $item] 0] eq [_ "Timeline"] } {
 		    set is_timeline 1
+		} elseif { [$tree item text $item] eq [_ "Timeline"] } {
+		    set is_timeline 1
 		} elseif { [regexp {^\s*(\w)\s+} $txt] } {
 		    set has_cvs 1
 		    set cvs_active 1
-		} elseif  { [regexp {^\s*\w{2,}\s*} $txt] } {
+		} elseif  { [regexp {^\s*(\w{2,})\s*} $txt {} word] } {
 		    set has_fossil 1
 		    set fossil_active 1
+		    if { $word eq "DELETED" } {
+		        set can_be_added 1
+		    }
 		} elseif { [regexp {^\s*\?\s+} $txt] } {
 		    set can_be_added 1
+		}
+		set itemL $item
+		while { $itemL != 0 } {
+		    if { [file isdirectory [$tree item text $itemL 0]] } {
+		        set dir [$tree item text $itemL 0]
+		        lappend dirs $dir
+		        set pwd [pwd]
+		        cd $dir
+		        if { [auto_execok cvs] ne "" && [file isdirectory CVS] } {
+		            set cvs_active 1
+		        }
+		        set fossil [auto_execok fossil]
+		        if { $fossil ne "" && [catch { exec $fossil info } ret] == 0 } {
+		            set fossil_active 1
+		        }
+		        cd $pwd
+		    }
+		    set itemL [$tree item parent $itemL]
 		}
 	    }
 	    set pwd [pwd]
@@ -1318,7 +1530,8 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 	    if { [auto_execok cvs] ne "" && [file isdirectory CVS] } {
 		set cvs_active 1
 	    }
-	    if { [auto_execok fossil] ne "" && [catch { exec fossil info }] == 0 } {
+	    set fossil [auto_execok fossil]
+	    if { $fossil ne "" && [catch { exec $fossil info } ret] == 0 } {
 		set fossil_active 1
 	    }
 	    cd $pwd
@@ -1326,7 +1539,7 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 		$menu add command -label [_ "Commit"] -accelerator $::control_txt-i -command \
 		    [list "update_recursive_cmd" $w commit $tree $sel_ids]
 	    }
-	    if { !$is_timeline && $has_fossil } {
+	    if { !$is_timeline && ($has_cvs || $has_fossil) } {
 		$menu add command -label [_ "Revert"]... -command \
 		    [list "update_recursive_cmd" $w revert $tree $sel_ids]
 	    }
@@ -1366,11 +1579,15 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 		    $menu add separator
 		}
 	    }
+	    if { !$is_timeline && $has_fossil } {
+		$menu add command -label [_ "Remove"]... -command \
+		    [list "update_recursive_cmd" $w remove $tree $sel_ids]
+	    }
 	    set need_sep 0
 	    if { !$is_timeline && ($has_cvs || $has_fossil) } {
 		$menu add command -label [_ "View diff"] -accelerator $::control_txt-d -command \
 		    [list "update_recursive_cmd" $w open_program tkdiff $tree $sel_ids]
-		$menu add command -label [_ "View diff (ignore blanks)"] -command \
+		$menu add command -label [_ "View diff (ignore blanks)"] -accelerator $::control_txt-D -command \
 		    [list "update_recursive_cmd" $w open_program tkdiff_ignore_blanks $tree $sel_ids]
 		set need_sep 1
 	    }
@@ -1379,29 +1596,29 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 		    [list "update_recursive_cmd" $w open_program tkcvs $tree $sel_ids]
 		set need_sep 1
 	    }
-	    if { $fossil_active } {
+	    if { $fossil_active || $is_timeline} {
 		if { !$is_timeline && $has_fossil } {
 		    $menu add command -label [_ "View diff window"]... -command \
 		        [list "update_recursive_cmd" $w diff_window $tree $sel_ids]
 		}
-		$menu add command -label [_ "Open fossil browser"] -command \
+		$menu add command -label [_ "Open fossil browser"] -accelerator $::control_txt-f -command \
 		    [list "update_recursive_cmd" $w open_program fossil_ui $tree $sel_ids]
 		$menu add separator
 		$menu add checkbutton -label [_ "Fossil autosync"] -variable \
 		    [$w give_uservar fossil_autosync] -command \
 		    [list "update_recursive_cmd" $w fossil_toggle_autosync]
 		$menu add command -label [_ "Fossil syncronize"] -command \
-		    [list "update_recursive_cmd" $w fossil_syncronize sync $tree $sel_ids]
+		    [list "update_recursive_cmd" $w fossil_syncronize sync $tree $sel_ids $dirs]
 		$menu add command -label [_ "Fossil pull"] -command \
-		    [list "update_recursive_cmd" $w fossil_syncronize pull $tree $sel_ids]
+		    [list "update_recursive_cmd" $w fossil_syncronize pull $tree $sel_ids $dirs]
 		$w set_uservar_value fossil_autosync [update_recursive_cmd $w give_fossil_sync]
 		set need_sep 1
 	    }
 	    if { $need_sep } {
 		$menu add separator
 	    }
-	    foreach i [list all normal] t [list [_ All] [_ Normal]] {
-		$menu add command -label [_ "View %s" $t] -command \
+	    foreach i [list all normal] t [list [_ "View All"] [_ "View Normal"]] {
+		$menu add command -label $t -command \
 		    [list "update_recursive_cmd" $w view $tree 0 $i]
 	    }
 	}
@@ -1411,7 +1628,8 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 	    set autosync 0
 	    set pwd [pwd]
 	    cd $dir
-	    set err [catch { exec fossil settings autosync } ret]
+	    set fossil [auto_execok fossil]
+	    set err [catch { exec $fossil settings autosync } ret]
 	    if { !$err } {
 		regexp {(\d)\s*$} $ret {} autosync
 	    }
@@ -1422,7 +1640,8 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 	    lassign $args autosync
 	    set pwd [pwd]
 	    cd [$w give_uservar_value dir]
-	    set err [catch { exec fossil settings autosync $autosync } ret]
+	    set fossil [auto_execok fossil]
+	    set err [catch { exec $fossil settings autosync $autosync } ret]
 	    if { !$err } {
 		snit_messageBox -message $ret -parent $w
 	    }
@@ -1443,13 +1662,16 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 	    update_recursive_accept $w view $dir $tree 0
 	}
 	fossil_syncronize {
-	    lassign $args sync_type
-	    set pwd [pwd]
-	    cd [$w give_uservar_value dir]
+	    lassign $args sync_type tree sel_ids dirs
 	    waitstate $w on sync
-	    set err [catch { exec fossil $sync_type } ret]
-	    if { $ret ne "" } {
-		snit_messageBox -message $ret -parent $w
+	    set pwd [pwd]
+	    foreach dir $dirs {
+		cd $dir
+		set fossil [auto_execok fossil]
+		set err [catch { exec $fossil $sync_type } ret]
+		if { $ret ne "" } {
+		    snit_messageBox -message $ret -parent $w
+		}
 	    }
 	    waitstate $w off
 	    cd $pwd
@@ -1515,24 +1737,72 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 	    }
 	    dict for "dir fs" $fossil_files_dict {
 		cd $dir
-		set info [exec fossil info]
-		regexp -line {^local-root:\s*(.*)} [exec fossil info] {} dirF
+		set fossil [auto_execok fossil]
+		set info [exec $fossil info]
+		regexp -line {^local-root:\s*(.*)} $info {} dirF
 		cd $dirF
-		set err [catch { exec fossil commit --nosign -m $message {*}$fs 2>@1 } ret]
+		if { $message eq "" } { set message " " }
+		set err [catch { exec $fossil commit --nosign -m $message {*}$fs 2>@1 } ret]
+		regsub -all {processed:\s*\d+%\s*} $ret {} ret
 		if { $err } { set color red } else { set color blue }
 		foreach file $fs {
 		    set item [dict get $items fossil $dir $file]
 		    $tree item element configure $item 0 e_text_sel -fill $color -text $ret
 		}
+		if { [regexp {New_Version:\s*(\S+)} $ret {} c] } {
+		    set new_commit "\[[string range $c 0 9]\]"
+		} else {
+		    set new_commit ""
+		}
+		set tickets [string trim [$w give_uservar_value tickets]]
+		set ticket_status [$w give_uservar_value ticket_status]
+		if { !$err && $ticket_status ne "" && $tickets ne "" } {
+		    set err [catch { exec $fossil ticket show 0 } ret]
+		    if { !$err } {
+		        set fieds [split [lindex [split $ret \n] 0] \t]
+		        set ipos_tkt_uuid [lsearch -exact $fieds tkt_uuid]
+		        set ipos_comment [lsearch -exact $fieds comment]
+		        set ipos_status [lsearch -exact $fieds status]
+		        if { $ipos_tkt_uuid == -1 || $ipos_comment == -1 || $ipos_status == -1 } {
+		            set err 1
+		        }
+		    } else {
+		        set ret [_ "Version of fossil executable is too old to manage tickets. Upgrade fossil"]
+		    }
+		    if { !$err } {
+		        set ticketList ""
+		        foreach line [lrange [split $ret \n] 1 end] {
+		            set values [split $line \t]
+		            set ticket [lindex $values $ipos_tkt_uuid]
+		            set comment [lindex $values $ipos_comment]
+		            lappend ticketList [list "\[[string range $ticket 0 9]\]" $ticket $comment]
+		        }
+		        foreach ticket [split $tickets ", ;"] {
+		            set ipos [lsearch -exact -index 0 $ticketList $ticket]
+		            if { $ipos == -1 } {
+		                set err 1
+		                set ret [_ "Ticket '%s' not found in list" $ticket]
+		                break
+		            }
+		            lassign [lindex $ticketList $ipos] - ticketF comment
+		            append comment "\ncommit: $new_commit. Change status to: $ticket_status"
+		            exec $fossil ticket change $ticketF status $ticket_status comment $comment
+		        }
+		    }
+		    if { $err } { break }
+		}
 	    }
 	    cd $pwd
 	    if { $err } {
 		snit_messageBox -message $ret -parent $w
+	    } else {
+		$w set_uservar_value tickets ""
 	    }
 	    waitstate $w off
 	    set dict [cu::get_program_preferences -valueName cvs_update_recursive RamDebugger]
 	    $w set_uservar_value messages [linsert0 -max_len 20 [dict_getd $dict messages ""] $message]
 	    dict set dict messages [$w give_uservar_value messages]
+	    dict set dict ticket_status [$w give_uservar_value ticket_status]
 	    cu::store_program_preferences -valueName cvs_update_recursive RamDebugger $dict
 	}
 	add - add_binary - add_fossil {
@@ -1540,7 +1810,7 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 	    set message [$w give_uservar_value message]
 	    set files ""
 	    foreach item $sel_ids {
-		if { ![regexp {^\?\s(\S+)} [$tree item text $item 0] {} file] } { continue }
+		if { ![regexp {^(?:\?|DELETED)\s+(\S+)} [$tree item text $item 0] {} file] } { continue }
 		lappend files $file
 	    }
 	    if { [string length $files] < 100 } {
@@ -1568,16 +1838,17 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 	    waitstate $w on Add
 	    set pwd [pwd]
 	    foreach item $sel_ids {
-		if { ![regexp {^\?\s(\S+)} [$tree item text $item 0] {} file] } { continue }
+		if { ![regexp {^(?:\?|DELETED)\s+(\S+)} [$tree item text $item 0] {} file] } { continue }
 		set dir [$tree item text [$tree item parent $item] 0]
 		cd $dir
 		if { $what in "add add_binary" } {
 		    set err [catch { exec cvs add -m $message {*}$kopt $file 2>@1 } ret]
 		} else {
-		    set info [exec fossil info]
-		    regexp -line {^local-root:\s*(.*)} [exec fossil info] {} dir
+		    set fossil [auto_execok fossil]
+		    set info [exec $fossil info]
+		    regexp -line {^local-root:\s*(.*)} $info {} dir
 		    cd $dir
-		    set err [catch { exec fossil add $file 2>@1 } ret]
+		    set err [catch { exec $fossil add $file 2>@1 } ret]
 		}
 		if { $err } { break }
 		$tree item element configure $item 0 e_text_sel -fill blue -text $ret
@@ -1589,11 +1860,49 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 	    dict set dict messages [$w give_uservar_value messages]
 	    cu::store_program_preferences -valueName cvs_update_recursive RamDebugger $dict
 	}
+	remove {
+	    lassign $args tree sel_ids
+	    set files ""
+	    foreach item $sel_ids {
+		if { ![regexp {^(?:UNCHANGED|DELETED|MISSING|UPDATE)\s+(\S+)} [$tree item text $item 0] {} file] } { continue }
+		lappend files $file
+	    }
+	    if { [string length $files] < 100 } {
+		set filesT $files
+	    } else {
+		set filesT "[lindex $files 0] ... [lindex $files end]"
+	    }
+	    set txt [_ "Are you sure to remove from fossil %d files? (%s)" [llength $files] $filesT]
+	    set ret [snit_messageBox -icon question -title [_ "Remove files"] -type okcancel \
+		    -default ok -parent $w -message $txt]
+	    if { $ret eq "cancel" } { return }
+
+	    waitstate $w on Remove
+	    set pwd [pwd]
+	    foreach item $sel_ids {
+		if { ![regexp {^(?:UNCHANGED|DELETED|MISSING|UPDATE)\s+(\S+)} [$tree item text $item 0] {} file] } { continue }
+		set dir [$tree item text [$tree item parent $item] 0]
+		cd $dir
+
+		set fossil [auto_execok fossil]
+		set info [exec $fossil info]
+		regexp -line {^local-root:\s*(.*)} $info {} dir
+		cd $dir
+		set err [catch { exec $fossil rm $file 2>@1 } ret]
+		
+		if { $err } { break }
+		$tree item element configure $item 0 e_text_sel -fill blue -text $ret
+	    }
+	    cd $pwd
+	    waitstate $w off
+	}
 	revert {
 	    lassign $args tree sel_ids
 	    set files ""
 	    foreach item $sel_ids {
-		if { [regexp {(\w{2,})\s+(.*)} [$tree item text $item 0] {} mode file] && $mode ne "UNCHANGED" } {
+		if { [regexp {^[MA]\s(\S+)} [$tree item text $item 0] {} file] } { 
+		    lappend files $file
+		} elseif { [regexp {(\w{2,})\s+(.*)} [$tree item text $item 0] {} mode file] && $mode ne "UNCHANGED" } {
 		    lappend files $file
 		}
 	    }
@@ -1610,16 +1919,19 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 	    waitstate $w on Revert
 	    set pwd [pwd]
 	    foreach item $sel_ids {
-		if { ![regexp {(\w{2,})\s+(.*)} [$tree item text $item 0] {} mode file] || $mode eq "UNCHANGED" } { continue }
 		set dir [$tree item text [$tree item parent $item] 0]
 		cd $dir
-		set info [exec fossil info]
-		regexp -line {^local-root:\s*(.*)} [exec fossil info] {} dir
-		cd $dir
-		if { $fossil_version == 0 } {
-		    set err [catch { exec fossil revert --yes $file 2>@1 } ret]
-		} else {
-		    set err [catch { exec fossil revert $file 2>@1 } ret]   
+		if { [regexp {(\w{2,})\s+(.*)} [$tree item text $item 0] {} mode file] && $mode ne "UNCHANGED" } {
+		    set info [exec $fossil info]
+		    regexp -line {^local-root:\s*(.*)} $info {} dir
+		    cd $dir
+		    if { $fossil_version == 0 } {
+		        set err [catch { exec $fossil revert --yes $file 2>@1 } ret]
+		    } else {
+		        set err [catch { exec $fossil revert $file 2>@1 } ret]   
+		    }
+		} elseif { [regexp {^[MA]\s(\S+)} [$tree item text $item 0] {} file] } {
+		    set err [catch { exec cvs update -C $file } ret] 
 		}
 		if { $err } { break }
 		$tree item element configure $item 0 e_text_sel -fill blue -text $ret
@@ -1639,7 +1951,14 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 	    }
 	    foreach item [lsort -unique $ids] {
 		set dir [$tree item text $item 0]
-		update_recursive_accept $w $what_in $dir $tree [$tree item parent $item] $item
+		set pwd [pwd]
+		catch { 
+		    cd $dir
+		    # if there is a problem with tme modification time, fossil seem to remember this checking later
+		    exec $fossil stat --sha1sum
+		}
+		cd $pwd
+		update_recursive_accept -item $item $w $what_in $dir $tree [$tree item parent $item]
 	    }
 	}
 	apply_version {
@@ -1693,7 +2012,8 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 		    }
 		    foreach file $files {
 		        cd [file dirname $file]
-		        set err [catch { exec fossil info } info]
+		        set fossil [auto_execok fossil]
+		        set err [catch { exec $fossil info } info]
 		        if { !$err } {
 		            regexp -line {^local-root:\s*(.*)} $info {} dirF
 		            set len [llength [file split $dirF]]
@@ -1710,6 +2030,8 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 		        set dir [$tree item text [$tree item parent $item] 0]
 		        lappend files_list [list $mode $dir $file]
 		    }
+		    set fossil [auto_execok fossil]
+		    set num_open 0
 		    foreach i $files_list {
 		        lassign $i mode dir file
 		        if { [string length $mode] == 1 } {
@@ -1717,7 +2039,7 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 		        } else {
 		            cd $dir
 		            set err [catch {
-		                    set info [exec fossil info]
+		                    set info [exec $fossil info]
 		                    regexp -line {^local-root:\s*(.*)} $info {} dirF
 		                } ret]
 		            if { $err } {
@@ -1726,16 +2048,21 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 		            }
 		            set fileF [file join $dirF $file]
 		        }
+		        set rex {gdiff-command\s+\((local|global)\)\s+(.*)}
+		        
 		        if { [file exists $fileF] } {
 		            if { [string length $mode] == 1 } {
 		                cd [file dirname $fileF]
-		                RamDebugger::OpenProgram -new_interp 1 tkdiff -r [file tail $fileF]
+		                open_program -new_interp 1 tkdiff {*}$ignore_blanks -r [file tail $fileF]
+		            } elseif { ![catch { exec $fossil settings gdiff-command } ret] && [regexp $rex $ret {} {} cmd] } {
+		                cd [file dirname $fileF]
+		                exec $fossil gdiff $fileF &
 		            } else {
 		                cd $dirF
-		                set err [catch { parse_timeline [exec fossil descendants] } ret]
+		                set err [catch { parse_timeline [exec $fossil descendants] } ret]
 		                if { !$err && [llength $ret] > 0 } {
 		                    lassign [lindex $ret 0] date time checkin comment
-		                    set err [catch { parse_finfo [exec fossil finfo $file] } ret]
+		                    set err [catch { parse_finfo [exec $fossil finfo $file] } ret]
 		                    set finfo_list $ret
 		                } else {
 		                    set err 1
@@ -1759,7 +2086,7 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 		                    }
 		                }
 		                if { !$found } {
-		                    set ret [parse_timeline [exec fossil timeline parents $checkin -n 2000]]
+		                    set ret [parse_timeline [exec $fossil timeline parents $checkin -n 2000]]
 		                    foreach i $ret {
 		                        lassign $i date time checkin comment
 		                        foreach i $finfo_list {
@@ -1784,12 +2111,23 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 		                    return
 		                }
 		                set c [string range $checkin 0 9]
-		                exec fossil artifact $artifact $file.$c.$date
-
-		                set err [catch { RamDebugger::OpenProgram -new_interp 1 tkdiff {*}$ignore_blanks \
+		                exec $fossil artifact $artifact $file.$c.$date
+		                
+		                if { [winfo screenheight .] > 500 } {
+		                    set y [expr {[winfo screenheight .]-500+$num_open*40}]
+		                    if { $y > [winfo screenheight .] - 100 } {
+		                        set y [expr {[winfo screenheight .] - 100}]
+		                    }
+		                    set geom_opt [list -geometry 80x20+0+$y]
+		                } else {
+		                    set geom_opt ""
+		                }
+		                set err [catch { open_program -new_interp 1 tkdiff {*}$geom_opt {*}$ignore_blanks \
 		                            $file $file.$c.$date } ret]
 		                if { $err } {
 		                    lappend errList $ret
+		                } else {
+		                    incr num_open
 		                }
 		                file delete -force $file.$c.$date
 		            }
@@ -1806,20 +2144,52 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 		    cd $pwd
 		}
 		tkcvs {
-		    RamDebugger::OpenProgram tkcvs -dir [$w give_uservar_value dir]
+		    open_program tkcvs -dir [$w give_uservar_value dir]
 		}
 		fossil_ui {
+		    if { [llength $sel_ids] == 0 } {
+		        set sel_ids [$tree selection get]
+		    }
 		    set dirs ""
 		    foreach item $sel_ids {
-		        if { [$tree item text [$tree item parent $item] 0] eq [_ "Timeline"] } { continue }
-		        lappend dirs [$tree item text [$tree item parent $item] 0]
+		        set itemL $item
+		        while { $itemL != 0 } {
+		            if { [file isdirectory [$tree item text $itemL 0]] } {
+		                lappend dirs [$tree item text $itemL 0]
+		            }
+		            set itemL [$tree item parent $itemL]
+		        }
 		    }
 		    lappend dirs [$w give_uservar_value dir]
 		    set pwd [pwd]
 		    foreach dir $dirs {
 		        cd $dir
-		        if { [catch { exec fossil info }] } { continue }
-		        exec fossil ui &
+		        if { [catch { exec $fossil info }] } { continue }
+		        if { $files eq "" } {
+		            exec $fossil ui &
+		        } else {
+		            set port ""
+		            set fin [open "|fossil server" r]
+		            fconfigure $fin -blocking 0
+		            while { ![eof $fin] } {
+		                set line [read $fin]
+		                if { [string length $line] } {
+		                    regexp {port\s+(\d+)} $line {} port
+		                    break
+		                }
+		            }
+		            if { $port ne "" } {
+		                set url [string map [list PORT $port] $files]
+		                set line [exec $fossil settings web-browser]
+		                set browser ""
+		                regexp {\((local|global)\)\s+(.*)$} $line {} {} browser
+		                if { $browser ne "" } {
+		                    exec $browser $url &
+		                } else {
+		                    cu::file::execute url $url
+		                }
+		            }
+		        }
 		        break
 		    }
 		    cd $pwd
@@ -1832,7 +2202,7 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 	    set pwd [pwd]
 	    foreach file $files {
 		cd [file dirname $file]
-		set err [catch { exec fossil info } info]
+		set err [catch { exec $fossil info } info]
 		if { !$err } {
 		    regexp -line {^local-root:\s*(.*)} $info {} dirF
 		    set len [llength [file split $dirF]]
@@ -1858,10 +2228,10 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 	    }
 	    lassign [lindex $files_list 0] mode dir file
 	    cd $dir
-	    set err [catch { parse_finfo [exec fossil finfo $file] } ret]
+	    set err [catch { parse_finfo [exec $fossil finfo $file] } ret]
 	    if { $err } {
-		set err_version [catch { exec fossil version }]
-		set err_info [catch { exec fossil info }]
+		set err_version [catch { exec $fossil version }]
+		set err_info [catch { exec $fossil info }]
 	    }
 	    cd $pwd
 	    if { $err } {
@@ -1945,14 +2315,14 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
 		set c1 [string range $checkin1 0 9]
 		set pwd [pwd]
 		cd $dir
-		exec fossil artifact $artifact1 $file.$c1.$date1
+		exec $fossil artifact $artifact1 $file.$c1.$date1
 		if { [llength $selecteditems] == 1 } {
-		    set err [catch { RamDebugger::OpenProgram -new_interp 1 tkdiff {*}$ignore_blanks $file $file.$c1.$date1 } ret]
+		    set err [catch { open_program -new_interp 1 tkdiff {*}$ignore_blanks $file $file.$c1.$date1 } ret]
 		} else {
 		    lassign [lindex $selecteditems 1] date2 checkin2 - - artifact2
 		    set c2 [string range $checkin2 0 9]
-		    exec fossil artifact $artifact2 $file.$c2.$date2
-		    set err [catch { RamDebugger::OpenProgram -new_interp 1 tkdiff {*}$ignore_blanks $file.$c1.$date1 $file.$c2.$date2 } ret]
+		    exec $fossil artifact $artifact2 $file.$c2.$date2
+		    set err [catch { open_program -new_interp 1 tkdiff {*}$ignore_blanks $file.$c1.$date1 $file.$c2.$date2 } ret]
 		}
 		if { $err } {
 		    snit_messageBox -message $ret -parent $wD
@@ -1970,16 +2340,107 @@ proc RamDebugger::CVS::update_recursive_cmd { w what args } {
     } 
 }
 
-if { $argv0 eq [info script] } {
-    wm withdraw .
-    source [file join [file dirname [info script]] mini_compass_utils.tcl]
-    #package require compass_utils
-    set RamDebugger::currentfile ""
-    set RamDebugger::topdir [file dirname [info script]]
-    set RamDebugger::CVS::try_threaded debug
-    RamDebugger::CVS::update_recursive "" last
+proc RamDebugger::CVS::open_program { args } {
+    variable openprogram_uniqueid
+    
+    upvar #0 ::RamDebugger::topdir topdir
+    
+    set optional {
+	{ -new_interp boolean 0 }
+    }
+    set compulsory "what"
+    set argv [parse_args -raise_compulsory_error 0  $optional $compulsory $args]
+
+    switch $what {
+	visualregexp { set file [file join $topdir addons visualregexp visual_regexp.tcl] }
+	tkcvs {
+	    set file [file join $topdir addons tkcvs bin tkcvs.tcl]
+	}
+	tkdiff { set file [file join $topdir addons tkcvs bin tkdiff.tcl] }
+    }
+    if { $new_interp } {
+	set what $what[incr openprogram_uniqueid]
+    }
+    if { [interp exists $what] } {
+	interp delete $what
+    }
+    interp create $what
+    interp alias $what exit_interp "" interp delete $what
+    $what eval [list proc exit { args } "destroy . ; exit_interp"]
+    interp alias $what puts "" RamDebugger::_OpenProgram_puts
+    $what eval [list set argc [llength $argv]]
+    $what eval [list set argv $argv]
+    $what eval [list load {} Tk]
+    $what eval [list source $file]
 }
 
+if { $argv0 eq [info script] || ( [info exists ::starkit::topdir] && 
+    [file root [file tail $::starkit::topdir]] eq "vcs-ramdebugger") } {
+    wm withdraw .
+    source [file join [file dirname [info script]] mini_compass_utils.tcl]
+    
+    
+    if { $::tcl_platform(platform) eq "windows" } {
+	event add <<ContextualPress>> <ButtonPress-3>
+	event add <<Contextual>> <ButtonRelease-3>
+	event add <<Contextual>> <App>
+	set ::control Control
+	set ::control_txt Ctrl
+    } elseif { [tk windowingsystem] eq "aqua" } {
+	event add <<ContextualPress>> <ButtonPress-2>
+	event add <<Contextual>> <ButtonRelease-2>
+	set ::control Command
+	set ::control_txt Command
+	
+	foreach ev [bind Text] {
+	    if { [regsub {Control} $ev {Command} evC] } {
+		bind Text $evC [bind Text $ev]
+	    }
+	}
+    } else {
+	event add <<ContextualPress>> <ButtonPress-3>
+	event add <<Contextual>> <ButtonRelease-3>
+	set ::control Control
+	set ::control_txt Ctrl
+    }
+    
+    #package require compass_utils
+    set RamDebugger::currentfile ""
+    set RamDebugger::topdir [file dirname [file dirname [file normalize [info script]]]]
+
+    if { $::tcl_platform(platform) eq "windows" } {
+	set usecommR 1
+	if { [info exists ::env(APPDATA)] } {
+	    set RamDebugger::AppDataDir [file join $::env(APPDATA) RamDebugger]
+	} else {
+	    package require registry
+	    set key {HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion}
+	    append key {\Explorer\Shell Folders}
+	    set err [catch { registry get $key AppData } AppData]
+	    if { !$err } {
+		set RamDebugger::AppDataDir [file join [registry get $key AppData] RamDebugger]
+	    } else {
+		set RamDebugger::AppDataDir [file join $::env(HOME) .RamDebugger]
+	    }
+	}
+    } else {
+	set RamDebugger::AppDataDir [file join $::env(HOME) .RamDebugger]
+    }
+    
+    set RamDebugger::CVS::try_threaded debug
+    if { [lindex $argv 0] ne "" } {
+	set w [RamDebugger::CVS::update_recursive "" this [lindex $argv 0]]
+    } else {
+	set w [RamDebugger::CVS::update_recursive "" last]
+    }
+
+    bind $w <Destroy> {
+	if { "%W" eq [winfo toplevel %W] } {
+	    exit
+	}
+    }
+    bind $w <Control-q> [list destroy $w]
+}
 
 
 

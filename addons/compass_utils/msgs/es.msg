@@ -6,7 +6,7 @@
 ::msgcat::mcset es {Connection to '%s' is lost. Retry?} {Se ha perdido la conexión a '%s'. Reintentar?}
 ::msgcat::mcset es Exit Salir
 ::msgcat::mcset es {GiD geo files} {ficheros geo GiD}
-::msgcat::mcset es {All files} {Todos los ficheros}
+::msgcat::mcset es {All files} Todos
 ::msgcat::mcset es {Open GiD file} {Abrir fichero GiD}
 ::msgcat::mcset es {Sending file '%s' (binary=$bin) } {Enviando fichero '%s' (binario=$bin)}
 ::msgcat::mcset es {Recieving file '%s' (binary=$bin) } {Recibiendo fichero '%s' (binario=$bin)}
@@ -128,7 +128,7 @@
 ::msgcat::mcset es Next Siguiente
 ::msgcat::mcset es {Go to} {Ir a}
 ::msgcat::mcset es Action Acción
-::msgcat::mcset es New Nueva
+::msgcat::mcset es New Nuevo
 ::msgcat::mcset es {Update current} {Actualizar actual}
 ::msgcat::mcset es Refresh Refrescar
 ::msgcat::mcset es properties propiedades
@@ -230,7 +230,7 @@
 ::msgcat::mcset es {Create form fields} {Crear campos de formulario}
 ::msgcat::mcset es {Form created} {Formulario creado}
 ::msgcat::mcset es {Welcome to the forms creation wizard. Select what kind of form do you wish to create} {Bienvenido al asistente de creación de formularios. Seleccione qué tipo de formulario desea crear}
-::msgcat::mcset es {A set of fields where to enter values and formulas} {Un set de campos donde introducir valores y fórmulas}
+::msgcat::mcset es {A set of fields where to enter values and formulas} {Un conjunto de campos dónde introducir valores y fórmulas}
 ::msgcat::mcset es {A form, to store values in a database} {Un formulario, para almacenar valores en una base de datos}
 ::msgcat::mcset es {Enter fields definition manually} {introduzca la definición de los campos manualmente}
 ::msgcat::mcset es {Import from Spreadsheet (Excel or OpenOffice)} {Importar desde una hoja de cálculo (Excel u OpenOffice)}
@@ -296,7 +296,7 @@
 ::msgcat::mcset es {Creating directory '%s'} {Creando directorio '%s'}
 ::msgcat::mcset es {killed process %s} {Proceso eliminado %s}
 ::msgcat::mcset es {recieving file '%s'} {recibiendo fichero '%s'}
-::msgcat::mcset es {recieved file} {fichero recibido '%s'}
+::msgcat::mcset es {recieved file} {fichero recibido}
 ::msgcat::mcset es {sending file '%s'} {enviando fichero '%s'}
 ::msgcat::mcset es {failed sending file '%s'} {fallo enviando fichero '%s'}
 ::msgcat::mcset es {Requesting sessions list} {Solicitando lista de sesiones}
@@ -445,12 +445,12 @@
 ::msgcat::mcset es {error in paramter quoting} {error in paramter quoting}
 ::msgcat::mcset es {invalid numeric value} {invalid numeric value}
 ::msgcat::mcset es {number too large or too small} {number too large or too small}
-::msgcat::mcset es {unknown error} {unknown error}
-::msgcat::mcset es {Show this help message} {Show this help message}
-::msgcat::mcset es {Display brief usage message} {Display brief usage message}
+::msgcat::mcset es {unknown error} {error desconocido}
+::msgcat::mcset es {Show this help message} {Muestra este mensaje de ayuda}
+::msgcat::mcset es {Display brief usage message} {  Visualiza un breve uso del mensaje}
 ::msgcat::mcset es ARG ARG
-::msgcat::mcset es Usage: Usage:
-::msgcat::mcset es {[OPTION...]} {[OPTION...]}
+::msgcat::mcset es Usage: Uso:
+::msgcat::mcset es {[OPTION...]} {[OPCION...]}
 ::msgcat::mcset es {Find executable for '%s'} {Encontrar ejecutable para '%s'}
 ::msgcat::mcset es {Executable file} {Fichero ejecutable}
 ::msgcat::mcset es {TCL files} {Ficheros TCL}
@@ -542,3 +542,191 @@ t%s}
 ::msgcat::mcset es {Add title page} {Añadir página de título}
 ::msgcat::mcset es {Add normal page} {Añadir página normal}
 ::msgcat::mcset es {Page %d} {Página %d}
+::msgcat::mcset es Cut Cortar
+::msgcat::mcset es (Clear) (Limpiar)
+::msgcat::mcset es Rename Renombrar
+::msgcat::mcset es Unnamed%d {Sin nombre%d}
+::msgcat::mcset es {Name can only contain letters, digits, -_.'} {El nombre solo puede contener letras, dígitos, -_.'}
+::msgcat::mcset es {Print formulas} {Imprimir fórmulas}
+::msgcat::mcset es No No
+::msgcat::mcset es {Detailed when edit} {Detallado con edición}
+::msgcat::mcset es Detailed Detallado
+::msgcat::mcset es {Do you want to reload file '%s'?} {Desea recargar el archivo '%s'?}
+::msgcat::mcset es {Creation date} {Fecha de creación}
+::msgcat::mcset es {Modification date} {Fecha de modificación}
+::msgcat::mcset es {View columns at maximum width} {Ver columnas al ancgho máximo}
+::msgcat::mcset es {Modify some fields} {Modificar algunos campos}
+::msgcat::mcset es {Modify selected entry in the database} {Modificar las entradas elegidas en la base de datos}
+::msgcat::mcset es {Select fields to update} {Seleccione campos a actualizar}
+::msgcat::mcset es {Select fields to update (Modifying %d entries)} {Seleccione campos a actualizar (Modificando %d entradas)}
+::msgcat::mcset es {Updated %d selected entries} {Actualizar %d entradas elegidas}
+::msgcat::mcset es {View dates} {Ver fechas}
+::msgcat::mcset es {Move entry to} {Modificar entrada a}
+::msgcat::mcset es {Reorder ids} {Reordenar ids}
+::msgcat::mcset es {Pasted data is not correct (# columns=%d). In needs to have %d or %d columns or have a header with some column names} {Los datos pegados no son correctos (# columnas=%d). Es necesario tener %d ó %d columnas o un encabezamiento con algunos nombres de columnas}
+::msgcat::mcset es {Are you sure to add %d entries to current database?} {Está seguro de añadir %d entradas a la actual base de datos?}
+::msgcat::mcset es {Error pasting data (%s)} {Error pegando datos (%s)}
+::msgcat::mcset es {First quarter} {Primer Trimestre}
+::msgcat::mcset es {Second quarter} {Segundo Trimestre}
+::msgcat::mcset es {Third quarter} {Tercer Trimestre}
+::msgcat::mcset es {Forth quarter} {Cuarto Trimestre}
+::msgcat::mcset es {Full year} {Año completo}
+::msgcat::mcset es {User defined} {Def. usuario}
+::msgcat::mcset es {Enter time period} {Introduzca el período de tiempo}
+::msgcat::mcset es {time period} {periodo de tiempo}
+::msgcat::mcset es time tiempo
+::msgcat::mcset es Period Periodo
+::msgcat::mcset es Dates Fechas
+::msgcat::mcset es From De
+::msgcat::mcset es To A
+::msgcat::mcset es {print template} {Imprimir plantilla}
+::msgcat::mcset es Template Plantilla
+::msgcat::mcset es {print detail} {Imprimir detalles}
+::msgcat::mcset es {Print detailed data} {Imprimir información detallada}
+::msgcat::mcset es {SQL condition} {Condición SQL}
+::msgcat::mcset es {Dates are not OK} {Las fechas no son correctas}
+::msgcat::mcset es {Error: table '%s' does not exist} {Error: tabla '%s' no existe}
+::msgcat::mcset es {User is not allowed to add/modify other users} {El usuario no tiene permiso para añadir/modificar otros usuarios}
+::msgcat::mcset es Update Actualizar
+::msgcat::mcset es {Clear search entry} {Limpiar la entrada de búsqueda}
+::msgcat::mcset es {Stop server} {Parar servidor}
+::msgcat::mcset es {starting session for user '%s'} {Iniciando sesión para usuario '%s'}
+::msgcat::mcset es {Administrative user and password} {Usuario administrador y password}
+::msgcat::mcset es {Enter administrative user and password:} {Introduzca un usuario administrador y el password}
+::msgcat::mcset es User Usuario
+::msgcat::mcset es Password Contraseña
+::msgcat::mcset es {User or password not correct} {Usuario o password incorrecto}
+::msgcat::mcset es All Todo
+::msgcat::mcset es {Error: First users needs to be administrator or all} {Error: El primer usuario necesita ser administrador o todo}
+::msgcat::mcset es {Error: user type is not correct} {Error: El tipod e usuario no es correcto}
+::msgcat::mcset es {Added or modified user '%s', type='%s'} {Usuario '%s' añadido o modificado, tipo='%s'}
+::msgcat::mcset es {Removed user '%s'} {Usuario '%s' quitado}
+::msgcat::mcset es {Set database files for user '%s' to '%s'} {Preparar los archivo de base de datos para el usuario '%s' a '%s'}
+::msgcat::mcset es {Clear database files for user '%s'} {Limpiar base de datos para el usuario '%s'}
+::msgcat::mcset es {Error a restricted user cannot created directories} {Error: un usuario restringido no puede crear carpetas}
+::msgcat::mcset es {Error a restricted user cannot rename databases} {Error: un usuario restringido no puede renombrar bases de datos}
+::msgcat::mcset es {Error a restricted user cannot delete databases} {Error: un usuario restringido no puede borrar bases de datos}
+::msgcat::mcset es {Error. File '%s' is not allowed for user '%s'} {Error: Archivo '%s' no está permitido para el usuario '%s'}
+::msgcat::mcset es {Service %s started} {Servicio %s  inciado}
+::msgcat::mcset es {Error starting service %s (%s)} {Error iniciando servicio %s (%s)}
+::msgcat::mcset es {Error installing service (%s)} {Error instalando servicio (%s)}
+::msgcat::mcset es {Service %s removed} {Servicio %s quitado}
+::msgcat::mcset es {Error removing service %s (%s)} {Error quitando servicio %s (%s)}
+::msgcat::mcset es Name%d Name%d
+::msgcat::mcset es {Failed to source page '%s'. Page does not exist} {Falló la página fuente '%s'. La página no existe}
+::msgcat::mcset es {Sending file '%s' (binary=%s) } {Enviando archivo '%s' (binary=%s)}
+::msgcat::mcset es {Recieving file '%s' (binary=%s) } {Recibiendo archivo '%s' (binary=%s)}
+::msgcat::mcset es {Could not add icon to icontray (%s)} {No se pudo añadir a el área de notificaciones (%s)}
+::msgcat::mcset es {error: it is necessary to define application directory in -appdir} {error: es necesario definir el directorio de aplicación en -appdir}
+::msgcat::mcset es {error: Server is stopped} {error: el servidor está parado}
+::msgcat::mcset es {starting server at port %d} {iniciando servidor en el puerto %d}
+::msgcat::mcset es {Started server at ports: %s} {Servidor iniciado en los puertos: %s}
+::msgcat::mcset es {Started server at port: %s} {Servidor iniciado en el puerto: %s}
+::msgcat::mcset es {Select port} {Seleccionar puerto}
+::msgcat::mcset es Global Global
+::msgcat::mcset es {No user '%s' found in database} {Ningún usuario '%s' encontrado en la base de datos}
+::msgcat::mcset es {error: it is necessary to define one or more ports} {error: es necesario definir uno o más puertos}
+::msgcat::mcset es {Image files} {Ficheros de imagen}
+::msgcat::mcset es {All Files} {Todos los archivos}
+::msgcat::mcset es {Add file} {Añadir archivo}
+::msgcat::mcset es {Enter file name for the image} {Entrar el nombre del archivo para la imagen}
+::msgcat::mcset es {Import from file} {Importar desde el archivo.}
+::msgcat::mcset es {View more entries} {Ver más entradas}
+::msgcat::mcset es {View end} {Ver final}
+::msgcat::mcset es {View all entries} {Ver todas las entradas}
+::msgcat::mcset es {Clear search entry (Backspace)} {Limpiar entrada de búsqueda (Retroceso)}
+::msgcat::mcset es {Reduced view} {Vista reducida}
+::msgcat::mcset es {Notes view} {Vista de notas}
+::msgcat::mcset es {Draw box} {Caja de dibujo}
+::msgcat::mcset es {Clear last draw box} {Limpiar la última caja de dibujo}
+::msgcat::mcset es {Clear ALL draw box} {Limpiar TODAS las cajas de dibujo}
+::msgcat::mcset es {Draw point (zoomed)} {Punto de dibujo (aumentado)}
+::msgcat::mcset es {Draw point} {Dibujar punto}
+::msgcat::mcset es Color Color
+::msgcat::mcset es Reset Reinicializar
+::msgcat::mcset es {other operations} {otras operaciones}
+::msgcat::mcset es {Scatter plot} {Gráfico de dispersión}
+::msgcat::mcset es {Edit axis} {Editar ejes}
+::msgcat::mcset es Displacement Desplazamiento
+::msgcat::mcset es Vector Vector
+::msgcat::mcset es Functions Funciones
+::msgcat::mcset es Area Área
+::msgcat::mcset es {Area under a function} {Área bajo una función}
+::msgcat::mcset es {Area between two functions} {Área entre 2 funciones}
+::msgcat::mcset es {Area of the region enclosed by two functions} {Área de la región cerradas por dos funciones}
+::msgcat::mcset es {Export to spreadsheet (XML files)} {Exportar a hoja de cálculo (archivos XML)}
+::msgcat::mcset es {Import from spreadsheet (XML files)} {Importar de hoja de cálculo (archivos XML)}
+::msgcat::mcset es {Save as SVG} {Guardar como SVG}
+::msgcat::mcset es Legend Leyenda
+::msgcat::mcset es {SVG files} {Ficheros SVG}
+::msgcat::mcset es {Area between a function and the x-axis} {Área entre una función y los ejes-x}
+::msgcat::mcset es {Area of the region between the x axis, the fat lines labeled a and b, and the graph.} {Área de la región entre los ejes x, las líneas gruesas llamadas a y b, y el gráfico.}
+::msgcat::mcset es {The limits of integration will be the intersection points of the two curves.} {Los límites de integración serán los puntos de intersección de las dos curvas.}
+::msgcat::mcset es {Integration interval:} {Intervalo de la integración:}
+::msgcat::mcset es {From (a):} {De (a):}
+::msgcat::mcset es {Enter the start x-coordinate 
+for the range on the graph} {Entre el final de la coordenada-x 
+for el rango en el gráfico}
+::msgcat::mcset es {To (b):} {A (b):}
+::msgcat::mcset es {Enter the end x-coordinate 
+for the range on the graph} {Entre el inicio de la coordenada-x 
+for el rango en el gráfico}
+::msgcat::mcset es Functions: Funciones:
+::msgcat::mcset es f(x) f(x)
+::msgcat::mcset es {Selected functions} {Funciones seleccionadas}
+::msgcat::mcset es g(x) g(x)
+::msgcat::mcset es Area: Área:
+::msgcat::mcset es {Calculates the area under the graph of the 
+selected functions using Simpson's formula.} {Calcula el área bajo el gráfico de las funciones 
+selected usando la fórmula de Simpson.}
+::msgcat::mcset es u² u²
+::msgcat::mcset es {Incorrect integration interval.} {Intervalo de la integración incorrecto.}
+::msgcat::mcset es {Function f(x) should be different than g(x).} {La función f(x) debería ser diferente de g(x).}
+::msgcat::mcset es {The functions do not intersect.} {Las funciones no se intersectan.}
+::msgcat::mcset es X-value valor-X
+::msgcat::mcset es {X displacement value} {Valor de desplazamiento X}
+::msgcat::mcset es Y-value valor-Y
+::msgcat::mcset es {Y displacement value} {valor de desplazamiento Y}
+::msgcat::mcset es {Incorrect x-axis range.} {Rango de ejes-x incorrecto.}
+::msgcat::mcset es {Incorrect y-axis left range.} {Rango inzquierdo de ejes-y incorrecto.}
+::msgcat::mcset es {Incorrect y-axis right range.} {Rango derecho de ejes-y incorrecto.}
+::msgcat::mcset es General General
+::msgcat::mcset es {Automatic x-y axis} {Ejes x-y automático.}
+::msgcat::mcset es {Automatic x-y axis range} {Rango de ejes x-y automático}
+::msgcat::mcset es x-axis Eje-x
+::msgcat::mcset es Maximum Máximo
+::msgcat::mcset es {Maximum x-axis value} {Máximo valor de eje-x}
+::msgcat::mcset es Minimum Mínimo
+::msgcat::mcset es {Minimum x-axis value} {Mínimo valor de eje-x}
+::msgcat::mcset es y-axis Eje-y
+::msgcat::mcset es {Maximum y-axis value} {Máximo valor de eje-y}
+::msgcat::mcset es {Minimum y-axis value} {Mínimo valor de eje-y}
+::msgcat::mcset es {XML files} {Ficheros XML}
+::msgcat::mcset es {Import data from spreadsheet file} {Importar datos del archivo de hoja de cálculo}
+::msgcat::mcset es {File extension should be xml} {La extensión del archivo debería ser xml}
+::msgcat::mcset es {Excel files} {Archivos Excel}
+::msgcat::mcset es {Save graph as spreadsheet (Excel...)} {Guardar gráfico como hoja de cálculo (Excel...)}
+::msgcat::mcset es {starting server at port %d. Work dir: %s} {iniciando el servidor en el puerto %d. Dir de trabajo: %s}
+::msgcat::mcset es {Starting mail server at port 25} {Iniciando el correo del servidor en el puerto 25}
+::msgcat::mcset es {Error starting mail server: %s} {Error inicio servidor de correo: %s}
+::msgcat::mcset es {Mail server not started} {Correo del servidor no iniciado}
+::msgcat::mcset es {Error inserting mail from mail_server (%s)} {Error al insertar el correo desde el mail_server (%s)}
+::msgcat::mcset es Mail Correo
+::msgcat::mcset es {Search mail message} {Buscar el mensaje de correo}
+::msgcat::mcset es {Message id} {Mensaje id}
+::msgcat::mcset es {Entered new item '%s' for diary in '%s'} {Entró '%s' nuevo elemento para el diario en '%s'}
+::msgcat::mcset es Repeat Repetir
+::msgcat::mcset es {Enter value} {Entrar valor}
+::msgcat::mcset es value valor
+::msgcat::mcset es {Set value} {Establecer valor}
+::msgcat::mcset es animation animación
+::msgcat::mcset es {Connection with the server has been lost (%s)} {La conexión con el servidor se ha perdido (%s)}
+::msgcat::mcset es {Open new database} {Abrir nueva base de datos}
+::msgcat::mcset es {Retrieving '%s'...} {Obteniendo '%s'...}
+::msgcat::mcset es {error: could not resolve image '%s'} {error: no se pudo resolver la imagen '%s'}
+::msgcat::mcset es colors colores
+::msgcat::mcset es {Background color view} {Color de fondo en la visualización}
+::msgcat::mcset es New#C#Masculino Nuevo
+::msgcat::mcset es Activate Activar
+::msgcat::mcset es all todo
+::msgcat::mcset es Select Seleccionar

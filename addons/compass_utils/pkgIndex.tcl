@@ -7,15 +7,32 @@
 # in response to "package require" commands.  When this
 # script is sourced, the variable $dir must contain the
 # full path name of this file's directory.
+
 set cmd ""
 lappend cmd [list source [file join $dir compass_utils.tcl]]
 lappend cmd [list lappend ::auto_path $dir]
-package ifneeded compass_utils 1.3 [join $cmd ";"]
-package ifneeded compass_utils::c 1.1 [list load \
-	[file join $dir compass_utils[info sharedlibextension]]]
-package ifneeded compass_utils::math 1.1 [list source [file join $dir math.tcl]]
-package ifneeded compass_utils::img 1.1 [list load \
-	[file join $dir compass_utils_tk[info sharedlibextension]]]
+
+package ifneeded compass_utils 1.10 [join $cmd ";"]
+
+proc load_compass_utils_library { dir basename } {
+    if { $::tcl_platform(pointerSize) == 8} {
+	set bits 64
+    } else {
+	set bits 32
+    }
+    set library ${basename}_${bits}[info sharedlibextension]
+    load [file normalize [file join $dir $library]] $basename
+}
+
+package ifneeded compass_utils::c 1.10 [list load_compass_utils_library $dir compass_utils]
+package ifneeded compass_utils::math 1.5 [list source [file join $dir math.tcl]]
+
+set cmd ""
+lappend cmd [list source [file join $dir tk_utils.tcl]]
+lappend cmd [list load_compass_utils_library $dir compass_utils_tk]
+
+package ifneeded compass_utils::img 1.10 [join $cmd ";"]
+
 package ifneeded compass_utils::fcgi 1.0 {
     package require compass_utils::c
     cu::fcgi_init

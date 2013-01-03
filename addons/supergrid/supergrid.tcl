@@ -51,7 +51,7 @@
 ###################################################################################
 
 ################################################################################
-#  This software is copyrighted by Ramon Ribó (RAMSAN) ramsan@cimne.upc.es.
+#  This software is copyrighted by Ramon RibÃ³ (RAMSAN) ramsan@cimne.upc.es.
 #  (http://gid.cimne.upc.es/ramsan) The following terms apply to all files 
 #  associated with the software unless explicitly disclaimed in individual files.
 
@@ -189,6 +189,7 @@ proc supergrid::go { f { isrecursive 0 } } {
 	}
 	if { [regexp $DiscardWidgets $i] } { continue }
 	if { ![info exists data($i)] } {
+	    if { [winfo toplevel $i] ne [winfo toplevel $f] } { continue }
 	    error "error: before running supergrid::go it is necessary to use -grid in widget $i"
 	}
 	if { $data($i) == "no" } { continue }

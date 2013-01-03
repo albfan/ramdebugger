@@ -771,10 +771,13 @@ proc ::TreeCtrl::SetGrabAndFocus { focuswin grabwin } {
     } else {
 	set grabStatus ""
     }
-    tkwait  visibility $grabwin
-    focus $focuswin
-    grab $grabwin
-    bind $grabwin <Unmap> +[list ::TreeCtrl::ReleaseGrabAndFocus $oldGrab $grabStatus]
+    # catch is for cases when window gets destroyed before finishing
+    catch {
+	tkwait visibility $grabwin
+	focus $focuswin
+	grab $grabwin
+	bind $grabwin <Unmap> +[list ::TreeCtrl::ReleaseGrabAndFocus $oldGrab $grabStatus]
+    }
 }
 
 proc ::TreeCtrl::ReleaseGrabAndFocus { oldGrab grabStatus } {

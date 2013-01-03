@@ -1,0 +1,14 @@
+Package tkdnd 1.0
+Meta as::author      {Georgios Petasis}
+Meta as::build::date 2010-06-03
+Meta as::origin      http://sourceforge.net/projects/tkdnd
+Meta category        Drag and Drop
+Meta description     The packages adds native drag and drop capabilities
+Meta description     to the Tk toolkit on Unix (using the XDND protocol)
+Meta description     and on Microsoft Windows.
+Meta license         BSD
+Meta platform        linux-glibc2.3-x86_64
+Meta require         {Tcl 8.4}
+Meta require         {Tk 8.4}
+Meta subject         drag drop widget gui xdnd
+Meta summary         Drag and drop capabilities for Tk

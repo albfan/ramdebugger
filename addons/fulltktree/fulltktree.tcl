@@ -1,12 +1,14 @@
 
 package require treectrl
-#package require tile
 package require snit
 package require autoscroll
-#package require compass_utils
-package require img::png
+package require tooltip
+catch { package require compass_utils }
 
-package provide fulltktree 1.16
+#kike: add catch because GiD has img::png internal, starting ramdebugger can't load img::png as external package
+catch {package require img::png}
+
+package provide fulltktree 1.20
 
 if { [info commands ttk::style] eq "" } {
     interp alias "" ttk::style "" style
@@ -26,11 +28,13 @@ proc fulltktree { args } {}
 
 snit::widget fulltktree {
     option -button1handler "" ;# returns also identify information
+    option -button1presshandler "" ;# returns also identify information
     option -selecthandler "" ;# button-1 or return (if not selecthandler2)
     option -selecthandler2 "" ;# double button or return
     option -returnhandler "" ;# if not null, previous options do not react on return
     option -contextualhandler ""
     option -contextualhandler_menu ""
+    option -contextualhandler_fmenu "" ;# like previous but adding more arguments at the callback
     option -editbeginhandler "" ;# if returns 0, the edition does not begin (optional)
     option -editaccepthandler ""
     option -deletehandler ""
@@ -40,9 +44,10 @@ snit::widget fulltktree {
     option -compass_background 0
     option -selectmode extended
     option -sensitive_cols "" ;# can be a list of column indexes or all
+    option -sort_type_cols ""; # can be a list of sort types: dictionary, integer real
     option -item_image ""
     option -folder_image ""
-    option -buttonpress_open_close 1
+    option -buttonpress_open_close 0
     option -has_sizegrip 0
     option -spreadsheet_mode 0
     option -keypress_search_active 1
@@ -106,6 +111,7 @@ snit::widget fulltktree {
 	if { $err } {
 	    $tree configure -buttonimage [list mac-collapse open mac-expand !open ]
 	}
+	autoscroll::autoscroll $win.sh
 	#autoscroll::autoscroll $win.sv
 	bind $tree <Configure> [mymethod check_scroll_idle]
 	
@@ -113,6 +119,7 @@ snit::widget fulltktree {
 
 	$tree state define disabled
 	$tree state define emphasis
+	$tree state define readonly
 
 	bind $win <FocusIn> [mymethod focus -only_if_win %W]
 	grid $win.t $win.sv -sticky ns
@@ -129,7 +136,7 @@ snit::widget fulltktree {
 	
 	set bfont [concat [font actual [$tree cget -font]] [list -weight bold]]
 	$tree element create e_text_sel text -lines 1 \
-	    -fill [list grey disabled \
+	    -fill [list grey disabled grey !enabled green readonly \
 		$fulltktree::SystemHighlightText {selected focus} \
 		] -font [list $bfont emphasis]
 	$tree element create e_rect rect -fill \
@@ -143,6 +150,11 @@ snit::widget fulltktree {
 	}
 	$tree element create e_rect_disabled rect -fill grey \
 	    -showfocus no -width 20 -height 20
+	
+################################################################################
+#    style folder
+################################################################################
+	
 	set S [$tree style create folder -orient horizontal]
 	$tree style elements $S [list e_rect e_folder_image e_text_sel \
 		e_selmarker_up e_selmarker_down]
@@ -156,13 +168,18 @@ snit::widget fulltktree {
 	$tree style layout $S e_selmarker_up -detach 1
 	    
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_up -width 100 -height 2 -sticky nw
+	    $tree style layout $S e_selmarker_up -height 2 -sticky nwe -iexpand x
 	}
 	$tree style layout $S e_selmarker_down -detach 1 \
 	     -expand n
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_down -width 100 -height 2 -sticky sw
+	    $tree style layout $S e_selmarker_down -height 2 -sticky swe -iexpand x
 	}
+	
+################################################################################
+#    style item
+################################################################################
+
 	set S [$tree style create item -orient horizontal]
 	$tree style elements $S [list e_rect e_item_image e_text_sel \
 		e_selmarker_up e_selmarker_down]
@@ -176,13 +193,17 @@ snit::widget fulltktree {
 	$tree style layout $S e_selmarker_up -detach 1
 	    
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_up -width 100 -height 2 -sticky nw
+	    $tree style layout $S e_selmarker_up -height 2 -sticky nwe -iexpand x
 	}
 	$tree style layout $S e_selmarker_down -detach 1 \
 	    -expand n
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_down -width 100 -height 2 -sticky sw 
+	    $tree style layout $S e_selmarker_down -height 2 -sticky swe -iexpand x
 	}
+
+################################################################################
+#    style itemtext
+################################################################################
 
 	set S [$tree style create imagetext -orient horizontal]
 	$tree style elements $S [list e_rect e_image e_text_sel \
@@ -194,13 +215,17 @@ snit::widget fulltktree {
 	$tree style layout $S e_selmarker_up -detach 1
 	    
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_up -width 100 -height 2 -sticky nw
+	    $tree style layout $S e_selmarker_up -height 2 -sticky nwe -iexpand x
 	}
 	$tree style layout $S e_selmarker_down -detach 1 \
 	    -expand n
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_down -width 100 -height 2 -sticky sw 
+	    $tree style layout $S e_selmarker_down -height 2 -sticky swe -iexpand x
 	}
+
+################################################################################
+#    style text
+################################################################################
 
 	set S [$tree style create text -orient horizontal]
 	$tree style elements $S [list e_rect e_text_sel \
@@ -214,14 +239,18 @@ snit::widget fulltktree {
 
 	$tree style layout $S e_selmarker_up -detach 1           
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_up -width 100 -height 2 -sticky nw
+	    $tree style layout $S e_selmarker_up -height 2 -sticky nwe -iexpand x
 	}
 	$tree style layout $S e_selmarker_down -detach 1 \
 	    -expand n
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_down -width 100 -height 2 -sticky sw 
+	    $tree style layout $S e_selmarker_down -height 2 -sticky swe -iexpand x
 	}
  
+################################################################################
+#    style text_r
+################################################################################
+
 	set S [$tree style create text_r -orient horizontal]
 	$tree style elements $S [list e_rect e_text_sel \
 		e_selmarker_up e_selmarker_down]
@@ -230,18 +259,23 @@ snit::widget fulltktree {
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
 	    $tree style layout $S e_text_sel -iexpand nsx -sticky e
 	}
+	
 	$tree style layout $S e_rect -union [list e_text_sel] -iexpand nswe -ipadx 2
  
 	$tree style layout $S e_selmarker_up -detach 1           
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_up -width 100 -height 2 -sticky nw
+	    $tree style layout $S e_selmarker_up -height 2 -sticky nwe -iexpand x
 	}
 	$tree style layout $S e_selmarker_down -detach 1 \
 	    -expand n
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_down -width 100 -height 2 -sticky sw 
+	    $tree style layout $S e_selmarker_down -height 2 -sticky swe -iexpand x
 	}
      
+################################################################################
+#    style image
+################################################################################
+
 	set S [$tree style create image -orient horizontal]
 	$tree style elements $S [list e_rect e_image e_text_sel e_hidden \
 		e_selmarker_up e_selmarker_down]
@@ -252,13 +286,17 @@ snit::widget fulltktree {
 
 	$tree style layout $S e_selmarker_up -detach 1           
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_up -width 100 -height 2 -sticky nw
+	    $tree style layout $S e_selmarker_up -height 2 -sticky nwe -iexpand x
 	}
 	$tree style layout $S e_selmarker_down -detach 1 \
 	    -expand n
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_down -width 100 -height 2 -sticky sw 
+	    $tree style layout $S e_selmarker_down -height 2 -sticky swe -iexpand x
 	}
+
+################################################################################
+#    style window
+################################################################################
 
 	set S [$tree style create window -orient horizontal]
 	$tree style elements $S [list e_rect \
@@ -275,14 +313,18 @@ snit::widget fulltktree {
  
 	$tree style layout $S e_selmarker_up -detach 1           
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_up -width 100 -height 2 -sticky nw
+	    $tree style layout $S e_selmarker_up -height 2 -sticky nwe -iexpand x
 	}
 	$tree style layout $S e_selmarker_down -detach 1 \
 	    -expand n
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_down -width 100 -height 2 -sticky sw 
+	    $tree style layout $S e_selmarker_down -height 2 -sticky swe -iexpand x
 	}
        
+################################################################################
+#    style full_disabled
+################################################################################
+
 	set S [$tree style create full_disabled -orient horizontal]
 	$tree style elements $S [list e_rect_disabled \
 		e_selmarker_up e_selmarker_down]
@@ -293,12 +335,12 @@ snit::widget fulltktree {
  
 	$tree style layout $S e_selmarker_up -detach 1           
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_up -width 100 -height 2 -sticky nw
+	    $tree style layout $S e_selmarker_up -height 2 -sticky nwe -iexpand x
 	}
 	$tree style layout $S e_selmarker_down -detach 1 \
 	    -expand n
 	if { [package vcompare [package present treectrl] 2.1] >= 0 } {
-	    $tree style layout $S e_selmarker_down -width 100 -height 2 -sticky sw 
+	    $tree style layout $S e_selmarker_down -height 2 -sticky swe -iexpand x
 	}
 
 	$self createbindings
@@ -311,10 +353,13 @@ snit::widget fulltktree {
 	
 	if { $options(-have_search_button) != 0 } {
 	    set searchbutton [button $win.search -image search13x14 -bd 0 -highlightthickness 0 -padx 0 \
-		    -command [mymethod toggle_search_label]] 
+		    -command [mymethod toggle_search_label]]
+	    bindtags $win.search [lreplace [bindtags $win.search] 2 2]
 #             bind $win.search <ButtonPress-1> "[list %W state pressed]; break"
 #             bind $win.search <ButtonRelease-1> "[bind [winfo class $win.search] <ButtonRelease-1>]; break"
 	    set info [grid info $win.sv]
+	    
+	    tooltip::tooltip $win.search [_ "Search in tree"]
 	    
 	    grid $win.t -row 1 -column 0 -rowspan 2
 	    grid $searchbutton -row 0 -column 1 -rowspan 2
@@ -325,7 +370,8 @@ snit::widget fulltktree {
 	    grid rowconfigure $win 2 -weight 1
 	    
 	    if { $info eq "" } {
-		grid remove $searchbutton $win.sv
+		grid remove $searchbutton
+		#$win.sv
 	    }
 	} elseif { [info exists searchbutton] } {
 	    destroy $searchbutton
@@ -355,6 +401,7 @@ snit::widget fulltktree {
 	parse_args $optional $compulsory $args
 
 	if { $only_if_win ne "" && $only_if_win ne $win } { return }
+	if { [string match $win.* [focus]] } { return }
 	if { [winfo exists $tree] } {
 	    focus $tree
 	}
@@ -373,6 +420,7 @@ snit::widget fulltktree {
 		%W activate "active parent"
 		%W selection clear all
 		%W selection add active
+		%W selection anchor active
 	    }
 	}
 	bind TreeCtrl <KeyPress-Right> {
@@ -422,12 +470,20 @@ snit::widget fulltktree {
 	bind $tree <KeyPress> [mymethod keypress %K %A]
 	bind $tree <Return> "[mymethod execute_select_return]; break"
 	bind $tree <space> "[mymethod execute_select_return]; break"
-	bind $tree <ButtonPress-1> "[mymethod popup_help_cancel] ; [mymethod execute_select_press %x %y]"
 	
+	foreach i [list <ButtonPress-1> <Control-ButtonPress-1> <Shift-ButtonPress-1>] {
+	    set cmd "[mymethod popup_help_cancel]"
+	    if { $i eq "<ButtonPress-1>" } {
+		append cmd "; [mymethod execute_select_press %x %y]; break"
+	    } else {
+		append cmd "; [bind FullTreeCtrl $i]"
+	    }
+	    bind $tree $i $cmd
+	}
 	bind $tree <ButtonRelease-1> "[bind FullTreeCtrl <ButtonRelease-1>];
 		[mymethod execute_select %x %y] ; break"
 	bind $tree <<Contextual>> "[mymethod popup_help_cancel] ; [mymethod contextual %x %y %X %Y]"
-	bind $tree <Double-1> [mymethod execute_select_double1 %x %y]
+	bind $tree <Double-ButtonRelease-1> [mymethod execute_select_double1 %x %y]
 
 	bind $tree <F2> {
 	    if { [[winfo parent %W] is_special_folder active] } { return }
@@ -483,6 +539,9 @@ snit::widget fulltktree {
 	set options(-compass_background) $value
 
 	if { [package vcompare [package present treectrl] 2.1] < 0 } { return }
+	
+	# not used any more by now
+	return
 
 	if { $value } {
 	    if { [lsearch -exact [image names] fulltktree::compass_background] == -1 } {
@@ -534,11 +593,12 @@ snit::widget fulltktree {
 	set idx 0
 	foreach col $options(-columns) {
 	    lassign $col width name justify type is_editable expand
+	    set wi [expr {round($w0*$width)}]
 	    if { $expand == 1 || ($options(-expand) && $expand != 0) } {
-		$tree column configure c$idx -minwidth [expr {round($w0*$width)}] \
-		    -width "" -expand 1 -squeeze 1
+		$tree column configure c$idx -minwidth $wi \
+		    -width "" -expand 1 -squeeze 1 -weight $wi
 	    } else {
-		$tree column configure c$idx -width [expr {round($w0*$width)}] \
+		$tree column configure c$idx -width $wi \
 		    -expand 0 -squeeze 0
 	    }
 	    incr idx
@@ -562,10 +622,11 @@ snit::widget fulltktree {
 	    lassign $col width name justify type is_editable expand
 	    set wi [expr {round($w0*$width)}]
 	    $tree column create -text $name -width $wi \
-		-tag c$idx -justify $justify
+		-tag c$idx -justify $justify -borderwidth 1 \
+		-background [cu::give_widget_background [winfo parent $win]]
 	    if { $expand == 1 || ($options(-expand) && $expand != 0) } {
 		$tree column configure c$idx -minwidth $wi \
-		    -width "" -expand 1 -squeeze 1
+		    -width "" -expand 1 -squeeze 1 -weight $wi
 	    }
 	    if { $type eq "text" && $justify eq "right" } {
 		set type text_r
@@ -574,6 +635,7 @@ snit::widget fulltktree {
 	    lappend itemStyle $idx $type
 	    incr idx
 	}
+	$tree column configure tail -borderwidth 1 -background [cu::give_widget_background [winfo parent $win]]
 	$tree configure -treecolumn 0
 
 	$self _apply_columns_values
@@ -607,8 +669,9 @@ snit::widget fulltktree {
 	    
 	    bind $vscrollbar <Map> +[list after 100 [list catch [list raise $win.grip]]]
 	    
-	    bind $win.grip <ButtonPress-1> +[mymethod _move_sizegrip start]
-	    bind $win.grip <ButtonRelease-1> +[mymethod _move_sizegrip end]
+	    bind $win.grip <ButtonPress-1> +[mymethod _move_sizegrip start $win.grip]
+	    bind $win.grip <ButtonRelease-1> +[mymethod _move_sizegrip end $win.grip]
+	    bind $win.grip <B1-Motion> +[mymethod _move_sizegrip motion $win.grip %X %Y]
 	}
     }
     variable check_scroll_idle_after ""
@@ -633,18 +696,30 @@ snit::widget fulltktree {
 	    grid $win.sv
 	    set last_end_item [$tree index end]
 	} elseif { [$tree index end] ne $last_end_item } {
-	    if { [info exists searchbutton] } {
-		grid remove $searchbutton
-	    }
-	    grid remove $win.sv
+#             if { [info exists searchbutton] } {
+#                 grid remove $searchbutton
+#             }
+	    #grid remove $win.sv
 	    set last_end_item [$tree index end]
 	}
     }
 
-    method _move_sizegrip { what args } {
+    method _move_sizegrip { what w args } {
 	switch $what {
 	    start {
 		$tree notify bind $vscrollbar <Scroll-y> ""
+	    }
+	    motion {
+		lassign $args X Y
+		set toplevel [winfo toplevel $tree]
+		set x [winfo rootx $toplevel]
+		set y [winfo rooty $toplevel]
+		if { $X < $x || $Y < $y } {
+		    if { $X < $x } { set x $X }
+		    if { $Y < $y } { set y $Y }
+		    wm geometry $toplevel +$x+$y
+		    ttk::sizegrip::Press $w $X $Y
+		}
 	    }
 	    end {
 		$tree notify bind $vscrollbar <Scroll-y> { %W set %l %u }
@@ -671,6 +746,12 @@ snit::widget fulltktree {
 	    return
 	}
 	set manage_motion_id [after 600 [list catch [mymethod popup_help $identify]]]
+    }
+    method add_state { state color } {
+	
+	$tree state define $state
+	set colorList [linsert [$tree element cget e_text_sel -fill] 0 $color $state]
+	$tree element configure e_text_sel -fill $colorList
     }
     method popup_enter_help { args } {
 	
@@ -719,8 +800,10 @@ snit::widget fulltktree {
 	    
 	    if { [dict exists $popup_help_dict $id command] } {
 		set w [uplevel #0 [dict get $popup_help_dict $id command] [list $id [dict get $popup_help_dict $id text]]]
-		set manage_motion_active 0
-		bind $w <Destroy> +[list set [varname manage_motion_active] 1]
+		if { [winfo exists $w] } {
+		    set manage_motion_active 0
+		    bind $w <Destroy> +[list set [varname manage_motion_active] 1]
+		}
 		return
 	    } elseif { [dict exists $popup_help_dict $id text] } {
 		set text [dict get $popup_help_dict $id text]
@@ -748,7 +831,14 @@ snit::widget fulltktree {
     method _popup_help_activate_motion { l } {
 	if { ![winfo exists $l] } { return }
 	set w [winfo toplevel $l]
-	bind $l <Motion> [list destroy $w]
+	lassign [winfo pointerxy $l] x y
+	bind $l <Motion> [mymethod _popup_help_has_motion $l $x $y %X %Y]
+    }
+    method _popup_help_has_motion { l x_old y_old x y } {
+	set d [expr {sqrt(($x-$x_old)**2+($y-$y_old)**2)}]
+	if { $d < 3 } { return }
+	set w [winfo toplevel $l]
+	destroy $w
     }
     method _popup_help_button_event { w event X Y } {
 	destroy $w
@@ -761,12 +851,12 @@ snit::widget fulltktree {
 	}
     }
     method is_popup_help_active { wp } {
-	return [winfo exists $wp.tootip]
+	return [winfo exists $wp.tooltip]
     }
     method popup_help_do { wp text x y { minimum_time 0 } } {
-	destroy $wp.tootip
+	destroy $wp.tooltip
 	
-	set w [toplevel $wp.tootip -bg black]
+	set w [toplevel $wp.tooltip -bg black]
 	
 	label $w.l -text $text -highlightthickness 1 -bg white -fg black \
 	    -justify left -wraplength 300
@@ -781,7 +871,6 @@ snit::widget fulltktree {
 	}
 	wm overrideredirect $w 1
 	wm geometry $w +${x}+$y
-	
 	bind $w.l <ButtonPress-1> [mymethod _popup_help_button_event \
 		$w <ButtonPress-1> %X %Y]
 	bind $w.l <<ContextualPress>> [mymethod _popup_help_button_event \
@@ -789,6 +878,14 @@ snit::widget fulltktree {
 	after $minimum_time [mymethod _popup_help_activate_motion $w.l]
 	bind $w.l <KeyPress> [mymethod _popup_help_button_event \
 		$w "" "" ""]
+	
+	bind $w.l <ButtonPress-4> "[mymethod _popup_help_button_event \
+		$w "" "" ""];break"
+	bind $w.l <ButtonPress-5> "[mymethod _popup_help_button_event \
+		$w "" "" ""];break"
+	bind $w.l <MouseWheel> "[mymethod _popup_help_button_event \
+		$w "" "" ""];break"
+	
 	return $w
     }
     method selection { what args } {
@@ -1017,21 +1114,41 @@ snit::widget fulltktree {
     }
     method sort_column_do { parent ptype order } {
 	
-	set firstOpt ""
-	set items [lrange [$self item children $parent] 0 5]
-	for { set i 5 } { $i >= 0 } { incr i -1 } {
-	    set item [lindex $items $i]
-	    if { $item eq "" } { continue }
-	    if { [$self item style set $item $sortcolumn] ne $ptype } {
-		set firstOpt [list -first [lindex $items $i+1]]
+	set first_last_opts ""
+	set items [$self item children $parent]
+	set len [llength $items]
+	foreach first_last [list first last] {
+	    switch $first_last {
+		"first" {
+		    set max [expr {($len>6)?5:$len-2}]
+		    set range [rangeF $max 0 -1] }
+		"last" { 
+		    set min [expr {($len-6>0)?$len-6:1}]
+		    set range [range $min $len] }
+	    }
+	    foreach i $range {
+		if { $i < 0 || $i >= $len } { continue }
+		set item [lindex $items $i]
+		set i_type [$self item style set $item $sortcolumn]
+		if { $i_type eq $ptype } { continue }
+		if { [string match *text* $i_type] && [string match *text* $ptype] } { continue }
+		switch $first_last {
+		    "first" { set item [lindex $items [expr {$i+1}]] }
+		    "last" { set item [lindex $items [expr {$i-1}]] }
+		}
+		lappend first_last_opts -$first_last $item
 		break
 	    }
 	}
+	set sort_type [lindex $options(-sort_type_cols) $sortcolumn]
+	if { $sort_type eq "" } {
+	    set sort_type dictionary
+	}
 	if { $ptype eq "image" } {
 	    $self item sort $parent -$order -column $sortcolumn \
-		-element e_hidden -dictionary {*}$firstOpt
+		-element e_hidden -$sort_type {*}$first_last_opts
 	} else {
-	    $self item sort $parent -$order -column $sortcolumn -dictionary {*}$firstOpt
+	    $self item sort $parent -$order -column $sortcolumn -$sort_type {*}$first_last_opts
 	}
 	if { $options(-recursive_sort) } {
 	    foreach i [$tree item children $parent] {
@@ -1082,7 +1199,7 @@ snit::widget fulltktree {
 
 	focus $tree
 	
-	if { $options(-contextualhandler_menu) ne "" } {
+	if { $options(-contextualhandler_menu) ne "" || $options(-contextualhandler_fmenu) ne "" } {
 	    set contextual_save [list [$tree index active]]
 	    set selecthandler_active 0
 	} else {
@@ -1099,14 +1216,20 @@ snit::widget fulltktree {
 	    $tree selection clear all
 	    lappend contextual_save ""   
 	}
-	if { $options(-contextualhandler_menu) ne "" } {
+	if { $options(-contextualhandler_menu) ne "" || $options(-contextualhandler_fmenu) ne "" } {
 	    $self popup_help_deactivate
 	    update idletasks
 	    set selecthandler_active 1
 	    destroy $tree.menu
 	    menu $tree.menu -tearoff 0
-	    set ch $options(-contextualhandler_menu)
-	    set ret [uplevel #0 $ch [list $self $tree.menu $id [$tree selection get]]]
+	    if { $options(-contextualhandler_fmenu) ne "" } {
+		set ch $options(-contextualhandler_fmenu)   
+		lappend ch $self $tree.menu $id [$tree selection get] $x $y
+	    } else {
+		set ch $options(-contextualhandler_menu)
+		lappend ch $self $tree.menu $id [$tree selection get]
+	    }
+	    set ret [uplevel #0 $ch]
 
 	    if { $::tcl_platform(platform) ne "windows" } {
 		bind $tree.menu <Unmap> [mymethod contextual_end]
@@ -1131,6 +1254,7 @@ snit::widget fulltktree {
 	lassign $contextual_save active selection
 	set selecthandler_active 0
 	$tree activate $active
+	$tree selection anchor $active
 	
 	$tree selection clear all
 	foreach id $selection {
@@ -1156,18 +1280,22 @@ snit::widget fulltktree {
 	    if { $clear } { set searchstring "" }
 	    $self search_text_label
 	    destroy $win.search_label
+	    focus $tree
 	} else {
 	    ttk::entry $win.search_label -textvariable [myvar searchstring]
 	    grid $win.search_label -row 0 -column 0 -sticky ew -padx 2 -pady 2
 	    
 	    focus $win.search_label
+	    $win.search_label icursor end
+	    bind $win.search_label <Escape> "[mymethod toggle_search_label]; break"
 	    
 	    if { $clear } { set searchstring "" }
 	    $self search_text_label
 	    
 	    set cmd [mymethod search_text_label_idle]
 	    trace add variable [myvar searchstring] write "$cmd ;#"
-	    bind $win.search_label <Destroy> [list trace remove variable [myvar searchstring] write "$cmd ;#"]
+	    bind $win.search_label <Destroy> [list trace remove variable [myvar searchstring] \
+		    write "$cmd ;#"]
 	}
     }
     variable search_text_after_id
@@ -1194,29 +1322,61 @@ snit::widget fulltktree {
 	}
 	set search_text_after_id [after 500 [mymethod search_text_label]]
     }
+    proc glob_map { args } {
+	set map {
+	    ? \\?
+	    * \\*
+	    \[ \\\[
+	    \] \\\]
+	    \\ \\\\
+	    \{ \\\{
+	    \} \\\}
+	}
+	return [string map $map [join $args ""]]
+    }
     method search_text_label {} {
 
 	if { [info exists search_text_after_id] } {
 	    after cancel $search_text_after_id
 	    unset search_text_after_id
 	}
-#         if { $searchstring eq "" } {
-#             set searchstring_entry [_ "Enter search string"]
-#             $win.search_label state disabled
-#         } else {
-#             set searchstring_entry $searchstring
-#             $win.search_label state !disabled
-#         }
 	if { $searchstring eq "" } {
 	    set is_selected 1
 	} else {
 	    set is_selected 0
 	    $tree selection clear all
 	}
+	lassign [list "" and] wordList op
+	foreach i [regexp -inline -all {"[^"]*"|\S+} $searchstring] {
+	    set i [string trim $i {"}]
+	    if { [string length $i] < 2 } { continue }
+	    if { [string equal -nocase $i or] } {
+		set op or
+	    } elseif { [string equal -nocase $i and] } {
+		set op and
+	    } else {
+		lappend wordList $i
+	    }
+	}
+	set num 0
 	set item [$tree item id "first next"]
 	while { $item ne "" } {
-	    if { [string match -nocase *$searchstring* [$tree item text $item]] } {
+	    set text [$tree item text $item]
+	    set found 0
+	    foreach i $wordList {
+		if { [string match -nocase *[glob_map $i]* [$tree item text $item]] } {
+		    incr found
+		    if { $op eq "or" } { break }
+		} else {
+		    if { $op eq "and" } {
+		        set found 0
+		        break 
+		    }
+		}
+	    }
+	    if { $found || $searchstring eq "" } {
 		$tree item configure $item -visible 1
+		incr num
 		foreach i [lrange [$tree item ancestors $item] 0 end-1] {
 		    $tree item configure $i -visible 1
 		    if { $searchstring ne "" } {
@@ -1226,6 +1386,7 @@ snit::widget fulltktree {
 		if { !$is_selected } {
 		    $tree activate $item
 		    $tree selection add $item
+		    $tree selection anchor $item
 		    set is_selected 1
 		}
 	    } else {
@@ -1236,6 +1397,13 @@ snit::widget fulltktree {
 	set item [lindex [$tree selection get] 0]
 	if { $item ne "" } {
 	    $tree see $item
+	}
+	
+	if { $num>1 && [winfo exists $win.search_label] && [focus] ne "$win.search_label" } {
+	    focus $win.search_label
+	    $win.search_label icursor end
+	} elseif { $num==1 } {
+	    focus $tree
 	}
     }
     method search_text { char } {
@@ -1284,6 +1452,7 @@ snit::widget fulltktree {
 		$tree see $id_found
 		$tree selection clear all
 		$tree selection add active
+		$tree selection anchor active
 		set search_text_after_id [after 300 [list set [varname searchstring] ""]]
 	    }
 	}
@@ -1297,6 +1466,7 @@ snit::widget fulltktree {
 	$tree activate $id
 	$tree selection clear all
 	$tree selection add $id
+	$tree selection anchor active
     }
     method activate_select { name_path { col "" } } {
 
@@ -1332,12 +1502,15 @@ snit::widget fulltktree {
 	$tree activate $id
 	$tree selection clear all
 	$tree selection add $id
+	$tree selection anchor active
     }
-    method _correct_xview { item col } {
+    method _correct_xview { item col max_width } {
 	$tree see $item
 	lassign [$tree item bbox $item $col] x0 - x1 -
 	if { $x0 eq "" } { return }
-	
+	if { $max_width ne "" && $x1-$x0 > $max_width } {
+	    set x1 [expr {$x0+$max_width}]
+	}
 	if { $x0 < 0 || $x1 > [winfo width $tree] } {
 	    set x0c [$tree canvasx $x0]
 	    set tw [expr {[winfo width $tree]/([lindex [$tree xview] 1]-[lindex [$tree xview] 0])}]
@@ -1380,6 +1553,7 @@ snit::widget fulltktree {
 	foreach icol $range {
 	    if { [lsearch -integer $editcolumns $icol] == -1 } { continue }
 	    if { [$tree column cget $icol -visible] == 0 } { continue }
+	    if { [catch { $tree item style elements $item $icol }] } { continue }
 	    foreach el [$tree item style elements $item $icol] {
 		if { $el eq "e_text_sel" || ( [$tree item style set active $icol] eq "image" && $el eq "e_image") } {
 		    if { $options(-editbeginhandler) ne "" } {
@@ -1389,7 +1563,8 @@ snit::widget fulltktree {
 		    } else {
 		        set ret 1
 		    }
-		    $self _correct_xview $item $icol
+	       
+		    $self _correct_xview $item $icol 30
 		    
 		    switch [lindex $ret 0] {
 		        1 - entry {
@@ -1426,6 +1601,9 @@ snit::widget fulltktree {
 		        }
 		    }
 		    if { $w ne "" } {
+		        set max_width [winfo width $w]
+		        $self _correct_xview $item $icol $max_width
+		        
 		        bind $w <KeyPress-Tab> "[mymethod edit_item_tab $item $w $icol next];break"
 		        bind $w <<PrevWindow>> "[mymethod edit_item_tab $item $w $icol prev];break"
 		        foreach i [list Right Left Up Down] {
@@ -1527,7 +1705,15 @@ snit::widget fulltktree {
     }
     variable execute_select_pointer ""
     method execute_select_press { x y } {
+	set TreeCtrl::Priv(selectMode) set
+	TreeCtrl::FullTkTreeButton1 $tree $x $y
 	set execute_select_pointer [list $x $y]
+	
+	set identify [$tree identify $x $y]
+	if { $identify ne "" && $options(-button1presshandler) ne "" } {
+	    set ids [$tree selection get]
+	    uplevel #0 $options(-button1presshandler) [list $tree $ids $identify $x $y]
+	}
     }
     variable execute_select_pressed ""
     method execute_select { { x "" } { y "" } } {
@@ -1586,7 +1772,7 @@ snit::widget fulltktree {
 		}
 	    } elseif { ![$self is_special_folder $id] } {
 		set execute_select_pressed $id
-		#after 900 [list catch [list set [varname execute_select_pressed] ""]]
+		after 900 [list catch [list set [varname execute_select_pressed] ""]]
 	    }
 	    set ret 1
 	    if { $identify ne "" && $options(-button1handler) ne "" } {
@@ -1767,6 +1953,32 @@ snit::widget fulltktree {
 	}
 	return [varname uservar([lindex $args 0])]
     }
+    method item_window_configure { args } {
+	
+	set optional {
+	    { -text text "" }
+	    { -image image "" }
+	    { -compound compound "" }
+	    { -command cmd "" }
+	}
+	set compulsory "item"
+	parse_args $optional $compulsory $args
+
+	set font [concat [font actual [$tree cget -font]] [list -underline 1]]
+	if { $compound eq "" } {
+	    set compoundL ""
+	} else {
+	    set compoundL [list -compound $compound]
+	}
+	
+	set b [button $tree.item$item -font $font -text $text \
+		-image $image {*}$compoundL \
+		-foreground blue -background white -bd 0 -cursor hand2 \
+		-command $command]
+	$tree item style set $item 0 window
+	$tree item element configure $item 0 e_window -destroy 1 \
+	    -window $b
+    }
     method set_uservar_value { key newvalue } {
 	set uservar($key) $newvalue
     }
@@ -1835,6 +2047,8 @@ snit::widget fulltktree {
 	destroy $w
 
 	if { [info command search13x14] ne "" } { return }
+	
+	package require img::png
 
 	image create photo mac-collapse  -data {
 	    R0lGODlhEAAQALIAAAAAAAAAMwAAZgAAmQAAzAAA/wAzAAAzMyH5BAUAAAYA
